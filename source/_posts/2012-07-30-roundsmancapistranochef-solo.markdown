@@ -1,7 +1,9 @@
 ---
 layout: post
 title: roundsmanを使ってcapistranoからchef-soloを実行する
-tags: 
+categories:
+comments: true
+published: false
 ---
 管理対象のサーバー台数が少ない場合など、[chef](http://www.opscode.com/chef/)のサーバーを運用するコストとベネフィットを天
 秤にかけてみて、ああこれどう考えても労力ペイできないな、でも設定ファイルを手動で管理するのはやだな、といったときに[roundsman](https://g

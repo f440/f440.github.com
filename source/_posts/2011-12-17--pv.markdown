@@ -1,9 +1,11 @@
 ---
 layout: post
 title: プログレスバーを簡単に表示できるコマンド pv
-tags:
+categories:
 - unix
 - pv
+comments: true
+published: false
 ---
 プログレスバーを簡単に表示できる `pv` について説明する。
 

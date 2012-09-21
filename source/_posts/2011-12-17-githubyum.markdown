@@ -1,12 +1,14 @@
 ---
 layout: post
 title: githubを使ってyumリポジトリを公開する
-tags:
+categories:
 - git
 - github
 - centos
 - rpm
 - yum
+comments: true
+published: false
 ---
 ubuntuには[PPA](https://launchpad.net/ubuntu/+ppas)という仕組みがあり、プロジェクトホスティングサービス
 [launchpad](https://launchpad.net/) と連携してパッケージを簡単に配布する仕組みが用意されている。今回は、githubを使

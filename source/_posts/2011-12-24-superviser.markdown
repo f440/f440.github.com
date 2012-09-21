@@ -1,7 +1,9 @@
 ---
 layout: post
 title: プロセス管理にsuperviserを使う
-tags: 
+categories:
+comments: true
+published: false
 ---
 ちょっと前にsupervisorを使ったのでやり方をまとめておく。
 

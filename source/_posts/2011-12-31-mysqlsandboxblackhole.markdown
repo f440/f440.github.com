@@ -1,8 +1,10 @@
 ---
 layout: post
 title: MySQL::Sandboxで環境を作ってBLACKHOLEエンジンを試す
-tags:
+categories:
 - mysql
+comments: true
+published: false
 ---
 ちょっとMySQLのBLACKHOLEエンジン使って調べたいことがあったんだけど、
 [MySQL::Sandbox](http://mysqlsandbox.net/) 使うとレプリケーション環境が簡単に構築できて便利。

@@ -1,7 +1,9 @@
 ---
 layout: post
 title: rundeckをセットアップして、jenkins上のjava成果物をデプロイする
-tags: 
+categories:
+comments: true
+published: false
 ---
 rundeck でjenkins上の成果物をデプロイしよう、という話。
 
