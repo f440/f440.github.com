@@ -101,7 +101,7 @@ supervisorはプログラムの起動、停止を管理するツール。daemont
 
 アクセス出来るようになる
 
-![Web管理画面](http://media.tumblr.com/tumblr_lx9eq9SHXa1qz5yk8.jpg)
+![Web管理画面](/images/2011-12-24-superviser/tumblr_lx9eq9SHXa1qz5yk8.jpg)
 
 終わり。
 
