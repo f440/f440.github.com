@@ -4,7 +4,7 @@
   <title><![CDATA[apatheia.info]]></title>
   <link href="http://apatheia.info/atom.xml" rel="self"/>
   <link href="http://apatheia.info/"/>
-  <updated>2012-09-22T21:36:12+09:00</updated>
+  <updated>2012-09-22T21:50:19+09:00</updated>
   <id>http://apatheia.info/</id>
   <author>
     <name><![CDATA[f440]]></name>
@@ -235,6 +235,1669 @@ $ mv post source/
 <p><code>source</code> ディレクトリの中身が <code>public</code> 以下に展開されて、ここが公開領域となる。
 <code>public</code> の中身が <code>_deploy</code> にコピーされて、ここが Github Pages に push される
 。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[roundsmanを使ってcapistranoからchef-soloを実行する]]></title>
+    <link href="http://apatheia.info/blog/2012/07/30/roundsmancapistranochef-solo/"/>
+    <updated>2012-07-30T00:00:00+09:00</updated>
+    <id>http://apatheia.info/blog/2012/07/30/roundsmancapistranochef-solo</id>
+    <content type="html"><![CDATA[<p>管理対象のサーバー台数が少ない場合など、<a href="http://www.opscode.com/chef/">chef</a>のサーバーを運用するコストとベネフィットを天
+秤にかけてみて、ああこれどう考えても労力ペイできないな、でも設定ファイルを手動で管理するのはやだな、といったときに<a href="https://g%0Aithub.com/iain/roundsman">roundsman</a>を使うといいという話。</p>
+
+<p><a href="https://github.com/iain/roundsman">roundsman</a>は、chefのレシピを転送して<a href="http:%0A//wiki.opscode.com/display/chef/Chef+Solo">chef-solo</a>を実行する<a href="https://github.com%0A/capistrano/capistrano">capistrano</a>向けライブラリ。アプリケーションのリリースタイミングに併せてインフラ設定の変更が必要になることは往々にしてある
+ので、<a href="https://github.com/capistrano/capistrano">capistrano</a>を使ってデプロイとインフラ設定変更を一括適
+用できるのは便利だ。</p>
+
+<p>ここでは、Railsアプリを対象に<a href="https://github.com/iain/roundsman">roundsman</a>適用までの作業を簡単にまとめる
+。</p>
+
+<h2>手順</h2>
+
+<p>まずは適当なRailsプロジェクトを作るところから。</p>
+
+<pre><code>PROJECT="my_fantastic_project"
+rails new $PROJECT
+cd $PROJECT
+
+$EDITOR Gemfile
+  # 追加
+  gem roundsman, :require =&gt; false
+  gem capistrano, :require =&gt; false
+
+bundle install --path vendor/bundle
+
+# capistranoのCapfile、config/deploy.rbを生成
+bundle exec capify .
+</code></pre>
+
+<p>chefのcookbooksは<code>config/cookbooks</code>に配置する。場所は設定で変更可能。このディレクトリだけ別リポジトリにしておくと、ほかのプロ
+ジェクトでも転用できて便利なのでそうしてる。</p>
+
+<p>config/deploy.rbを調整する。サーバーの種別ごとにデプロイを切り替えたいので、マルチステージを有効化。</p>
+
+<pre><code>$EDITOR config/deploy.rb
+
+# 追加
+# require roundsman/capistrano
+# require capistrano/ext/multistage
+</code></pre>
+
+<p>サーバーグループの設定を<code>config/deploy/*.rb</code>に配置。これについては、<a href="https:%0A//github.com/capistrano/capistrano/wiki/2.x-Multistage-Extension">capistrano/ext/multistage</a>の説明を参照。</p>
+
+<p>あとは<code>config/deploy.rb</code>でrecipeを実行するタスクを追加し、<code>config/deploy/*.rb</code>の中でattributeを設定して
+いく。</p>
+
+<pre><code>config/deploy.rb:
+
+    namespace :chef do
+      set :care_about_ruby_version, false
+
+      # 一括して適用
+      task :default do
+        roundsman.run_list fetch(:run_list)
+      end
+
+      # 個別にレシピ適用 (ex. nginx)
+        namespace :nginx do
+          task :install do
+            roundsman.run_list "recipe[nginx]"
+          end
+        end
+
+      end
+</code></pre>
+
+<p><a href="https://github.com/iain/roundsman#configuration">githubにある設定方法の説明</a>だと、config/ス
+テージ名.rb に設定を書いている。</p>
+
+<pre><code>config/deploy/*.rb:
+
+    set :nginx, :user =&gt; "nginx", "worker_process" =&gt; 1, …
+    set :run_recipe, :user =&gt; "nginx", "worker_process" =&gt; 1, …
+</code></pre>
+
+<p>ただ、これだとattributesの管理がcapistranoの中にべったり書くことになってしまい、chef-
+soloを手で実行したいときとか面倒くさい。そのため、attributesの値はknifeやchef-
+soloで読めるようなjsonを作って、config/roles 以下で管理している。</p>
+
+<p>roles ディレクトリはアプリのアップデートと関係なく更新していくことになるので、別リポジトリで管理した方がいい。</p>
+
+<pre><code>ファイル構成(抜粋)
+
+  ├── Capify
+  ├── Gemfile
+  └── config
+        ├── cookbooks
+        ├── deploy
+        └── roles
+
+config/deploy.rb:
+
+  # jsonファイルを取り込む関数を追加
+  require active_support/core_ext/hash/deep_merge
+  def load_role(*roles)
+    json = {}                                                                    
+    roles.each do |role|
+      json_path = "#{File.dirname(__FILE__)}/roles/#{role}.json"
+      json.deep_merge! JSON.load(File.new(json_path))
+    end
+    json.each {|k,v| set (k.to_sym), v }                                         
+ end
+
+config/deploy/*.rb:
+
+  # 読み込みたいjsonファイルを指定
+  load_role "web"
+
+config/roles/*.json:
+
+ 例: config/roles/web.json
+  {
+     "nginx" : {
+      "user" : "nginx",
+      "worker_processes" : 1,
+    …
+     "run_list" : [ "recipe[nginx]", ... ]
+  }
+</code></pre>
+
+<p>以上で準備が整った。これで実行できるようになる。</p>
+
+<pre><code># 一括適用
+bundle exec cap ステージ名 chef
+
+# cookbook を指定して適用
+bundle exec cap ステージ名 chef:nginx
+</code></pre>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[分散ファイルシステム GlusterFS を使う]]></title>
+    <link href="http://apatheia.info/blog/2012/06/05/-glusterfs-/"/>
+    <updated>2012-06-05T00:00:00+09:00</updated>
+    <id>http://apatheia.info/blog/2012/06/05/-glusterfs-</id>
+    <content type="html"><![CDATA[<p>Webアプリケーションを構築する上で、運用中に発生したファイルをローカルのファイルシステム上に保管すると、スケールを阻害するため好ましくないことが多い。</p>
+
+<p>そのため、アプリケーションの設計の段階からCDNの利用したり、ファイルの管理だけ別のサービスに切り出したりすることを考慮すべきだけど、いろいろなしがらみのた
+めにどうしてもファイルを複数台のサーバーで共有するようなシステム形態にせざるを得ないことが往々にしてある。</p>
+
+<p>サーバー間のファイル共有のための方法として、<a href="http://code.google.com/p/lsyncd/">lsyncd</a> や<a href="http:%0A//www.drbd.org/">DRBD</a>を使ったり、NASを介したりするなど様々な方法があるけど、<a href="http://www.gluster.or%0Ag/">GlusterFS</a> がとても便利。特別な機器を必要とせず、すでにある環境に対して導入でき、信頼性とスケーラビリティのあるクラスタリングファイルシステムを手早く構築するこ
+とができる。</p>
+
+<p>GlusterFS を簡単に説明すると、以下のような特徴がある:</p>
+
+<ul>
+<li>分散型ファイルシステム
+
+<ul>
+<li>SPOFになるような特殊ノードも必要ない</li>
+</ul>
+</li>
+<li>NFSやCIFSでマウント可能
+
+<ul>
+<li>先日発表された 3.3.0 で、HDFSとの互換性できてHadoopから処理できるようになったり、OpenStack Object Storage API互換の REST APIが提供されたりでいろいろ熱い感じになっている</li>
+</ul>
+</li>
+<li>ストライピングで性能を上げたり、レプリケーションで耐障害性をあげたりすることが可能</li>
+</ul>
+
+
+<p>今回は仮想マシンで動作を検証するまでの流れをまとめる。</p>
+
+<h2>環境構築</h2>
+
+<p>作業環境として、Mac OS X Lion上のVirtualBoxを利用し、仮想マシンとしてはCentOS 6.2
+x86_64を使う。Windowsでやる場合は<code>vagrant ssh</code>が動かないので、そのあたりを読み替えればできると思う。</p>
+
+<p>はじめにCentOS 6.2のマシンイメージを作る。</p>
+
+<pre><code>$ gem install vagrant veewee
+$ mkdir work
+$ cd work
+$ vagrant basebox define CentOS-6.2-x86_64-minimal CentOS-6.2-x86_64-minimal
+$ vagrant basebox build CentOS-6.2-x86_64-minimal # マシンイメージのビルド
+$ vagrant basebox validate CentOS-6.2-x86_64-minimal # チェック
+$ vagrant basebox export CentOS-6.2-x86_64-minimal
+$ vagrant box add CentOS-6.2-x86_64-minimal CentOS-6.2-x86_64-minimal.box
+$ cd ..
+$ rm -rf ./work
+</code></pre>
+
+<p>次にクラスタ構成の設定。</p>
+
+<pre><code>$ mkdir -p ~/Documents/vagrant/glusterfs/ # 作業用ディレクトリ作成
+$ cd ~/Documents/vagrant/glusterfs/
+$ vim Vagrantfile # 編集
+</code></pre>
+
+<p><a href="https://gist.github.com/2868494">https://gist.github.com/2868494</a></p>
+
+<pre><code>$ vagrant up # 3台の仮想マシン起動
+</code></pre>
+
+<p>必要となる仮想マシンがそろったので、glusterfsのセットアップを始める。</p>
+
+<pre><code>$ cd ~/Documents/vagrant/glusterfs # この中は 共有ディレクトリを通して、仮想マシンの/vagrantからも参照可能
+$ curl -LO [http://download.gluster.org/pub/gluster/glusterfs/LATEST/CentOS/glusterfs-3.3.0-1.el6.x86_64.rpm](http://download.gluster.org/pub/gluster/glusterfs/LATEST/CentOS/glusterfs-3.3.0-1.el6.x86_64.rpm)
+$ curl -LO [http://download.gluster.org/pub/gluster/glusterfs/LATEST/CentOS/glusterfs-fuse-3.3.0-1.el6.x86_64.rpm](http://download.gluster.org/pub/gluster/glusterfs/LATEST/CentOS/glusterfs-fuse-3.3.0-1.el6.x86_64.rpm)
+$ curl -LO [http://download.gluster.org/pub/gluster/glusterfs/LATEST/CentOS/glusterfs-server-3.3.0-1.el6.x86_64.rpm](http://download.gluster.org/pub/gluster/glusterfs/LATEST/CentOS/glusterfs-server-3.3.0-1.el6.x86_64.rpm)
+</code></pre>
+
+<p>仮想マシンに必要となるパッケージをインストールしておく。</p>
+
+<pre><code>$ brew install parallel # 一台ずつ設定するの面倒なので、gnu parallel 使う
+$ parallel vagrant ssh {} -c sh -c "sudo yum -y install wget fuse fuse-libs" ::: host1 host2 host3
+$ parallel vagrant ssh {} -c sh -c "sudo yum install -y /vagrant/glusterfs-*" ::: host1 host2 host3 # パッケージインストール
+$ parallel vagrant ssh {} -c sh -c "/usr/sbin/glusterfs -V" ::: host1 host2 host3 # 動作確認
+$ parallel vagrant ssh {} -c sh -c "sudo /sbin/service iptables stop" ::: host1 host2 host3 # iptables 停止
+$ parallel vagrant ssh {} -c sh -c "sudo /sbin/service glusterd start" ::: host1 host2 host3 # 起動
+</code></pre>
+
+<p>以降、<code>$</code> から始まるのはホストOS、<code>hostX$</code> から始まるのは仮想マシン上のターミナルの説明とする。</p>
+
+<h2>ストレージプール作成</h2>
+
+<p>ストレージプールと呼ばれる、サーバー間の信頼済みネットワークを作成する。</p>
+
+<pre><code>$ vagrant ssh host1
+
+host1$ sudo gluster peer probe 192.168.56.11 # host2 をプールに追加
+host1$ sudo gluster peer probe 192.168.56.12 # host3 をプールに追加
+# 自ホスト(host1)の追加は不要
+</code></pre>
+
+<h2>ボリューム作成</h2>
+
+<p>ストレージプールを構成したら、ボリュームを作成する。</p>
+
+<p>ボリュームは「分散するかどうか」「レプリケーションするかどうか」「ストライピングするかどうか」を選ぶことになる。組み合わせることも可能。ひとまず2台構成で分
+散、ストライピング、レプリケーションのそれぞれについて試してみる。</p>
+
+<h3>分散</h3>
+
+<p>ファイルをストレージ内のどこかしらに保存しておく形態。追加すればするほど大きなストレージとなるけど、冗長性などは確保されない。</p>
+
+<p>host1, host2 で分散ボリュームを作ってみる。</p>
+
+<pre><code>$ parallel vagrant ssh {} -c sh -c "sudo mkdir -p /export/vol" ::: host1 host2
+$ vagrant ssh host1
+
+host1$ sudo gluster volume create vol 192.168.56.10:/export/vol 192.168.56.11:/export/vol
+</code></pre>
+
+<h3>ストラインピング</h3>
+
+<p>性能向上を目的として、ファイルを複数に分割して保存しておく形態。RAID0みたいな感じ。</p>
+
+<p>host2, host3 でストライピングボリュームを作ってみる。</p>
+
+<pre><code>$ parallel vagrant ssh {} -c sh -c "sudo mkdir -p /export/vol-striping" ::: host2 host3  
+$ vagrant ssh host1
+
+host1 $ sudo gluster volume create vol-striping stripe 2 192.168.56.11:/export/vol-striping 192.168.56.12:/export/vol-striping
+</code></pre>
+
+<h3>レプリケーション</h3>
+
+<p>データの複製を作って、複数の場所に保管しておく形態。RAID1みたいな感じ。信頼性が高くなり、ファイルの読み込みも早くなる。</p>
+
+<p>host1, host3 でレプリケーションボリュームを作ってみる。</p>
+
+<pre><code>$ parallel vagrant ssh {} -c sh -c "sudo mkdir -p /export/vol-replica" ::: host1 host3
+$ vagrant ssh host1
+
+host1$ sudo gluster volume create vol-replica replica 2 192.168.56.10:/export/vol-replica 192.168.56.12:/export/vol-replica
+host1$ sudo gluster volume start vol-replica
+</code></pre>
+
+<h2>利用</h2>
+
+<h3>マウント</h3>
+
+<p>OSにマウントしてみる。マウント方法にはNFSやCIFSなども選べるけど、ここではネイティブのglusterfs形式を選んでみる。</p>
+
+<pre><code>$ vagrant ssh host1
+
+host1$ sudo mkdir -p /mnt/{vol,vol-striping,vol-replica}
+host1$ sudo mount -t glusterfs 192.168.56.10:/vol /mnt/vol # 分散
+host1$ sudo mount -t glusterfs 192.168.56.11:/vol-striping /mnt/vol-striping # ストライピング
+host1$ sudo mount -t glusterfs 192.168.56.12:/vol-replica /mnt/vol-replica # レプリケーション    
+</code></pre>
+
+<h3>動作確認</h3>
+
+<p>はじめに、マウントした結果を見てみる。</p>
+
+<pre><code>$ df -h /mnt/*
+Filesystem            Size  Used Avail Use% Mounted on
+192.168.56.10:vol      17G  1.9G   14G  12% /mnt/vol
+192.168.56.12:vol-replica
+                      8.4G  949M  7.0G  12% /mnt/vol-replica
+192.168.56.11:vol-striping
+                       17G  1.9G   14G  12% /mnt/vol-striping
+</code></pre>
+
+<p>分散、ストライピングは2台分を足し合わせた結果になっている。レプリケーションは2台に同じデータが分散されるので、ディスク効率は50%に下がる。</p>
+
+<h4>分散</h4>
+
+<p>適当にファイルを作ってみる。</p>
+
+<pre><code>host1$ sudo touch /mnt/vol/{1..9}
+
+# 保管先をチェック
+
+host1$ ls /export/vol/ # 1  5  7  8  9
+
+host2$ ls /export/vol/ # 2  3  4  6
+</code></pre>
+
+<p>ファイルがばらばらと格納されていることがわかる。</p>
+
+<h3>ストライピング</h3>
+
+<pre><code>host1$ sudo vi /mnt/vol-striping/sample.txt # 10M強データをテキストデータを書き込み
+
+host1$ du -s /mnt/vol-striping/sample.txt # 10256と表示された
+host1$ ls -l /mnt/vol-striping/sample.txt # サイズが 10484785 と表示された
+
+# 保管先をチェック
+host2$ du -s /export/vol-striping/sample.txt # 5128 と表示された
+host2$ ls -l /export/vol-striping/sample.txt # サイズが 10354688 と表示された
+
+host3$ du -s /export/vol-striping/sample.txt # 5128 と表示された
+host3$ ls -l /export/vol-striping/sample.txt # サイズが 10484785 と表示された
+</code></pre>
+
+<p>duの結果（ディスクのセクタ）はちょうど半分ずつに分割されるけど、ファイルの実際のサイズは元ファイルと同じ場合と異なる場合の2パターンが検出できた。これは、
+ファイルがスパースファイルなっているため、見かけ上のサイズと実際にディスク上で利用しているサイズが異なっていることが原因。</p>
+
+<h3>レプリケーション</h3>
+
+<p>適当なファイルを作ってみる。</p>
+
+<pre><code>host1$ sudo dd if=/dev/urandom of=/mnt/vol-replica/dummy bs=1M count=10
+host1$ sha1sum /mnt/vol-replica/dummy # 54b5c383e96d511249f9393de060c3219549e030 だった
+
+# 保管先をチェック
+host1$ sha1sum /export/vol-replica/dummy # 54b5c383e96d511249f9393de060c3219549e030 だった
+
+host2$ sha1sum /export/vol-replica/dummy # 54b5c383e96d511249f9393de060c3219549e030 だった
+</code></pre>
+
+<p>同じ内容のファイルが複数箇所に保存されることがわかった。</p>
+
+<h2>メモ</h2>
+
+<p>なんとなくでも使い始められちゃうくらい簡単に使えるけど、<a href="http://gluster.org/community/documentatio%0An/index.php/Main_Page">ドキュメント</a>の<a href="http://www.gluster.org/wp-%0Acontent/uploads/2012/05/Gluster_File_System-3.3.0-Administration_Guide-en-%0AUS.pdf">PDF</a> がわかりやすくコンパクトにまとまっていて、全体像を理解するのはここからここから始めるといいと思う。</p>
+
+<h2>参考</h2>
+
+<ul>
+<li><a href="http://www.gluster.org/community/documentation/index.php/Main_Page">Gluster Community のドキュメント</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[sphinxの更新をguard-livereloadで検知してブラウザを自動リロードする]]></title>
+    <link href="http://apatheia.info/blog/2012/06/03/sphinxguard-livereload/"/>
+    <updated>2012-06-03T00:00:00+09:00</updated>
+    <id>http://apatheia.info/blog/2012/06/03/sphinxguard-livereload</id>
+    <content type="html"><![CDATA[<p>sphinxでドキュメントを書く際に生じる「文章の記述 => ビルド =>
+ブラウザでの確認」という一連のサイクルを人力でやるのは効率が悪い。いろいろな省力化対策が考えられるが、ここでは guard-
+livereloadを使って、文章のビルドとブラウザのリロードを自動化する方法を説明する。</p>
+
+<h2>作業環境</h2>
+
+<p>検証に使った環境は以下の通り。環境に依存する部分は少ないので、他のOSでも動くと思う。</p>
+
+<ul>
+<li>Mac OS X Lion</li>
+<li>ruby 1.9.3-p194</li>
+<li>sphinx 1.1.3</li>
+</ul>
+
+
+<h2>事前準備</h2>
+
+<h3>サーバー側準備</h3>
+
+<p>用意するのは3ファイル</p>
+
+<ul>
+<li>Gemfile … 必要なライブラリをまとめてインストールするための設定ファイル</li>
+<li>Gaurdfile … ファイルシステム監視の設定ファイル</li>
+<li>Procfile … Webサーバーとファイル監視を起動するための設定ファイル</li>
+</ul>
+
+
+<p><a href="https://gist.github.com/2862843">https://gist.github.com/2862843</a></p>
+
+<p>これら3ファイルをsphinxの作業ディレクトリ内に配置する。製生後のhtmlファイルは<code>buld/html</code>ディレクトリに格納されていることを期待した設定
+になっているので、必要であれば適宜修正する。</p>
+
+<p>ファイルの設置が終わったら、ライブラリをインストールする。</p>
+
+<pre><code>bundle install
+</code></pre>
+
+<h3>ブラウザ側準備</h3>
+
+<p>好きなブラウザにlivereloadのブラウザ拡張をインストールする。</p>
+
+<p><a href="http://help.livereload.com/kb/general-use/browser-extensions">http://help.livereload.com/kb/general-use/browser-
+extensions</a></p>
+
+<h2>利用方法</h2>
+
+<p>サーバー側でファイルの監視とlivereloadを開始する。</p>
+
+<pre><code>foreman start
+</code></pre>
+
+<p>ブラウザで http://localhost:3000/ (3000以外にしたい場合は Procfile 内で変更)
+にアクセスしてlivereloadのブラウザ拡張を有効化すれば、あとはファイルの更新に合わせて自動的にビルドとブラウザのリロードが行われる。</p>
+
+<h2>参考</h2>
+
+<ul>
+<li><a href="http://aligach.net/diary/20110925.html">LiveReloadが超気持ちいい2011</a> Livereloadの詳しい説明</li>
+<li><a href="https://addons.mozilla.org/en-US/firefox/addon/auto-reload/">Auto Reload</a> ローカルファイルの更新を検知してFirefoxをリロードしてくれるアドオン。試してみたけど、自分の環境ではリロードがうまく動かなかった。</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[さくらのVPSにLXCで仮想環境構築してXtraDB Cluster動かす]]></title>
+    <link href="http://apatheia.info/blog/2012/05/13/vpslxcxtradb-cluster/"/>
+    <updated>2012-05-13T00:00:00+09:00</updated>
+    <id>http://apatheia.info/blog/2012/05/13/vpslxcxtradb-cluster</id>
+    <content type="html"><![CDATA[<p>ほんの数年前までVPSといえばLinode、Slicehostなどの海外のサーバーしか選択肢がなかった。ls を実行しても一呼吸おくほどのレイテンシーがある
+ような環境で、128MBくらいのメモリを何とかやりくりしてRailsを動かしていた記憶が、現在では月1000円程度で用途によっては手に余るようなスペックが手
+に入るようになっている。そんなVPSの余ったリソースを使って、仮想環境をたてようというのが今回の目的だ。</p>
+
+<p><a href="http://lxc.sourceforge.net/">LXC</a>は、他の仮想化方式と比べてオーバーヘッドが少なくきびきび動くし、必要であればCPUやメモ
+リの制限をつけることもできる。RPMやDebのパッケージ作成をしたり、Chefのcookbook作成などで独立した環境を手軽に構築したい人には特に有用に思う
+。また、簡単にネットワークが作れるので、複数台構成のソフトウェアを1台のマシンのなかで動かすことが出来る。今回は動作確認として <a href="http://www.percona.com/software/percona-xtradb-%0Acluster/">Percona
+XtraDB Cluster</a>を動かしてみることにする。</p>
+
+<h2>前提について</h2>
+
+<p>作業環境は以下を想定している。</p>
+
+<ul>
+<li>さくらのVPS(v3) 1G
+
+<ul>
+<li>CentOS 6.2 x86_64</li>
+</ul>
+</li>
+<li>LXC 0.7.5</li>
+</ul>
+
+
+<p>CentOSを使っているのはデフォルトのOSイメージだからというのが理由。</p>
+
+<p>今回の内容をEC2上で実行する場合、Amazon Linux でもほとんど同様の設定で作業を行えることを確認しているけど、もっ と新しいOS、たとえば
+Ubuntu 12.04 LTS を使えば後述する cgroupの設定、bridgeの設定が不要となるためより簡単に行える。CentOS
+6で実施したときだけ遭遇するような問題に何度もぶつかったので、出来るだけ新しいOSを使った方がいい。</p>
+
+<p>仮想環境としては、lxcに同梱されているテンプレートを利用してUbuntuを、またOSイメージの作成からCentOSを構築する。</p>
+
+<h2>構築方法</h2>
+
+<p>以降の作業はすべて root で行うものとする。</p>
+
+<h3>ネットワークの設定</h3>
+
+<p>仮想環境とのやりとりで使うブリッジを作る。</p>
+
+<pre><code># yum install bridge-utils
+# vim /etc/sysconfig/network-scripts/ifcfg-lxcbr0
+
+    DEVICE=lxcbr0
+    TYPE=Bridge
+    BOOTPROTO=none
+    IPADDR=10.0.3.1
+    NETMASK=255.255.255.0
+    ONBOOT=yes
+
+# ifup lxcbr0 # 起動
+</code></pre>
+
+<h3>cgroup</h3>
+
+<pre><code># mount | grep cgroup # cgroup がないこと確認
+# mkdir -p /cgroup
+# printf "none          /cgroup     cgroup  defaults        0 0
+" &gt;&gt; /etc/fstab
+# mount -a
+# mount | grep cgroup # cgroup があること確認
+</code></pre>
+
+<h3>lxc セットアップ</h3>
+
+<pre><code># yum install libcap-devel docbook-utils
+# yum groupinstall "Development Tools"
+
+# wget [http://lxc.sourceforge.net/download/lxc/lxc-0.7.5.tar.gz](http://lxc.sourceforge.net/download/lxc/lxc-0.7.5.tar.gz)
+# tar xf lxc-0.7.5.tar.gz
+# cd lxc-0.7.5
+# ./configure
+# make rpm # この途中で /usr/lib64/lxc/{template,rootfs} がインストールされるのかなり狂ってる
+# rpm -ivh ~/rpmbuild/RPMS/x86_64/lxc-0.7.5-1.x86_64.rpm
+   (~/rpmbuild になければ、/usr/src/rpm から探す)
+# mkdir -p /var/lib/lxc
+</code></pre>
+
+<h3>dnsmasq (DHCP, DNS サーバー) セットアップ</h3>
+
+<p>環境を増やすごとに毎回NICの設定を編集するのは手間なので、ホスト側で dncp, dns の設定をする。</p>
+
+<pre><code># yum install dnsmasq
+# vim /etc/dnsmasq.conf
+
+    コメントを外して有効化する、編集するなどで以下の設定を行う
+    domain は自分の使いたい名前にすればいい
+
+    domain-needed
+    bogus-priv
+    interface = lxcbr0
+    listen-address = 127.0.0.1
+    listen-address = 10.0.3.1
+    expand-hosts
+    domain = lxc
+    dhcp-range = 10.0.3.50,10.0.3.200,1h
+
+# service dnsmasq reload
+</code></pre>
+
+<h3>ネットワークセットアップ</h3>
+
+<p>仮想環境から外部へのやりとりが出来るようにネットワークの設定を変更する。</p>
+
+<pre><code># sysctl -w net.ipv4.ip_forward=1
+# sed -i -re s/net.ipv4.ip_forward = 0/net.ipv4.ip_forward = 1/ /etc/sysctl.conf
+# iptables -A POSTROUTING -s 10.0.3.0/24 -t nat -j MASQUERADE
+# service iptables save # 設定を /etc/sysconfig/iptables に保存
+</code></pre>
+
+<h3>仮想環境構築 (1) 同梱のスクリプトを使った Ubuntu のインストール</h3>
+
+<p>lxcに同梱のスクリプト /usr/lib64/lxc/templates/lxc-ubuntu を使ってUbuntuをインストールする。</p>
+
+<p>基本的な設定ファイルを作る。</p>
+
+<pre><code># cd
+# vim lxc.conf
+
+    lxc.network.type=veth
+    lxc.network.link=lxcbr0
+    lxc.network.flags=up
+</code></pre>
+
+<p>今回は Ubuntu を導入するので、そのために必要なプログラムをインストールする。</p>
+
+<pre><code># yum install --enablerepo=epel debootstrap dpkg
+</code></pre>
+
+<p>これで準備が出来たので、実際に仮想環境を動かしてみる。</p>
+
+<pre><code># lxc-create -t ubuntu -f lxc.conf -n vm0
+   -t がテンプレートの名前。 -t ubuntu なら /usr/lib64/lxc/templates/lxc-ubuntu が読み込まれる
+      オプションでバージョンが指定可能だが、lxc 0.7.5 に同梱されているテンプレートのデフォルトだと Ubuntu 10.04 が選ばれる。
+   -f がさっき作った設定ファイルの場所
+   -n が環境の名前。今回は vm0 とした。 /var/lib/lxc/vm0 にファイルがおかれる
+# lxc-start -n vm0 -l debug -o debug.out -d
+   -l はデバッグレベル、-o はデバッグの場所を指定。安定して起動するようになったらつけなくていい
+# lxc-console -n vm0
+  一回エンター押した後、ユーザー root パスワード root でログイン
+  抜けるときは Ctrl-a q
+
+  lxc-console をしても何も表示されない状態になったら、以下を施して再起動
+
+# vim /var/lib/lxc/vm0/rootfs/etc/init/lxc.conf
+
+  telinit を差し込む
+
+    --- /var/lib/lxc/vm0/rootfs/etc/init/lxcguest.conf.orig 2012-02-07 10:28:25.000000000 +0900
+    +++ /var/lib/lxc/vm0/rootfs/etc/init/lxcguest.conf      2012-05-06 22:43:21.606098530 +0900
+    @@ -12,5 +12,6 @@
+        touch /var/run/utmp
+        chown root:utmp /var/run/utmp
+        initctl emit --no-wait net-device-added INTERFACE=lo || true
+    +   telinit 3
+        exit 0
+     end script
+</code></pre>
+
+<p>lxc-console だとCtrl-aが使えなくて不便なので、今後はsshでログインしたい。テンプレートが自動的にOpenSSHを
+インストールしてくれるが、ちゃんと起動しない。仕方が無いので、update-rc.d で起動するように設定</p>
+
+<pre><code>  仮想環境内で実行
+# update-rc.d ssh enable
+</code></pre>
+
+<p>固定IPアドレスを振りたい場合は、設定を変更する。</p>
+
+<pre><code>  ホスト側からの変更
+# vim /var/lib/lxc/vm0/config
+
+  lxc.network.ipv4 = 10.0.3.2/24
+
+  仮想環境の中で変更
+# vim /etc/network/interfaces
+
+    変更前
+    auto lo
+    iface lo inet loopback
+
+    auto eth0
+    iface eth0 inet dhcp
+
+    変更後
+    auto lo
+    iface lo inet loopback
+
+    iface eth0 inet static
+        address 10.0.3.2
+        netmask 255.255.255.0
+        gateway 10.0.3.1
+</code></pre>
+
+<p>仮想環境の破棄は lxc-destroy で行う</p>
+
+<pre><code># lxc-destroy -n vm0
+</code></pre>
+
+<h3>仮想環境構築 (2) 独自に構築した CentOS 6 のインストール</h3>
+
+<p>lxc-console の標準テンプレートでは CentOS が用意されていないので、自力でセットアップする。</p>
+
+<h4>イメージ作成</h4>
+
+<p>基本的に <a href="http://wiki.1tux.or%0Ag/wiki/Centos6/Installation/Minimal_installation_using_yum">Centos6/Installation/Minimal installation using yum</a> の通り。ただし 64 bit
+版をインストールする</p>
+
+<pre><code># mkdir /t
+# cd /t
+# wget [http://mirrors.kernel.org/centos/6/os/x86_64/Packages/centos-release-6-2.el6.centos.7.x86_64.rpm](http://mirrors.kernel.org/centos/6/os/x86_64/Packages/centos-release-6-2.el6.centos.7.x86_64.rpm)
+# rpm2cpio centos-release-6-2.el6.centos.7.x86_64.rpm  | cpio -idm
+# sed -i s/$releasever/6/g ./etc/yum.repos.d/*
+# yum --installroot=/t groupinstall base
+# yum --installroot=/t install dhclient
+# rm centos-release*.rpm
+# chroot /t
+
+  // ここから後はchroot内
+
+# passwd # パスワード変更
+
+# rm -f /dev/null
+# mknod -m 666 /dev/null c 1 3
+# mknod -m 666 /dev/zero c 1 5
+# mknod -m 666 /dev/urandom c 1 9
+# ln -s /dev/urandom /dev/random
+# mknod -m 600 /dev/console c 5 1
+# mknod -m 660 /dev/tty1 c 4 1
+# chown root:tty /dev/tty1
+
+# mkdir -p /dev/shm
+# chmod 1777 /dev/shm
+# mkdir -p /dev/pts
+# chmod 755 /dev/pts
+
+# cp -a /etc/skel/. /root/.
+
+# cat &gt; /etc/resolv.conf &lt;&lt; END
+# Google public DNS
+nameserver 8.8.8.8
+nameserver 8.8.4.4
+END
+
+# cat &gt; /etc/hosts &lt;&lt; END
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+END
+
+# cat &gt; /etc/sysconfig/network &lt;&lt; END
+NETWORKING=yes
+HOSTNAME=localhost
+END
+
+# cat &gt; /etc/sysconfig/network-scripts/ifcfg-eth0  &lt;&lt; END
+DEVICE=eth0
+ONBOOT=yes
+BOOTPROTO=dhcp
+END
+
+# cat &gt; /etc/fstab &lt;&lt; END
+/dev/root               /                       rootfs   defaults        0 0
+none                    /dev/shm                tmpfs    nosuid,nodev    0 0
+END
+
+# cat &gt; /etc/init/lxc-sysinit.conf &lt;&lt; END
+start on startup
+env container
+
+pre-start script
+        if [ "x$container" != "xlxc" -a "x$container" != "xlibvirt" ]; then
+                stop;
+        fi
+        telinit 3
+        initctl start tty TTY=console
+        exit 0;
+end script
+END
+
+# exit
+
+// ここから後はchroot外
+
+# cd /t
+# tar cvfz /centos6-lxc-root.tgz .
+</code></pre>
+
+<h4>設定</h4>
+
+<pre><code># mkdir /var/lib/lxc/vm0
+# cd /var/lib/lxc/vm0
+# mkdir rootfs
+# cd rootfs
+# tar xfz /centos6-lxc-root.tgz --numeric-owner
+# cd /var/lib/lxc/vm0
+
+# cat &gt;/var/lib/lxc/vm0/config &lt;&lt; END
+lxc.network.type=veth
+lxc.network.link=lxcbr0
+lxc.network.flags=up
+lxc.network.veth.pair=veth-vm0
+lxc.utsname = vm0
+
+lxc.tty = 1
+lxc.pts = 1024
+lxc.rootfs = /var/lib/lxc/vm0/rootfs
+lxc.mount  = /var/lib/lxc/vm0/fstab
+lxc.arch = x86_64
+lxc.cap.drop = sys_module mac_admin
+
+lxc.cgroup.devices.deny = a
+# Allow any mknod (but not using the node)
+lxc.cgroup.devices.allow = c *:* m
+lxc.cgroup.devices.allow = b *:* m
+# /dev/null and zero
+lxc.cgroup.devices.allow = c 1:3 rwm
+lxc.cgroup.devices.allow = c 1:5 rwm
+# consoles
+lxc.cgroup.devices.allow = c 5:1 rwm
+lxc.cgroup.devices.allow = c 5:0 rwm
+# /dev/{,u}random
+lxc.cgroup.devices.allow = c 1:9 rwm
+lxc.cgroup.devices.allow = c 1:8 rwm
+lxc.cgroup.devices.allow = c 136:* rwm
+lxc.cgroup.devices.allow = c 5:2 rwm
+# rtc
+lxc.cgroup.devices.allow = c 254:0 rwm
+#fuse
+lxc.cgroup.devices.allow = c 10:229 rwm
+#tun
+lxc.cgroup.devices.allow = c 10:200 rwm
+#full
+lxc.cgroup.devices.allow = c 1:7 rwm
+#hpet
+lxc.cgroup.devices.allow = c 10:228 rwm
+#kvm
+lxc.cgroup.devices.allow = c 10:232 rwm
+END
+
+# cat &gt; fstab  &lt;&lt; END
+proc            /var/lib/lxc/vm0/rootfs/proc         proc    nodev,noexec,nosuid 0 0
+sysfs           /var/lib/lxc/vm0/rootfs/sys          sysfs defaults  0 0
+END
+</code></pre>
+
+<h4>起動</h4>
+
+<pre><code># lxc-start -n vm0 -l debug -o debug.out -d
+# lxc-console -n vm0
+
+OpenSSH がなければ入れておく
+# yum install openssh-server
+# service sshd start
+</code></pre>
+
+<h2>動作確認 (Percona XtraDB Cluster の稼働確認)</h2>
+
+<p>動作確認として Percona XtraDB Cluster を動かしてみる。</p>
+
+<p>すでにこれまでの作業を通して vm0 としてCentOS 6がインストール済みとする。</p>
+
+<h3>ホスト側設定</h3>
+
+<ul>
+<li>構成
+
+<ul>
+<li>ホスト, IPアドレス 10.0.3.1</li>
+<li>仮想0 vm0, IPアドレス 10.0.3.2</li>
+<li>仮想1 vm1, IPアドレス 10.0.3.3</li>
+<li>仮想2 vm2, IPアドレス 10.0.3.4</li>
+</ul>
+</li>
+</ul>
+
+
+<p>各仮想環境に簡単にアクセスできるように hosts を設定しておく。ホスト側に設定しておけば、dnsmasq のおかげで仮想側でも名前が引けるようになる。</p>
+
+<pre><code># vim /etc/hosts
+    以下を追記
+    10.0.3.2 vm0
+    10.0.3.3 vm1
+    10.0.3.4 vm2
+</code></pre>
+
+<h3>コピー元(vm0) 設定</h3>
+
+<pre><code># ssh vm0
+  ここからはvm0の中
+
+  固定IPアドレスを設定
+# vim /var/lib/lxc/vm1/rootfs/etc/sysconfig/network-scripts/ifcfg-eth0
+    DEVICE=eth0
+    ONBOOT=yes
+    BOOTPROTO=static
+    IPADDR=10.0.3.3
+    NETMASK=255.255.255.0
+    GATEWAY=10.0.3.1
+
+  XtraDB Cluster インストール
+# rpm -Uhv [http://repo.percona.com/testing/centos/6/os/noarch/percona-testing-0.0-1.noarch.rpm](http://repo.percona.com/testing/centos/6/os/noarch/percona-testing-0.0-1.noarch.rpm)
+# rpm -Uhv [http://www.percona.com/downloads/percona-release/percona-release-0.0-1.x86_64.rpm](http://www.percona.com/downloads/percona-release/percona-release-0.0-1.x86_64.rpm)
+# yum install Percona-XtraDB-Cluster-server Percona-XtraDB-Cluster-client
+# cat &gt; /etc/my.cnf &lt;&lt;END
+[mysqld]
+binlog_format=ROW
+wsrep_provider=/usr/lib64/libgalera_smm.so
+wsrep_cluster_address=gcomm://
+wsrep_slave_threads=2
+wsrep_cluster_name=lxccluster
+wsrep_sst_method=rsync
+wsrep_node_name=node0
+innodb_locks_unsafe_for_binlog=1
+innodb_autoinc_lock_mode=2
+END
+
+# poweroff
+</code></pre>
+
+<h3>コピー、起動</h3>
+
+<pre><code># lxc-clone -n vm1 -o vm0
+  -n はこれから作る仮想環境の名前
+  -o はコピー元の仮想環境の名前
+# lxc-clone -n vm1 -o vm0
+# vim /var/lib/lxc/vm1/config
+  vm0をvm1に置換 (vm2ではvm2に置換)
+  IPアドレスを10.0.3.2 -&gt; 10.0.3.3 に変更 (vm2では 10.0.3.4に変更)
+# vim /var/lib/lxc/vm1/rootfs/etc/my.cnf
+    wsrep_cluster_address=gcomm:// をwsrep_cluster_address=gcomm://10.0.3.2 に変更
+    wsrep_node_name=node0 を wsrep_node_name=node1 に変更 (vm2ではnode2に変更)
+
+  同様にvm0からvm2のコピーを実施
+</code></pre>
+
+<p>3つの環境が完成したら起動</p>
+
+<pre><code># lxc-start -n vm0 -l debug -o debug.0.out -d
+# lxc-start -n vm1 -l debug -o debug.1.out -d
+# lxc-start -n vm2 -l debug -o debug.2.out -d
+</code></pre>
+
+<h3>動作確認</h3>
+
+<p>vm0 にログインして実行</p>
+
+<pre><code># mysql -u root
+  データベース、テーブル作成
+mysql&gt; create database t;
+mysql&gt; use t;
+mysql&gt; create table sample (
+id int not null primary key auto_increment,
+value int
+);
+
+データ投入
+mysql&gt; insert into sample set value = 1;
+mysql&gt; insert into sample set value = 1;
+mysql&gt; insert into sample set value = 1;
+mysql&gt; select * from sample;
++----+-------+
+| id | value |
++----+-------+
+|  2 |     1 |
+|  5 |     1 |
+|  8 |     1 |
++----+-------+
+</code></pre>
+
+<p>IDがスキップしながらインサートされることがわかる。引き続き、他の環境でもデータを入れてみる。</p>
+
+<p>vm1 にログインして実行</p>
+
+<pre><code>mysql&gt; use t;
+mysql&gt; select * from sample;
++----+-------+
+| id | value |
++----+-------+
+|  2 |     1 |
+|  5 |     1 |
+|  8 |     1 |
++----+-------+
+mysql&gt; insert into sample set value =  1;
+mysql&gt; insert into sample set value =  1;
+mysql&gt; insert into sample set value =  1;
+mysql&gt; select * from sample;
++----+-------+
+| id | value |
++----+-------+
+|  2 |     1 |
+|  5 |     1 |
+|  8 |     1 |
+|  9 |     1 |
+| 12 |     1 |
+| 15 |     1 |
++----+-------+
+</code></pre>
+
+<p>同様のことがvm2でも起きる。</p>
+
+<p>これにより、XtraDB Cluster の以下の動作が確認出来た。</p>
+
+<ul>
+<li>すべてのサーバーで書き込みと参照がおこなえること</li>
+<li>オートインクリメントがバッティングしないように、値が自動的にオフセットをつけて挿入されること</li>
+</ul>
+
+
+<h1>メモ</h1>
+
+<h2>外部から仮想環境へ直接アクセスしたい場合</h2>
+
+<p>たとえば、外部からポート10080でアクセスされたとき、仮想環境の 10.0.3.51 のポート 80 へ転送させたい場合は iptables
+で以下のような設定をする。</p>
+
+<pre><code># vim /etc/syscofig/iptables
+    -A POSTROUTING -s 10.0.3.0/24 -j MASQUERADE の下に以下を追加
+    -A PREROUTING -i eth0 -p tcp --dport 10080 -j DNAT --to-destination 10.0.3.51:80
+# service iptables condrestart
+# iptables -L -t nat # NATテーブルから設定追加を確認
+</code></pre>
+
+<h2>新しい Ubuntu を入れたい場合</h2>
+
+<p>元の手順だとlucid (10.04) がインストールされるが、たとえば oneiric (11.10) であれば以下でインストール可能。</p>
+
+<pre><code># cp -a /usr/share/debootstrap/scripts/lucid  /usr/share/debootstrap/scripts/oneiric
+    lucid は /usr/share/debootstrap/scripts/gutsy のシンボリックリンクで、他のリリースも同様。とにかくファ イル名が参照できるようにシンボリックリンクをコピーしておけばいい。
+# lxc-create -t ubuntu -f lxc.conf -n vm0 -- --trim -r oneiric
+    lxc-create ではなく -r はテンプレートへの引数
+</code></pre>
+
+<h2>他の OS もインストールしてみたい場合</h2>
+
+<p>/usr/lib64/lxc/templates/ には lxc-busybox,lxc-debian,lxc-fedora,lxc-lenny,lxc-
+opensuse,lxc-sshd,lxc-ubuntu の テンプレートがある。これ以外の環境が必要であれば、「lxc guset
+OS名」とかで検索してみる。</p>
+
+<h1>参考</h1>
+
+<ul>
+<li><a href="http://www.activestate.com/blog/2011/10/virtualization-ec2-cloud-using-lxc">http://www.activestate.com/blog/2011/10/virtualization-ec2-cloud-using-lxc</a></li>
+<li><a href="http://wiki.debian.org/LXC">http://wiki.debian.org/LXC</a></li>
+<li><a href="https://help.ubuntu.com/12.04/serverguide/lxc.html">https://help.ubuntu.com/12.04/serverguide/lxc.html</a></li>
+<li><a href="http://www.lacerta.be/d7/content/lxc-installation-ubuntu-server-1104">http://www.lacerta.be/d7/content/lxc-installation-ubuntu-server-1104</a></li>
+<li><a href="http://wiki.1tux.org/wiki/Lxc/Installation/Guest/Centos/6">http://wiki.1tux.org/wiki/Lxc/Installation/Guest/Centos/6</a></li>
+<li><a href="http://www.percona.com/doc/percona-xtradb-cluster/index.html">http://www.percona.com/doc/percona-xtradb-cluster/index.html</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[rundeckをセットアップして、jenkins上のjava成果物をデプロイする]]></title>
+    <link href="http://apatheia.info/blog/2012/01/03/rundeckjenkinsjava/"/>
+    <updated>2012-01-03T00:00:00+09:00</updated>
+    <id>http://apatheia.info/blog/2012/01/03/rundeckjenkinsjava</id>
+    <content type="html"><![CDATA[<p>rundeck でjenkins上の成果物をデプロイしよう、という話。</p>
+
+<h2>rundeck について</h2>
+
+<p><a href="http://rundeck.org/">公式サイト</a></p>
+
+<p>ITオペレーションのコンサルやってる<a href="http://www.dtosolutions.com/">DTO Solution</a>（Depops関連の資料とかでよ
+く会社名は見かけますね）が作っているデプロイ用のツール。元々は<a href="http://doc36.controltier.org/wiki%0A/Main_Page">ControlTier</a>っていう管理ツールがあって、そこから分家した。ControlTierはサーバー/クライアントモデルだけど、サーバー側しか用意しなくてい
+いRundeckのほうがお手軽度高い。</p>
+
+<p>複数のサーバーを対象に状態を変更するのが目的で、<a href="https://github.com/capistrano/capistrano">capistrano</a>
+とか <a href="http://docs.fabfile.org">fabric</a>
+とかと同じジャンル。GUIで操作するのが特徴なので、<a href="https://github.com/peritor/webistrano">webistrano</a>
+とかに近い。</p>
+
+<p>GUI（笑）みたいに思うかもしれないけど、画面上から履歴が確認できたり、ブラウザがあればどこからでもデプロイ出来るのって、運用の敷居下げるのに貢献してくれる
+と思う。</p>
+
+<h2>rundeck 設定</h2>
+
+<h3>インストール</h3>
+
+<p>とりあえずインストールしてみる。以降の説明は、rundeck インストールサーバー、デプロイ対象サーバーともに CentOS 5 の場合。</p>
+
+<p><a href="http://rundeck.org/docs/RunDeck-Guide.html#installing-rundeck">http://rundeck.org/docs/RunDeck-Guide.html#installing-
+rundeck</a> , <a href="http://kb.dtosolutions.com/wik%0Ai/Rundeck_on_CentOS">htt
+p://kb.dtosolutions.com/wiki/Rundeck_on_CentOS</a> 参照。CentOSならyumで簡単にインストールできる。</p>
+
+<pre><code>$ sudo rpm -Uvh [http://repo.rundeck.org/latest.rpm](http://repo.rundeck.org/latest.rpm)
+$ sudo yum install rundeck
+</code></pre>
+
+<p>まずはインストールされたファイルを確認してみよう。</p>
+
+<pre><code>$ rpm -ql rundeck
+$ rpm -ql rundeck-config
+</code></pre>
+
+<p>以下のようなことがわかる。</p>
+
+<ul>
+<li>設定系のファイル /etc/rundeck は本体と別の RPM (rundeck-config) に入っている</li>
+<li>/var/lib/rundeck 以下にシステム関係のデータがおかれて、/var/rundeck 以下にユーザーが作成したデータをおくっぽい
+
+<ul>
+<li>僕は試してないけど、保存先はDBも使えるみたい。http://rundeck.org/docs/RunDeck-Guide.html#relational-database</li>
+</ul>
+</li>
+</ul>
+
+
+<h3>起動</h3>
+
+<p>さっそく起動してみる。</p>
+
+<pre><code>$ sudo /sbin/service rundeckd start
+</code></pre>
+
+<p>既定のポートは 4440 なので http://RUNDECK_HOST:4440/ にアクセスしてみる。</p>
+
+<p><img src="http://apatheia.info/images/2012-01-03-rundeckjenkinsjava/tumblr_lx82ozkABF1qz5yk8.png" alt="ログイン画面" /></p>
+
+<p>アクセスできなければ、ちゃんと起動出来てるかどうかとか、iptables が邪魔していないかとか確認。この時点ではまだログイン出来ない。</p>
+
+<p>ログインできるようにするために、ユーザーを作る。[公式サイトの説明](http://rundeck.org/docs/RunDeck-Guide.html</p>
+
+<h1>managing-logins)</h1>
+
+<p>パスワードのハッシュ化はmd5sumコマンドとかでもいいけど、手順に沿って付属のライブラリ使ってみる。RPMでインストールすると、説明文中の$RUNDECK
+_BASE相当がないので、読み替えて以下のように実行</p>
+
+<pre><code>$ cd /var/lib/rundeck/
+$ java -cp exp/webapp/WEB-INF/lib/jetty-6.1.21.jar:exp/webapp/WEB-INF/lib/jetty-util-6.1.21.jar org.mortbay.jetty.security.Password f440 secret_password
+OBF:1vny1vn61unn1z7e1vu91ytc1r3x1xfj1r411yta1vv11z7o1uob1vnw1vn4
+MD5:be6cb1069f01cd207e6484538367bd1d
+CRYPT:f4Ou7EnVsEzMg
+</code></pre>
+
+<p>ユーザー一覧に追加</p>
+
+<pre><code>$ sudo vim /etc/rundeck/realm.properties
+// 末尾に以下を追加
+f440: MD5:be6cb1069f01cd207e6484538367bd1d,admin,user
+</code></pre>
+
+<p>これで利用可能になった。ユーザー情報を読み込むために、サービス再起動 （今後もユーザー設定の変更ごとに再起動させる）</p>
+
+<pre><code>$ sudo /sbin/service rundeckd restart
+</code></pre>
+
+<p>アクセス出来るようになったはず。ログインしてみる。</p>
+
+<p><img src="http://apatheia.info/images/2012-01-03-rundeckjenkinsjava/tumblr_lx838slUR51qz5yk8.png" alt="ログイン直後" /></p>
+
+<p>やりましたね。</p>
+
+<p>プロジェクトの名前はお好きに。SSHのキーについては、RPMインストール時に作られるrundeckユーザーのキーが<code>/home/rundeck/.ssh/r
+undeck.id_rsa</code>なので、ここにしておくと手間が少なくて済む。他の値については、今回はデフォルトで。</p>
+
+<p>この後説明するホストやジョブはプロジェクト単位で管理していくことになる。</p>
+
+<p><img src="http://apatheia.info/images/2012-01-03-rundeckjenkinsjava/tumblr_lx840qzSI71qz5yk8.png" alt="Run" /></p>
+
+<p>左上のメニューに注目</p>
+
+<ul>
+<li>Run … 一回こっきりのコマンド。非定型な処理（緊急でアプリケーションサーバー順々に再起動かけたいとか）はここから実行できる。capistrano の <code>cap shell</code> みたいなイメージ</li>
+<li>Job … 複数のコマンドや条件を保存はここに登録。</li>
+<li>Histoly … 実行履歴が確認出来る。</li>
+</ul>
+
+
+<p>最初は localhost だけがホストに登録されているから、Run を選択後、真ん中の入力フォームからコマンドを実行してみる。</p>
+
+<p><img src="http://apatheia.info/images/2012-01-03-rundeckjenkinsjava/tumblr_lx84c0tw7g1qz5yk8.png" alt="exec_uname" /></p>
+
+<p>実行できた。</p>
+
+<h3>ホスト追加</h3>
+
+<p>ローカルホストにばかりいじっていても不毛なので、ホストを追加していく。ユーザー同様ホストについても設定ファイルを編集する必要がある。</p>
+
+<p>rundeck をインストールしたサーバーで公開鍵をメモ</p>
+
+<pre><code>rundeck$ sudo su - rundeck
+rundeck$ cat .ssh/rundeck.id_rsa.pub # 出力結果をメモ
+</code></pre>
+
+<p>各ホストに作業用ユーザー「deploy」を追加する - パスワード不要でsudo可能。 - パスワードは設定しない - SSH
+の鍵認証でパスフレーズ無しにログイン可能</p>
+
+<pre><code>以下、デプロイ対象サーバー(仮に192.168.10.10とする)
+192.168.10.10$ sudo /sbin/useradd deploy
+192.168.10.10$ sudo /usr/sbin/visudo
+
+  // tty が使えないとSSH経由のコマンドに問題が起きるので、無効化する
+  Defaults:deploy    !requiretty
+  deploy  ALL=(ALL)       NOPASSWD: ALL
+
+192.168.10.10$ mkdir -m 700 /home/deploy/.ssh
+192.168.10.10$ sudo vim /home/deploy/.ssh/authorized_keys # rundeck の公開鍵を登録
+192.168.10.10$ sudo chown -R deploy.deploy /home/deploy/.ssh
+</code></pre>
+
+<p>いったん rundeck 側からログインしてみる。</p>
+
+<pre><code> ここからはまた rundeck をインストールしたサーバーの話
+$ sudo su - rundeck
+$ touch .ssh/config
+$ chmod 600 .ssh/config
+$ vim .ssh/config
+    このあともがしがしサーバー追加していくので、LAN内のマシンについては指紋チェック無効化しておく
+    Host 192.168.*.*
+        StrictHostKeyChecking no
+$ ssh -i ~/.ssh/rundeck.id_rsa deploy@192.168.10.10
+</code></pre>
+
+<p>次に設定ファイル編集</p>
+
+<pre><code>$ sudo vim /var/rundeck/projects/example/etc/resources.xml
+
+以下のような行を追加。name, hostname, username 辺りは重要だけど、それ以外は適当に指定。絞り込みの時に使えるので、tags あたりはしっかり入力しておいたほうがいい。
+&lt;node name="target1" description="適当" tags="適当" hostname="192.168.10.10" osArch="適当" osFamily="適当" osName="適当" osVersion="適当" username="deploy" /&gt;
+</code></pre>
+
+<p>これで再起動させればrundeck側からホストが操作できるようになっているはず。target1(192.168.115.60),
+target2(192.168.115.61)を追加して画面から確認してみる。</p>
+
+<p><img src="http://apatheia.info/images/2012-01-03-rundeckjenkinsjava/tumblr_lx96zd197m1qz5yk8.png" alt="フィルタ変更" /></p>
+
+<p>フィルタの変更でとりあえず全部外して、全台表示にする。</p>
+
+<p><img src="http://apatheia.info/images/2012-01-03-rundeckjenkinsjava/tumblr_lx96zqf2uJ1qz5yk8.png" alt="フィルタ変更後" /></p>
+
+<p>確認できた。ここでコマンドを打てば全台に適用される。</p>
+
+<h3>ジョブ追加</h3>
+
+<p>サーバーがセットアップ出来たので、ジョブを追加していく。メニューから<code>Jobs</code>を選択して、<code>New job</code>
+をクリックすればいい。全部画面に書いてあるけど、一応説明すると:</p>
+
+<ul>
+<li>Saved this job? ジョブを保存するかどうか
+
+<ul>
+<li>Job Name … 名前</li>
+<li>Group … グループ。スラッシュ区切りで入力しておくと、階層構造で表示してくれる</li>
+<li>Description … 説明</li>
+<li>UUID … UUID （これとは別に、ジョブを作ると勝手にID割り振られる）</li>
+</ul>
+</li>
+<li>Project どのプロジェクトを対象とするか</li>
+<li>Workflow
+
+<ul>
+<li>Keepgoing エラーで止まるかそのまま進むか</li>
+<li>Strategy ノードが3台、ステップが2個あったとして、node1-step1, node1-step2, node1-step3, node2-step1 … とすすむのがNode-oriented、Node-oriented、node1-step1, node2-step1, node3-step1 と進んでいくのが Step-oriented</li>
+</ul>
+</li>
+<li>Step 実行するステップを指定。各行の右端にマウスをあわせると（入れ替えたり編集、削除したりできる）
+
+<ul>
+<li>Command … コマンドの実行（Runでやったのと同じ）</li>
+<li>Script … 複数行のスクリプトの実行</li>
+<li>Script file … サーバー上にあるスクリプトファイルの実行</li>
+<li>Job Reference … 他のジョブを実行</li>
+</ul>
+</li>
+<li>Dispatch to Nodes … これを選択しないと、ローカルホストだけで実行される。選択すると実行対象の絞り込み画面が表示されるので、タグやホスト名、その他条件を設定する。</li>
+<li>Log level … ログの出力多寡を決定</li>
+</ul>
+
+
+<p>サクサク作れるので、必要に応じてがしがし増やしていく。</p>
+
+<p><img src="http://apatheia.info/images/2012-01-03-rundeckjenkinsjava/tumblr_lx99jg4sze1qz5yk8.png" alt="" /></p>
+
+<h2>jenkins との連動</h2>
+
+<p>rundeck は<a href="http://jenkins-ci.org/">jenkins</a>および<a href="https://wiki%0A.jenkins-ci.org/display/JENKINS/RunDeck+Plugin">rundeckプラグイン</a>と連動して利用することが出来る。</p>
+
+<p>プラグインはjenkinsのプラグイン管理画面に表示されるので、それを選択するだけでいい。</p>
+
+<h3>jenkins から rundeck をキックする</h3>
+
+<p>jenkinsでビルド完了→rundeckでデプロイ→jenkinsで統合テスト実施、といった0-clickのデプロイパイプが作れるようになる。<a href="http://www.otsune.com/diary/2008/09/11/1.html#200809111">0-cli
+ckは革命</a> 。</p>
+
+<p>jenkinsの設定方法は<a href="https://wiki.jenkins-%0Aci.org/display/JENKINS/RunDeck+Plugin#RunDeckPlugin-DeploymentPipeline">プラグインの説明ページ</a>参照。</p>
+
+<h3>rundeck からjenkins上の成果物を選択できるようにする。</h3>
+
+<p>rundeckで手動デプロイするとき、成果物名やビルドの名前を選択できるようにする。</p>
+
+<p>jenkins rundeck プラグインは以下を利用出来るようにしてくれる:</p>
+
+<ul>
+<li>特定の成果物を起点に、ビルド履歴とその際の成果物を提供するAPI</li>
+<li>特定のビルドを起点に、その最新成果物一覧を提供するAPI</li>
+</ul>
+
+
+<p>rundeck でジョブを実行するとき、ユーザー入力を受け付けることが出来るんだけど、この選択項目には外部から取得したJSONなども設定できる。この機能と先
+ほどのAPIを組み合わせることで実現出来る。</p>
+
+<p>やってみよう。ジョブの保存画面でオプションを選択。</p>
+
+<p><img src="http://apatheia.info/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9bfrJrHn1qz5yk8.png" alt="オプション設定画面" /></p>
+
+<p><img src="http://apatheia.info/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9c296d8I1qz5yk8.png" alt="オプション設定画面2" /></p>
+
+<ul>
+<li>Option Name … 変数名として使われる値。artifact を指定</li>
+<li>Description … 適当</li>
+<li>Default Value … 未設定でいい</li>
+<li>Allowed Value … Remote URL からAPIのURLを指定（URLの形式は<a href="https://wiki.jenkins-ci.org/display/JENKINS/RunDeck+Plugin#RunDeckPlugin-OptionProvider">ドキュメント参照</a>）</li>
+<li>Restrictions … 値の形式チェック。Remote URLの値しか指定させたくないので、「Enforced from Allowed Values」を指定</li>
+<li>Requirement … 必須かどうか。必須なので、当然「yes」</li>
+<li>Multi-valued … 複数の値をとれるようにするか。複数の成果物を同時にデプロイしたい、とかであれば使えるかもしれないけど、今回は「No」</li>
+<li>Usage … ここで指定した値をステップの部分でどのように使えばいいのか説明してくれている。</li>
+</ul>
+
+
+<p>併せて、受け取った値を表示するだけのステップを作ってみる。</p>
+
+<p><img src="http://apatheia.info/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9cj2ACEP1qz5yk8.png" alt="ステップ" /></p>
+
+<p>実行してみよう。最初にビルド番号を聞かれる。</p>
+
+<p><img src="http://apatheia.info/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9cobBFg31qz5yk8.png" alt="成果物一覧" /></p>
+
+<p>適当に選んで「Run Job
+Now」すると、さっき作った変数を表示するだけのスクリプトが動いて、指定した成果物のURLが表示され、連携がうまくいっていたことが確認出来る。</p>
+
+<p><img src="http://apatheia.info/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9dlhjwmr1qz5yk8.png" alt="実行結果" /></p>
+
+<p>詳細なデプロイ手順については、各環境ごとにあるだろうから、アレンジしてもらえればと思う。</p>
+
+<h2>まとめ</h2>
+
+<p>ホストやユーザーの設定をいちいちファイル編集しなくちゃいけなかったりするのが、ちょっとかっこわるいかな。ただ、UIはわかりやすいし、セットアップも簡単なので
+、気軽に試してみるといいと思う。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[MySQL::Sandboxで環境を作ってBLACKHOLEエンジンを試す]]></title>
+    <link href="http://apatheia.info/blog/2011/12/31/mysqlsandboxblackhole/"/>
+    <updated>2011-12-31T00:00:00+09:00</updated>
+    <id>http://apatheia.info/blog/2011/12/31/mysqlsandboxblackhole</id>
+    <content type="html"><![CDATA[<p>ちょっとMySQLのBLACKHOLEエンジン使って調べたいことがあったんだけど、
+<a href="http://mysqlsandbox.net/">MySQL::Sandbox</a> 使うとレプリケーション環境が簡単に構築できて便利。</p>
+
+<p>以下は、MySQL::SandboxのセットアップからBLACKHOLEエンジン使うところまでの記録。</p>
+
+<h3>前提</h3>
+
+<ul>
+<li>確認した環境は Debian 6.0.3, perl v5.12.3</li>
+<li>cpanm &amp; perlbrew インストール済み（<code>cpan</code>コマンドでも問題無いはず）</li>
+<li>MySQL 5.5 はサーバーを起動するためにlibaio1が必要なので、あらかじめパッケージをインストールしておく</li>
+</ul>
+
+
+<h3>手順</h3>
+
+<h4>インストール</h4>
+
+<p><code>cpanm</code> でMySQL::Sandbox をインストール。</p>
+
+<pre><code>$ cpanm MySQL::Sandbox
+</code></pre>
+
+<p>これで make_sandbox などのコマンド群がインストールされる。</p>
+
+<p>データファイルは以下のようなファイル構成を取る</p>
+
+<ul>
+<li>$HOME/opt/mysql 以下のサブディレクトリにサーバーを設置 (環境変数 SANDBOX_BINARY で変更可能)</li>
+<li>$HOME/sandboxes 以下のサブディレクトリにMySQLのデータや起動スクリプトを設置 (環境変数 SANDBOX_HOME で変更可能)</li>
+</ul>
+
+
+<h4>サーバーセットアップ</h4>
+
+<p>サーバーを起動してみる。</p>
+
+<pre><code># 使用するディレクトリ設定
+$ export SANDBOX_BINARY=$HOME/opt/mysql
+$ export SANDBOX_HOME=$HOME/opt/sandboxes
+# ソース取得
+$ cd SANDBOX_HOME
+$ curl -L -o mysql-5.5.19-linux2.6-x86_64.tar.gz http://www-jp.mysql.com/get/Downloads/MySQL-5.5/mysql-5.5.19-linux2.6-x86_64.tar.gz/from/http://ftp.jaist.ac.jp/pub/mysql/
+# Sandbox 作成
+$ make_sandbox $SANDBOX_BINARY/mysql-5.5.19-linux2.6-x86_64.tar.gz
+</code></pre>
+
+<p>これで$SANDBOX_BINARY/5.5.19 にサーバーが、また $SANDBOX_HOME/msb_5_5_19 以下にインスタンスが作成される。</p>
+
+<p>この時点で起動出来ているはずなので、接続してみる。以下で mysql クライアントが起動するはず。</p>
+
+<pre><code>$ $SANDBOX_HOME/msb_5_5_19/use
+</code></pre>
+
+<p><code>use</code>以外には、<code>start</code>, <code>stop</code>, <code>status</code> などの名前から動作が推測できそうなコマンド群がある。$SANDBOX_HOME
+には複数のサンドボックスを操作するコマンド <code>use_all</code>, <code>start_all</code>, <code>stop_all</code> などがある。</p>
+
+<pre><code>$ make_replication_sandbox 5.5.19 
+# 第二引数はtar.gzまでのパスでもいいが、一度展開されたらバージョン番号指定でもいい。make_sandboxも同様
+</code></pre>
+
+<p>以上で、 master, node1, node2 というサーバーが起動する。node1, node2 は master
+を参照したレプリケーション構成となる。デフォルトでノードは2台だが、<code>--how_many_nodes</code> オプションで台数は変更可能。</p>
+
+<p>同様に<a href="http://dev.mysql.com/doc/refman/5.1/ja/replication-%0Atopology-circular.html">Circular recplication</a>(日本語訳だとなんになるんだろう)も簡単に作れる。マスター/マスターレプリケーションはCircular
+replication が2台のみの構成だった場合に同じ。</p>
+
+<pre><code>$ make_replication_sandbox --circular=4 5.5.19
+</code></pre>
+
+<p>これで node1 -> node2, node2 -> nod3, node3 -> node4, node4 -> node1
+という循環関係のレプリケーションが作れる。</p>
+
+<p>使い終わったら止めておこう。</p>
+
+<pre><code>$ $SANDBOX_HOME/stop_all
+</code></pre>
+
+<h3>BLACKHOLEエンジンを試す</h3>
+
+<p>準備ができたので、<a href="http://dev.mysql.com/doc/refman/5.1/ja/blackhole-%0Astorage-engine.html">BLACKHOLEエンジン</a>を使ってみる。BLACKHOLEエンジンはバイナリログは記録するが、データは残さないストレージエンジンのこと。</p>
+
+<p>まずは、サンドボックス作成</p>
+
+<p>$ make_replication_sandbox &#8211;circular=3 5.5.19</p>
+
+<p>デフォルトストレージエンジンをnode1, node3はInnoDB、node2 はBLACKHOLEに変更</p>
+
+<pre><code>$ echo default_storage_engine=InnoDB &gt;&gt; $SANDBOX_HOME/rcsandbox_5_5_19/node1/my.sandbox.cnf
+$ echo default_storage_engine=BLACKHOLE &gt;&gt; $SANDBOX_HOME/rcsandbox_5_5_19/node2/my.sandbox.cnf
+$ echo default_storage_engine=InnoDB &gt;&gt; $SANDBOX_HOME/rcsandbox_5_5_19/node3/my.sandbox.cnf
+$ $SANDBOX_HOME/rcsandbox_5_5_19/restart_all
+</code></pre>
+
+<p>node2, node3 のレプリケーションだけ再開して、node1 -> node2 -> node3 の2階層スレーブにする。</p>
+
+<pre><code>$ $SANDBOX_HOME/rcsandbox_5_5_19/node2/use -e start slave
+$ $SANDBOX_HOME/rcsandbox_5_5_19/node3/use -e start slave
+</code></pre>
+
+<p>実験のための構成が完成した。ここで、node1 にデータを流し込んだとき、node2 にはデータが残らなくて、node3 にデータが出来たら成功。</p>
+
+<p>サンプルデータには、<a href="https://launchpad.net/test-%0Adb/">Sample database with test suite</a>を利用する。</p>
+
+<pre><code>$ curl -LO [http://launchpad.net/test-db/employees-db-1/1.0.6/+download/employees_db-full-1.0.6.tar.bz2](http://launchpad.net/test-db/employees-db-1/1.0.6/+download/employees_db-full-1.0.6.tar.bz2)
+$ tar xf employees_db-full-1.0.6.tar.bz2
+$ cd employees_db
+# InnoDB が決めうちで設定されているので、コメントアウト
+$ sed -i -re s/^\s+(set storage_engine = InnoDB;)/-- \1/ *.sql
+# 取り込み
+$ $SANDBOX_HOME/rcsandbox_5_5_19/node1/use  -t &lt; ./employees.sql
+</code></pre>
+
+<p>結果</p>
+
+<pre><code>$ cd $SANDBOX_HOME
+$ du -sh rcsandbox_5_5_19/node?/data/ibdata1
+219M    rcsandbox_5_5_19/node1/data/ibdata1
+18M     rcsandbox_5_5_19/node2/data/ibdata1
+219M    rcsandbox_5_5_19/node3/data/ibdata1
+</code></pre>
+
+<p>node2 だけデータファイルがふくらまない。</p>
+
+<pre><code>$ ls -l rcsandbox_5_5_19/node2/data/
+合計 357652
+drwx------ 2 f440 f440      4096 2011-12-31 17:15 employees/
+-rw-rw---- 1 f440 f440   5242880 2011-12-31 17:14 ib_logfile0
+-rw-rw---- 1 f440 f440   5242880 2011-12-31 17:11 ib_logfile1
+-rw-rw---- 1 f440 f440  18874368 2011-12-31 17:14 ibdata1
+-rw-rw---- 1 f440 f440        88 2011-12-31 17:16 master.info
+-rw-rw---- 1 f440 f440      5925 2011-12-31 17:14 msandbox.err
+drwx------ 2 f440 f440      4096 2011-12-31 17:11 mysql/
+-rw-rw---- 1 f440 f440      6273 2011-12-31 17:14 mysql-bin.000001
+-rw-rw---- 1 f440 f440 168403385 2011-12-31 17:16 mysql-bin.000002
+-rw-rw---- 1 f440 f440        38 2011-12-31 17:14 mysql-bin.index
+-rw-rw---- 1 f440 f440       315 2011-12-31 17:14 mysql_sandbox15902-relay-bin.000005
+-rw-rw---- 1 f440 f440 168399499 2011-12-31 17:16 mysql_sandbox15902-relay-bin.000006
+-rw-rw---- 1 f440 f440        76 2011-12-31 17:14 mysql_sandbox15902-relay-bin.index
+-rw-rw---- 1 f440 f440         5 2011-12-31 17:14 mysql_sandbox15902.pid
+drwx------ 2 f440 f440      4096 2011-12-31 17:11 performance_schema/
+-rw-rw---- 1 f440 f440        75 2011-12-31 17:16 relay-log.info
+drwx------ 2 f440 f440      4096 2011-12-31 17:11 test/
+</code></pre>
+
+<p>node2 のバイナリログ、リレーログはちゃんと出来ているので、BLACKHOLEエンジンの適用を確認できた。</p>
+
+<h3>メモ</h3>
+
+<ul>
+<li><code>$SANDBOX_HOME/clear_all</code> でデータ消せるの便利。</li>
+<li>MySQL::Sandbox 3.0.19 からは、<a href="http://mysqlsandbox.net/news.html">Percona や Maria DB などの派生DBも扱える</a>みたい。いろいろなバージョンで試すことが多いのでうれしい。</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[プロセス管理にsuperviserを使う]]></title>
+    <link href="http://apatheia.info/blog/2011/12/24/superviser/"/>
+    <updated>2011-12-24T00:00:00+09:00</updated>
+    <id>http://apatheia.info/blog/2011/12/24/superviser</id>
+    <content type="html"><![CDATA[<p>ちょっと前にsupervisorを使ったのでやり方をまとめておく。</p>
+
+<p>公式サイト: <a href="http://supervisord.org/">supervisor</a></p>
+
+<p>supervisorはプログラムの起動、停止を管理するツール。daemontools
+がわかるなら、あんな感じのソフトだと思ってもらえれば早い。daemontoolsよりも標準的なディレクトリ構成で使えるぶん、導入障壁は低いと思う。</p>
+
+<p>最近のLinuxなら、パッケージですぐインストール出来る。以降の説明は debian (6.0.3)、superviser 3 系によるもの。</p>
+
+<h2>インストール</h2>
+
+<pre><code>$ sudo apt-get install superviser
+</code></pre>
+
+<h3>確認</h3>
+
+<pre><code>$ sudo service supervisor status # 起動確認（名前表示されない……）
+ is running
+$ sudo service supervisor stop # 停止
+Stopping supervisor: supervisord.
+$ sudo service supervisor start # 起動
+Starting supervisor: supervisord.
+</code></pre>
+
+<h2>例</h2>
+
+<p>例のために、自分のホームにインストールしてあったmemcachedを起動してみる。</p>
+
+<p>まずは、コマンドラインから問題無く起動出来ることを確認</p>
+
+<pre><code>$ /home/f440/opt/bin/memcached # 起動
+</code></pre>
+
+<p>プログラムはフォアグラウンドで起動する。memcached の例で言うと、-d オプション (run as a daemon) はつけない。</p>
+
+<p>設定ファイルを配置する。もともと /etc/supervisor/supervisord.conf 内で
+/etc/supervisor/conf.d/*.conf を Include
+するよう設定されていた読み込むように設定されていたので、以下のようなファイルを作った。</p>
+
+<pre><code>$ cat /etc/supervisor/conf.d/memcached.conf
+[program:memcached]
+command=/home/f440/opt/bin/memcached
+user=f440
+</code></pre>
+
+<p>デフォルトだと設定したプログラムは自動起動する(autostart=true)なので、supervisor を再起動させれば memcached
+も起動する。memcached がいつまでも起動しなければ /var/log/supervisor 以下のログを確認する。</p>
+
+<p>何らかの原因で停止したとき、自動起動して欲しければ autorestart=true を指定しておく。</p>
+
+<h2>コマンドで操作</h2>
+
+<p>起動中は supervisorctl 経由で操作ができるようになる。</p>
+
+<pre><code>$ sudo supervisor 
+memcached                        RUNNING    pid 24928, uptime 0:08:21
+supervisor&gt; # help でヘルプを表示
+supervisor&gt; exit
+$ sudo supervisor status # 直接引数を渡すこともできる
+memcached                        RUNNING    pid 24928, uptime 0:08:21
+</code></pre>
+
+<h2>Webで操作</h2>
+
+<p>設定を追加するとWebから操作できるようになる。外部から好き放題できるので、安全な場所以外では適切な権限設定必須。</p>
+
+<p>ポート9001で、どこからでもアクセスできるよう設定</p>
+
+<pre><code>diff --git a/supervisor/supervisord.conf b/supervisor/supervisord.conf
+index 61b3020..86e04f2 100644
+--- a/supervisor/supervisord.conf
++++ b/supervisor/supervisord.conf
+@@ -4,6 +4,9 @@
+ file=/var/run//supervisor.sock   ; (the path to the socket file)
+ chmod=0700                       ; sockef file mode (default 0700)
+
++[inet_http_server]
++port=*:9001
++
+ [supervisord]
+ logfile=/var/log/supervisor/supervisord.log ; (main log file;default $CWD/supervisord.log)
+ pidfile=/var/run/supervisord.pid ; (supervisord pidfile;default supervisord.pid)
+</code></pre>
+
+<p>設定ファイル再読込</p>
+
+<pre><code> $ sudo supervisor reload
+</code></pre>
+
+<p>アクセス出来るようになる</p>
+
+<p><img src="http://apatheia.info/images/2011-12-24-superviser/tumblr_lx9eq9SHXa1qz5yk8.jpg" alt="Web管理画面" /></p>
+
+<p>終わり。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[githubを使ってyumリポジトリを公開する]]></title>
+    <link href="http://apatheia.info/blog/2011/12/17/githubyum/"/>
+    <updated>2011-12-17T00:00:00+09:00</updated>
+    <id>http://apatheia.info/blog/2011/12/17/githubyum</id>
+    <content type="html"><![CDATA[<p>ubuntuには<a href="https://launchpad.net/ubuntu/+ppas">PPA</a>という仕組みがあり、プロジェクトホスティングサービス
+<a href="https://launchpad.net/">launchpad</a> と連携してパッケージを簡単に配布する仕組みが用意されている。今回は、githubを使
+ってリポジトリにpushしたら自動的にRPMパッケージを公開する方法をまとめる。</p>
+
+<p>※
+PPAだとサーバサイドで各種プラットフォームにビルドしてくれるが、そこまではサポートしない。あくまで配布だけ。RPMをどうやって作るのかについても触れない。</p>
+
+<p>以下は<a href="http://haproxy.1wt.eu/">haproxy</a>
+を公開するときの例。haproxyのソースにはRPMのspecファイルが含まれているので、簡単にrpmが作成出来る。</p>
+
+<h2>手順</h2>
+
+<h3>git リポジトリを作成</h3>
+
+<p><a href="https://github.com/repositories/new">Create a New Repository - github</a>
+からリポジトリを作成。</p>
+
+<h3>ディレクトリ構造を作成</h3>
+
+<p>以下はCentOS 5 64bit 版とソースRPMを配布する場合</p>
+
+<pre><code>$ mkdir -p haproxy-rpm/centos/5/os/{SRPMS,x86_64}
+$ cd haproxy-rpm
+</code></pre>
+
+<h3>ファイル設置</h3>
+
+<pre><code>$ cp /some/path/haproxy-1.4.18-1.src.rpm centos/5/os/SRPMS/
+$ cp /some/path/haproxy-1.4.18-1.x86_64.rpm centos/5/os/x86_64/
+</code></pre>
+
+<h3>メタデータ作成</h3>
+
+<pre><code>$ sudo yum install -y createrepo
+$ createrepo centos/5/os/SRPMS/
+$ createrepo centos/5/os/x86_64/
+</code></pre>
+
+<h3>commit &amp; push</h3>
+
+<pre><code>$ git add .
+$ git ci -m initial commit  
+$ git remote add origin git@github.com:f440/haproxy-rpm.git
+$ git push -u origin master
+</code></pre>
+
+<h2>利用方法</h2>
+
+<p>/etc/yum.repos.d 以下にわかりやすい名前でファイルを作る。</p>
+
+<pre><code>サンプル /etc/yum.repos.d/haproxy-rpm-f440.repo (1行目やnameは適宜変更する)
+
+[haproxy-rpm-f440]
+name=haproxy-CentOS-$releasever
+baseurl=https://raw.github.com/f440/haproxy-rpm/master/centos/5/os/x86_64/
+enabled=1
+gpgcheck=0
+</code></pre>
+
+<p>あとは通常通り <code>sudo yum install haproxy</code> でインストール可能。</p>
+
+<h2>備考</h2>
+
+<ul>
+<li>createrepo はdebian, ubuntuなどにもコマンドが用意されているので、ビルド以外の作業はRHEL系以外のOSでもよい</li>
+<li>mercurialを使いたければ、<a href="https://bitbucket.org">bitbucket</a>でも似たような手順で公開可能。その際は baseurl の部分に <code>baseurl=https://bitbucket.org/f440/haproxy-rpm/raw/tip/centos/$releasever/os/$basearch/</code> のような形式で記述する</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[プログレスバーを簡単に表示できるコマンド pv]]></title>
+    <link href="http://apatheia.info/blog/2011/12/17/-pv/"/>
+    <updated>2011-12-17T00:00:00+09:00</updated>
+    <id>http://apatheia.info/blog/2011/12/17/-pv</id>
+    <content type="html"><![CDATA[<p>プログレスバーを簡単に表示できる <code>pv</code> について説明する。</p>
+
+<h2>インストール方法</h2>
+
+<p>自分の環境(debian 6.0.3)だと <code>apt</code>
+でインストール出来る。RHEL系なら<a href="http://pkgs.repoforge.org/pv/">ここ</a>かな。</p>
+
+<h2>使い方</h2>
+
+<p>端的に言うと、「cat ＋ 標準エラー出力にプログレスバー」という動きを取る。</p>
+
+<pre><code>f440@abhoth[10]:~$ yes | pv &gt;/dev/null
+ 529MB 0:00:08 [67.2MB/s] [       &lt;=&gt;                                         ]
+</code></pre>
+
+<p>8秒で合計529MB、秒間67.2MBくらいで「y」の文字が <code>pv</code> を通り抜けてるのがわかる。 <code>-l</code>
+オプションをつけると行モードになり、転送量ではなく転送行数を調べられる。</p>
+
+<pre><code>f440@abhoth[10]:~$ yes | pv -l &gt;/dev/null
+ 435k 0:00:10 [45.9k/s] [          &lt;=&gt;                                        ]
+</code></pre>
+
+<p>10秒で435行、秒間45900行くらいが通り抜けてるのがわかる。</p>
+
+<p>他にもおもしろいオプションとして <code>-L</code> っていうのがあって、パイプから出てく流量を制限することが出来る。</p>
+
+<h2>用途</h2>
+
+<p><code>mysqldump</code> とか <code>mysql</code>にくっつけてダンプ、リストアの完了時刻を予想する、とかかな。</p>
+
+<p>Webで見てると、<code>nc</code> とか <code>tcpdump</code> とかと組み合わせてる例がある。</p>
+
+<p>自分で作ったコマンドとかに、簡単に進行状況表示がくっつけられるのは便利。</p>
 ]]></content>
   </entry>
   

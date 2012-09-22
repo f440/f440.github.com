@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: git | apatheia.info]]></title>
+  <link href="http://apatheia.info/blog/categories/git/atom.xml" rel="self"/>
+  <link href="http://apatheia.info/"/>
+  <updated>2012-09-22T21:50:19+09:00</updated>
+  <id>http://apatheia.info/</id>
+  <author>
+    <name><![CDATA[f440]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[githubを使ってyumリポジトリを公開する]]></title>
+    <link href="http://apatheia.info/blog/2011/12/17/githubyum/"/>
+    <updated>2011-12-17T00:00:00+09:00</updated>
+    <id>http://apatheia.info/blog/2011/12/17/githubyum</id>
+    <content type="html"><![CDATA[<p>ubuntuには<a href="https://launchpad.net/ubuntu/+ppas">PPA</a>という仕組みがあり、プロジェクトホスティングサービス
+<a href="https://launchpad.net/">launchpad</a> と連携してパッケージを簡単に配布する仕組みが用意されている。今回は、githubを使
+ってリポジトリにpushしたら自動的にRPMパッケージを公開する方法をまとめる。</p>
+
+<p>※
+PPAだとサーバサイドで各種プラットフォームにビルドしてくれるが、そこまではサポートしない。あくまで配布だけ。RPMをどうやって作るのかについても触れない。</p>
+
+<p>以下は<a href="http://haproxy.1wt.eu/">haproxy</a>
+を公開するときの例。haproxyのソースにはRPMのspecファイルが含まれているので、簡単にrpmが作成出来る。</p>
+
+<h2>手順</h2>
+
+<h3>git リポジトリを作成</h3>
+
+<p><a href="https://github.com/repositories/new">Create a New Repository - github</a>
+からリポジトリを作成。</p>
+
+<h3>ディレクトリ構造を作成</h3>
+
+<p>以下はCentOS 5 64bit 版とソースRPMを配布する場合</p>
+
+<pre><code>$ mkdir -p haproxy-rpm/centos/5/os/{SRPMS,x86_64}
+$ cd haproxy-rpm
+</code></pre>
+
+<h3>ファイル設置</h3>
+
+<pre><code>$ cp /some/path/haproxy-1.4.18-1.src.rpm centos/5/os/SRPMS/
+$ cp /some/path/haproxy-1.4.18-1.x86_64.rpm centos/5/os/x86_64/
+</code></pre>
+
+<h3>メタデータ作成</h3>
+
+<pre><code>$ sudo yum install -y createrepo
+$ createrepo centos/5/os/SRPMS/
+$ createrepo centos/5/os/x86_64/
+</code></pre>
+
+<h3>commit &amp; push</h3>
+
+<pre><code>$ git add .
+$ git ci -m initial commit  
+$ git remote add origin git@github.com:f440/haproxy-rpm.git
+$ git push -u origin master
+</code></pre>
+
+<h2>利用方法</h2>
+
+<p>/etc/yum.repos.d 以下にわかりやすい名前でファイルを作る。</p>
+
+<pre><code>サンプル /etc/yum.repos.d/haproxy-rpm-f440.repo (1行目やnameは適宜変更する)
+
+[haproxy-rpm-f440]
+name=haproxy-CentOS-$releasever
+baseurl=https://raw.github.com/f440/haproxy-rpm/master/centos/5/os/x86_64/
+enabled=1
+gpgcheck=0
+</code></pre>
+
+<p>あとは通常通り <code>sudo yum install haproxy</code> でインストール可能。</p>
+
+<h2>備考</h2>
+
+<ul>
+<li>createrepo はdebian, ubuntuなどにもコマンドが用意されているので、ビルド以外の作業はRHEL系以外のOSでもよい</li>
+<li>mercurialを使いたければ、<a href="https://bitbucket.org">bitbucket</a>でも似たような手順で公開可能。その際は baseurl の部分に <code>baseurl=https://bitbucket.org/f440/haproxy-rpm/raw/tip/centos/$releasever/os/$basearch/</code> のような形式で記述する</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>
