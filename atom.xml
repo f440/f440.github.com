@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[apatheia.info]]></title>
+  <link href="http://apatheia.info/atom.xml" rel="self"/>
+  <link href="http://apatheia.info/"/>
+  <updated>2012-09-22T20:31:37+09:00</updated>
+  <id>http://apatheia.info/</id>
+  <author>
+    <name><![CDATA[f440]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[TumblerからOctopressへの移行]]></title>
+    <link href="http://apatheia.info/blog/2012/09/22/tumbler-to-octopress/"/>
+    <updated>2012-09-22T17:28:00+09:00</updated>
+    <id>http://apatheia.info/blog/2012/09/22/tumbler-to-octopress</id>
+    <content type="html"><![CDATA[<p>Tumblerでブログ書いていたけど、ローカルで記事書く => フォームに貼り付け =>
+プレビューのサイクルが結構面倒くさいと思っていたので、Octopressに移行した。</p>
+
+<p>vim で書く => すぐに確認 => github にデプロイ => 公開の流れは気持ちいい。</p>
+
+<h2>やったこと</h2>
+
+<pre><code>$ git clone git://github.com/imathis/octopress.git octopress
+
+# テーマ入れ替える    
+$ git clone git://github.com/tommy351/Octopress-Theme-Slash.git .themes/slash
+$ rake 'install[slash]' # zsh だとクォートなりエスケープするなりしないと、[, ] がメタ文字として解釈される
+# .themes/slash/{source,sass} がルートディレクトリにコピーされる
+</code></pre>
+
+<p>このままだと header の canonical が設定されないかったので、同梱テンプレート <code>.themes/classic/source/_includes/head.html</code> を参考に <code>./source/_includes/head.html</code> をちょっとといじった。</p>
+
+<p><a href="http://tsurayogoshi.tumblr.com/archive">ブログの過去記事</a>を全部インポートする ( 参考: <a href="http://blog.assimov.net/blog/2012/03/24/tumblr-to-octopress-powered-by-jekyll-and-markdown/">Goodbye Tumblr. Hello, Octopress Powered by Jekyll and Markdown!</a>)</p>
+
+<pre><code>$ wget -O source/tumblr.rb https://raw.github.com/stephenmcd/jekyll/master/lib/jekyll/migrators/tumblr.rb
+$ vim source/tumblr.rb # format="md" =&gt; format="markdown" に書き換え
+$ ruby -rubygems -e 'require "./source/tumblr"; Jekyll::Tumblr.process("http://tsurayogoshi.tumblr.com", format="markdown", grab_images=true)'
+$ mv _posts/tumblr/* source/_posts/
+$ mv post source/
+</code></pre>
+
+<p>後は細かい調整</p>
+
+<ul>
+<li>画像のパスが tumblr を参照しているので、全部ダウンロードして <code>source/images</code> 以下に
+保存</li>
+<li>記事のメタデータ部分
+
+<ul>
+<li><code>comments: true</code>を追加</li>
+<li><code>tags</code> を <code>categories</code> に書き換え。</li>
+</ul>
+</li>
+<li>各種外部サイト向けパーツの設定</li>
+</ul>
+
+
+<p>Github Pages へのデプロイ方法は<a href="http://octopress.org/docs/deploying/github/">公式の説明</a>を参照。</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -3,17 +3,16 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>apatheia.info</title>
+	<title>Blog Archives - apatheia.info</title>
 	<meta name="author" content="f440">
 
 	
-	<meta name="description" content="Tumblerでブログ書いていたけど、ローカルで記事書く => フォームに貼り付け =>
-プレビューのサイクルが結構面倒くさいと思っていたので、Octopressに移行した。 vim で書く => すぐに確認 => github にデプロイ => 公開の流れは気持ちいい。 やったこと $ git &hellip;">
+	<meta name="description" content=" 2012 TumblerからOctopressへの移行 Sep 22 octopress ">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-	<link rel="canonical" href="http://apatheia.info/">
+	<link rel="canonical" href="http://apatheia.info/blog/archives/">
 	<link href="/favicon.png" rel="shortcut icon">
 	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
 	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
@@ -77,89 +76,28 @@
 		
 	
 	<div id="content" class="inner">
+	
 
 
-    <article class="post">
+	
+	
+	<section class="archives"><h1 class="year">2012</h1>
+
+<article>
 	<h1 class="title"><a href="/blog/2012/09/22/tumbler-to-octopress/">TumblerからOctopressへの移行</a></h1>
-	<div class="entry-content">
-		<p>Tumblerでブログ書いていたけど、ローカルで記事書く => フォームに貼り付け =>
-プレビューのサイクルが結構面倒くさいと思っていたので、Octopressに移行した。</p>
-
-<p>vim で書く => すぐに確認 => github にデプロイ => 公開の流れは気持ちいい。</p>
-
-<h2>やったこと</h2>
-
-<pre><code>$ git clone git://github.com/imathis/octopress.git octopress
-
-# テーマ入れ替える    
-$ git clone git://github.com/tommy351/Octopress-Theme-Slash.git .themes/slash
-$ rake 'install[slash]' # zsh だとクォートなりエスケープするなりしないと、[, ] がメタ文字として解釈される
-# .themes/slash/{source,sass} がルートディレクトリにコピーされる
-</code></pre>
-
-<p>このままだと header の canonical が設定されないかったので、同梱テンプレート <code>.themes/classic/source/_includes/head.html</code> を参考に <code>./source/_includes/head.html</code> をちょっとといじった。</p>
-
-<p><a href="http://tsurayogoshi.tumblr.com/archive">ブログの過去記事</a>を全部インポートする ( 参考: <a href="http://blog.assimov.net/blog/2012/03/24/tumblr-to-octopress-powered-by-jekyll-and-markdown/">Goodbye Tumblr. Hello, Octopress Powered by Jekyll and Markdown!</a>)</p>
-
-<pre><code>$ wget -O source/tumblr.rb https://raw.github.com/stephenmcd/jekyll/master/lib/jekyll/migrators/tumblr.rb
-$ vim source/tumblr.rb # format="md" =&gt; format="markdown" に書き換え
-$ ruby -rubygems -e 'require "./source/tumblr"; Jekyll::Tumblr.process("http://tsurayogoshi.tumblr.com", format="markdown", grab_images=true)'
-$ mv _posts/tumblr/* source/_posts/
-$ mv post source/
-</code></pre>
-
-<p>後は細かい調整</p>
-
-<ul>
-<li>画像のパスが tumblr を参照しているので、全部ダウンロードして <code>source/images</code> 以下に
-保存</li>
-<li>記事のメタデータ部分
-
-<ul>
-<li><code>comments: true</code>を追加</li>
-<li><code>tags</code> を <code>categories</code> に書き換え。</li>
-</ul>
-</li>
-<li>各種外部サイト向けパーツの設定</li>
-</ul>
-
-
-<p>Github Pages へのデプロイ方法は<a href="http://octopress.org/docs/deploying/github/">公式の説明</a>を参照。</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-09-22T17:28:00+09:00" pubdate data-updated="true">2012-09-22</time></div>
-	<div class="tags">
+	<div class="meta">
+		<span class="date">Sep 22</span>
+		<span class="tags">
 
 
 	<a class='category' href='/blog/categories/octopress/'>octopress</a>
 
 
+</span>
+	    
+	</div>
+</article>
 </div>
-	
-</div></article>
-
-<nav id="pagenavi">
-    
-    
-    <div class="center"><a href="/blog/archives">Blog Archives</a></div>
-</nav></div>
 	<footer id="footer" class="inner">Copyright &copy; 2012
 
     f440
