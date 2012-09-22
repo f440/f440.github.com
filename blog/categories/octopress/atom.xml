@@ -4,7 +4,7 @@
   <title><![CDATA[Category: octopress | apatheia.info]]></title>
   <link href="http://apatheia.info/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://apatheia.info/"/>
-  <updated>2012-09-22T22:22:18+09:00</updated>
+  <updated>2012-09-22T23:25:01+09:00</updated>
   <id>http://apatheia.info/</id>
   <author>
     <name><![CDATA[f440]]></name>
@@ -22,6 +22,9 @@
 プレビューのサイクルが結構面倒くさいな、と常々思っていたので、Octopressに移行した。</p>
 
 <p>ホスティングには <a href="http://pages.github.com/">Github Pages</a> を利用している。</p>
+
+<!-- more -->
+
 
 <h2>手順</h2>
 

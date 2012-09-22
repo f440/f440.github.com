@@ -4,7 +4,7 @@
   <title><![CDATA[apatheia.info]]></title>
   <link href="http://apatheia.info/atom.xml" rel="self"/>
   <link href="http://apatheia.info/"/>
-  <updated>2012-09-22T22:22:18+09:00</updated>
+  <updated>2012-09-22T23:25:01+09:00</updated>
   <id>http://apatheia.info/</id>
   <author>
     <name><![CDATA[f440]]></name>
@@ -19,6 +19,9 @@
     <updated>2012-09-22T19:00:00+09:00</updated>
     <id>http://apatheia.info/blog/2012/09/22/head&#8211;tail-</id>
     <content type="html"><![CDATA[<p>head と tail を使うとき、行数指定方法について。動作確認は GNU coreutils 8.19 で行っている。</p>
+
+<!-- more -->
+
 
 <p>head と tail のは<code>-n 数字</code>(あるいは<code>--line 数字</code>)で出力する行数を指定できる。</p>
 
@@ -99,6 +102,9 @@ $ seq 10 | awk 3&lt;=NR &amp;&amp; NR&lt;=5
     <updated>2012-09-22T18:00:00+09:00</updated>
     <id>http://apatheia.info/blog/2012/09/22/-riemann</id>
     <content type="html"><![CDATA[<p>イベント処理ツール <a href="http://aphyr.github.com/riemann/">riemann</a>を使ってみたのでその感想。</p>
+
+<!-- more -->
+
 
 <ul>
 <li>サーバーは clojure で書かれている
@@ -191,6 +197,9 @@ processor」だった。fluentd はイベントを集計できる形式でログ
 
 <p>ホスティングには <a href="http://pages.github.com/">Github Pages</a> を利用している。</p>
 
+<!-- more -->
+
+
 <h2>手順</h2>
 
 <pre><code>$ git clone git://github.com/imathis/octopress.git octopress
@@ -253,6 +262,9 @@ $ mv post source/
     <id>http://apatheia.info/blog/2012/07/30/roundsmancapistranochef-solo</id>
     <content type="html"><![CDATA[<p>管理対象のサーバー台数が少ない場合など、<a href="http://www.opscode.com/chef/">chef</a>のサーバーを運用するコストとベネフィットを天
 秤にかけてみて、ああこれどう考えても労力ペイできないな、でも設定ファイルを手動で管理するのはやだな、といったときに<a href="https://g%0Aithub.com/iain/roundsman">roundsman</a>を使うといいという話。</p>
+
+<!-- more -->
+
 
 <p><a href="https://github.com/iain/roundsman">roundsman</a>は、chefのレシピを転送して<a href="http:%0A//wiki.opscode.com/display/chef/Chef+Solo">chef-solo</a>を実行する<a href="https://github.com%0A/capistrano/capistrano">capistrano</a>向けライブラリ。アプリケーションのリリースタイミングに併せてインフラ設定の変更が必要になることは往々にしてある
 ので、<a href="https://github.com/capistrano/capistrano">capistrano</a>を使ってデプロイとインフラ設定変更を一括適
@@ -388,6 +400,9 @@ bundle exec cap ステージ名 chef:nginx
     <updated>2012-06-05T00:00:00+09:00</updated>
     <id>http://apatheia.info/blog/2012/06/05/-glusterfs-</id>
     <content type="html"><![CDATA[<p>Webアプリケーションを構築する上で、運用中に発生したファイルをローカルのファイルシステム上に保管すると、スケールを阻害するため好ましくないことが多い。</p>
+
+<!-- more -->
+
 
 <p>そのため、アプリケーションの設計の段階からCDNの利用したり、ファイルの管理だけ別のサービスに切り出したりすることを考慮すべきだけど、いろいろなしがらみのた
 めにどうしてもファイルを複数台のサーバーで共有するようなシステム形態にせざるを得ないことが往々にしてある。</p>
@@ -621,6 +636,9 @@ host2$ sha1sum /export/vol-replica/dummy # 54b5c383e96d511249f9393de060c3219549e
 ブラウザでの確認」という一連のサイクルを人力でやるのは効率が悪い。いろいろな省力化対策が考えられるが、ここでは guard-
 livereloadを使って、文章のビルドとブラウザのリロードを自動化する方法を説明する。</p>
 
+<!-- more -->
+
+
 <h2>作業環境</h2>
 
 <p>検証に使った環境は以下の通り。環境に依存する部分は少ないので、他のOSでも動くと思う。</p>
@@ -690,6 +708,9 @@ extensions</a></p>
     <content type="html"><![CDATA[<p>ほんの数年前までVPSといえばLinode、Slicehostなどの海外のサーバーしか選択肢がなかった。ls を実行しても一呼吸おくほどのレイテンシーがある
 ような環境で、128MBくらいのメモリを何とかやりくりしてRailsを動かしていた記憶が、現在では月1000円程度で用途によっては手に余るようなスペックが手
 に入るようになっている。そんなVPSの余ったリソースを使って、仮想環境をたてようというのが今回の目的だ。</p>
+
+<!-- more -->
+
 
 <p><a href="http://lxc.sourceforge.net/">LXC</a>は、他の仮想化方式と比べてオーバーヘッドが少なくきびきび動くし、必要であればCPUやメモ
 リの制限をつけることもできる。RPMやDebのパッケージ作成をしたり、Chefのcookbook作成などで独立した環境を手軽に構築したい人には特に有用に思う
@@ -1245,6 +1266,9 @@ OS名」とかで検索してみる。</p>
     <id>http://apatheia.info/blog/2012/01/03/rundeckjenkinsjava</id>
     <content type="html"><![CDATA[<p>rundeck でjenkins上の成果物をデプロイしよう、という話。</p>
 
+<!-- more -->
+
+
 <h2>rundeck について</h2>
 
 <p><a href="http://rundeck.org/">公式サイト</a></p>
@@ -1536,6 +1560,9 @@ Now」すると、さっき作った変数を表示するだけのスクリプ�
     <content type="html"><![CDATA[<p>ちょっとMySQLのBLACKHOLEエンジン使って調べたいことがあったんだけど、
 <a href="http://mysqlsandbox.net/">MySQL::Sandbox</a> 使うとレプリケーション環境が簡単に構築できて便利。</p>
 
+<!-- more -->
+
+
 <p>以下は、MySQL::SandboxのセットアップからBLACKHOLEエンジン使うところまでの記録。</p>
 
 <h3>前提</h3>
@@ -1697,6 +1724,9 @@ drwx------ 2 f440 f440      4096 2011-12-31 17:11 test/
     <id>http://apatheia.info/blog/2011/12/24/superviser</id>
     <content type="html"><![CDATA[<p>ちょっと前にsupervisorを使ったのでやり方をまとめておく。</p>
 
+<!-- more -->
+
+
 <p>公式サイト: <a href="http://supervisord.org/">supervisor</a></p>
 
 <p>supervisorはプログラムの起動、停止を管理するツール。daemontools
@@ -1801,6 +1831,9 @@ index 61b3020..86e04f2 100644
 <a href="https://launchpad.net/">launchpad</a> と連携してパッケージを簡単に配布する仕組みが用意されている。今回は、githubを使
 ってリポジトリにpushしたら自動的にRPMパッケージを公開する方法をまとめる。</p>
 
+<!-- more -->
+
+
 <p>※
 PPAだとサーバサイドで各種プラットフォームにビルドしてくれるが、そこまではサポートしない。あくまで配布だけ。RPMをどうやって作るのかについても触れない。</p>
 
@@ -1874,6 +1907,9 @@ gpgcheck=0
     <updated>2011-12-17T00:00:00+09:00</updated>
     <id>http://apatheia.info/blog/2011/12/17/-pv</id>
     <content type="html"><![CDATA[<p>プログレスバーを簡単に表示できる <code>pv</code> について説明する。</p>
+
+<!-- more -->
+
 
 <h2>インストール方法</h2>
 

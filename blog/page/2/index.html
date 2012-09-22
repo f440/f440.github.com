@@ -7,8 +7,9 @@
 	<meta name="author" content="f440">
 
 	
-	<meta name="description" content="イベント処理ツール riemannを使ってみたのでその感想。 サーバーは clojure で書かれている 設定ファイルは S 式 クライアントは各言語版がある http://aphyr.github.com/riemann/clients.html
-サーバーの状態は riemann-dash &hellip;">
+	<meta name="description" content="ubuntuにはPPAという仕組みがあり、プロジェクトホスティングサービス
+launchpad と連携してパッケージを簡単に配布する仕組みが用意されている。今回は、githubを使
+ってリポジトリにpushしたら自動的にRPMパッケージを公開する方法をまとめる。 Read on &rarr; &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -80,91 +81,15 @@
 
 
     <article class="post">
-	<h1 class="title"><a href="/blog/2012/09/22/-riemann/">イベント処理ツール Riemannを使う</a></h1>
+	<h1 class="title"><a href="/blog/2011/12/17/githubyum/">Githubを使ってyumリポジトリを公開する</a></h1>
 	<div class="entry-content">
-		<p>イベント処理ツール <a href="http://aphyr.github.com/riemann/">riemann</a>を使ってみたのでその感想。</p>
-
-<ul>
-<li>サーバーは clojure で書かれている
-
-<ul>
-<li>設定ファイルは S 式</li>
-</ul>
-</li>
-<li>クライアントは各言語版がある <a href="http://aphyr.github.com/riemann/clients.html">http://aphyr.github.com/riemann/clients.html</a></li>
-<li>サーバーの状態は riemann-dash という sinatra でできた Web 画面から確認できる</li>
-<li>クライアントからのメッセージはイベントと呼んでる
-
-<ul>
-<li>host, service, state, time, description, tags, metric, ttl というパラメータを持っている</li>
-</ul>
-</li>
-<li>サーバー、クライアント間は Protocol Buffer で通信する</li>
-</ul>
-
-
-<p>公式サイトではサーバーの tar ball と deb パッケージを配布している。動かすためには、Java で実行するだけ。</p>
-
-<pre><code>$ wget [http://aphyr.com/riemann/riemann-0.1.2.tar.bz2](http://aphyr.com/riemann/riemann-0.1.2.tar.bz2)
-$ tar xf riemann-0.1.2.tar.bz2
-$ cd riemann-0.1.2
-$ bin/riemann etc/riemann.config
-</code></pre>
-
-<p>設定ファイルを S 式でがりがりかけるのはおもしろくって、riemann だとこんな感じに設定できる:</p>
-
-<pre><code># 公式サイトの設定例から引用 [http://aphyr.github.com/riemann/configuring.html](http://aphyr.github.com/riemann/configuring.html)
-
-; You can use any options for [https://github.com/drewr/postal.](https://github.com/drewr/postal.)
-;
-; (mailer {:from "riemann@trioptimum.com"
-;          :host "mx1.trioptimum.com"
-;          :user "foo"
-;          :pass "bar"})
-
-(streams
-  (where (and (service "web server")
-              (state "exception"))
-         (tagged "controller"
-                 (email "5551234567@txt.att.net"))
-         (tagged "view"
-                 (email "delacroix@trioptimum.com" "bronson@trioptimum.com"))
-         (tagged "model"
-                 (email "staff@vonbraun.mil"))))
-</code></pre>
-
-<p>「イベント x あるいは y が n 秒以内に m 回発生したらアラート」みたいなのも設定できるみたいなので、監視ツールと組み合わせてもおもしろそう。</p>
-
-<p>ソフトウェアの内容や使いかっては、 <a href="http://fluentd.org/">fluentd</a>
-ととても近いように感じた。それぞれ公式サイトに掲げられているメッセージを比較してみると、fluentd は「Fluentd is a lightweight
-and flexible log collector」で、riemann は「Riemann is an event stream
-processor」だった。fluentd はイベントを集計できる形式でログとして残すこと、riemann
-はイベントストリームから特定の状況をリアルタイムで見つけだすことが主眼ということかな。</p>
-
-<h2>参考</h2>
-
-<ul>
-<li><a href="http://aphyr.github.com/riemann/">公式サイト</a></li>
-<li><a href="http://vimeo.com/45807716">紹介ビデオ</a></li>
-<li><a href="http://blog.boundary.com/2012/03/12/boundary-tech-talks-march-6th-2012/">紹介ビデオ</a></li>
-<li><a href="https://twitter.com/aphyr">作者 Kyle Kingsbury</a></li>
-<li><a href="http://labs.amara.org/2012-07-16-metrics.html">利用事例</a></li>
-</ul>
-
-
-<h3>関連するサービス、同類のソフトウェア</h3>
-
-<ul>
-<li><a href="http://fluentd.org/">fluentd</a></li>
-<li><a href="http://boundary.com/">boundary</a></li>
-<li><a href="http://aws.amazon.com/en/cloudwatch/">amazon cloudwatch</a></li>
-<li><a href="http://www.loggly.com/">loggly</a></li>
-<li>その他多くの監視ツール</li>
-</ul>
+		<p>ubuntuには<a href="https://launchpad.net/ubuntu/+ppas">PPA</a>という仕組みがあり、プロジェクトホスティングサービス
+<a href="https://launchpad.net/">launchpad</a> と連携してパッケージを簡単に配布する仕組みが用意されている。今回は、githubを使
+ってリポジトリにpushしたら自動的にRPMパッケージを公開する方法をまとめる。</p>
 
 
 		
-		
+		<a href="/blog/2011/12/17/githubyum/" class="more-link">Read on &rarr;</a>
 	</div>
 
 
@@ -181,8 +106,48 @@ processor」だった。fluentd はイベントを集計できる形式でログ
   
 
 
-<time datetime="2012-09-22T18:00:00+09:00" pubdate data-updated="true">2012-09-22</time></div>
+<time datetime="2011-12-17T00:00:00+09:00" pubdate data-updated="true">2011-12-17</time></div>
 	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/centos/'>centos</a>, <a class='category' href='/blog/categories/git/'>git</a>, <a class='category' href='/blog/categories/github/'>github</a>, <a class='category' href='/blog/categories/rpm/'>rpm</a>, <a class='category' href='/blog/categories/yum/'>yum</a>
+
+
+</div>
+	
+</div></article>
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2011/12/17/-pv/">プログレスバーを簡単に表示できるコマンド Pv</a></h1>
+	<div class="entry-content">
+		<p>プログレスバーを簡単に表示できる <code>pv</code> について説明する。</p>
+
+
+		
+		<a href="/blog/2011/12/17/-pv/" class="more-link">Read on &rarr;</a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-17T00:00:00+09:00" pubdate data-updated="true">2011-12-17</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/pv/'>pv</a>, <a class='category' href='/blog/categories/unix/'>unix</a>
+
 
 </div>
 	
@@ -192,8 +157,6 @@ processor」だった。fluentd はイベントを集計できる形式でログ
     
         <a href="/" class="prev">Prev</a>
     
-    
-        <a href="/blog/page/3/" class="next">Next</a>
     
     <div class="center"><a href="/blog/archives">Blog Archives</a></div>
 </nav></div>
