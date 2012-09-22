@@ -4,7 +4,7 @@
   <title><![CDATA[Category: yum | apatheia.info]]></title>
   <link href="http://apatheia.info/blog/categories/yum/atom.xml" rel="self"/>
   <link href="http://apatheia.info/"/>
-  <updated>2012-09-22T23:25:01+09:00</updated>
+  <updated>2012-09-23T00:24:01+09:00</updated>
   <id>http://apatheia.info/</id>
   <author>
     <name><![CDATA[f440]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[githubを使ってyumリポジトリを公開する]]></title>
-    <link href="http://apatheia.info/blog/2011/12/17/githubyum/"/>
+    <link href="http://apatheia.info/blog/2011/12/17/github-yum/"/>
     <updated>2011-12-17T00:00:00+09:00</updated>
-    <id>http://apatheia.info/blog/2011/12/17/githubyum</id>
+    <id>http://apatheia.info/blog/2011/12/17/github-yum</id>
     <content type="html"><![CDATA[<p>ubuntuには<a href="https://launchpad.net/ubuntu/+ppas">PPA</a>という仕組みがあり、プロジェクトホスティングサービス
 <a href="https://launchpad.net/">launchpad</a> と連携してパッケージを簡単に配布する仕組みが用意されている。今回は、githubを使
 ってリポジトリにpushしたら自動的にRPMパッケージを公開する方法をまとめる。</p>

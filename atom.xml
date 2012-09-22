@@ -4,7 +4,7 @@
   <title><![CDATA[apatheia.info]]></title>
   <link href="http://apatheia.info/atom.xml" rel="self"/>
   <link href="http://apatheia.info/"/>
-  <updated>2012-09-22T23:25:01+09:00</updated>
+  <updated>2012-09-23T00:24:01+09:00</updated>
   <id>http://apatheia.info/</id>
   <author>
     <name><![CDATA[f440]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[head と tail の行数指定方法]]></title>
-    <link href="http://apatheia.info/blog/2012/09/22/head--tail-/"/>
+    <link href="http://apatheia.info/blog/2012/09/22/head-tail/"/>
     <updated>2012-09-22T19:00:00+09:00</updated>
-    <id>http://apatheia.info/blog/2012/09/22/head&#8211;tail-</id>
+    <id>http://apatheia.info/blog/2012/09/22/head-tail</id>
     <content type="html"><![CDATA[<p>head と tail を使うとき、行数指定方法について。動作確認は GNU coreutils 8.19 で行っている。</p>
 
 <!-- more -->
@@ -98,9 +98,9 @@ $ seq 10 | awk 3&lt;=NR &amp;&amp; NR&lt;=5
   
   <entry>
     <title type="html"><![CDATA[イベント処理ツール riemannを使う]]></title>
-    <link href="http://apatheia.info/blog/2012/09/22/-riemann/"/>
+    <link href="http://apatheia.info/blog/2012/09/22/riemann/"/>
     <updated>2012-09-22T18:00:00+09:00</updated>
-    <id>http://apatheia.info/blog/2012/09/22/-riemann</id>
+    <id>http://apatheia.info/blog/2012/09/22/riemann</id>
     <content type="html"><![CDATA[<p>イベント処理ツール <a href="http://aphyr.github.com/riemann/">riemann</a>を使ってみたのでその感想。</p>
 
 <!-- more -->
@@ -257,9 +257,9 @@ $ mv post source/
   
   <entry>
     <title type="html"><![CDATA[roundsmanを使ってcapistranoからchef-soloを実行する]]></title>
-    <link href="http://apatheia.info/blog/2012/07/30/roundsmancapistranochef-solo/"/>
+    <link href="http://apatheia.info/blog/2012/07/30/roundsman-capistrano-chef-solo/"/>
     <updated>2012-07-30T00:00:00+09:00</updated>
-    <id>http://apatheia.info/blog/2012/07/30/roundsmancapistranochef-solo</id>
+    <id>http://apatheia.info/blog/2012/07/30/roundsman-capistrano-chef-solo</id>
     <content type="html"><![CDATA[<p>管理対象のサーバー台数が少ない場合など、<a href="http://www.opscode.com/chef/">chef</a>のサーバーを運用するコストとベネフィットを天
 秤にかけてみて、ああこれどう考えても労力ペイできないな、でも設定ファイルを手動で管理するのはやだな、といったときに<a href="https://g%0Aithub.com/iain/roundsman">roundsman</a>を使うといいという話。</p>
 
@@ -396,9 +396,9 @@ bundle exec cap ステージ名 chef:nginx
   
   <entry>
     <title type="html"><![CDATA[分散ファイルシステム GlusterFS を使う]]></title>
-    <link href="http://apatheia.info/blog/2012/06/05/-glusterfs-/"/>
+    <link href="http://apatheia.info/blog/2012/06/05/glusterfs/"/>
     <updated>2012-06-05T00:00:00+09:00</updated>
-    <id>http://apatheia.info/blog/2012/06/05/-glusterfs-</id>
+    <id>http://apatheia.info/blog/2012/06/05/glusterfs</id>
     <content type="html"><![CDATA[<p>Webアプリケーションを構築する上で、運用中に発生したファイルをローカルのファイルシステム上に保管すると、スケールを阻害するため好ましくないことが多い。</p>
 
 <!-- more -->
@@ -629,9 +629,9 @@ host2$ sha1sum /export/vol-replica/dummy # 54b5c383e96d511249f9393de060c3219549e
   
   <entry>
     <title type="html"><![CDATA[sphinxの更新をguard-livereloadで検知してブラウザを自動リロードする]]></title>
-    <link href="http://apatheia.info/blog/2012/06/03/sphinxguard-livereload/"/>
+    <link href="http://apatheia.info/blog/2012/06/03/sphinx-guard-livereload/"/>
     <updated>2012-06-03T00:00:00+09:00</updated>
-    <id>http://apatheia.info/blog/2012/06/03/sphinxguard-livereload</id>
+    <id>http://apatheia.info/blog/2012/06/03/sphinx-guard-livereload</id>
     <content type="html"><![CDATA[<p>sphinxでドキュメントを書く際に生じる「文章の記述 => ビルド =>
 ブラウザでの確認」という一連のサイクルを人力でやるのは効率が悪い。いろいろな省力化対策が考えられるが、ここでは guard-
 livereloadを使って、文章のビルドとブラウザのリロードを自動化する方法を説明する。</p>
@@ -702,9 +702,9 @@ extensions</a></p>
   
   <entry>
     <title type="html"><![CDATA[さくらのVPSにLXCで仮想環境構築してXtraDB Cluster動かす]]></title>
-    <link href="http://apatheia.info/blog/2012/05/13/vpslxcxtradb-cluster/"/>
+    <link href="http://apatheia.info/blog/2012/05/13/vps-lxc-xtradb-cluster/"/>
     <updated>2012-05-13T00:00:00+09:00</updated>
-    <id>http://apatheia.info/blog/2012/05/13/vpslxcxtradb-cluster</id>
+    <id>http://apatheia.info/blog/2012/05/13/vps-lxc-xtradb-cluster</id>
     <content type="html"><![CDATA[<p>ほんの数年前までVPSといえばLinode、Slicehostなどの海外のサーバーしか選択肢がなかった。ls を実行しても一呼吸おくほどのレイテンシーがある
 ような環境で、128MBくらいのメモリを何とかやりくりしてRailsを動かしていた記憶が、現在では月1000円程度で用途によっては手に余るようなスペックが手
 に入るようになっている。そんなVPSの余ったリソースを使って、仮想環境をたてようというのが今回の目的だ。</p>
@@ -1261,9 +1261,9 @@ OS名」とかで検索してみる。</p>
   
   <entry>
     <title type="html"><![CDATA[rundeckをセットアップして、jenkins上のjava成果物をデプロイする]]></title>
-    <link href="http://apatheia.info/blog/2012/01/03/rundeckjenkinsjava/"/>
+    <link href="http://apatheia.info/blog/2012/01/03/rundeck-jenkins-java/"/>
     <updated>2012-01-03T00:00:00+09:00</updated>
-    <id>http://apatheia.info/blog/2012/01/03/rundeckjenkinsjava</id>
+    <id>http://apatheia.info/blog/2012/01/03/rundeck-jenkins-java</id>
     <content type="html"><![CDATA[<p>rundeck でjenkins上の成果物をデプロイしよう、という話。</p>
 
 <!-- more -->
@@ -1554,9 +1554,9 @@ Now」すると、さっき作った変数を表示するだけのスクリプ�
   
   <entry>
     <title type="html"><![CDATA[MySQL::Sandboxで環境を作ってBLACKHOLEエンジンを試す]]></title>
-    <link href="http://apatheia.info/blog/2011/12/31/mysqlsandboxblackhole/"/>
+    <link href="http://apatheia.info/blog/2011/12/31/mysql-sandbox-blackhole/"/>
     <updated>2011-12-31T00:00:00+09:00</updated>
-    <id>http://apatheia.info/blog/2011/12/31/mysqlsandboxblackhole</id>
+    <id>http://apatheia.info/blog/2011/12/31/mysql-sandbox-blackhole</id>
     <content type="html"><![CDATA[<p>ちょっとMySQLのBLACKHOLEエンジン使って調べたいことがあったんだけど、
 <a href="http://mysqlsandbox.net/">MySQL::Sandbox</a> 使うとレプリケーション環境が簡単に構築できて便利。</p>
 
@@ -1823,10 +1823,54 @@ index 61b3020..86e04f2 100644
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[githubを使ってyumリポジトリを公開する]]></title>
-    <link href="http://apatheia.info/blog/2011/12/17/githubyum/"/>
+    <title type="html"><![CDATA[プログレスバーを簡単に表示できるコマンド pv]]></title>
+    <link href="http://apatheia.info/blog/2011/12/17/pv/"/>
     <updated>2011-12-17T00:00:00+09:00</updated>
-    <id>http://apatheia.info/blog/2011/12/17/githubyum</id>
+    <id>http://apatheia.info/blog/2011/12/17/pv</id>
+    <content type="html"><![CDATA[<p>プログレスバーを簡単に表示できる <code>pv</code> について説明する。</p>
+
+<!-- more -->
+
+
+<h2>インストール方法</h2>
+
+<p>自分の環境(debian 6.0.3)だと <code>apt</code>
+でインストール出来る。RHEL系なら<a href="http://pkgs.repoforge.org/pv/">ここ</a>かな。</p>
+
+<h2>使い方</h2>
+
+<p>端的に言うと、「cat ＋ 標準エラー出力にプログレスバー」という動きを取る。</p>
+
+<pre><code>f440@abhoth[10]:~$ yes | pv &gt;/dev/null
+ 529MB 0:00:08 [67.2MB/s] [       &lt;=&gt;                                         ]
+</code></pre>
+
+<p>8秒で合計529MB、秒間67.2MBくらいで「y」の文字が <code>pv</code> を通り抜けてるのがわかる。 <code>-l</code>
+オプションをつけると行モードになり、転送量ではなく転送行数を調べられる。</p>
+
+<pre><code>f440@abhoth[10]:~$ yes | pv -l &gt;/dev/null
+ 435k 0:00:10 [45.9k/s] [          &lt;=&gt;                                        ]
+</code></pre>
+
+<p>10秒で435行、秒間45900行くらいが通り抜けてるのがわかる。</p>
+
+<p>他にもおもしろいオプションとして <code>-L</code> っていうのがあって、パイプから出てく流量を制限することが出来る。</p>
+
+<h2>用途</h2>
+
+<p><code>mysqldump</code> とか <code>mysql</code>にくっつけてダンプ、リストアの完了時刻を予想する、とかかな。</p>
+
+<p>Webで見てると、<code>nc</code> とか <code>tcpdump</code> とかと組み合わせてる例がある。</p>
+
+<p>自分で作ったコマンドとかに、簡単に進行状況表示がくっつけられるのは便利。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[githubを使ってyumリポジトリを公開する]]></title>
+    <link href="http://apatheia.info/blog/2011/12/17/github-yum/"/>
+    <updated>2011-12-17T00:00:00+09:00</updated>
+    <id>http://apatheia.info/blog/2011/12/17/github-yum</id>
     <content type="html"><![CDATA[<p>ubuntuには<a href="https://launchpad.net/ubuntu/+ppas">PPA</a>という仕組みがあり、プロジェクトホスティングサービス
 <a href="https://launchpad.net/">launchpad</a> と連携してパッケージを簡単に配布する仕組みが用意されている。今回は、githubを使
 ってリポジトリにpushしたら自動的にRPMパッケージを公開する方法をまとめる。</p>
@@ -1898,50 +1942,6 @@ gpgcheck=0
 <li>mercurialを使いたければ、<a href="https://bitbucket.org">bitbucket</a>でも似たような手順で公開可能。その際は baseurl の部分に <code>baseurl=https://bitbucket.org/f440/haproxy-rpm/raw/tip/centos/$releasever/os/$basearch/</code> のような形式で記述する</li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[プログレスバーを簡単に表示できるコマンド pv]]></title>
-    <link href="http://apatheia.info/blog/2011/12/17/-pv/"/>
-    <updated>2011-12-17T00:00:00+09:00</updated>
-    <id>http://apatheia.info/blog/2011/12/17/-pv</id>
-    <content type="html"><![CDATA[<p>プログレスバーを簡単に表示できる <code>pv</code> について説明する。</p>
-
-<!-- more -->
-
-
-<h2>インストール方法</h2>
-
-<p>自分の環境(debian 6.0.3)だと <code>apt</code>
-でインストール出来る。RHEL系なら<a href="http://pkgs.repoforge.org/pv/">ここ</a>かな。</p>
-
-<h2>使い方</h2>
-
-<p>端的に言うと、「cat ＋ 標準エラー出力にプログレスバー」という動きを取る。</p>
-
-<pre><code>f440@abhoth[10]:~$ yes | pv &gt;/dev/null
- 529MB 0:00:08 [67.2MB/s] [       &lt;=&gt;                                         ]
-</code></pre>
-
-<p>8秒で合計529MB、秒間67.2MBくらいで「y」の文字が <code>pv</code> を通り抜けてるのがわかる。 <code>-l</code>
-オプションをつけると行モードになり、転送量ではなく転送行数を調べられる。</p>
-
-<pre><code>f440@abhoth[10]:~$ yes | pv -l &gt;/dev/null
- 435k 0:00:10 [45.9k/s] [          &lt;=&gt;                                        ]
-</code></pre>
-
-<p>10秒で435行、秒間45900行くらいが通り抜けてるのがわかる。</p>
-
-<p>他にもおもしろいオプションとして <code>-L</code> っていうのがあって、パイプから出てく流量を制限することが出来る。</p>
-
-<h2>用途</h2>
-
-<p><code>mysqldump</code> とか <code>mysql</code>にくっつけてダンプ、リストアの完了時刻を予想する、とかかな。</p>
-
-<p>Webで見てると、<code>nc</code> とか <code>tcpdump</code> とかと組み合わせてる例がある。</p>
-
-<p>自分で作ったコマンドとかに、簡単に進行状況表示がくっつけられるのは便利。</p>
 ]]></content>
   </entry>
   

@@ -3,18 +3,17 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>sphinxの更新をguard-livereloadで検知してブラウザを自動リロードする - apatheia.info</title>
+	<title>プログレスバーを簡単に表示できるコマンド pv - apatheia.info</title>
 	<meta name="author" content="f440">
 
 	
-	<meta name="description" content="sphinxでドキュメントを書く際に生じる「文章の記述 => ビルド =>
-ブラウザでの確認」という一連のサイクルを人力でやるのは効率が悪い。いろいろな省力化対策が考えられるが、ここでは guard-
-livereloadを使って、文章のビルドとブラウザのリロードを自動化する方法を説明する。 &hellip;">
+	<meta name="description" content="プログレスバーを簡単に表示できる pv について説明する。 インストール方法 自分の環境(debian 6.0.3)だと apt
+でインストール出来る。RHEL系ならここかな。 使い方 端的に言うと、「cat ＋ 標準エラー出力にプログレスバー」という動きを取る。 f440@abhoth[10 &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-	<link rel="canonical" href="http://apatheia.info/blog/2012/06/03/sphinxguard-livereload/">
+	<link rel="canonical" href="http://apatheia.info/blog/2011/12/17/pv/">
 	<link href="/favicon.png" rel="shortcut icon">
 	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
 	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
@@ -78,72 +77,43 @@ livereloadを使って、文章のビルドとブラウザのリロードを自�
 		
 	
 	<div id="content" class="inner"><article class="post">
-	<h1 class="title">Sphinxの更新をguard-livereloadで検知してブラウザを自動リロードする</h1>
-	<div class="entry-content"><p>sphinxでドキュメントを書く際に生じる「文章の記述 => ビルド =>
-ブラウザでの確認」という一連のサイクルを人力でやるのは効率が悪い。いろいろな省力化対策が考えられるが、ここでは guard-
-livereloadを使って、文章のビルドとブラウザのリロードを自動化する方法を説明する。</p>
+	<h1 class="title">プログレスバーを簡単に表示できるコマンド Pv</h1>
+	<div class="entry-content"><p>プログレスバーを簡単に表示できる <code>pv</code> について説明する。</p>
 
 <!-- more -->
 
 
-<h2>作業環境</h2>
+<h2>インストール方法</h2>
 
-<p>検証に使った環境は以下の通り。環境に依存する部分は少ないので、他のOSでも動くと思う。</p>
+<p>自分の環境(debian 6.0.3)だと <code>apt</code>
+でインストール出来る。RHEL系なら<a href="http://pkgs.repoforge.org/pv/">ここ</a>かな。</p>
 
-<ul>
-<li>Mac OS X Lion</li>
-<li>ruby 1.9.3-p194</li>
-<li>sphinx 1.1.3</li>
-</ul>
+<h2>使い方</h2>
 
+<p>端的に言うと、「cat ＋ 標準エラー出力にプログレスバー」という動きを取る。</p>
 
-<h2>事前準備</h2>
-
-<h3>サーバー側準備</h3>
-
-<p>用意するのは3ファイル</p>
-
-<ul>
-<li>Gemfile … 必要なライブラリをまとめてインストールするための設定ファイル</li>
-<li>Gaurdfile … ファイルシステム監視の設定ファイル</li>
-<li>Procfile … Webサーバーとファイル監視を起動するための設定ファイル</li>
-</ul>
-
-
-<p><a href="https://gist.github.com/2862843">https://gist.github.com/2862843</a></p>
-
-<p>これら3ファイルをsphinxの作業ディレクトリ内に配置する。製生後のhtmlファイルは<code>buld/html</code>ディレクトリに格納されていることを期待した設定
-になっているので、必要であれば適宜修正する。</p>
-
-<p>ファイルの設置が終わったら、ライブラリをインストールする。</p>
-
-<pre><code>bundle install
+<pre><code>f440@abhoth[10]:~$ yes | pv &gt;/dev/null
+ 529MB 0:00:08 [67.2MB/s] [       &lt;=&gt;                                         ]
 </code></pre>
 
-<h3>ブラウザ側準備</h3>
+<p>8秒で合計529MB、秒間67.2MBくらいで「y」の文字が <code>pv</code> を通り抜けてるのがわかる。 <code>-l</code>
+オプションをつけると行モードになり、転送量ではなく転送行数を調べられる。</p>
 
-<p>好きなブラウザにlivereloadのブラウザ拡張をインストールする。</p>
-
-<p><a href="http://help.livereload.com/kb/general-use/browser-extensions">http://help.livereload.com/kb/general-use/browser-
-extensions</a></p>
-
-<h2>利用方法</h2>
-
-<p>サーバー側でファイルの監視とlivereloadを開始する。</p>
-
-<pre><code>foreman start
+<pre><code>f440@abhoth[10]:~$ yes | pv -l &gt;/dev/null
+ 435k 0:00:10 [45.9k/s] [          &lt;=&gt;                                        ]
 </code></pre>
 
-<p>ブラウザで http://localhost:3000/ (3000以外にしたい場合は Procfile 内で変更)
-にアクセスしてlivereloadのブラウザ拡張を有効化すれば、あとはファイルの更新に合わせて自動的にビルドとブラウザのリロードが行われる。</p>
+<p>10秒で435行、秒間45900行くらいが通り抜けてるのがわかる。</p>
 
-<h2>参考</h2>
+<p>他にもおもしろいオプションとして <code>-L</code> っていうのがあって、パイプから出てく流量を制限することが出来る。</p>
 
-<ul>
-<li><a href="http://aligach.net/diary/20110925.html">LiveReloadが超気持ちいい2011</a> Livereloadの詳しい説明</li>
-<li><a href="https://addons.mozilla.org/en-US/firefox/addon/auto-reload/">Auto Reload</a> ローカルファイルの更新を検知してFirefoxをリロードしてくれるアドオン。試してみたけど、自分の環境ではリロードがうまく動かなかった。</li>
-</ul>
+<h2>用途</h2>
 
+<p><code>mysqldump</code> とか <code>mysql</code>にくっつけてダンプ、リストアの完了時刻を予想する、とかかな。</p>
+
+<p>Webで見てると、<code>nc</code> とか <code>tcpdump</code> とかと組み合わせてる例がある。</p>
+
+<p>自分で作ったコマンドとかに、簡単に進行状況表示がくっつけられるのは便利。</p>
 </div>
 
 
@@ -160,8 +130,12 @@ extensions</a></p>
   
 
 
-<time datetime="2012-06-03T00:00:00+09:00" pubdate data-updated="true">2012-06-03</time></div>
+<time datetime="2011-12-17T00:00:00+09:00" pubdate data-updated="true">2011-12-17</time></div>
 	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/pv/'>pv</a>, <a class='category' href='/blog/categories/unix/'>unix</a>
+
 
 </div>
 	
@@ -211,8 +185,8 @@ extensions</a></p>
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://apatheia.info/blog/2012/06/03/sphinxguard-livereload/';
-        var disqus_url = 'http://apatheia.info/blog/2012/06/03/sphinxguard-livereload/';
+        var disqus_identifier = 'http://apatheia.info/blog/2011/12/17/pv/';
+        var disqus_url = 'http://apatheia.info/blog/2011/12/17/pv/';
         var disqus_script = 'embed.js';
       
     (function () {

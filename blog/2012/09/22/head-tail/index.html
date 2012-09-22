@@ -3,17 +3,20 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>プログレスバーを簡単に表示できるコマンド pv - apatheia.info</title>
+	<title>head と tail の行数指定方法 - apatheia.info</title>
 	<meta name="author" content="f440">
 
 	
-	<meta name="description" content="プログレスバーを簡単に表示できる pv について説明する。 インストール方法 自分の環境(debian 6.0.3)だと apt
-でインストール出来る。RHEL系ならここかな。 使い方 端的に言うと、「cat ＋ 標準エラー出力にプログレスバー」という動きを取る。 f440@abhoth[10 &hellip;">
+	<meta name="description" content="head と tail を使うとき、行数指定方法について。動作確認は GNU coreutils 8.19 で行っている。 head と tail のは-n 数字(あるいは--line 数字)で出力する行数を指定できる。 # 先頭3行を表示
+$ seq 10 | head -n 3
+1
+2
+3 &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-	<link rel="canonical" href="http://apatheia.info/blog/2011/12/17/-pv/">
+	<link rel="canonical" href="http://apatheia.info/blog/2012/09/22/head-tail/">
 	<link href="/favicon.png" rel="shortcut icon">
 	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
 	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
@@ -77,43 +80,82 @@
 		
 	
 	<div id="content" class="inner"><article class="post">
-	<h1 class="title">プログレスバーを簡単に表示できるコマンド Pv</h1>
-	<div class="entry-content"><p>プログレスバーを簡単に表示できる <code>pv</code> について説明する。</p>
+	<h1 class="title">Head と Tail の行数指定方法</h1>
+	<div class="entry-content"><p>head と tail を使うとき、行数指定方法について。動作確認は GNU coreutils 8.19 で行っている。</p>
 
 <!-- more -->
 
 
-<h2>インストール方法</h2>
+<p>head と tail のは<code>-n 数字</code>(あるいは<code>--line 数字</code>)で出力する行数を指定できる。</p>
 
-<p>自分の環境(debian 6.0.3)だと <code>apt</code>
-でインストール出来る。RHEL系なら<a href="http://pkgs.repoforge.org/pv/">ここ</a>かな。</p>
+<pre><code># 先頭3行を表示
+$ seq 10 | head -n 3
+1
+2
+3
 
-<h2>使い方</h2>
-
-<p>端的に言うと、「cat ＋ 標準エラー出力にプログレスバー」という動きを取る。</p>
-
-<pre><code>f440@abhoth[10]:~$ yes | pv &gt;/dev/null
- 529MB 0:00:08 [67.2MB/s] [       &lt;=&gt;                                         ]
+# 末尾3行を表示
+$ seq 10 | tail -n 3
+8
+9
+10
 </code></pre>
 
-<p>8秒で合計529MB、秒間67.2MBくらいで「y」の文字が <code>pv</code> を通り抜けてるのがわかる。 <code>-l</code>
-オプションをつけると行モードになり、転送量ではなく転送行数を調べられる。</p>
+<p>オプションで与える数字には、プラスがつく場合、マイナスがつく場合、何もつかない場合が考えられるが、記号がついた場合に通常異なる挙動をとる場合が出てくる。</p>
 
-<pre><code>f440@abhoth[10]:~$ yes | pv -l &gt;/dev/null
- 435k 0:00:10 [45.9k/s] [          &lt;=&gt;                                        ]
+<p><code>head -n -数字</code>の場合は、「末尾から指定した行数を除いたもの」となる:</p>
+
+<pre><code>$ seq 10 | head -n -3
+1
+2
+3
+4
+5
+6
+7
 </code></pre>
 
-<p>10秒で435行、秒間45900行くらいが通り抜けてるのがわかる。</p>
+<p><code>tail -n +数字</code> の場合は、「先頭から数えて指定した行以降のもの」となる:</p>
 
-<p>他にもおもしろいオプションとして <code>-L</code> っていうのがあって、パイプから出てく流量を制限することが出来る。</p>
+<pre><code>$ seq 10 | tail -n +3
+3
+4
+5
+6
+7
+8
+9
+10
+</code></pre>
 
-<h2>用途</h2>
+<p>まとめると以下の通り:</p>
 
-<p><code>mysqldump</code> とか <code>mysql</code>にくっつけてダンプ、リストアの完了時刻を予想する、とかかな。</p>
+<table><thead><tr><th>コマンド</th> <th>-n -行数</th> <th>-n 行数</th> <th>-n
++行数</th> </tr></thead><tr><td>head</td> <td>末尾から
 
-<p>Webで見てると、<code>nc</code> とか <code>tcpdump</code> とかと組み合わせてる例がある。</p>
+指定行数を除いて表示</td> <td>先頭から
 
-<p>自分で作ったコマンドとかに、簡単に進行状況表示がくっつけられるのは便利。</p>
+指定行数表示</td> <td>先頭から
+
+指定行数表示</td> </tr><tr><td>tail</td> <td>先頭から
+
+指定行数以降を表示</td> <td>末尾から
+
+指定行数表示</td> <td>先頭から
+
+数えて指定した行以降表示</td> </tr></table>
+
+
+<p><code>-n 数字</code> の代わりに <code>-数字</code> で指定することもできるけど、-n のオプションで負数を指定しているときと混同するのでやめた方がいい。</p>
+
+<p><code>-</code> や <code>+</code> オプションは境界値がどうなっているか忘れがちだし、これが必要となるような局面では <code>awk</code> を使った方が直感的に表現できる。</p>
+
+<pre><code># 3行目から5行目を表示
+$ seq 10 | awk 3&lt;=NR &amp;&amp; NR&lt;=5
+3
+4
+5
+</code></pre>
 </div>
 
 
@@ -130,12 +172,8 @@
   
 
 
-<time datetime="2011-12-17T00:00:00+09:00" pubdate data-updated="true">2011-12-17</time></div>
+<time datetime="2012-09-22T19:00:00+09:00" pubdate data-updated="true">2012-09-22</time></div>
 	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/pv/'>pv</a>, <a class='category' href='/blog/categories/unix/'>unix</a>
-
 
 </div>
 	
@@ -185,8 +223,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://apatheia.info/blog/2011/12/17/-pv/';
-        var disqus_url = 'http://apatheia.info/blog/2011/12/17/-pv/';
+        var disqus_identifier = 'http://apatheia.info/blog/2012/09/22/head-tail/';
+        var disqus_url = 'http://apatheia.info/blog/2012/09/22/head-tail/';
         var disqus_script = 'embed.js';
       
     (function () {

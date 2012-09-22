@@ -4,7 +4,7 @@
   <title><![CDATA[Category: pv | apatheia.info]]></title>
   <link href="http://apatheia.info/blog/categories/pv/atom.xml" rel="self"/>
   <link href="http://apatheia.info/"/>
-  <updated>2012-09-22T23:25:01+09:00</updated>
+  <updated>2012-09-23T00:24:01+09:00</updated>
   <id>http://apatheia.info/</id>
   <author>
     <name><![CDATA[f440]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[プログレスバーを簡単に表示できるコマンド pv]]></title>
-    <link href="http://apatheia.info/blog/2011/12/17/-pv/"/>
+    <link href="http://apatheia.info/blog/2011/12/17/pv/"/>
     <updated>2011-12-17T00:00:00+09:00</updated>
-    <id>http://apatheia.info/blog/2011/12/17/-pv</id>
+    <id>http://apatheia.info/blog/2011/12/17/pv</id>
     <content type="html"><![CDATA[<p>プログレスバーを簡単に表示できる <code>pv</code> について説明する。</p>
 
 <!-- more -->

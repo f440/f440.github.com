@@ -1,39 +1,39 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
-        <loc>http://apatheia.info/blog/2011/12/17/-pv/</loc>
-        <lastmod>2012-09-22T23:19:24+09:00</lastmod>
+        <loc>http://apatheia.info/blog/2011/12/17/github-yum/</loc>
+        <lastmod>2012-09-22T23:20:03+09:00</lastmod>
     </url>
     <url>
-        <loc>http://apatheia.info/blog/2011/12/17/githubyum/</loc>
-        <lastmod>2012-09-22T23:20:03+09:00</lastmod>
+        <loc>http://apatheia.info/blog/2011/12/17/pv/</loc>
+        <lastmod>2012-09-22T23:19:24+09:00</lastmod>
     </url>
     <url>
         <loc>http://apatheia.info/blog/2011/12/24/superviser/</loc>
         <lastmod>2012-09-22T23:20:09+09:00</lastmod>
     </url>
     <url>
-        <loc>http://apatheia.info/blog/2011/12/31/mysqlsandboxblackhole/</loc>
+        <loc>http://apatheia.info/blog/2011/12/31/mysql-sandbox-blackhole/</loc>
         <lastmod>2012-09-22T23:20:13+09:00</lastmod>
     </url>
     <url>
-        <loc>http://apatheia.info/blog/2012/01/03/rundeckjenkinsjava/</loc>
+        <loc>http://apatheia.info/blog/2012/01/03/rundeck-jenkins-java/</loc>
         <lastmod>2012-09-22T23:20:17+09:00</lastmod>
     </url>
     <url>
-        <loc>http://apatheia.info/blog/2012/05/13/vpslxcxtradb-cluster/</loc>
+        <loc>http://apatheia.info/blog/2012/05/13/vps-lxc-xtradb-cluster/</loc>
         <lastmod>2012-09-22T23:20:24+09:00</lastmod>
     </url>
     <url>
-        <loc>http://apatheia.info/blog/2012/06/03/sphinxguard-livereload/</loc>
+        <loc>http://apatheia.info/blog/2012/06/03/sphinx-guard-livereload/</loc>
         <lastmod>2012-09-22T23:20:28+09:00</lastmod>
     </url>
     <url>
-        <loc>http://apatheia.info/blog/2012/06/05/-glusterfs-/</loc>
+        <loc>http://apatheia.info/blog/2012/06/05/glusterfs/</loc>
         <lastmod>2012-09-22T23:24:22+09:00</lastmod>
     </url>
     <url>
-        <loc>http://apatheia.info/blog/2012/07/30/roundsmancapistranochef-solo/</loc>
+        <loc>http://apatheia.info/blog/2012/07/30/roundsman-capistrano-chef-solo/</loc>
         <lastmod>2012-09-22T23:25:00+09:00</lastmod>
     </url>
     <url>
@@ -41,12 +41,16 @@
         <lastmod>2012-09-22T23:19:44+09:00</lastmod>
     </url>
     <url>
-        <loc>http://apatheia.info/blog/2012/09/22/-riemann/</loc>
+        <loc>http://apatheia.info/blog/2012/09/22/riemann/</loc>
         <lastmod>2012-09-22T23:19:51+09:00</lastmod>
     </url>
     <url>
-        <loc>http://apatheia.info/blog/2012/09/22/head--tail-/</loc>
+        <loc>http://apatheia.info/blog/2012/09/22/head-tail/</loc>
         <lastmod>2012-09-22T23:18:57+09:00</lastmod>
+    </url>
+    <url>
+        <loc>http://apatheia.info/404.html</loc>
+        <lastmod>2012-09-22T23:45:53+09:00</lastmod>
     </url>
     <url>
         <loc>http://apatheia.info/blog/archives/</loc>
