@@ -7,8 +7,8 @@
 	<meta name="author" content="f440">
 
 	
-	<meta name="description" content="管理対象のサーバー台数が少ない場合など、chefのサーバーを運用するコストとベネフィットを天
-秤にかけてみて、ああこれどう考えても労力ペイできないな、でも設定ファイルを手動で管理するのはやだな、といったときにroundsmanを使うといいという話。 roundsmanは、 &hellip;">
+	<meta name="description" content="イベント処理ツール riemannを使ってみたのでその感想。 サーバーは clojure で書かれている 設定ファイルは S 式 クライアントは各言語版がある http://aphyr.github.com/riemann/clients.html
+サーバーの状態は riemann-dash &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -80,386 +80,86 @@
 
 
     <article class="post">
-	<h1 class="title"><a href="/blog/2012/07/30/roundsmancapistranochef-solo/">Roundsmanを使ってcapistranoからchef-soloを実行する</a></h1>
+	<h1 class="title"><a href="/blog/2012/09/22/-riemann/">イベント処理ツール Riemannを使う</a></h1>
 	<div class="entry-content">
-		<p>管理対象のサーバー台数が少ない場合など、<a href="http://www.opscode.com/chef/">chef</a>のサーバーを運用するコストとベネフィットを天
-秤にかけてみて、ああこれどう考えても労力ペイできないな、でも設定ファイルを手動で管理するのはやだな、といったときに<a href="https://g%0Aithub.com/iain/roundsman">roundsman</a>を使うといいという話。</p>
-
-<p><a href="https://github.com/iain/roundsman">roundsman</a>は、chefのレシピを転送して<a href="http:%0A//wiki.opscode.com/display/chef/Chef+Solo">chef-solo</a>を実行する<a href="https://github.com%0A/capistrano/capistrano">capistrano</a>向けライブラリ。アプリケーションのリリースタイミングに併せてインフラ設定の変更が必要になることは往々にしてある
-ので、<a href="https://github.com/capistrano/capistrano">capistrano</a>を使ってデプロイとインフラ設定変更を一括適
-用できるのは便利だ。</p>
-
-<p>ここでは、Railsアプリを対象に<a href="https://github.com/iain/roundsman">roundsman</a>適用までの作業を簡単にまとめる
-。</p>
-
-<h2>手順</h2>
-
-<p>まずは適当なRailsプロジェクトを作るところから。</p>
-
-<pre><code>PROJECT="my_fantastic_project"
-rails new $PROJECT
-cd $PROJECT
-
-$EDITOR Gemfile
-  # 追加
-  gem roundsman, :require =&gt; false
-  gem capistrano, :require =&gt; false
-
-bundle install --path vendor/bundle
-
-# capistranoのCapfile、config/deploy.rbを生成
-bundle exec capify .
-</code></pre>
-
-<p>chefのcookbooksは<code>config/cookbooks</code>に配置する。場所は設定で変更可能。このディレクトリだけ別リポジトリにしておくと、ほかのプロ
-ジェクトでも転用できて便利なのでそうしてる。</p>
-
-<p>config/deploy.rbを調整する。サーバーの種別ごとにデプロイを切り替えたいので、マルチステージを有効化。</p>
-
-<pre><code>$EDITOR config/deploy.rb
-
-# 追加
-# require roundsman/capistrano
-# require capistrano/ext/multistage
-</code></pre>
-
-<p>サーバーグループの設定を<code>config/deploy/*.rb</code>に配置。これについては、<a href="https:%0A//github.com/capistrano/capistrano/wiki/2.x-Multistage-Extension">capistrano/ext/multistage</a>の説明を参照。</p>
-
-<p>あとは<code>config/deploy.rb</code>でrecipeを実行するタスクを追加し、<code>config/deploy/*.rb</code>の中でattributeを設定して
-いく。</p>
-
-<pre><code>config/deploy.rb:
-
-    namespace :chef do
-      set :care_about_ruby_version, false
-
-      # 一括して適用
-      task :default do
-        roundsman.run_list fetch(:run_list)
-      end
-
-      # 個別にレシピ適用 (ex. nginx)
-        namespace :nginx do
-          task :install do
-            roundsman.run_list "recipe[nginx]"
-          end
-        end
-
-      end
-</code></pre>
-
-<p><a href="https://github.com/iain/roundsman#configuration">githubにある設定方法の説明</a>だと、config/ス
-テージ名.rb に設定を書いている。</p>
-
-<pre><code>config/deploy/*.rb:
-
-    set :nginx, :user =&gt; "nginx", "worker_process" =&gt; 1, …
-    set :run_recipe, :user =&gt; "nginx", "worker_process" =&gt; 1, …
-</code></pre>
-
-<p>ただ、これだとattributesの管理がcapistranoの中にべったり書くことになってしまい、chef-
-soloを手で実行したいときとか面倒くさい。そのため、attributesの値はknifeやchef-
-soloで読めるようなjsonを作って、config/roles 以下で管理している。</p>
-
-<p>roles ディレクトリはアプリのアップデートと関係なく更新していくことになるので、別リポジトリで管理した方がいい。</p>
-
-<pre><code>ファイル構成(抜粋)
-
-  ├── Capify
-  ├── Gemfile
-  └── config
-        ├── cookbooks
-        ├── deploy
-        └── roles
-
-config/deploy.rb:
-
-  # jsonファイルを取り込む関数を追加
-  require active_support/core_ext/hash/deep_merge
-  def load_role(*roles)
-    json = {}                                                                    
-    roles.each do |role|
-      json_path = "#{File.dirname(__FILE__)}/roles/#{role}.json"
-      json.deep_merge! JSON.load(File.new(json_path))
-    end
-    json.each {|k,v| set (k.to_sym), v }                                         
- end
-
-config/deploy/*.rb:
-
-  # 読み込みたいjsonファイルを指定
-  load_role "web"
-
-config/roles/*.json:
-
- 例: config/roles/web.json
-  {
-     "nginx" : {
-      "user" : "nginx",
-      "worker_processes" : 1,
-    …
-     "run_list" : [ "recipe[nginx]", ... ]
-  }
-</code></pre>
-
-<p>以上で準備が整った。これで実行できるようになる。</p>
-
-<pre><code># 一括適用
-bundle exec cap ステージ名 chef
-
-# cookbook を指定して適用
-bundle exec cap ステージ名 chef:nginx
-</code></pre>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-07-30T00:00:00+09:00" pubdate data-updated="true">2012-07-30</time></div>
-	<div class="tags">
-
-</div>
-	
-</div></article>
-
-
-    <article class="post">
-	<h1 class="title"><a href="/blog/2012/06/05/-glusterfs-/">分散ファイルシステム GlusterFS を使う</a></h1>
-	<div class="entry-content">
-		<p>Webアプリケーションを構築する上で、運用中に発生したファイルをローカルのファイルシステム上に保管すると、スケールを阻害するため好ましくないことが多い。</p>
-
-<p>そのため、アプリケーションの設計の段階からCDNの利用したり、ファイルの管理だけ別のサービスに切り出したりすることを考慮すべきだけど、いろいろなしがらみのた
-めにどうしてもファイルを複数台のサーバーで共有するようなシステム形態にせざるを得ないことが往々にしてある。</p>
-
-<p>サーバー間のファイル共有のための方法として、<a href="http://code.google.com/p/lsyncd/">lsyncd</a> や<a href="http:%0A//www.drbd.org/">DRBD</a>を使ったり、NASを介したりするなど様々な方法があるけど、<a href="http://www.gluster.or%0Ag/">GlusterFS</a> がとても便利。特別な機器を必要とせず、すでにある環境に対して導入でき、信頼性とスケーラビリティのあるクラスタリングファイルシステムを手早く構築するこ
-とができる。</p>
-
-<p>GlusterFS を簡単に説明すると、以下のような特徴がある:</p>
+		<p>イベント処理ツール <a href="http://aphyr.github.com/riemann/">riemann</a>を使ってみたのでその感想。</p>
 
 <ul>
-<li>分散型ファイルシステム
+<li>サーバーは clojure で書かれている
 
 <ul>
-<li>SPOFになるような特殊ノードも必要ない</li>
+<li>設定ファイルは S 式</li>
 </ul>
 </li>
-<li>NFSやCIFSでマウント可能
+<li>クライアントは各言語版がある <a href="http://aphyr.github.com/riemann/clients.html">http://aphyr.github.com/riemann/clients.html</a></li>
+<li>サーバーの状態は riemann-dash という sinatra でできた Web 画面から確認できる</li>
+<li>クライアントからのメッセージはイベントと呼んでる
 
 <ul>
-<li>先日発表された 3.3.0 で、HDFSとの互換性できてHadoopから処理できるようになったり、OpenStack Object Storage API互換の REST APIが提供されたりでいろいろ熱い感じになっている</li>
+<li>host, service, state, time, description, tags, metric, ttl というパラメータを持っている</li>
 </ul>
 </li>
-<li>ストライピングで性能を上げたり、レプリケーションで耐障害性をあげたりすることが可能</li>
+<li>サーバー、クライアント間は Protocol Buffer で通信する</li>
 </ul>
 
 
-<p>今回は仮想マシンで動作を検証するまでの流れをまとめる。</p>
+<p>公式サイトではサーバーの tar ball と deb パッケージを配布している。動かすためには、Java で実行するだけ。</p>
 
-<h2>環境構築</h2>
-
-<p>作業環境として、Mac OS X Lion上のVirtualBoxを利用し、仮想マシンとしてはCentOS 6.2
-x86_64を使う。Windowsでやる場合は<code>vagrant ssh</code>が動かないので、そのあたりを読み替えればできると思う。</p>
-
-<p>はじめにCentOS 6.2のマシンイメージを作る。</p>
-
-<pre><code>$ gem install vagrant veewee
-$ mkdir work
-$ cd work
-$ vagrant basebox define CentOS-6.2-x86_64-minimal CentOS-6.2-x86_64-minimal
-$ vagrant basebox build CentOS-6.2-x86_64-minimal # マシンイメージのビルド
-$ vagrant basebox validate CentOS-6.2-x86_64-minimal # チェック
-$ vagrant basebox export CentOS-6.2-x86_64-minimal
-$ vagrant box add CentOS-6.2-x86_64-minimal CentOS-6.2-x86_64-minimal.box
-$ cd ..
-$ rm -rf ./work
+<pre><code>$ wget [http://aphyr.com/riemann/riemann-0.1.2.tar.bz2](http://aphyr.com/riemann/riemann-0.1.2.tar.bz2)
+$ tar xf riemann-0.1.2.tar.bz2
+$ cd riemann-0.1.2
+$ bin/riemann etc/riemann.config
 </code></pre>
 
-<p>次にクラスタ構成の設定。</p>
+<p>設定ファイルを S 式でがりがりかけるのはおもしろくって、riemann だとこんな感じに設定できる:</p>
 
-<pre><code>$ mkdir -p ~/Documents/vagrant/glusterfs/ # 作業用ディレクトリ作成
-$ cd ~/Documents/vagrant/glusterfs/
-$ vim Vagrantfile # 編集
+<pre><code># 公式サイトの設定例から引用 [http://aphyr.github.com/riemann/configuring.html](http://aphyr.github.com/riemann/configuring.html)
+
+; You can use any options for [https://github.com/drewr/postal.](https://github.com/drewr/postal.)
+;
+; (mailer {:from "riemann@trioptimum.com"
+;          :host "mx1.trioptimum.com"
+;          :user "foo"
+;          :pass "bar"})
+
+(streams
+  (where (and (service "web server")
+              (state "exception"))
+         (tagged "controller"
+                 (email "5551234567@txt.att.net"))
+         (tagged "view"
+                 (email "delacroix@trioptimum.com" "bronson@trioptimum.com"))
+         (tagged "model"
+                 (email "staff@vonbraun.mil"))))
 </code></pre>
 
-<p><a href="https://gist.github.com/2868494">https://gist.github.com/2868494</a></p>
+<p>「イベント x あるいは y が n 秒以内に m 回発生したらアラート」みたいなのも設定できるみたいなので、監視ツールと組み合わせてもおもしろそう。</p>
 
-<pre><code>$ vagrant up # 3台の仮想マシン起動
-</code></pre>
-
-<p>必要となる仮想マシンがそろったので、glusterfsのセットアップを始める。</p>
-
-<pre><code>$ cd ~/Documents/vagrant/glusterfs # この中は 共有ディレクトリを通して、仮想マシンの/vagrantからも参照可能
-$ curl -LO [http://download.gluster.org/pub/gluster/glusterfs/LATEST/CentOS/glusterfs-3.3.0-1.el6.x86_64.rpm](http://download.gluster.org/pub/gluster/glusterfs/LATEST/CentOS/glusterfs-3.3.0-1.el6.x86_64.rpm)
-$ curl -LO [http://download.gluster.org/pub/gluster/glusterfs/LATEST/CentOS/glusterfs-fuse-3.3.0-1.el6.x86_64.rpm](http://download.gluster.org/pub/gluster/glusterfs/LATEST/CentOS/glusterfs-fuse-3.3.0-1.el6.x86_64.rpm)
-$ curl -LO [http://download.gluster.org/pub/gluster/glusterfs/LATEST/CentOS/glusterfs-server-3.3.0-1.el6.x86_64.rpm](http://download.gluster.org/pub/gluster/glusterfs/LATEST/CentOS/glusterfs-server-3.3.0-1.el6.x86_64.rpm)
-</code></pre>
-
-<p>仮想マシンに必要となるパッケージをインストールしておく。</p>
-
-<pre><code>$ brew install parallel # 一台ずつ設定するの面倒なので、gnu parallel 使う
-$ parallel vagrant ssh {} -c sh -c "sudo yum -y install wget fuse fuse-libs" ::: host1 host2 host3
-$ parallel vagrant ssh {} -c sh -c "sudo yum install -y /vagrant/glusterfs-*" ::: host1 host2 host3 # パッケージインストール
-$ parallel vagrant ssh {} -c sh -c "/usr/sbin/glusterfs -V" ::: host1 host2 host3 # 動作確認
-$ parallel vagrant ssh {} -c sh -c "sudo /sbin/service iptables stop" ::: host1 host2 host3 # iptables 停止
-$ parallel vagrant ssh {} -c sh -c "sudo /sbin/service glusterd start" ::: host1 host2 host3 # 起動
-</code></pre>
-
-<p>以降、<code>$</code> から始まるのはホストOS、<code>hostX$</code> から始まるのは仮想マシン上のターミナルの説明とする。</p>
-
-<h2>ストレージプール作成</h2>
-
-<p>ストレージプールと呼ばれる、サーバー間の信頼済みネットワークを作成する。</p>
-
-<pre><code>$ vagrant ssh host1
-
-host1$ sudo gluster peer probe 192.168.56.11 # host2 をプールに追加
-host1$ sudo gluster peer probe 192.168.56.12 # host3 をプールに追加
-# 自ホスト(host1)の追加は不要
-</code></pre>
-
-<h2>ボリューム作成</h2>
-
-<p>ストレージプールを構成したら、ボリュームを作成する。</p>
-
-<p>ボリュームは「分散するかどうか」「レプリケーションするかどうか」「ストライピングするかどうか」を選ぶことになる。組み合わせることも可能。ひとまず2台構成で分
-散、ストライピング、レプリケーションのそれぞれについて試してみる。</p>
-
-<h3>分散</h3>
-
-<p>ファイルをストレージ内のどこかしらに保存しておく形態。追加すればするほど大きなストレージとなるけど、冗長性などは確保されない。</p>
-
-<p>host1, host2 で分散ボリュームを作ってみる。</p>
-
-<pre><code>$ parallel vagrant ssh {} -c sh -c "sudo mkdir -p /export/vol" ::: host1 host2
-$ vagrant ssh host1
-
-host1$ sudo gluster volume create vol 192.168.56.10:/export/vol 192.168.56.11:/export/vol
-</code></pre>
-
-<h3>ストラインピング</h3>
-
-<p>性能向上を目的として、ファイルを複数に分割して保存しておく形態。RAID0みたいな感じ。</p>
-
-<p>host2, host3 でストライピングボリュームを作ってみる。</p>
-
-<pre><code>$ parallel vagrant ssh {} -c sh -c "sudo mkdir -p /export/vol-striping" ::: host2 host3  
-$ vagrant ssh host1
-
-host1 $ sudo gluster volume create vol-striping stripe 2 192.168.56.11:/export/vol-striping 192.168.56.12:/export/vol-striping
-</code></pre>
-
-<h3>レプリケーション</h3>
-
-<p>データの複製を作って、複数の場所に保管しておく形態。RAID1みたいな感じ。信頼性が高くなり、ファイルの読み込みも早くなる。</p>
-
-<p>host1, host3 でレプリケーションボリュームを作ってみる。</p>
-
-<pre><code>$ parallel vagrant ssh {} -c sh -c "sudo mkdir -p /export/vol-replica" ::: host1 host3
-$ vagrant ssh host1
-
-host1$ sudo gluster volume create vol-replica replica 2 192.168.56.10:/export/vol-replica 192.168.56.12:/export/vol-replica
-host1$ sudo gluster volume start vol-replica
-</code></pre>
-
-<h2>利用</h2>
-
-<h3>マウント</h3>
-
-<p>OSにマウントしてみる。マウント方法にはNFSやCIFSなども選べるけど、ここではネイティブのglusterfs形式を選んでみる。</p>
-
-<pre><code>$ vagrant ssh host1
-
-host1$ sudo mkdir -p /mnt/{vol,vol-striping,vol-replica}
-host1$ sudo mount -t glusterfs 192.168.56.10:/vol /mnt/vol # 分散
-host1$ sudo mount -t glusterfs 192.168.56.11:/vol-striping /mnt/vol-striping # ストライピング
-host1$ sudo mount -t glusterfs 192.168.56.12:/vol-replica /mnt/vol-replica # レプリケーション    
-</code></pre>
-
-<h3>動作確認</h3>
-
-<p>はじめに、マウントした結果を見てみる。</p>
-
-<pre><code>$ df -h /mnt/*
-Filesystem            Size  Used Avail Use% Mounted on
-192.168.56.10:vol      17G  1.9G   14G  12% /mnt/vol
-192.168.56.12:vol-replica
-                      8.4G  949M  7.0G  12% /mnt/vol-replica
-192.168.56.11:vol-striping
-                       17G  1.9G   14G  12% /mnt/vol-striping
-</code></pre>
-
-<p>分散、ストライピングは2台分を足し合わせた結果になっている。レプリケーションは2台に同じデータが分散されるので、ディスク効率は50%に下がる。</p>
-
-<h4>分散</h4>
-
-<p>適当にファイルを作ってみる。</p>
-
-<pre><code>host1$ sudo touch /mnt/vol/{1..9}
-
-# 保管先をチェック
-
-host1$ ls /export/vol/ # 1  5  7  8  9
-
-host2$ ls /export/vol/ # 2  3  4  6
-</code></pre>
-
-<p>ファイルがばらばらと格納されていることがわかる。</p>
-
-<h3>ストライピング</h3>
-
-<pre><code>host1$ sudo vi /mnt/vol-striping/sample.txt # 10M強データをテキストデータを書き込み
-
-host1$ du -s /mnt/vol-striping/sample.txt # 10256と表示された
-host1$ ls -l /mnt/vol-striping/sample.txt # サイズが 10484785 と表示された
-
-# 保管先をチェック
-host2$ du -s /export/vol-striping/sample.txt # 5128 と表示された
-host2$ ls -l /export/vol-striping/sample.txt # サイズが 10354688 と表示された
-
-host3$ du -s /export/vol-striping/sample.txt # 5128 と表示された
-host3$ ls -l /export/vol-striping/sample.txt # サイズが 10484785 と表示された
-</code></pre>
-
-<p>duの結果（ディスクのセクタ）はちょうど半分ずつに分割されるけど、ファイルの実際のサイズは元ファイルと同じ場合と異なる場合の2パターンが検出できた。これは、
-ファイルがスパースファイルなっているため、見かけ上のサイズと実際にディスク上で利用しているサイズが異なっていることが原因。</p>
-
-<h3>レプリケーション</h3>
-
-<p>適当なファイルを作ってみる。</p>
-
-<pre><code>host1$ sudo dd if=/dev/urandom of=/mnt/vol-replica/dummy bs=1M count=10
-host1$ sha1sum /mnt/vol-replica/dummy # 54b5c383e96d511249f9393de060c3219549e030 だった
-
-# 保管先をチェック
-host1$ sha1sum /export/vol-replica/dummy # 54b5c383e96d511249f9393de060c3219549e030 だった
-
-host2$ sha1sum /export/vol-replica/dummy # 54b5c383e96d511249f9393de060c3219549e030 だった
-</code></pre>
-
-<p>同じ内容のファイルが複数箇所に保存されることがわかった。</p>
-
-<h2>メモ</h2>
-
-<p>なんとなくでも使い始められちゃうくらい簡単に使えるけど、<a href="http://gluster.org/community/documentatio%0An/index.php/Main_Page">ドキュメント</a>の<a href="http://www.gluster.org/wp-%0Acontent/uploads/2012/05/Gluster_File_System-3.3.0-Administration_Guide-en-%0AUS.pdf">PDF</a> がわかりやすくコンパクトにまとまっていて、全体像を理解するのはここからここから始めるといいと思う。</p>
+<p>ソフトウェアの内容や使いかっては、 <a href="http://fluentd.org/">fluentd</a>
+ととても近いように感じた。それぞれ公式サイトに掲げられているメッセージを比較してみると、fluentd は「Fluentd is a lightweight
+and flexible log collector」で、riemann は「Riemann is an event stream
+processor」だった。fluentd はイベントを集計できる形式でログとして残すこと、riemann
+はイベントストリームから特定の状況をリアルタイムで見つけだすことが主眼ということかな。</p>
 
 <h2>参考</h2>
 
 <ul>
-<li><a href="http://www.gluster.org/community/documentation/index.php/Main_Page">Gluster Community のドキュメント</a></li>
+<li><a href="http://aphyr.github.com/riemann/">公式サイト</a></li>
+<li><a href="http://vimeo.com/45807716">紹介ビデオ</a></li>
+<li><a href="http://blog.boundary.com/2012/03/12/boundary-tech-talks-march-6th-2012/">紹介ビデオ</a></li>
+<li><a href="https://twitter.com/aphyr">作者 Kyle Kingsbury</a></li>
+<li><a href="http://labs.amara.org/2012-07-16-metrics.html">利用事例</a></li>
+</ul>
+
+
+<h3>関連するサービス、同類のソフトウェア</h3>
+
+<ul>
+<li><a href="http://fluentd.org/">fluentd</a></li>
+<li><a href="http://boundary.com/">boundary</a></li>
+<li><a href="http://aws.amazon.com/en/cloudwatch/">amazon cloudwatch</a></li>
+<li><a href="http://www.loggly.com/">loggly</a></li>
+<li>その他多くの監視ツール</li>
 </ul>
 
 
@@ -481,99 +181,7 @@ host2$ sha1sum /export/vol-replica/dummy # 54b5c383e96d511249f9393de060c3219549e
   
 
 
-<time datetime="2012-06-05T00:00:00+09:00" pubdate data-updated="true">2012-06-05</time></div>
-	<div class="tags">
-
-</div>
-	
-</div></article>
-
-
-    <article class="post">
-	<h1 class="title"><a href="/blog/2012/06/03/sphinxguard-livereload/">Sphinxの更新をguard-livereloadで検知してブラウザを自動リロードする</a></h1>
-	<div class="entry-content">
-		<p>sphinxでドキュメントを書く際に生じる「文章の記述 => ビルド =>
-ブラウザでの確認」という一連のサイクルを人力でやるのは効率が悪い。いろいろな省力化対策が考えられるが、ここでは guard-
-livereloadを使って、文章のビルドとブラウザのリロードを自動化する方法を説明する。</p>
-
-<h2>作業環境</h2>
-
-<p>検証に使った環境は以下の通り。環境に依存する部分は少ないので、他のOSでも動くと思う。</p>
-
-<ul>
-<li>Mac OS X Lion</li>
-<li>ruby 1.9.3-p194</li>
-<li>sphinx 1.1.3</li>
-</ul>
-
-
-<h2>事前準備</h2>
-
-<h3>サーバー側準備</h3>
-
-<p>用意するのは3ファイル</p>
-
-<ul>
-<li>Gemfile … 必要なライブラリをまとめてインストールするための設定ファイル</li>
-<li>Gaurdfile … ファイルシステム監視の設定ファイル</li>
-<li>Procfile … Webサーバーとファイル監視を起動するための設定ファイル</li>
-</ul>
-
-
-<p><a href="https://gist.github.com/2862843">https://gist.github.com/2862843</a></p>
-
-<p>これら3ファイルをsphinxの作業ディレクトリ内に配置する。製生後のhtmlファイルは<code>buld/html</code>ディレクトリに格納されていることを期待した設定
-になっているので、必要であれば適宜修正する。</p>
-
-<p>ファイルの設置が終わったら、ライブラリをインストールする。</p>
-
-<pre><code>bundle install
-</code></pre>
-
-<h3>ブラウザ側準備</h3>
-
-<p>好きなブラウザにlivereloadのブラウザ拡張をインストールする。</p>
-
-<p><a href="http://help.livereload.com/kb/general-use/browser-extensions">http://help.livereload.com/kb/general-use/browser-
-extensions</a></p>
-
-<h2>利用方法</h2>
-
-<p>サーバー側でファイルの監視とlivereloadを開始する。</p>
-
-<pre><code>foreman start
-</code></pre>
-
-<p>ブラウザで http://localhost:3000/ (3000以外にしたい場合は Procfile 内で変更)
-にアクセスしてlivereloadのブラウザ拡張を有効化すれば、あとはファイルの更新に合わせて自動的にビルドとブラウザのリロードが行われる。</p>
-
-<h2>参考</h2>
-
-<ul>
-<li><a href="http://aligach.net/diary/20110925.html">LiveReloadが超気持ちいい2011</a> Livereloadの詳しい説明</li>
-<li><a href="https://addons.mozilla.org/en-US/firefox/addon/auto-reload/">Auto Reload</a> ローカルファイルの更新を検知してFirefoxをリロードしてくれるアドオン。試してみたけど、自分の環境ではリロードがうまく動かなかった。</li>
-</ul>
-
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-06-03T00:00:00+09:00" pubdate data-updated="true">2012-06-03</time></div>
+<time datetime="2012-09-22T18:00:00+09:00" pubdate data-updated="true">2012-09-22</time></div>
 	<div class="tags">
 
 </div>

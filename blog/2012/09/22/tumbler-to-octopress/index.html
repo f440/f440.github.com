@@ -8,7 +8,7 @@
 
 	
 	<meta name="description" content="Tumblerでブログ書いていたけど、ローカルで記事書く => フォームに貼り付け =>
-プレビューのサイクルが結構面倒くさいと思っていたので、Octopressに移行した。 vim で書く => すぐに確認 => github にデプロイ => 公開の流れは気持ちいい。 やったこと $ git &hellip;">
+プレビューのサイクルが結構面倒くさいな、と常々思っていたので、Octopressに移行した。 ホスティングには Github Pages を利用している。 手順 $ git clone git:// &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -79,11 +79,11 @@
 	<div id="content" class="inner"><article class="post">
 	<h1 class="title">TumblerからOctopressへの移行</h1>
 	<div class="entry-content"><p>Tumblerでブログ書いていたけど、ローカルで記事書く => フォームに貼り付け =>
-プレビューのサイクルが結構面倒くさいと思っていたので、Octopressに移行した。</p>
+プレビューのサイクルが結構面倒くさいな、と常々思っていたので、Octopressに移行した。</p>
 
-<p>vim で書く => すぐに確認 => github にデプロイ => 公開の流れは気持ちいい。</p>
+<p>ホスティングには <a href="http://pages.github.com/">Github Pages</a> を利用している。</p>
 
-<h2>やったこと</h2>
+<h2>手順</h2>
 
 <pre><code>$ git clone git://github.com/imathis/octopress.git octopress
 
@@ -120,13 +120,21 @@ $ mv post source/
 </ul>
 
 
-<p>Github Pages へのデプロイ方法は<a href="http://octopress.org/docs/deploying/github/">公式の説明</a>を参照。</p>
+<p><a href="http://pages.github.com/">Github Pages</a> へのデプロイ方法は<a href="http://octopress.org/docs/deploying/github/">公式の説明</a>を参照。</p>
 
 <h2>仕組み</h2>
 
 <p><code>source</code> ディレクトリの中身が <code>public</code> 以下に展開されて、ここが公開領域となる。
 <code>public</code> の中身が <code>_deploy</code> にコピーされて、ここが Github Pages に push される
 。</p>
+
+<p>git リポジトリのうち、<code>master</code> は公開用、<code>source</code> は編集用となる。つまり、ルー
+トディレクトリに <code>source</code> ブランチ、<code>_master</code> ディレクトリに <code>maste</code> ブランチと
+いう二つのリポジトリが配置されることになる。</p>
+
+<h2>感想</h2>
+
+<p>vim で書く => すぐに確認 => github にデプロイ => 公開の流れは気持ちいい。tumblr の頃と同じく、markdown で書けるのもとても具合がいい。</p>
 </div>
 
 

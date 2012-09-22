@@ -7,8 +7,8 @@
 	<meta name="author" content="f440">
 
 	
-	<meta name="description" content="ちょっと前にsupervisorを使ったのでやり方をまとめておく。 公式サイト: supervisor supervisorはプログラムの起動、停止を管理するツール。daemontools
-がわかるなら、あんな感じのソフトだと思ってもらえれば早い。 &hellip;">
+	<meta name="description" content="管理対象のサーバー台数が少ない場合など、chefのサーバーを運用するコストとベネフィットを天
+秤にかけてみて、ああこれどう考えても労力ペイできないな、でも設定ファイルを手動で管理するのはやだな、といったときにroundsmanを使うといいという話。 roundsmanは、 &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -80,200 +80,136 @@
 
 
     <article class="post">
-	<h1 class="title"><a href="/blog/2011/12/24/superviser/">プロセス管理にsuperviserを使う</a></h1>
+	<h1 class="title"><a href="/blog/2012/07/30/roundsmancapistranochef-solo/">Roundsmanを使ってcapistranoからchef-soloを実行する</a></h1>
 	<div class="entry-content">
-		<p>ちょっと前にsupervisorを使ったのでやり方をまとめておく。</p>
+		<p>管理対象のサーバー台数が少ない場合など、<a href="http://www.opscode.com/chef/">chef</a>のサーバーを運用するコストとベネフィットを天
+秤にかけてみて、ああこれどう考えても労力ペイできないな、でも設定ファイルを手動で管理するのはやだな、といったときに<a href="https://g%0Aithub.com/iain/roundsman">roundsman</a>を使うといいという話。</p>
 
-<p>公式サイト: <a href="http://supervisord.org/">supervisor</a></p>
+<p><a href="https://github.com/iain/roundsman">roundsman</a>は、chefのレシピを転送して<a href="http:%0A//wiki.opscode.com/display/chef/Chef+Solo">chef-solo</a>を実行する<a href="https://github.com%0A/capistrano/capistrano">capistrano</a>向けライブラリ。アプリケーションのリリースタイミングに併せてインフラ設定の変更が必要になることは往々にしてある
+ので、<a href="https://github.com/capistrano/capistrano">capistrano</a>を使ってデプロイとインフラ設定変更を一括適
+用できるのは便利だ。</p>
 
-<p>supervisorはプログラムの起動、停止を管理するツール。daemontools
-がわかるなら、あんな感じのソフトだと思ってもらえれば早い。daemontoolsよりも標準的なディレクトリ構成で使えるぶん、導入障壁は低いと思う。</p>
-
-<p>最近のLinuxなら、パッケージですぐインストール出来る。以降の説明は debian (6.0.3)、superviser 3 系によるもの。</p>
-
-<h2>インストール</h2>
-
-<pre><code>$ sudo apt-get install superviser
-</code></pre>
-
-<h3>確認</h3>
-
-<pre><code>$ sudo service supervisor status # 起動確認（名前表示されない……）
- is running
-$ sudo service supervisor stop # 停止
-Stopping supervisor: supervisord.
-$ sudo service supervisor start # 起動
-Starting supervisor: supervisord.
-</code></pre>
-
-<h2>例</h2>
-
-<p>例のために、自分のホームにインストールしてあったmemcachedを起動してみる。</p>
-
-<p>まずは、コマンドラインから問題無く起動出来ることを確認</p>
-
-<pre><code>$ /home/f440/opt/bin/memcached # 起動
-</code></pre>
-
-<p>プログラムはフォアグラウンドで起動する。memcached の例で言うと、-d オプション (run as a daemon) はつけない。</p>
-
-<p>設定ファイルを配置する。もともと /etc/supervisor/supervisord.conf 内で
-/etc/supervisor/conf.d/*.conf を Include
-するよう設定されていた読み込むように設定されていたので、以下のようなファイルを作った。</p>
-
-<pre><code>$ cat /etc/supervisor/conf.d/memcached.conf
-[program:memcached]
-command=/home/f440/opt/bin/memcached
-user=f440
-</code></pre>
-
-<p>デフォルトだと設定したプログラムは自動起動する(autostart=true)なので、supervisor を再起動させれば memcached
-も起動する。memcached がいつまでも起動しなければ /var/log/supervisor 以下のログを確認する。</p>
-
-<p>何らかの原因で停止したとき、自動起動して欲しければ autorestart=true を指定しておく。</p>
-
-<h2>コマンドで操作</h2>
-
-<p>起動中は supervisorctl 経由で操作ができるようになる。</p>
-
-<pre><code>$ sudo supervisor 
-memcached                        RUNNING    pid 24928, uptime 0:08:21
-supervisor&gt; # help でヘルプを表示
-supervisor&gt; exit
-$ sudo supervisor status # 直接引数を渡すこともできる
-memcached                        RUNNING    pid 24928, uptime 0:08:21
-</code></pre>
-
-<h2>Webで操作</h2>
-
-<p>設定を追加するとWebから操作できるようになる。外部から好き放題できるので、安全な場所以外では適切な権限設定必須。</p>
-
-<p>ポート9001で、どこからでもアクセスできるよう設定</p>
-
-<pre><code>diff --git a/supervisor/supervisord.conf b/supervisor/supervisord.conf
-index 61b3020..86e04f2 100644
---- a/supervisor/supervisord.conf
-+++ b/supervisor/supervisord.conf
-@@ -4,6 +4,9 @@
- file=/var/run//supervisor.sock   ; (the path to the socket file)
- chmod=0700                       ; sockef file mode (default 0700)
-
-+[inet_http_server]
-+port=*:9001
-+
- [supervisord]
- logfile=/var/log/supervisor/supervisord.log ; (main log file;default $CWD/supervisord.log)
- pidfile=/var/run/supervisord.pid ; (supervisord pidfile;default supervisord.pid)
-</code></pre>
-
-<p>設定ファイル再読込</p>
-
-<pre><code> $ sudo supervisor reload
-</code></pre>
-
-<p>アクセス出来るようになる</p>
-
-<p><img src="/images/2011-12-24-superviser/tumblr_lx9eq9SHXa1qz5yk8.jpg" alt="Web管理画面" /></p>
-
-<p>終わり。</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-12-24T00:00:00+09:00" pubdate data-updated="true">2011-12-24</time></div>
-	<div class="tags">
-
-</div>
-	
-</div></article>
-
-
-    <article class="post">
-	<h1 class="title"><a href="/blog/2011/12/17/githubyum/">Githubを使ってyumリポジトリを公開する</a></h1>
-	<div class="entry-content">
-		<p>ubuntuには<a href="https://launchpad.net/ubuntu/+ppas">PPA</a>という仕組みがあり、プロジェクトホスティングサービス
-<a href="https://launchpad.net/">launchpad</a> と連携してパッケージを簡単に配布する仕組みが用意されている。今回は、githubを使
-ってリポジトリにpushしたら自動的にRPMパッケージを公開する方法をまとめる。</p>
-
-<p>※
-PPAだとサーバサイドで各種プラットフォームにビルドしてくれるが、そこまではサポートしない。あくまで配布だけ。RPMをどうやって作るのかについても触れない。</p>
-
-<p>以下は<a href="http://haproxy.1wt.eu/">haproxy</a>
-を公開するときの例。haproxyのソースにはRPMのspecファイルが含まれているので、簡単にrpmが作成出来る。</p>
+<p>ここでは、Railsアプリを対象に<a href="https://github.com/iain/roundsman">roundsman</a>適用までの作業を簡単にまとめる
+。</p>
 
 <h2>手順</h2>
 
-<h3>git リポジトリを作成</h3>
+<p>まずは適当なRailsプロジェクトを作るところから。</p>
 
-<p><a href="https://github.com/repositories/new">Create a New Repository - github</a>
-からリポジトリを作成。</p>
+<pre><code>PROJECT="my_fantastic_project"
+rails new $PROJECT
+cd $PROJECT
 
-<h3>ディレクトリ構造を作成</h3>
+$EDITOR Gemfile
+  # 追加
+  gem roundsman, :require =&gt; false
+  gem capistrano, :require =&gt; false
 
-<p>以下はCentOS 5 64bit 版とソースRPMを配布する場合</p>
+bundle install --path vendor/bundle
 
-<pre><code>$ mkdir -p haproxy-rpm/centos/5/os/{SRPMS,x86_64}
-$ cd haproxy-rpm
+# capistranoのCapfile、config/deploy.rbを生成
+bundle exec capify .
 </code></pre>
 
-<h3>ファイル設置</h3>
+<p>chefのcookbooksは<code>config/cookbooks</code>に配置する。場所は設定で変更可能。このディレクトリだけ別リポジトリにしておくと、ほかのプロ
+ジェクトでも転用できて便利なのでそうしてる。</p>
 
-<pre><code>$ cp /some/path/haproxy-1.4.18-1.src.rpm centos/5/os/SRPMS/
-$ cp /some/path/haproxy-1.4.18-1.x86_64.rpm centos/5/os/x86_64/
+<p>config/deploy.rbを調整する。サーバーの種別ごとにデプロイを切り替えたいので、マルチステージを有効化。</p>
+
+<pre><code>$EDITOR config/deploy.rb
+
+# 追加
+# require roundsman/capistrano
+# require capistrano/ext/multistage
 </code></pre>
 
-<h3>メタデータ作成</h3>
+<p>サーバーグループの設定を<code>config/deploy/*.rb</code>に配置。これについては、<a href="https:%0A//github.com/capistrano/capistrano/wiki/2.x-Multistage-Extension">capistrano/ext/multistage</a>の説明を参照。</p>
 
-<pre><code>$ sudo yum install -y createrepo
-$ createrepo centos/5/os/SRPMS/
-$ createrepo centos/5/os/x86_64/
+<p>あとは<code>config/deploy.rb</code>でrecipeを実行するタスクを追加し、<code>config/deploy/*.rb</code>の中でattributeを設定して
+いく。</p>
+
+<pre><code>config/deploy.rb:
+
+    namespace :chef do
+      set :care_about_ruby_version, false
+
+      # 一括して適用
+      task :default do
+        roundsman.run_list fetch(:run_list)
+      end
+
+      # 個別にレシピ適用 (ex. nginx)
+        namespace :nginx do
+          task :install do
+            roundsman.run_list "recipe[nginx]"
+          end
+        end
+
+      end
 </code></pre>
 
-<h3>commit &amp; push</h3>
+<p><a href="https://github.com/iain/roundsman#configuration">githubにある設定方法の説明</a>だと、config/ス
+テージ名.rb に設定を書いている。</p>
 
-<pre><code>$ git add .
-$ git ci -m initial commit  
-$ git remote add origin git@github.com:f440/haproxy-rpm.git
-$ git push -u origin master
+<pre><code>config/deploy/*.rb:
+
+    set :nginx, :user =&gt; "nginx", "worker_process" =&gt; 1, …
+    set :run_recipe, :user =&gt; "nginx", "worker_process" =&gt; 1, …
 </code></pre>
 
-<h2>利用方法</h2>
+<p>ただ、これだとattributesの管理がcapistranoの中にべったり書くことになってしまい、chef-
+soloを手で実行したいときとか面倒くさい。そのため、attributesの値はknifeやchef-
+soloで読めるようなjsonを作って、config/roles 以下で管理している。</p>
 
-<p>/etc/yum.repos.d 以下にわかりやすい名前でファイルを作る。</p>
+<p>roles ディレクトリはアプリのアップデートと関係なく更新していくことになるので、別リポジトリで管理した方がいい。</p>
 
-<pre><code>サンプル /etc/yum.repos.d/haproxy-rpm-f440.repo (1行目やnameは適宜変更する)
+<pre><code>ファイル構成(抜粋)
 
-[haproxy-rpm-f440]
-name=haproxy-CentOS-$releasever
-baseurl=https://raw.github.com/f440/haproxy-rpm/master/centos/5/os/x86_64/
-enabled=1
-gpgcheck=0
+  ├── Capify
+  ├── Gemfile
+  └── config
+        ├── cookbooks
+        ├── deploy
+        └── roles
+
+config/deploy.rb:
+
+  # jsonファイルを取り込む関数を追加
+  require active_support/core_ext/hash/deep_merge
+  def load_role(*roles)
+    json = {}                                                                    
+    roles.each do |role|
+      json_path = "#{File.dirname(__FILE__)}/roles/#{role}.json"
+      json.deep_merge! JSON.load(File.new(json_path))
+    end
+    json.each {|k,v| set (k.to_sym), v }                                         
+ end
+
+config/deploy/*.rb:
+
+  # 読み込みたいjsonファイルを指定
+  load_role "web"
+
+config/roles/*.json:
+
+ 例: config/roles/web.json
+  {
+     "nginx" : {
+      "user" : "nginx",
+      "worker_processes" : 1,
+    …
+     "run_list" : [ "recipe[nginx]", ... ]
+  }
 </code></pre>
 
-<p>あとは通常通り <code>sudo yum install haproxy</code> でインストール可能。</p>
+<p>以上で準備が整った。これで実行できるようになる。</p>
 
-<h2>備考</h2>
+<pre><code># 一括適用
+bundle exec cap ステージ名 chef
 
-<ul>
-<li>createrepo はdebian, ubuntuなどにもコマンドが用意されているので、ビルド以外の作業はRHEL系以外のOSでもよい</li>
-<li>mercurialを使いたければ、<a href="https://bitbucket.org">bitbucket</a>でも似たような手順で公開可能。その際は baseurl の部分に <code>baseurl=https://bitbucket.org/f440/haproxy-rpm/raw/tip/centos/$releasever/os/$basearch/</code> のような形式で記述する</li>
-</ul>
-
+# cookbook を指定して適用
+bundle exec cap ステージ名 chef:nginx
+</code></pre>
 
 		
 		
@@ -293,79 +229,8 @@ gpgcheck=0
   
 
 
-<time datetime="2011-12-17T00:00:00+09:00" pubdate data-updated="true">2011-12-17</time></div>
+<time datetime="2012-07-30T00:00:00+09:00" pubdate data-updated="true">2012-07-30</time></div>
 	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/centos/'>centos</a>, <a class='category' href='/blog/categories/git/'>git</a>, <a class='category' href='/blog/categories/github/'>github</a>, <a class='category' href='/blog/categories/rpm/'>rpm</a>, <a class='category' href='/blog/categories/yum/'>yum</a>
-
-
-</div>
-	
-</div></article>
-
-
-    <article class="post">
-	<h1 class="title"><a href="/blog/2011/12/17/-pv/">プログレスバーを簡単に表示できるコマンド Pv</a></h1>
-	<div class="entry-content">
-		<p>プログレスバーを簡単に表示できる <code>pv</code> について説明する。</p>
-
-<h2>インストール方法</h2>
-
-<p>自分の環境(debian 6.0.3)だと <code>apt</code>
-でインストール出来る。RHEL系なら<a href="http://pkgs.repoforge.org/pv/">ここ</a>かな。</p>
-
-<h2>使い方</h2>
-
-<p>端的に言うと、「cat ＋ 標準エラー出力にプログレスバー」という動きを取る。</p>
-
-<pre><code>f440@abhoth[10]:~$ yes | pv &gt;/dev/null
- 529MB 0:00:08 [67.2MB/s] [       &lt;=&gt;                                         ]
-</code></pre>
-
-<p>8秒で合計529MB、秒間67.2MBくらいで「y」の文字が <code>pv</code> を通り抜けてるのがわかる。 <code>-l</code>
-オプションをつけると行モードになり、転送量ではなく転送行数を調べられる。</p>
-
-<pre><code>f440@abhoth[10]:~$ yes | pv -l &gt;/dev/null
- 435k 0:00:10 [45.9k/s] [          &lt;=&gt;                                        ]
-</code></pre>
-
-<p>10秒で435行、秒間45900行くらいが通り抜けてるのがわかる。</p>
-
-<p>他にもおもしろいオプションとして <code>-L</code> っていうのがあって、パイプから出てく流量を制限することが出来る。</p>
-
-<h2>用途</h2>
-
-<p><code>mysqldump</code> とか <code>mysql</code>にくっつけてダンプ、リストアの完了時刻を予想する、とかかな。</p>
-
-<p>Webで見てると、<code>nc</code> とか <code>tcpdump</code> とかと組み合わせてる例がある。</p>
-
-<p>自分で作ったコマンドとかに、簡単に進行状況表示がくっつけられるのは便利。</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-12-17T00:00:00+09:00" pubdate data-updated="true">2011-12-17</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/pv/'>pv</a>, <a class='category' href='/blog/categories/unix/'>unix</a>
-
 
 </div>
 	
@@ -375,6 +240,8 @@ gpgcheck=0
     
         <a href="/blog/page/3/" class="prev">Prev</a>
     
+    
+        <a href="/blog/page/5/" class="next">Next</a>
     
     <div class="center"><a href="/blog/archives">Blog Archives</a></div>
 </nav></div>
