@@ -3,7 +3,7 @@ layout: post
 title: 分散ファイルシステム GlusterFS を使う
 categories:
 comments: true
-published: false
+published: true
 ---
 Webアプリケーションを構築する上で、運用中に発生したファイルをローカルのファイルシステム上に保管すると、スケールを阻害するため好ましくないことが多い。
 

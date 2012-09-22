@@ -5,7 +5,7 @@ categories:
 - unix
 - pv
 comments: true
-published: false
+published: true
 ---
 プログレスバーを簡単に表示できる `pv` について説明する。
 

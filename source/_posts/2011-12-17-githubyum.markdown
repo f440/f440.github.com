@@ -8,7 +8,7 @@ categories:
 - rpm
 - yum
 comments: true
-published: false
+published: true
 ---
 ubuntuには[PPA](https://launchpad.net/ubuntu/+ppas)という仕組みがあり、プロジェクトホスティングサービス
 [launchpad](https://launchpad.net/) と連携してパッケージを簡単に配布する仕組みが用意されている。今回は、githubを使

@@ -3,7 +3,7 @@ layout: post
 title: sphinxの更新をguard-livereloadで検知してブラウザを自動リロードする
 categories:
 comments: true
-published: false
+published: true
 ---
 sphinxでドキュメントを書く際に生じる「文章の記述 => ビルド =>
 ブラウザでの確認」という一連のサイクルを人力でやるのは効率が悪い。いろいろな省力化対策が考えられるが、ここでは guard-

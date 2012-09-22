@@ -3,7 +3,7 @@ layout: post
 title: rundeckをセットアップして、jenkins上のjava成果物をデプロイする
 categories:
 comments: true
-published: false
+published: true
 ---
 rundeck でjenkins上の成果物をデプロイしよう、という話。
 

@@ -6,7 +6,7 @@ categories:
 - lxc
 - linux
 comments: true
-published: false
+published: true
 ---
 ほんの数年前までVPSといえばLinode、Slicehostなどの海外のサーバーしか選択肢がなかった。ls を実行しても一呼吸おくほどのレイテンシーがある
 ような環境で、128MBくらいのメモリを何とかやりくりしてRailsを動かしていた記憶が、現在では月1000円程度で用途によっては手に余るようなスペックが手

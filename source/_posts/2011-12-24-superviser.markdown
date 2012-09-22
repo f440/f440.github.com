@@ -3,7 +3,7 @@ layout: post
 title: プロセス管理にsuperviserを使う
 categories:
 comments: true
-published: false
+published: true
 ---
 ちょっと前にsupervisorを使ったのでやり方をまとめておく。
 
