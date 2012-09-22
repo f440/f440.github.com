@@ -1,0 +1,251 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>head と tail の行数指定方法 - apatheia.info</title>
+	<meta name="author" content="f440">
+
+	
+	<meta name="description" content="head と tail を使うとき、行数指定方法について。動作確認は GNU coreutils 8.19 で行っている。 head と tail のは-n 数字(あるいは--line 数字)で出力する行数を指定できる。 # 先頭3行を表示
+$ seq 10 | head -n 3
+1
+2
+3 &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+	<link rel="canonical" href="http://apatheia.info/blog/2012/09/22/head--tail-/">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<link href="/atom.xml" rel="alternate" title="apatheia.info" type="application/atom+xml">
+	
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">apatheia.info</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:apatheia.info">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+		<a class="twitter" href="http://twitter.com/f440" title="Twitter">Twitter</a>
+		
+		
+		<a class="github" href="https://github.com/f440" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+	<form class="search" action="http://google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:apatheia.info">
+	</form>
+</nav>
+
+</header>
+	
+		
+	
+	<div id="content" class="inner"><article class="post">
+	<h1 class="title">Head と Tail の行数指定方法</h1>
+	<div class="entry-content"><p>head と tail を使うとき、行数指定方法について。動作確認は GNU coreutils 8.19 で行っている。</p>
+
+<p>head と tail のは<code>-n 数字</code>(あるいは<code>--line 数字</code>)で出力する行数を指定できる。</p>
+
+<pre><code># 先頭3行を表示
+$ seq 10 | head -n 3
+1
+2
+3
+
+# 末尾3行を表示
+$ seq 10 | tail -n 3
+8
+9
+10
+</code></pre>
+
+<p>オプションで与える数字には、プラスがつく場合、マイナスがつく場合、何もつかない場合が考えられるが、記号がついた場合に通常異なる挙動をとる場合が出てくる。</p>
+
+<p><code>head -n -数字</code>の場合は、「末尾から指定した行数を除いたもの」となる:</p>
+
+<pre><code>$ seq 10 | head -n -3
+1
+2
+3
+4
+5
+6
+7
+</code></pre>
+
+<p><code>tail -n +数字</code> の場合は、「先頭から数えて指定した行以降のもの」となる:</p>
+
+<pre><code>$ seq 10 | tail -n +3
+3
+4
+5
+6
+7
+8
+9
+10
+</code></pre>
+
+<p>まとめると以下の通り:</p>
+
+<table><thead><tr><th>コマンド</th> <th>-n -行数</th> <th>-n 行数</th> <th>-n
++行数</th> </tr></thead><tr><td>head</td> <td>末尾から
+
+指定行数を除いて表示</td> <td>先頭から
+
+指定行数表示</td> <td>先頭から
+
+指定行数表示</td> </tr><tr><td>tail</td> <td>先頭から
+
+指定行数以降を表示</td> <td>末尾から
+
+指定行数表示</td> <td>先頭から
+
+数えて指定した行以降表示</td> </tr></table>
+
+
+<p><code>-n 数字</code> の代わりに <code>-数字</code> で指定することもできるけど、-n のオプションで負数を指定しているときと混同するのでやめた方がいい。</p>
+
+<p><code>-</code> や <code>+</code> オプションは境界値がどうなっているか忘れがちだし、これが必要となるような局面では <code>awk</code> を使った方が直感的に表現できる。</p>
+
+<pre><code># 3行目から5行目を表示
+$ seq 10 | awk 3&lt;=NR &amp;&amp; NR&lt;=5
+3
+4
+5
+</code></pre>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-09-22T19:00:00+09:00" pubdate data-updated="true">2012-09-22</time></div>
+	<div class="tags">
+
+</div>
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4f8eed8875190f92"></script>
+  <script type="text/javascript">
+    var addthis_config = {
+      data_track_clickback: false 
+    }
+  </script>
+</div>
+
+
+
+<section id="comment">
+    <h1 class="title">Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2012
+
+    f440
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'apatheiainfo';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://apatheia.info/blog/2012/09/22/head--tail-/';
+        var disqus_url = 'http://apatheia.info/blog/2012/09/22/head--tail-/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35021317-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+</body>
+</html>

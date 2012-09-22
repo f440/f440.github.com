@@ -4,7 +4,7 @@
   <title><![CDATA[apatheia.info]]></title>
   <link href="http://apatheia.info/atom.xml" rel="self"/>
   <link href="http://apatheia.info/"/>
-  <updated>2012-09-22T21:14:39+09:00</updated>
+  <updated>2012-09-22T21:36:12+09:00</updated>
   <id>http://apatheia.info/</id>
   <author>
     <name><![CDATA[f440]]></name>
@@ -12,6 +12,174 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[head と tail の行数指定方法]]></title>
+    <link href="http://apatheia.info/blog/2012/09/22/head--tail-/"/>
+    <updated>2012-09-22T19:00:00+09:00</updated>
+    <id>http://apatheia.info/blog/2012/09/22/head&#8211;tail-</id>
+    <content type="html"><![CDATA[<p>head と tail を使うとき、行数指定方法について。動作確認は GNU coreutils 8.19 で行っている。</p>
+
+<p>head と tail のは<code>-n 数字</code>(あるいは<code>--line 数字</code>)で出力する行数を指定できる。</p>
+
+<pre><code># 先頭3行を表示
+$ seq 10 | head -n 3
+1
+2
+3
+
+# 末尾3行を表示
+$ seq 10 | tail -n 3
+8
+9
+10
+</code></pre>
+
+<p>オプションで与える数字には、プラスがつく場合、マイナスがつく場合、何もつかない場合が考えられるが、記号がついた場合に通常異なる挙動をとる場合が出てくる。</p>
+
+<p><code>head -n -数字</code>の場合は、「末尾から指定した行数を除いたもの」となる:</p>
+
+<pre><code>$ seq 10 | head -n -3
+1
+2
+3
+4
+5
+6
+7
+</code></pre>
+
+<p><code>tail -n +数字</code> の場合は、「先頭から数えて指定した行以降のもの」となる:</p>
+
+<pre><code>$ seq 10 | tail -n +3
+3
+4
+5
+6
+7
+8
+9
+10
+</code></pre>
+
+<p>まとめると以下の通り:</p>
+
+<table><thead><tr><th>コマンド</th> <th>-n -行数</th> <th>-n 行数</th> <th>-n
++行数</th> </tr></thead><tr><td>head</td> <td>末尾から
+
+指定行数を除いて表示</td> <td>先頭から
+
+指定行数表示</td> <td>先頭から
+
+指定行数表示</td> </tr><tr><td>tail</td> <td>先頭から
+
+指定行数以降を表示</td> <td>末尾から
+
+指定行数表示</td> <td>先頭から
+
+数えて指定した行以降表示</td> </tr></table>
+
+
+<p><code>-n 数字</code> の代わりに <code>-数字</code> で指定することもできるけど、-n のオプションで負数を指定しているときと混同するのでやめた方がいい。</p>
+
+<p><code>-</code> や <code>+</code> オプションは境界値がどうなっているか忘れがちだし、これが必要となるような局面では <code>awk</code> を使った方が直感的に表現できる。</p>
+
+<pre><code># 3行目から5行目を表示
+$ seq 10 | awk 3&lt;=NR &amp;&amp; NR&lt;=5
+3
+4
+5
+</code></pre>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[イベント処理ツール riemannを使う]]></title>
+    <link href="http://apatheia.info/blog/2012/09/22/-riemann/"/>
+    <updated>2012-09-22T18:00:00+09:00</updated>
+    <id>http://apatheia.info/blog/2012/09/22/-riemann</id>
+    <content type="html"><![CDATA[<p>イベント処理ツール <a href="http://aphyr.github.com/riemann/">riemann</a>を使ってみたのでその感想。</p>
+
+<ul>
+<li>サーバーは clojure で書かれている
+
+<ul>
+<li>設定ファイルは S 式</li>
+</ul>
+</li>
+<li>クライアントは各言語版がある <a href="http://aphyr.github.com/riemann/clients.html">http://aphyr.github.com/riemann/clients.html</a></li>
+<li>サーバーの状態は riemann-dash という sinatra でできた Web 画面から確認できる</li>
+<li>クライアントからのメッセージはイベントと呼んでる
+
+<ul>
+<li>host, service, state, time, description, tags, metric, ttl というパラメータを持っている</li>
+</ul>
+</li>
+<li>サーバー、クライアント間は Protocol Buffer で通信する</li>
+</ul>
+
+
+<p>公式サイトではサーバーの tar ball と deb パッケージを配布している。動かすためには、Java で実行するだけ。</p>
+
+<pre><code>$ wget [http://aphyr.com/riemann/riemann-0.1.2.tar.bz2](http://aphyr.com/riemann/riemann-0.1.2.tar.bz2)
+$ tar xf riemann-0.1.2.tar.bz2
+$ cd riemann-0.1.2
+$ bin/riemann etc/riemann.config
+</code></pre>
+
+<p>設定ファイルを S 式でがりがりかけるのはおもしろくって、riemann だとこんな感じに設定できる:</p>
+
+<pre><code># 公式サイトの設定例から引用 [http://aphyr.github.com/riemann/configuring.html](http://aphyr.github.com/riemann/configuring.html)
+
+; You can use any options for [https://github.com/drewr/postal.](https://github.com/drewr/postal.)
+;
+; (mailer {:from "riemann@trioptimum.com"
+;          :host "mx1.trioptimum.com"
+;          :user "foo"
+;          :pass "bar"})
+
+(streams
+  (where (and (service "web server")
+              (state "exception"))
+         (tagged "controller"
+                 (email "5551234567@txt.att.net"))
+         (tagged "view"
+                 (email "delacroix@trioptimum.com" "bronson@trioptimum.com"))
+         (tagged "model"
+                 (email "staff@vonbraun.mil"))))
+</code></pre>
+
+<p>「イベント x あるいは y が n 秒以内に m 回発生したらアラート」みたいなのも設定できるみたいなので、監視ツールと組み合わせてもおもしろそう。</p>
+
+<p>ソフトウェアの内容や使いかっては、 <a href="http://fluentd.org/">fluentd</a>
+ととても近いように感じた。それぞれ公式サイトに掲げられているメッセージを比較してみると、fluentd は「Fluentd is a lightweight
+and flexible log collector」で、riemann は「Riemann is an event stream
+processor」だった。fluentd はイベントを集計できる形式でログとして残すこと、riemann
+はイベントストリームから特定の状況をリアルタイムで見つけだすことが主眼ということかな。</p>
+
+<h2>参考</h2>
+
+<ul>
+<li><a href="http://aphyr.github.com/riemann/">公式サイト</a></li>
+<li><a href="http://vimeo.com/45807716">紹介ビデオ</a></li>
+<li><a href="http://blog.boundary.com/2012/03/12/boundary-tech-talks-march-6th-2012/">紹介ビデオ</a></li>
+<li><a href="https://twitter.com/aphyr">作者 Kyle Kingsbury</a></li>
+<li><a href="http://labs.amara.org/2012-07-16-metrics.html">利用事例</a></li>
+</ul>
+
+
+<h3>関連するサービス、同類のソフトウェア</h3>
+
+<ul>
+<li><a href="http://fluentd.org/">fluentd</a></li>
+<li><a href="http://boundary.com/">boundary</a></li>
+<li><a href="http://aws.amazon.com/en/cloudwatch/">amazon cloudwatch</a></li>
+<li><a href="http://www.loggly.com/">loggly</a></li>
+<li>その他多くの監視ツール</li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[TumblerからOctopressへの移行]]></title>
