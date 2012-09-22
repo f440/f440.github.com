@@ -9,6 +9,8 @@ published: true
 秤にかけてみて、ああこれどう考えても労力ペイできないな、でも設定ファイルを手動で管理するのはやだな、といったときに[roundsman](https://g
 ithub.com/iain/roundsman)を使うといいという話。
 
+<!-- more -->
+
 [roundsman](https://github.com/iain/roundsman)は、chefのレシピを転送して[chef-solo](http:
 //wiki.opscode.com/display/chef/Chef+Solo)を実行する[capistrano](https://github.com
 /capistrano/capistrano)向けライブラリ。アプリケーションのリリースタイミングに併せてインフラ設定の変更が必要になることは往々にしてある

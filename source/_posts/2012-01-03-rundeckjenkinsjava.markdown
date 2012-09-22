@@ -7,6 +7,8 @@ published: true
 ---
 rundeck でjenkins上の成果物をデプロイしよう、という話。
 
+<!-- more -->
+
 ## rundeck について
 
 [公式サイト](http://rundeck.org/)

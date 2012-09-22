@@ -8,6 +8,8 @@ published: true
 ---
 head と tail を使うとき、行数指定方法について。動作確認は GNU coreutils 8.19 で行っている。
 
+<!-- more -->
+
 head と tail のは`-n 数字`(あるいは`--line 数字`)で出力する行数を指定できる。
 
     

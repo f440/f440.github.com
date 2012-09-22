@@ -8,6 +8,8 @@ published: true
 ---
 イベント処理ツール [riemann](http://aphyr.github.com/riemann/)を使ってみたのでその感想。
 
+<!-- more -->
+
   * サーバーは clojure で書かれている 
     * 設定ファイルは S 式
   * クライアントは各言語版がある [http://aphyr.github.com/riemann/clients.html](http://aphyr.github.com/riemann/clients.html)

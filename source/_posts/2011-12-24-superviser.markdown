@@ -7,6 +7,8 @@ published: true
 ---
 ちょっと前にsupervisorを使ったのでやり方をまとめておく。
 
+<!-- more -->
+
 公式サイト: [supervisor](http://supervisord.org/)
 
 supervisorはプログラムの起動、停止を管理するツール。daemontools

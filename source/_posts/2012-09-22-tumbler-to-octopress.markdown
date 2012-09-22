@@ -12,6 +12,8 @@ Tumblerでブログ書いていたけど、ローカルで記事書く => フォ
 
 ホスティングには [Github Pages][] を利用している。
 
+<!-- more -->
+
 ##  手順
 
     $ git clone git://github.com/imathis/octopress.git octopress

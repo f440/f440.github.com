@@ -9,6 +9,8 @@ published: true
 ちょっとMySQLのBLACKHOLEエンジン使って調べたいことがあったんだけど、
 [MySQL::Sandbox](http://mysqlsandbox.net/) 使うとレプリケーション環境が簡単に構築できて便利。
 
+<!-- more -->
+
 以下は、MySQL::SandboxのセットアップからBLACKHOLEエンジン使うところまでの記録。
 
 ### 前提
