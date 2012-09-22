@@ -4,7 +4,7 @@
   <title><![CDATA[apatheia.info]]></title>
   <link href="http://apatheia.info/atom.xml" rel="self"/>
   <link href="http://apatheia.info/"/>
-  <updated>2012-09-22T20:31:37+09:00</updated>
+  <updated>2012-09-22T21:14:39+09:00</updated>
   <id>http://apatheia.info/</id>
   <author>
     <name><![CDATA[f440]]></name>
@@ -61,6 +61,12 @@ $ mv post source/
 
 
 <p>Github Pages へのデプロイ方法は<a href="http://octopress.org/docs/deploying/github/">公式の説明</a>を参照。</p>
+
+<h2>仕組み</h2>
+
+<p><code>source</code> ディレクトリの中身が <code>public</code> 以下に展開されて、ここが公開領域となる。
+<code>public</code> の中身が <code>_deploy</code> にコピーされて、ここが Github Pages に push される
+。</p>
 ]]></content>
   </entry>
   
