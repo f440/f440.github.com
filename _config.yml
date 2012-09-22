@@ -2,8 +2,8 @@
 #      Main Configs       #
 # ----------------------- #
 
-url: http://f440.github.com
-title: f440.github.com
+url: http://apatheia.info
+title: apatheia.info
 subtitle:
 author: f440
 simple_search: http://google.com/search
@@ -89,11 +89,11 @@ delicious_user:
 delicious_count: 3
 
 # Disqus Comments
-disqus_short_name: f440githubcom
+disqus_short_name: apatheiainfo
 disqus_show_comment_count: false
 
 # Google Analytics
-google_analytics_tracking_id: UA-34992291-1
+google_analytics_tracking_id: UA-35021317-1
 
 # Facebook Like
 facebook_like: false
