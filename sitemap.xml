@@ -2,7 +2,7 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>http://apatheia.info/blog/2011/12/17/github-yum/</loc>
-        <lastmod>2012-09-23T02:52:52+09:00</lastmod>
+        <lastmod>2012-09-23T05:07:04+09:00</lastmod>
     </url>
     <url>
         <loc>http://apatheia.info/blog/2011/12/17/pv/</loc>
@@ -38,7 +38,7 @@
     </url>
     <url>
         <loc>http://apatheia.info/blog/2012/09/22/tumbler-to-octopress/</loc>
-        <lastmod>2012-09-22T23:19:44+09:00</lastmod>
+        <lastmod>2012-09-23T16:43:33+09:00</lastmod>
     </url>
     <url>
         <loc>http://apatheia.info/blog/2012/09/22/riemann/</loc>
@@ -54,10 +54,10 @@
     </url>
     <url>
         <loc>http://apatheia.info/blog/archives/</loc>
-        <lastmod>2012-09-23T02:52:52+09:00</lastmod>
+        <lastmod>2012-09-23T16:43:33+09:00</lastmod>
     </url>
     <url>
         <loc>http://apatheia.info/</loc>
-        <lastmod>2012-09-23T02:52:52+09:00</lastmod>
+        <lastmod>2012-09-23T16:43:33+09:00</lastmod>
     </url>
 </urlset>
