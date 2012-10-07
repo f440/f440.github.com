@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: unix | apatheia.info]]></title>
-  <link href="http://apatheia.info/blog/categories/unix/atom.xml" rel="self"/>
+  <title><![CDATA[Category: shell | apatheia.info]]></title>
+  <link href="http://apatheia.info/blog/categories/shell/atom.xml" rel="self"/>
   <link href="http://apatheia.info/"/>
   <updated>2012-10-08T00:02:16+09:00</updated>
   <id>http://apatheia.info/</id>
@@ -172,50 +172,6 @@ See 'browse help &lt;command&gt;' for information on a specific command.
 <li><a href="https://github.com/37signals/sub">GitHubのリポジトリ</a></li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[プログレスバーを簡単に表示できるコマンド pv]]></title>
-    <link href="http://apatheia.info/blog/2011/12/17/pv/"/>
-    <updated>2011-12-17T00:00:00+09:00</updated>
-    <id>http://apatheia.info/blog/2011/12/17/pv</id>
-    <content type="html"><![CDATA[<p>プログレスバーを簡単に表示できる <code>pv</code> について説明する。</p>
-
-<!-- more -->
-
-
-<h2>インストール方法</h2>
-
-<p>自分の環境(debian 6.0.3)だと <code>apt</code>
-でインストール出来る。RHEL系なら<a href="http://pkgs.repoforge.org/pv/">ここ</a>かな。</p>
-
-<h2>使い方</h2>
-
-<p>端的に言うと、「cat ＋ 標準エラー出力にプログレスバー」という動きを取る。</p>
-
-<pre><code>f440@abhoth[10]:~$ yes | pv &gt;/dev/null
- 529MB 0:00:08 [67.2MB/s] [       &lt;=&gt;                                         ]
-</code></pre>
-
-<p>8秒で合計529MB、秒間67.2MBくらいで「y」の文字が <code>pv</code> を通り抜けてるのがわかる。 <code>-l</code>
-オプションをつけると行モードになり、転送量ではなく転送行数を調べられる。</p>
-
-<pre><code>f440@abhoth[10]:~$ yes | pv -l &gt;/dev/null
- 435k 0:00:10 [45.9k/s] [          &lt;=&gt;                                        ]
-</code></pre>
-
-<p>10秒で435行、秒間45900行くらいが通り抜けてるのがわかる。</p>
-
-<p>他にもおもしろいオプションとして <code>-L</code> っていうのがあって、パイプから出てく流量を制限することが出来る。</p>
-
-<h2>用途</h2>
-
-<p><code>mysqldump</code> とか <code>mysql</code>にくっつけてダンプ、リストアの完了時刻を予想する、とかかな。</p>
-
-<p>Webで見てると、<code>nc</code> とか <code>tcpdump</code> とかと組み合わせてる例がある。</p>
-
-<p>自分で作ったコマンドとかに、簡単に進行状況表示がくっつけられるのは便利。</p>
 ]]></content>
   </entry>
   

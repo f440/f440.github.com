@@ -1,0 +1,335 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>サブコマンドを使いたいときは sub が便利 - apatheia.info</title>
+	<meta name="author" content="f440">
+
+	
+	<meta name="description" content="sub は 37signals が公開しているスクリプト群。サブコマンド付きのコマンドを作りたいとき、補完やヘルプメッセージなどの便利な機能を提供してくれる。 使い方 以下の簡単なコマンドを作って、動作を確認してみることにする。 ex. browse safari http://google. &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+	<link rel="canonical" href="http://apatheia.info/blog/2012/10/07/sub-for-subcommands/">
+	<link href="/favicon.ico" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<link href="/atom.xml" rel="alternate" title="apatheia.info" type="application/atom+xml">
+	
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">apatheia.info</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:apatheia.info">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+		<a class="twitter" href="http://twitter.com/f440" title="Twitter">Twitter</a>
+		
+		
+		<a class="github" href="https://github.com/f440" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+	<form class="search" action="http://google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:apatheia.info">
+	</form>
+</nav>
+
+</header>
+	
+		
+	
+	<div id="content" class="inner"><article class="post">
+	<h1 class="title">サブコマンドを使いたいときは Sub が便利</h1>
+	<div class="entry-content"><p><a href="https://github.com/37signals/sub">sub</a> は <a href="http://37signals.com/">37signals</a> が公開しているスクリプト群。サブコマンド付きのコマンドを作りたいとき、補完やヘルプメッセージなどの便利な機能を提供してくれる。</p>
+
+<!-- more -->
+
+
+<h2>使い方</h2>
+
+<p>以下の簡単なコマンドを作って、動作を確認してみることにする。</p>
+
+<pre><code>ex. browse safari http://google.com/
+
+コマンド browse にサブコマンドでブラウザ(safari, chrome, opera, ...)を与え、
+最後の引数で渡された URL が開く。URL が渡されなければ、ブラウザの起動のみ行う。
+</code></pre>
+
+<p>なお、確認はすべて Mac OS X 10.8 上 の zsh で行っている。</p>
+
+<h3>初期化</h3>
+
+<pre><code>$ git clone git://github.com/37signals/sub.git browse
+$ cd browse
+$ ./prepare.sh browse
+# 以下のメッセージが表示される
+
+Preparing your 'browse' sub!
+Done! Enjoy your new sub! If you're happy with your sub, run:
+
+    rm -rf .git
+    git init
+    git add .
+    git commit -m 'Starting off browse'
+    ./bin/browse init
+
+Made a mistake? Want to make a different sub? Run:
+    git add .
+    git checkout -f
+Thanks for making a sub!
+</code></pre>
+
+<p>言われたとおり、コマンドを実行</p>
+
+<pre><code>$ rm -rf .git
+$ git init
+$ git add .
+$ git commit -m 'Starting off foo'
+$ ./bin/foo init
+# 以下のメッセージが表示される。パスは作業ディレクトリに応じて変わる。
+
+# Load browse automatically by adding
+# the following to ~/.zshenv:
+
+eval "$(/XXXXXXXX/browse/bin/browse init -)"
+</code></pre>
+
+<p>最後に表示されるコマンドを実行することにより、補完が有効になる(XXXXXXXX は作業ディレクトリに応じて変わる)。<code>browse he[tab]</code> を実行してみよう。</p>
+
+<pre><code>$ browse help
+Usage: browse &lt;command&gt; [&lt;args&gt;]
+Some useful browse commands are:
+   commands               List all browse commands
+
+See 'browse help &lt;command&gt;' for information on a specific command.
+</code></pre>
+
+<p>無事ヘルプが表示されたら、セットアップはうまくいっている。</p>
+
+<h3>サブコマンド作成</h3>
+
+<p>まずはディレクトリ構造を見てみよう。</p>
+
+<pre><code>$ gfind ! -path './.git/*'
+.
+./.git
+./bin
+./bin/browse
+./completions
+./completions/browse.bash
+./completions/browse.zsh
+./libexec
+./libexec/browse
+./libexec/browse-commands
+./libexec/browse-completions
+./libexec/browse-help
+./libexec/browse-init
+./libexec/browse-sh-shell
+./LICENSE
+./share
+./share/browse
+./share/browse/example
+</code></pre>
+
+<p>libexec/browse-SUBCOMMAND  形式でファイルを作れば、サブコマンドを追加できる。早速追加してみよう。</p>
+
+<pre><code>$ vim libexec/browse-safari
+
+    #!/usr/bin/env bash
+    set -e
+    open -a safari $1
+
+$ chomod a+x libexec/browse-safari
+</code></pre>
+
+<p>サブコマンドはシェル補完できるので、<code>browse saf[tab] http://google.com</code> といった入力が可能。問題が無ければブラウザが起動する。 ただ、これだけだと使い方がわかりづらいので、ヘルプを追加してみる。</p>
+
+<pre><code>$ vim libexec/browse-safari
+
+    #!/usr/bin/env bash
+    #
+    # Usage: browse safari [URL]
+    # Summary: safari で指定の URL を開く
+    # Help: safari を利用して、引数で渡された URL を開く
+    # 何も URL を指定しなければ、ブラウザの起動のみ
+
+    set -e
+
+    open -a safari $1
+</code></pre>
+
+<p>ヘルプに反映されていることを確認。</p>
+
+<pre><code>$ browse help safari
+Usage: browse safari [URL]
+
+safari を利用して、引数で渡された URL を開く
+何も URL を指定しなければ、ブラウザの起動のみ
+</code></pre>
+
+<p>引数なしの <code>help</code> もメッセージが変わっている。</p>
+
+<pre><code>$ browse help
+Usage: browse &lt;command&gt; [&lt;args&gt;]
+
+Some useful browse commands are:
+   commands               List all browse commands
+   safari                 safari で指定の URL を開く
+
+See 'browse help &lt;command&gt;' for information on a specific command.
+</code></pre>
+
+<p>あとは、libexec-chrome, libexec-opera, &#8230; とサブコマンドを追加していくことができる。</p>
+
+<h2>雑感</h2>
+
+<p>プログラムを書いてもシェルの補完設定までは手が回らないことが多いので、簡単にサポートしてくれる仕組みが提供されているのはかなりよかった。</p>
+
+<p>シェルスクリプトの書き方はかなりばらつきがあり、自分の周りでも割とフリーダムな状況になっていたので、邪魔にならない程度のフレームワークがあればいいな、と思っていた。そういう用途にも合っていると思う。</p>
+
+<h2>参考</h2>
+
+<ul>
+<li><a href="http://37signals.com/svn/posts/3264-automating-with-convention-introducing-sub">37signalsのブログでの紹介</a></li>
+<li><a href="https://github.com/37signals/sub">GitHubのリポジトリ</a></li>
+</ul>
+
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-07T22:13:00+09:00" pubdate data-updated="true">2012-10-07</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/cli/'>cli</a>, <a class='category' href='/blog/categories/shell/'>shell</a>, <a class='category' href='/blog/categories/unix/'>unix</a>
+
+
+</div>
+	
+</div></article>
+
+	
+<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4f8eed8875190f92"></script>
+  <script type="text/javascript">
+    var addthis_config = {
+      data_track_clickback: false 
+    }
+  </script>
+</div>
+
+
+
+
+<section id="comment">
+    <h1 class="title">Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2012
+
+    f440
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'apatheiainfo';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://apatheia.info/blog/2012/10/07/sub-for-subcommands/';
+        var disqus_url = 'http://apatheia.info/blog/2012/10/07/sub-for-subcommands/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35021317-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+</body>
+</html>
