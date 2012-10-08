@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "サブコマンドを使いたいときは sub が便利"
+title: "サブコマンドを sub で処理する"
 date: 2012-10-07 22:13
 comments: true
 categories:
