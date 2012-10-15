@@ -8,17 +8,11 @@ categories:
 comments: true
 published: true
 ---
-ほんの数年前までVPSといえばLinode、Slicehostなどの海外のサーバーしか選択肢がなかった。ls を実行しても一呼吸おくほどのレイテンシーがある
-ような環境で、128MBくらいのメモリを何とかやりくりしてRailsを動かしていた記憶が、現在では月1000円程度で用途によっては手に余るようなスペックが手
-に入るようになっている。そんなVPSの余ったリソースを使って、仮想環境をたてようというのが今回の目的だ。
+ほんの数年前までVPSといえばLinode、Slicehostなどの海外のサーバーしか選択肢がなかった。ls を実行しても一呼吸おくほどのレイテンシーがあるような環境で、128MBくらいのメモリを何とかやりくりしてRailsを動かしていたが、現在では月1000円程度で用途によっては手に余るようなスペックが手に入るようになっている。そんなVPSの余ったリソースを使って、仮想環境をたてようというのが今回の目的だ。
 
 <!-- more -->
 
-[LXC](http://lxc.sourceforge.net/)は、他の仮想化方式と比べてオーバーヘッドが少なくきびきび動くし、必要であればCPUやメモ
-リの制限をつけることもできる。RPMやDebのパッケージ作成をしたり、Chefのcookbook作成などで独立した環境を手軽に構築したい人には特に有用に思う
-。また、簡単にネットワークが作れるので、複数台構成のソフトウェアを1台のマシンのなかで動かすことが出来る。今回は動作確認として [Percona
-XtraDB Cluster](http://www.percona.com/software/percona-xtradb-
-cluster/)を動かしてみることにする。
+[LXC](http://lxc.sourceforge.net/)は、他の仮想化方式と比べてオーバーヘッドが少なくきびきび動くし、必要であればCPUやメモリの制限をつけることもできる。RPMやDebのパッケージ作成をしたり、Chefのcookbook作成などで独立した環境を手軽に構築したい人には特に有用に思う。また、簡単にネットワークが作れるので、複数台構成のソフトウェアを1台のマシンのなかで動かすことが出来る。今回は動作確認として [PerconaXtraDB Cluster](http://www.percona.com/software/percona-xtradb-cluster/)を動かしてみることにする。
 
 ## 前提について
 
@@ -30,9 +24,7 @@ cluster/)を動かしてみることにする。
 
 CentOSを使っているのはデフォルトのOSイメージだからというのが理由。
 
-今回の内容をEC2上で実行する場合、Amazon Linux でもほとんど同様の設定で作業を行えることを確認しているけど、もっ と新しいOS、たとえば
-Ubuntu 12.04 LTS を使えば後述する cgroupの設定、bridgeの設定が不要となるためより簡単に行える。CentOS
-6で実施したときだけ遭遇するような問題に何度もぶつかったので、出来るだけ新しいOSを使った方がいい。
+今回の内容をEC2上で実行する場合、Amazon Linux でもほとんど同様の設定で作業を行えることを確認しているけど、もっ と新しいOS、たとえば Ubuntu 12.04 LTS を使えば後述する cgroupの設定、bridgeの設定が不要となるためより簡単に行える。CentOS 6で実施したときだけ遭遇するような問題に何度もぶつかったので、出来るだけ新しいOSを使った方がいい。
 
 仮想環境としては、lxcに同梱されているテンプレートを利用してUbuntuを、またOSイメージの作成からCentOSを構築する。
 
@@ -171,8 +163,7 @@ lxcに同梱のスクリプト /usr/lib64/lxc/templates/lxc-ubuntu を使ってU
          end script
     
 
-lxc-console だとCtrl-aが使えなくて不便なので、今後はsshでログインしたい。テンプレートが自動的にOpenSSHを
-インストールしてくれるが、ちゃんと起動しない。仕方が無いので、update-rc.d で起動するように設定
+lxc-console だとCtrl-aが使えなくて不便なので、今後はsshでログインしたい。テンプレートが自動的にOpenSSHをインストールしてくれるが、ちゃんと起動しない。仕方が無いので、update-rc.d で起動するように設定
 
     
       仮想環境内で実行
@@ -219,9 +210,7 @@ lxc-console の標準テンプレートでは CentOS が用意されていない
 
 #### イメージ作成
 
-基本的に [Centos6/Installation/Minimal installation using yum](http://wiki.1tux.or
-g/wiki/Centos6/Installation/Minimal_installation_using_yum) の通り。ただし 64 bit
-版をインストールする
+基本的に [Centos6/Installation/Minimal installation using yum](http://wiki.1tux.org/wiki/Centos6/Installation/Minimal_installation_using_yum) の通り。ただし 64 bit 版をインストールする
 
     
     # mkdir /t
