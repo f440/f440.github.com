@@ -4,7 +4,7 @@
   <title><![CDATA[Category: lxc | apatheia.info]]></title>
   <link href="http://apatheia.info/blog/categories/lxc/atom.xml" rel="self"/>
   <link href="http://apatheia.info/"/>
-  <updated>2012-10-08T09:46:47+09:00</updated>
+  <updated>2012-11-15T19:23:27+09:00</updated>
   <id>http://apatheia.info/</id>
   <author>
     <name><![CDATA[f440]]></name>
@@ -18,17 +18,12 @@
     <link href="http://apatheia.info/blog/2012/05/13/vps-lxc-xtradb-cluster/"/>
     <updated>2012-05-13T00:00:00+09:00</updated>
     <id>http://apatheia.info/blog/2012/05/13/vps-lxc-xtradb-cluster</id>
-    <content type="html"><![CDATA[<p>ほんの数年前までVPSといえばLinode、Slicehostなどの海外のサーバーしか選択肢がなかった。ls を実行しても一呼吸おくほどのレイテンシーがある
-ような環境で、128MBくらいのメモリを何とかやりくりしてRailsを動かしていた記憶が、現在では月1000円程度で用途によっては手に余るようなスペックが手
-に入るようになっている。そんなVPSの余ったリソースを使って、仮想環境をたてようというのが今回の目的だ。</p>
+    <content type="html"><![CDATA[<p>ほんの数年前までVPSといえばLinode、Slicehostなどの海外のサーバーしか選択肢がなかった。ls を実行しても一呼吸おくほどのレイテンシーがあるような環境で、128MBくらいのメモリを何とかやりくりしてRailsを動かしていたが、現在では月1000円程度で用途によっては手に余るようなスペックが手に入るようになっている。そんなVPSの余ったリソースを使って、仮想環境をたてようというのが今回の目的だ。</p>
 
 <!-- more -->
 
 
-<p><a href="http://lxc.sourceforge.net/">LXC</a>は、他の仮想化方式と比べてオーバーヘッドが少なくきびきび動くし、必要であればCPUやメモ
-リの制限をつけることもできる。RPMやDebのパッケージ作成をしたり、Chefのcookbook作成などで独立した環境を手軽に構築したい人には特に有用に思う
-。また、簡単にネットワークが作れるので、複数台構成のソフトウェアを1台のマシンのなかで動かすことが出来る。今回は動作確認として <a href="http://www.percona.com/software/percona-xtradb-%0Acluster/">Percona
-XtraDB Cluster</a>を動かしてみることにする。</p>
+<p><a href="http://lxc.sourceforge.net/">LXC</a>は、他の仮想化方式と比べてオーバーヘッドが少なくきびきび動くし、必要であればCPUやメモリの制限をつけることもできる。RPMやDebのパッケージ作成をしたり、Chefのcookbook作成などで独立した環境を手軽に構築したい人には特に有用に思う。また、簡単にネットワークが作れるので、複数台構成のソフトウェアを1台のマシンのなかで動かすことが出来る。今回は動作確認として <a href="http://www.percona.com/software/percona-xtradb-cluster/">PerconaXtraDB Cluster</a>を動かしてみることにする。</p>
 
 <h2>前提について</h2>
 
@@ -47,9 +42,7 @@ XtraDB Cluster</a>を動かしてみることにする。</p>
 
 <p>CentOSを使っているのはデフォルトのOSイメージだからというのが理由。</p>
 
-<p>今回の内容をEC2上で実行する場合、Amazon Linux でもほとんど同様の設定で作業を行えることを確認しているけど、もっ と新しいOS、たとえば
-Ubuntu 12.04 LTS を使えば後述する cgroupの設定、bridgeの設定が不要となるためより簡単に行える。CentOS
-6で実施したときだけ遭遇するような問題に何度もぶつかったので、出来るだけ新しいOSを使った方がいい。</p>
+<p>今回の内容をEC2上で実行する場合、Amazon Linux でもほとんど同様の設定で作業を行えることを確認しているけど、もっ と新しいOS、たとえば Ubuntu 12.04 LTS を使えば後述する cgroupの設定、bridgeの設定が不要となるためより簡単に行える。CentOS 6で実施したときだけ遭遇するような問題に何度もぶつかったので、出来るだけ新しいOSを使った方がいい。</p>
 
 <p>仮想環境としては、lxcに同梱されているテンプレートを利用してUbuntuを、またOSイメージの作成からCentOSを構築する。</p>
 
@@ -180,8 +173,7 @@ Ubuntu 12.04 LTS を使えば後述する cgroupの設定、bridgeの設定が�
      end script
 </code></pre>
 
-<p>lxc-console だとCtrl-aが使えなくて不便なので、今後はsshでログインしたい。テンプレートが自動的にOpenSSHを
-インストールしてくれるが、ちゃんと起動しない。仕方が無いので、update-rc.d で起動するように設定</p>
+<p>lxc-console だとCtrl-aが使えなくて不便なので、今後はsshでログインしたい。テンプレートが自動的にOpenSSHをインストールしてくれるが、ちゃんと起動しない。仕方が無いので、update-rc.d で起動するように設定</p>
 
 <pre><code>  仮想環境内で実行
 # update-rc.d ssh enable
@@ -225,8 +217,7 @@ Ubuntu 12.04 LTS を使えば後述する cgroupの設定、bridgeの設定が�
 
 <h4>イメージ作成</h4>
 
-<p>基本的に <a href="http://wiki.1tux.or%0Ag/wiki/Centos6/Installation/Minimal_installation_using_yum">Centos6/Installation/Minimal installation using yum</a> の通り。ただし 64 bit
-版をインストールする</p>
+<p>基本的に <a href="http://wiki.1tux.org/wiki/Centos6/Installation/Minimal_installation_using_yum">Centos6/Installation/Minimal installation using yum</a> の通り。ただし 64 bit 版をインストールする</p>
 
 <pre><code># mkdir /t
 # cd /t
