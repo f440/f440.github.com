@@ -3,15 +3,11 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>head と tail の行数指定方法 - apatheia.info</title>
+	<title>Trickleを使って帯域制限をする - apatheia.info</title>
 	<meta name="author" content="f440">
 
 	
-	<meta name="description" content="head と tail を使うとき、行数指定方法について。動作確認は GNU coreutils 8.19 で行っている。 head と tail のは-n 数字(あるいは--line 数字)で出力する行数を指定できる。 # 先頭3行を表示
-$ seq 10 | head -n 3
-1
-2
-3 &hellip;">
+	<meta name="description" content="ネットワーク経由で大量のデータをやりとりしたいが、メインのサービスには影響を与えたくないという場合はよくある。Rsync や SCP など、大きなファイルの転送を考慮されたコマンドだとたいていの場合ネットワーク帯域を制限することができるけど、 &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -79,82 +75,37 @@ $ seq 10 | head -n 3
 		
 	
 	<div id="content" class="inner"><article class="post">
-	<h2 class="title">Head と Tail の行数指定方法</h2>
-	<div class="entry-content"><p>head と tail を使うとき、行数指定方法について。動作確認は GNU coreutils 8.19 で行っている。</p>
+	<h2 class="title">Trickleを使って帯域制限をする</h2>
+	<div class="entry-content"><p>ネットワーク経由で大量のデータをやりとりしたいが、メインのサービスには影響を与えたくないという場合はよくある。Rsync や SCP など、大きなファイルの転送を考慮されたコマンドだとたいていの場合ネットワーク帯域を制限することができるけど、自作のツールなどに帯域制限を実装するとなるとかなり面倒くさいことになる。</p>
 
-<!-- more -->
+<p>Linux で帯域制限をしたい場合、tc や cgroup を使う方法がよく知られている。ただ、「あるコマンドにネットワークが占領されないように穏やかに実行したい」というニーズに対しては大げさで、またオプションが難解だったり管理権限が必要だったりといったことから二の足を踏む感じのものだった。もっと普段使いに適したツールがないものかと探していたところ、こういったシーンでは<a href="http://monkey.org/~marius/pages/?page=trickle" title="trickle公式">Tricle</a>がかなり有効だと言うことがわかった。</p>
 
+<h2>インストール</h2>
 
-<p>head と tail のは<code>-n 数字</code>(あるいは<code>--line 数字</code>)で出力する行数を指定できる。</p>
+<p>Debian, Ubuntu なら公式からパッケージが提供されている。RHEL 系 OS であれば、EPEL にパッケージがあるのでそちらを利用。</p>
 
-<pre><code># 先頭3行を表示
-$ seq 10 | head -n 3
-1
-2
-3
+<h2>使い方</h2>
 
-# 末尾3行を表示
-$ seq 10 | tail -n 3
-8
-9
-10
+<h3>trickle</h3>
+
+<p>コマンドの前に <code>trickle</code> をつけるだけで、簡単に帯域制限が実現できる。とりあえず、「<code>-d n</code>で n KByte/sec にダウンロードが制限」、「<code>-u n</code>で n KByte/sec に制限」だけ覚えておけばいい。</p>
+
+<pre><code># wget のダウンロード速度を 20 KBpsに制限する例
+#  (本当は wget も curl も --limit-rate オプションが元々あるので、こんなことしなくても大丈夫)
+trickle -d 20 wget --verbose http://ftp.jaist.ac.jp/pub/Linux/ArchLinux/iso/2012.12.01/archlinux-2012.12.01-dual.iso
 </code></pre>
 
-<p>オプションで与える数字には、プラスがつく場合、マイナスがつく場合、何もつかない場合が考えられるが、記号がついた場合に通常異なる挙動をとる場合が出てくる。</p>
+<h3>trickled</h3>
 
-<p><code>head -n -数字</code>の場合は、「末尾から指定した行数を除いたもの」となる:</p>
+<p><code>trickled</code> というプログラムも利用できるようになって、<code>tricle</code>と同様にオプション<code>-d</code>, <code>-u</code>が設定可能。<code>trickled</code>を一度起動するとデーモンとなり、以降<code>trickle</code>を使って起動したコマンドの帯域は、<code>trickled</code>起動時のオプションで設定した値までに制限される。複数個のプログラムを <code>trickle</code> で起動した場合、使用している帯域の総和が <code>trickled</code>の設定値に従うことになる。</p>
 
-<pre><code>$ seq 10 | head -n -3
-1
-2
-3
-4
-5
-6
-7
-</code></pre>
+<h2>参考</h2>
 
-<p><code>tail -n +数字</code> の場合は、「先頭から数えて指定した行以降のもの」となる:</p>
+<ul>
+<li><a href="http://monkey.org/~marius/pages/?page=trickle" title="trickle公式">配布元</a></li>
+<li><a href="http://monkey.org/~marius/trickle/trickle.pdf">仕組み</a></li>
+</ul>
 
-<pre><code>$ seq 10 | tail -n +3
-3
-4
-5
-6
-7
-8
-9
-10
-</code></pre>
-
-<p>まとめると以下の通り:</p>
-
-<table><thead><tr><th>コマンド</th> <th>-n -行数</th> <th>-n 行数</th> <th>-n
-+行数</th> </tr></thead><tr><td>head</td> <td>末尾から
-
-指定行数を除いて表示</td> <td>先頭から
-
-指定行数表示</td> <td>先頭から
-
-指定行数表示</td> </tr><tr><td>tail</td> <td>先頭から
-
-指定行数以降を表示</td> <td>末尾から
-
-指定行数表示</td> <td>先頭から
-
-数えて指定した行以降表示</td> </tr></table>
-
-
-<p><code>-n 数字</code> の代わりに <code>-数字</code> で指定することもできるけど、-n のオプションで負数を指定しているときと混同するのでやめた方がいい。</p>
-
-<p><code>-</code> や <code>+</code> オプションは境界値がどうなっているか忘れがちだし、これが必要となるような局面では <code>awk</code> を使った方が直感的に表現できる。</p>
-
-<pre><code># 3行目から5行目を表示
-$ seq 10 | awk 3&lt;=NR &amp;&amp; NR&lt;=5
-3
-4
-5
-</code></pre>
 </div>
 
 
@@ -171,8 +122,12 @@ $ seq 10 | awk 3&lt;=NR &amp;&amp; NR&lt;=5
   
 
 
-<time datetime="2012-09-22T19:00:00+09:00" pubdate data-updated="true">2012-09-22</time></div>
+<time datetime="2013-01-01T17:05:00+09:00" pubdate data-updated="true">2013-01-01</time></div>
 	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/linux/'>linux</a>, <a class='category' href='/blog/categories/network/'>network</a>, <a class='category' href='/blog/categories/unix/'>unix</a>
+
 
 </div>
 	
@@ -224,8 +179,8 @@ $ seq 10 | awk 3&lt;=NR &amp;&amp; NR&lt;=5
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://apatheia.info/blog/2012/09/22/head-tail/';
-        var disqus_url = 'http://apatheia.info/blog/2012/09/22/head-tail/';
+        var disqus_identifier = 'http://apatheia.info/blog/2013/01/01/network-restriction-using-trickle/';
+        var disqus_url = 'http://apatheia.info/blog/2013/01/01/network-restriction-using-trickle/';
         var disqus_script = 'embed.js';
       
     (function () {
