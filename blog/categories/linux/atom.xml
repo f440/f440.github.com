@@ -4,7 +4,7 @@
   <title><![CDATA[Category: linux | apatheia.info]]></title>
   <link href="http://apatheia.info/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://apatheia.info/"/>
-  <updated>2013-01-02T00:38:42+09:00</updated>
+  <updated>2013-01-02T00:47:13+09:00</updated>
   <id>http://apatheia.info/</id>
   <author>
     <name><![CDATA[f440]]></name>
@@ -18,7 +18,10 @@
     <link href="http://apatheia.info/blog/2013/01/01/network-restriction-using-trickle/"/>
     <updated>2013-01-01T17:05:00+09:00</updated>
     <id>http://apatheia.info/blog/2013/01/01/network-restriction-using-trickle</id>
-    <content type="html"><![CDATA[<p>ネットワーク経由で大量のデータをやりとりしたいが、メインのサービスには影響を与えたくないという場合はよくある。Rsync や SCP など、大きなファイルの転送を考慮されたコマンドだとたいていの場合ネットワーク帯域を制限することができるけど、自作のツールなどに帯域制限を実装するとなるとかなり面倒くさいことになる。</p>
+    <content type="html"><![CDATA[<p>ネットワーク経由で大量のデータをやりとりしたいが、メインのサービスには影響を与えたくないという場合がよくある。<code>rsync</code>や<code>scp</code> など、大きなファイルの転送を考慮されたコマンドではネットワーク帯域を制限するオプションが用意されていることも多いが、自作のツールなどに帯域制限を実装するとなるとかなり面倒くさいことになる。</p>
+
+<!-- more -->
+
 
 <p>Linux で帯域制限をしたい場合、tc や cgroup を使う方法がよく知られている。ただ、「あるコマンドにネットワークが占領されないように穏やかに実行したい」というニーズに対しては大げさで、またオプションが難解だったり管理権限が必要だったりといったことから二の足を踏む感じのものだった。もっと普段使いに適したツールがないものかと探していたところ、こういったシーンでは<a href="http://monkey.org/~marius/pages/?page=trickle" title="trickle公式">Tricle</a>がかなり有効だと言うことがわかった。</p>
 
