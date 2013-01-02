@@ -4,7 +4,7 @@
   <title><![CDATA[Category: linux | apatheia.info]]></title>
   <link href="http://apatheia.info/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://apatheia.info/"/>
-  <updated>2013-01-02T00:47:13+09:00</updated>
+  <updated>2013-01-02T16:26:27+09:00</updated>
   <id>http://apatheia.info/</id>
   <author>
     <name><![CDATA[f440]]></name>
@@ -39,6 +39,8 @@
 #  (本当は wget も curl も --limit-rate オプションが元々あるので、こんなことしなくても大丈夫)
 trickle -d 20 wget --verbose http://ftp.jaist.ac.jp/pub/Linux/ArchLinux/iso/2012.12.01/archlinux-2012.12.01-dual.iso
 </code></pre>
+
+<p>実行時、<code>trickled</code> が見つからないというメッセージが出るが、これは<code>-s</code>(standaloneモード)をつけることで抑制できる。</p>
 
 <h3>trickled</h3>
 

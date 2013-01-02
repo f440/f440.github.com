@@ -98,6 +98,8 @@
 trickle -d 20 wget --verbose http://ftp.jaist.ac.jp/pub/Linux/ArchLinux/iso/2012.12.01/archlinux-2012.12.01-dual.iso
 </code></pre>
 
+<p>実行時、<code>trickled</code> が見つからないというメッセージが出るが、これは<code>-s</code>(standaloneモード)をつけることで抑制できる。</p>
+
 <h3>trickled</h3>
 
 <p><code>trickled</code> というプログラムも利用できるようになって、<code>tricle</code>と同様にオプション<code>-d</code>, <code>-u</code>が設定可能。<code>trickled</code>を一度起動するとデーモンとなり、以降<code>trickle</code>を使って起動したコマンドの帯域は、<code>trickled</code>起動時のオプションで設定した値までに制限される。複数個のプログラムを <code>trickle</code> で起動した場合、使用している帯域の総和が <code>trickled</code>の設定値に従うことになる。</p>
