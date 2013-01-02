@@ -26,6 +26,8 @@ Debian, Ubuntu なら公式からパッケージが提供されている。RHEL 
     #  (本当は wget も curl も --limit-rate オプションが元々あるので、こんなことしなくても大丈夫)
     trickle -d 20 wget --verbose http://ftp.jaist.ac.jp/pub/Linux/ArchLinux/iso/2012.12.01/archlinux-2012.12.01-dual.iso
 
+実行時、`trickled` が見つからないというメッセージが出るが、これは`-s`(standaloneモード)をつけることで抑制できる。
+
 ### trickled
 
 `trickled` というプログラムも利用できるようになって、`tricle`と同様にオプション`-d`, `-u`が設定可能。`trickled`を一度起動するとデーモンとなり、以降`trickle`を使って起動したコマンドの帯域は、`trickled`起動時のオプションで設定した値までに制限される。複数個のプログラムを `trickle` で起動した場合、使用している帯域の総和が `trickled`の設定値に従うことになる。
