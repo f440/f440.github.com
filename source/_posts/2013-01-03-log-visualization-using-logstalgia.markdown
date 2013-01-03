@@ -26,4 +26,4 @@ homebrew がインストール済みなら以下で動かせる。
 - [apache-loggen]
 
 [logstalgia]: https://code.google.com/p/logstalgia/ "logstalgia"
-[apache-loggen]: http://mt.orz.at/archives/2012/10/apache.html "apache-loggen"
+[apache-loggen]: http://mt.orz.at/archives/2012/11/apacherubygems.html "apache-loggen"
