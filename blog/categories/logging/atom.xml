@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: logging | apatheia.info]]></title>
+  <link href="http://apatheia.info/blog/categories/logging/atom.xml" rel="self"/>
+  <link href="http://apatheia.info/"/>
+  <updated>2013-01-03T19:45:14+09:00</updated>
+  <id>http://apatheia.info/</id>
+  <author>
+    <name><![CDATA[f440]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[logstalgia を使ってログを可視化]]></title>
+    <link href="http://apatheia.info/blog/2013/01/03/log-visualization-using-logstalgia/"/>
+    <updated>2013-01-03T18:50:00+09:00</updated>
+    <id>http://apatheia.info/blog/2013/01/03/log-visualization-using-logstalgia</id>
+    <content type="html"><![CDATA[<p>Webサーバーのログでピンポンゲームの映像を生成する<a href="https://code.google.com/p/logstalgia/" title="logstalgia">logstalgia</a>。</p>
+
+<!-- more -->
+
+
+<p>homebrew がインストール済みなら以下で動かせる。</p>
+
+<pre><code>gem install apache-loggen
+brew install logstalgia
+apache-loggen --rate 10 | logstalgia -
+</code></pre>
+
+<p><a href="http://mt.orz.at/archives/2012/11/apacherubygems.html" title="apache-loggen">apache-loggen</a> はApacheのダミーログを生成してくれるスクリプト。便利。</p>
+
+<p><img src="/images/2013-01-03-log-visualization-using-logstalgia/logstalgia.png" alt="logstalgia" /></p>
+
+<h2>参考</h2>
+
+<ul>
+<li><a href="https://code.google.com/p/logstalgia/" title="logstalgia">logstalgia</a></li>
+<li><a href="http://mt.orz.at/archives/2012/11/apacherubygems.html" title="apache-loggen">apache-loggen</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

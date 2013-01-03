@@ -3,11 +3,13 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>apatheia.info</title>
+	<title>logstalgia を使ってログを可視化 - apatheia.info</title>
 	<meta name="author" content="f440">
 
 	
-	<meta name="description" content=" Not Found. ">
+	<meta name="description" content="Webサーバーのログでピンポンゲームの映像を生成するlogstalgia。 homebrew がインストール済みなら以下で動かせる。 gem install apache-loggen
+brew install logstalgia
+apache-loggen --rate 10 | &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -77,11 +79,84 @@
 	
 		
 	
-	<div id="content" class="inner"><div id="content" class="inner">
-  <article class="post">
-    <p>Not Found.</p>
-  </article>
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Logstalgia を使ってログを可視化</h2>
+	<div class="entry-content"><p>Webサーバーのログでピンポンゲームの映像を生成する<a href="https://code.google.com/p/logstalgia/" title="logstalgia">logstalgia</a>。</p>
+
+<!-- more -->
+
+
+<p>homebrew がインストール済みなら以下で動かせる。</p>
+
+<pre><code>gem install apache-loggen
+brew install logstalgia
+apache-loggen --rate 10 | logstalgia -
+</code></pre>
+
+<p><a href="http://mt.orz.at/archives/2012/11/apacherubygems.html" title="apache-loggen">apache-loggen</a> はApacheのダミーログを生成してくれるスクリプト。便利。</p>
+
+<p><img src="/images/2013-01-03-log-visualization-using-logstalgia/logstalgia.png" alt="logstalgia" /></p>
+
+<h2>参考</h2>
+
+<ul>
+<li><a href="https://code.google.com/p/logstalgia/" title="logstalgia">logstalgia</a></li>
+<li><a href="http://mt.orz.at/archives/2012/11/apacherubygems.html" title="apache-loggen">apache-loggen</a></li>
+</ul>
+
 </div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-03T18:50:00+09:00" pubdate data-updated="true">2013-01-03</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/logging/'>logging</a>, <a class='category' href='/blog/categories/visualization/'>visualization</a>
+
+
+</div>
+	
+</div></article>
+
+	
+<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4f8eed8875190f92"></script>
+  <script type="text/javascript">
+    var addthis_config = {
+      data_track_clickback: false 
+    }
+  </script>
+</div>
+
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
 </div>
 	<footer id="footer" class="inner">Copyright &copy; 2013
 
@@ -101,7 +176,10 @@
       var disqus_shortname = 'apatheiainfo';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://apatheia.info/blog/2013/01/03/log-visualization-using-logstalgia/';
+        var disqus_url = 'http://apatheia.info/blog/2013/01/03/log-visualization-using-logstalgia/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
