@@ -2,11 +2,13 @@
 layout: post
 title: "Windows 上に node.js の開発環境を整える"
 date: 2013-02-03 21:11
-comments: false
+comments: true
 categories: node.js windows
 ---
 
-一身上の都合で Windows上に Node.js の開発環境を整えてる。そのときのメモ。
+一身上の都合で Windows 7 上に Node.js の開発環境を整えたんだけど、コマンドラインからの操作だけで開発環境がそろう時代になっていたことに驚いた。
+
+そのときの作業メモ。
 
 <!-- more -->
 
