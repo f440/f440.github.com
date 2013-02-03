@@ -4,7 +4,7 @@
   <title><![CDATA[apatheia.info]]></title>
   <link href="http://apatheia.info/atom.xml" rel="self"/>
   <link href="http://apatheia.info/"/>
-  <updated>2013-02-03T22:02:49+09:00</updated>
+  <updated>2013-02-03T22:14:45+09:00</updated>
   <id>http://apatheia.info/</id>
   <author>
     <name><![CDATA[f440]]></name>
@@ -18,7 +18,9 @@
     <link href="http://apatheia.info/blog/2013/02/03/installing-node-dot-js-on-windows-7/"/>
     <updated>2013-02-03T21:11:00+09:00</updated>
     <id>http://apatheia.info/blog/2013/02/03/installing-node-dot-js-on-windows-7</id>
-    <content type="html"><![CDATA[<p>一身上の都合で Windows上に Node.js の開発環境を整えてる。そのときのメモ。</p>
+    <content type="html"><![CDATA[<p>一身上の都合で Windows 7 上に Node.js の開発環境を整えたんだけど、コマンドラインからの操作だけで開発環境がそろう時代になっていたことに驚いた。</p>
+
+<p>そのときの作業メモ。</p>
 
 <!-- more -->
 
