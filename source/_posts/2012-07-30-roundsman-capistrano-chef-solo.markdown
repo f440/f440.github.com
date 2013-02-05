@@ -11,8 +11,7 @@ ithub.com/iain/roundsman)を使うといいという話。
 
 <!-- more -->
 
-[roundsman](https://github.com/iain/roundsman)は、chefのレシピを転送して[chef-solo](http:
-//wiki.opscode.com/display/chef/Chef+Solo)を実行する[capistrano](https://github.com
+[roundsman](https://github.com/iain/roundsman)は、chefのレシピを転送して[chef-solo](http://wiki.opscode.com/display/chef/Chef+Solo)を実行する[capistrano](https://github.com
 /capistrano/capistrano)向けライブラリ。アプリケーションのリリースタイミングに併せてインフラ設定の変更が必要になることは往々にしてある
 ので、[capistrano](https://github.com/capistrano/capistrano)を使ってデプロイとインフラ設定変更を一括適
 用できるのは便利だ。
