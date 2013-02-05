@@ -4,7 +4,7 @@
   <title><![CDATA[apatheia.info]]></title>
   <link href="http://apatheia.info/atom.xml" rel="self"/>
   <link href="http://apatheia.info/"/>
-  <updated>2013-02-06T00:16:24+09:00</updated>
+  <updated>2013-02-06T00:24:33+09:00</updated>
   <id>http://apatheia.info/</id>
   <author>
     <name><![CDATA[f440]]></name>
@@ -576,7 +576,7 @@ $ mv post source/
 <!-- more -->
 
 
-<p><a href="https://github.com/iain/roundsman">roundsman</a>は、chefのレシピを転送して<a href="http:%0A//wiki.opscode.com/display/chef/Chef+Solo">chef-solo</a>を実行する<a href="https://github.com%0A/capistrano/capistrano">capistrano</a>向けライブラリ。アプリケーションのリリースタイミングに併せてインフラ設定の変更が必要になることは往々にしてある
+<p><a href="https://github.com/iain/roundsman">roundsman</a>は、chefのレシピを転送して<a href="http://wiki.opscode.com/display/chef/Chef+Solo">chef-solo</a>を実行する<a href="https://github.com%0A/capistrano/capistrano">capistrano</a>向けライブラリ。アプリケーションのリリースタイミングに併せてインフラ設定の変更が必要になることは往々にしてある
 ので、<a href="https://github.com/capistrano/capistrano">capistrano</a>を使ってデプロイとインフラ設定変更を一括適
 用できるのは便利だ。</p>
 
@@ -717,7 +717,7 @@ bundle exec cap ステージ名 chef:nginx
 <p>そのため、アプリケーションの設計の段階からCDNの利用したり、ファイルの管理だけ別のサービスに切り出したりすることを考慮すべきだけど、いろいろなしがらみのた
 めにどうしてもファイルを複数台のサーバーで共有するようなシステム形態にせざるを得ないことが往々にしてある。</p>
 
-<p>サーバー間のファイル共有のための方法として、<a href="http://code.google.com/p/lsyncd/">lsyncd</a> や<a href="http:%0A//www.drbd.org/">DRBD</a>を使ったり、NASを介したりするなど様々な方法があるけど、<a href="http://www.gluster.or%0Ag/">GlusterFS</a> がとても便利。特別な機器を必要とせず、すでにある環境に対して導入でき、信頼性とスケーラビリティのあるクラスタリングファイルシステムを手早く構築するこ
+<p>サーバー間のファイル共有のための方法として、<a href="http://code.google.com/p/lsyncd/">lsyncd</a> や<a href="http://www.drbd.org/">DRBD</a>を使ったり、NASを介したりするなど様々な方法があるけど、<a href="http://www.gluster.or%0Ag/">GlusterFS</a> がとても便利。特別な機器を必要とせず、すでにある環境に対して導入でき、信頼性とスケーラビリティのあるクラスタリングファイルシステムを手早く構築するこ
 とができる。</p>
 
 <p>GlusterFS を簡単に説明すると、以下のような特徴がある:</p>
