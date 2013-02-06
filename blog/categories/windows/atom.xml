@@ -4,7 +4,7 @@
   <title><![CDATA[Category: windows | apatheia.info]]></title>
   <link href="http://apatheia.info/blog/categories/windows/atom.xml" rel="self"/>
   <link href="http://apatheia.info/"/>
-  <updated>2013-02-06T00:46:12+09:00</updated>
+  <updated>2013-02-06T12:02:56+09:00</updated>
   <id>http://apatheia.info/</id>
   <author>
     <name><![CDATA[f440]]></name>
@@ -30,6 +30,8 @@
 <pre><code># Chocolatey のインストール
 @powershell -NoProfile -ExecutionPolicy unrestricted -Command "iex ((new-object net.webclient).DownloadString('http://chocolatey.org/install.ps1'))" &amp;&amp; SET PATH=%PATH%;%systemdrive%\chocolatey\bin
 # システムドライブ直下にインストールするの微妙……
+# 追記: [システムディスクの直下にインストールする理由](https://github.com/chocolatey/chocolatey/wiki/DefaultChocolateyInstallReasoning)
+
 
 # パッケージのダウンロード&amp;インストール
 cinst nodejs.install
