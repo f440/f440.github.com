@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: windows | apatheia.info]]></title>
-  <link href="http://apatheia.info/blog/categories/windows/atom.xml" rel="self"/>
+  <title><![CDATA[Category: haskell | apatheia.info]]></title>
+  <link href="http://apatheia.info/blog/categories/haskell/atom.xml" rel="self"/>
   <link href="http://apatheia.info/"/>
   <updated>2013-02-08T22:50:27+09:00</updated>
   <id>http://apatheia.info/</id>
@@ -117,61 +117,6 @@ cpush HaskellPlatform.{バージョン番号}.nupkg
 <li><a href="http://chocolatey.org/">chocolatey</a></li>
 <li><a href="http://www.haskell.org/platform/windows.html">Haskell Platform for Windows</a></li>
 <li><a href="https://github.com/chocolatey/">chocolateyのgithubアカウント</a></li>
-</ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Windows 上に node.js の開発環境を整える]]></title>
-    <link href="http://apatheia.info/blog/2013/02/03/installing-node-dot-js-on-windows-7/"/>
-    <updated>2013-02-03T21:11:00+09:00</updated>
-    <id>http://apatheia.info/blog/2013/02/03/installing-node-dot-js-on-windows-7</id>
-    <content type="html"><![CDATA[<p>一身上の都合で Windows 7 上に Node.js の開発環境を整えたんだけど、コマンドラインからの操作だけで開発環境がそろう時代になっていたことに驚いた。</p>
-
-<p>そのときの作業メモ。</p>
-
-<!-- more -->
-
-
-<p>コマンドプロンプト起動:</p>
-
-<pre><code># Chocolatey のインストール
-@powershell -NoProfile -ExecutionPolicy unrestricted -Command "iex ((new-object net.webclient).DownloadString('http://chocolatey.org/install.ps1'))" &amp;&amp; SET PATH=%PATH%;%systemdrive%\chocolatey\bin
-# システムドライブ直下にインストールするの微妙……
-# 追記: [システムディスクの直下にインストールする理由](https://github.com/chocolatey/chocolatey/wiki/DefaultChocolateyInstallReasoning)
-
-
-# パッケージのダウンロード&amp;インストール
-cinst nodejs.install
-# nodejs.install ではなく nodejs だけだとコマンドライン版プログラムだけ
-# インストールされる。別途 npm を用意する必要が出てくるので
-# パッケージを使った方が楽
-
-# Node.js にパスを通す
-set PATH=%PATH%;%ProgramFiles(x86)%\nodejs
-
-# ちゃんと動くかどうか、試しに grunt をインストールしてみる
-mkdir test
-cd test
-npm install grunt
-</code></pre>
-
-<p>あとは好みにあわせて開発ツールを <code>cinst</code> でインストールしていく</p>
-
-<ul>
-<li>バージョン管理 (git ...)</li>
-<li>エディタ (sublimetext2, vim ...)</li>
-<li>データストア (redis, mongodb ...)</li>
-<li>ユーティリティ (Gow, ...)</li>
-</ul>
-
-
-<h2>参考</h2>
-
-<ul>
-<li><a href="http://nodejs.org/">node.js</a></li>
-<li><a href="http://chocolatey.org/">chocolatey</a></li>
 </ul>
 
 ]]></content>
