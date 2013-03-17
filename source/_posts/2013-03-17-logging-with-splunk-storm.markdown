@@ -2,7 +2,7 @@
 layout: post
 title: "イベント管理にSplunk Stormを使ってみる"
 date: 2013-03-17 21:17
-comments: false
+comments: true
 categories: logging visualization splunk
 ---
 
