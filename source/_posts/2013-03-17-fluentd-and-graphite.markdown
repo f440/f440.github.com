@@ -1,20 +1,20 @@
 ---
 layout: post
-title: "Fluentd で Graphite 使うときのTips"
+title: "FluentdのデータをGraphiteに出力するときのTips"
 date: 2013-03-17 15:50
 comments: true
 categories: fluentd graphite visualization
 ---
 
-[fluent-plugin-graphite] 使うときのメモ。
+[fluent-plugin-graphite] 利用時のメモ。
 
 Ops界隈での可視化というと、ここ何年かは[Graphite]でグラフを作ってそれを他のツールで表示する、みたいなのが多い。[Fluentd]のデータを可視化したい場合は[GrowthForecast]が使われることが多いけど、[Graphite]使ってみるといろんなツールと組み合わせられておもしろい。
 
 <!-- more -->
 
-[Fluent-plugin-graphite] 使えば簡単に実現できそうなんだけど、`:key` とか `:count` とかのインターフェースに合わせてデータを整形しておく必要がある。
+Fluentd から Graphite へデータを送るのは [Fluent-plugin-graphite] を使えば簡単に実現できそうなんだけど、プラグイン側のインターフェース(`:key` や `:count` といったキーが必要)に合わせて入力のデータを整形する必要がある。
 
-こういうキーの調整は out\_map を使うと調整できる。
+こういった調整は、out\_map を使うことで実現できる。
 
     <source>
       type tail
