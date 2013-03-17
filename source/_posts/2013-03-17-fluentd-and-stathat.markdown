@@ -2,7 +2,7 @@
 layout: post
 title: "Fluentd の出力結果をStatHatで可視化する"
 date: 2013-03-17 15:48
-comments: false
+comments: true
 categories: fluentd stathat visualization
 ---
 
