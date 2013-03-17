@@ -1,0 +1,186 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>イベント管理にSplunk Stormを使ってみる - apatheia.info</title>
+	<meta name="author" content="f440">
+
+	
+	<meta name="description" content="Splunk はおそらくイベント・ログ管理のツールとしてはおそらくもっとも有名で、日本でも販売展開しているので知っている人も多いかと思う。その splunk が Splunk Storm というサービスを始めている。試しに使ってみたのでその感想。 料金に応じて、 &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="apatheia.info" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	
+  
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35021317-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">apatheia.info</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:apatheia.info">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+		<a class="twitter" href="http://twitter.com/f440" title="Twitter">Twitter</a>
+		
+		
+		<a class="github" href="https://github.com/f440" title="GitHub">GitHub</a>
+		
+    
+    <a class="pinboard" href="https://pinboard.in/u:f440" title="Pinboard">Pinboard</a>
+    
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+	<form class="search" action="http://google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:apatheia.info">
+	</form>
+</nav>
+
+</header>
+	
+		
+	
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">イベント管理にSplunk Stormを使ってみる</h2>
+	<div class="entry-content"><p><a href="http://www.splunk.com/">Splunk</a> はおそらくイベント・ログ管理のツールとしてはおそらくもっとも有名で、日本でも販売展開しているので知っている人も多いかと思う。その splunk が <a href="https://www.splunkstorm.com/storm/">Splunk Storm</a> というサービスを始めている。試しに使ってみたのでその感想。</p>
+
+<!-- more -->
+
+
+<p>料金に応じて、格納可能なデータの容量が増える課金体系。無料でも1GBまで利用可能。</p>
+
+<p>データの取り込みは以下の方法が提供されている:</p>
+
+<ul>
+<li>Syslog, Rsyslog, Syslog-ng などから転送</li>
+<li>TCP/UDP を使って直接登録
+
+<ul>
+<li><code>cat some_file.log | nc endpoind_hostname port</code> で登録可能</li>
+</ul>
+</li>
+<li>HTTP API</li>
+<li>forwarder と呼ばれるクライアントプログラム
+
+<ul>
+<li>ログの読み取りなども可能</li>
+</ul>
+</li>
+<li>ファイルアップロード</li>
+</ul>
+
+
+<p>試しにアカウントをとってApacheのログ形式のデータをncでがんがん取り込んでみたところ、1GB を超えたところでもうこれ以上追加できないとのメールが届いた。結果、200万件以上のデータが登録できていた。</p>
+
+<p>複雑な検索式を使って特定の条件に合うレコードを弾き出したり、図示することができる。たとえば、ステータスコードでグルーピングしたグラフを表示するには、以下の検索式を指定する。</p>
+
+<pre><code>sourcetype="access_combined" status="*" | timechart count by status
+</code></pre>
+
+<p>リアルタイムで計算しているらしく、新しい時間帯から古い時間帯へとどんどんグラフが追加されていく。</p>
+
+<p><img src="/images/2013-03-17-logging-with-splunk-storm/httpstatus.png" alt="httpstatus" /></p>
+
+<p>さすがというか、よくできている。</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-17T21:17:00+09:00" pubdate data-updated="true">2013-03-17</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/logging/'>logging</a>, <a class='category' href='/blog/categories/splunk/'>splunk</a>, <a class='category' href='/blog/categories/visualization/'>visualization</a>
+
+
+</div>
+	
+</div></article>
+
+	
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2013
+
+    f440
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+</body>
+</html>

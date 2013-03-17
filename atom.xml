@@ -4,7 +4,7 @@
   <title><![CDATA[apatheia.info]]></title>
   <link href="http://apatheia.info/atom.xml" rel="self"/>
   <link href="http://apatheia.info/"/>
-  <updated>2013-03-17T16:42:06+09:00</updated>
+  <updated>2013-03-17T22:54:14+09:00</updated>
   <id>http://apatheia.info/</id>
   <author>
     <name><![CDATA[f440]]></name>
@@ -12,6 +12,54 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[イベント管理にSplunk Stormを使ってみる]]></title>
+    <link href="http://apatheia.info/blog/2013/03/17/logging-with-splunk-storm/"/>
+    <updated>2013-03-17T21:17:00+09:00</updated>
+    <id>http://apatheia.info/blog/2013/03/17/logging-with-splunk-storm</id>
+    <content type="html"><![CDATA[<p><a href="http://www.splunk.com/">Splunk</a> はおそらくイベント・ログ管理のツールとしてはおそらくもっとも有名で、日本でも販売展開しているので知っている人も多いかと思う。その splunk が <a href="https://www.splunkstorm.com/storm/">Splunk Storm</a> というサービスを始めている。試しに使ってみたのでその感想。</p>
+
+<!-- more -->
+
+
+<p>料金に応じて、格納可能なデータの容量が増える課金体系。無料でも1GBまで利用可能。</p>
+
+<p>データの取り込みは以下の方法が提供されている:</p>
+
+<ul>
+<li>Syslog, Rsyslog, Syslog-ng などから転送</li>
+<li>TCP/UDP を使って直接登録
+
+<ul>
+<li><code>cat some_file.log | nc endpoind_hostname port</code> で登録可能</li>
+</ul>
+</li>
+<li>HTTP API</li>
+<li>forwarder と呼ばれるクライアントプログラム
+
+<ul>
+<li>ログの読み取りなども可能</li>
+</ul>
+</li>
+<li>ファイルアップロード</li>
+</ul>
+
+
+<p>試しにアカウントをとってApacheのログ形式のデータをncでがんがん取り込んでみたところ、1GB を超えたところでもうこれ以上追加できないとのメールが届いた。結果、200万件以上のデータが登録できていた。</p>
+
+<p>複雑な検索式を使って特定の条件に合うレコードを弾き出したり、図示することができる。たとえば、ステータスコードでグルーピングしたグラフを表示するには、以下の検索式を指定する。</p>
+
+<pre><code>sourcetype="access_combined" status="*" | timechart count by status
+</code></pre>
+
+<p>リアルタイムで計算しているらしく、新しい時間帯から古い時間帯へとどんどんグラフが追加されていく。</p>
+
+<p><img src="http://apatheia.info/images/2013-03-17-logging-with-splunk-storm/httpstatus.png" alt="httpstatus" /></p>
+
+<p>さすがというか、よくできている。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[FluentdのデータをGraphiteに出力するときのTips]]></title>

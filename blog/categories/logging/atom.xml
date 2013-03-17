@@ -4,7 +4,7 @@
   <title><![CDATA[Category: logging | apatheia.info]]></title>
   <link href="http://apatheia.info/blog/categories/logging/atom.xml" rel="self"/>
   <link href="http://apatheia.info/"/>
-  <updated>2013-03-17T16:42:06+09:00</updated>
+  <updated>2013-03-17T22:54:14+09:00</updated>
   <id>http://apatheia.info/</id>
   <author>
     <name><![CDATA[f440]]></name>
@@ -12,6 +12,182 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[イベント管理にSplunk Stormを使ってみる]]></title>
+    <link href="http://apatheia.info/blog/2013/03/17/logging-with-splunk-storm/"/>
+    <updated>2013-03-17T21:17:00+09:00</updated>
+    <id>http://apatheia.info/blog/2013/03/17/logging-with-splunk-storm</id>
+    <content type="html"><![CDATA[<p><a href="http://www.splunk.com/">Splunk</a> はおそらくイベント・ログ管理のツールとしてはおそらくもっとも有名で、日本でも販売展開しているので知っている人も多いかと思う。その splunk が <a href="https://www.splunkstorm.com/storm/">Splunk Storm</a> というサービスを始めている。試しに使ってみたのでその感想。</p>
+
+<!-- more -->
+
+
+<p>料金に応じて、格納可能なデータの容量が増える課金体系。無料でも1GBまで利用可能。</p>
+
+<p>データの取り込みは以下の方法が提供されている:</p>
+
+<ul>
+<li>Syslog, Rsyslog, Syslog-ng などから転送</li>
+<li>TCP/UDP を使って直接登録
+
+<ul>
+<li><code>cat some_file.log | nc endpoind_hostname port</code> で登録可能</li>
+</ul>
+</li>
+<li>HTTP API</li>
+<li>forwarder と呼ばれるクライアントプログラム
+
+<ul>
+<li>ログの読み取りなども可能</li>
+</ul>
+</li>
+<li>ファイルアップロード</li>
+</ul>
+
+
+<p>試しにアカウントをとってApacheのログ形式のデータをncでがんがん取り込んでみたところ、1GB を超えたところでもうこれ以上追加できないとのメールが届いた。結果、200万件以上のデータが登録できていた。</p>
+
+<p>複雑な検索式を使って特定の条件に合うレコードを弾き出したり、図示することができる。たとえば、ステータスコードでグルーピングしたグラフを表示するには、以下の検索式を指定する。</p>
+
+<pre><code>sourcetype="access_combined" status="*" | timechart count by status
+</code></pre>
+
+<p>リアルタイムで計算しているらしく、新しい時間帯から古い時間帯へとどんどんグラフが追加されていく。</p>
+
+<p><img src="/images/2013-03-17-logging-with-splunk-storm/httpstatus.png" alt="httpstatus" /></p>
+
+<p>さすがというか、よくできている。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[FluentdのデータをGraphiteに出力するときのTips]]></title>
+    <link href="http://apatheia.info/blog/2013/03/17/fluentd-and-graphite/"/>
+    <updated>2013-03-17T15:50:00+09:00</updated>
+    <id>http://apatheia.info/blog/2013/03/17/fluentd-and-graphite</id>
+    <content type="html"><![CDATA[<p><a href="https://github.com/hotchpotch/fluent-plugin-graphite">fluent-plugin-graphite</a> 利用時のメモ。</p>
+
+<p>Ops界隈での可視化というと、ここ何年かは<a href="http://graphite.wikidot.com/">Graphite</a>でグラフを作ってそれを他のツールで表示する、みたいなのが多い。<a href="http://fluentd.org/">Fluentd</a>のデータを可視化したい場合は<a href="http://kazeburo.github.com/GrowthForecast/">GrowthForecast</a>が使われることが多いけど、<a href="http://graphite.wikidot.com/">Graphite</a>使ってみるといろんなツールと組み合わせられておもしろい。</p>
+
+<!-- more -->
+
+
+<p>Fluentd から Graphite へデータを送るのは <a href="https://github.com/hotchpotch/fluent-plugin-graphite">Fluent-plugin-graphite</a> を使えば簡単に実現できそうなんだけど、プラグイン側のインターフェース(<code>:key</code> や <code>:count</code> といったキーが必要)に合わせて入力のデータを整形する必要がある。</p>
+
+<p>こういった調整は、out_map を使うことで実現できる。</p>
+
+<pre><code>&lt;source&gt;
+  type tail
+  format apache
+  path /var/log/httpd/access_log
+  tag apache.access
+&lt;/source&gt;
+&lt;match apache.access&gt;
+  type map
+  map [["graphite." + tag, time, {"key" =&gt; "graphite.apache.accesslog.code." + record["code"], "count" =&gt; 1}]]
+  multi true
+&lt;/match&gt;
+&lt;match graphite.**&gt;
+  type graphite
+&lt;/match&gt;
+</code></pre>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Fluentdの出力結果をStatHatで可視化する]]></title>
+    <link href="http://apatheia.info/blog/2013/03/17/fluentd-and-stathat/"/>
+    <updated>2013-03-17T15:48:00+09:00</updated>
+    <id>http://apatheia.info/blog/2013/03/17/fluentd-and-stathat</id>
+    <content type="html"><![CDATA[<p><a href="http://fluentd.org/">Fluentd</a>で取得した情報を可視化したいとき、<a href="https://github.com/tagomoris/fluent-plugin-growthforecast">fluent-plugin-growthforecast</a>を使って<a href="http://kazeburo.github.com/GrowthForecast/">GrowthForecast</a>にグラフを作る方法がよく知られている。<a href="http://kazeburo.github.com/GrowthForecast/">GrowthForecast</a>はインストール後すぐに使い始められるお手軽ツールなんだけど、それすら面倒くさい、自前で環境を作るのが面倒、というときには<a href="http://www.stathat.com/">StatHat</a>を使うと簡単に可視化を実現できるという話。</p>
+
+<!-- more -->
+
+
+<p><a href="http://www.stathat.com/">StatHat</a>はシンプルなインターフェースで必要十分な機能があり、しかも無料で使えるというサービス。HTTPでデータを登録するだけできれいなグラフが簡単に生成できるので、幅広い用途で利用できる。</p>
+
+<p>以降、<a href="http://fluentd.org/">Fluentd</a>と<a href="http://www.stathat.com/">StatHat</a>を組み合わせて利用するための設定を説明する。</p>
+
+<h1>作業</h1>
+
+<h2>StatHat</h2>
+
+<p>Stathatの<a href="https://www.stathat.com/sign_up">Sign up</a>にアクセスしてメールアドレスを登録し、折り返し届くメール内のURLからパスワードを登録すればすぐ使い始められる。グラフを作るための下準備は不要。まずは、curl を使って直接 POST してみる。</p>
+
+<pre><code>curl -d "email=登録時のメールアドレス&amp;stat=body temperature&amp;value=36.8" http://api.stathat.com/ez
+</code></pre>
+
+<p>すると、メールアドレス宛にグラフの追加が通知され、画面から確認できるようになる。</p>
+
+<p>(メールアドレスに<code>+</code>みたいなURLエンコードが必要な文字を含んでる場合は、 --data-urlencode を使って一つずつパラメータを指定すればいい)</p>
+
+<p>APIを利用するために必要となるキーは、初期状態だと登録時のメールアドレスになっている。これは<a href="https://www.stathat.com/settings">設定画面</a>から変更可能。タイムゾーンも修正できるので住んでいる地域に変更しておいた方がいい。</p>
+
+<h2>Fluentd</h2>
+
+<p>Fluentd から StatHat を利用するために<a href="https://github.com/f440/fluent-plugin-stathat">プラギン</a>作ったので、これを利用する。</p>
+
+<pre><code>fluent-gem install fluent-plugin-stathat
+</code></pre>
+
+<p>たとえば、よくある「HTTP ステータスコードのカウント」の場合、以下のような設定をすればいい。</p>
+
+<pre><code>&lt;source&gt;
+  type tail
+  format apache
+  path /var/log/httpd/access_log
+  tag apache.access
+&lt;/source&gt;
+&lt;match apache.access&gt;
+  type datacounter
+  unit minute
+  tag stathut.httpstatus
+  count_key code
+  pattern1 2xx ^2\d\d$
+  pattern2 3xx ^3\d\d$
+  pattern3 4xx ^4\d\d$
+  pattern4 5xx ^5\d\d$
+&lt;/match&gt;
+&lt;match stathut.httpstatus&gt;
+  type copy
+  &lt;store&gt;
+    type  stathat
+    stat 2xx
+    ezkey your_email@example.com
+    count apache.access_200_count
+  &lt;/store&gt;
+  &lt;store&gt;
+    type  stathat
+    stat 3xx
+    ezkey your_email@example.com
+    count apache.access_3xx_count
+  &lt;/store&gt;
+  &lt;store&gt;
+    type  stathat
+    stat 4xx
+    ezkey your_email@example.com
+    count apache.access_4xx_count
+  &lt;/store&gt;
+  &lt;store&gt;
+    type  stathat
+    stat 5xx
+    ezkey your_email@example.com
+    count apache.access_5xx_count
+  &lt;/store&gt;
+&lt;/match&gt;
+</code></pre>
+
+<p>これで、こういったグラフが作れる。</p>
+
+<p><img src="/images/2013-03-17-fluentd-and-stathat/httpstatus.png" alt="httpstatus" />
+<img src="/images/2013-03-17-fluentd-and-stathat/4xx.png" alt="4xx" /></p>
+
+<h1>まとめ</h1>
+
+<p><a href="http://www.stathat.com/">StatHat</a> 便利。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[logstalgia を使ってログを可視化]]></title>
