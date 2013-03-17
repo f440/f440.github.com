@@ -4,7 +4,7 @@
   <title><![CDATA[Category: graphite | apatheia.info]]></title>
   <link href="http://apatheia.info/blog/categories/graphite/atom.xml" rel="self"/>
   <link href="http://apatheia.info/"/>
-  <updated>2013-03-17T16:35:33+09:00</updated>
+  <updated>2013-03-17T16:42:06+09:00</updated>
   <id>http://apatheia.info/</id>
   <author>
     <name><![CDATA[f440]]></name>
@@ -14,20 +14,20 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Fluentd で Graphite 使うときのTips]]></title>
+    <title type="html"><![CDATA[FluentdのデータをGraphiteに出力するときのTips]]></title>
     <link href="http://apatheia.info/blog/2013/03/17/fluentd-and-graphite/"/>
     <updated>2013-03-17T15:50:00+09:00</updated>
     <id>http://apatheia.info/blog/2013/03/17/fluentd-and-graphite</id>
-    <content type="html"><![CDATA[<p><a href="https://github.com/hotchpotch/fluent-plugin-graphite">fluent-plugin-graphite</a> 使うときのメモ。</p>
+    <content type="html"><![CDATA[<p><a href="https://github.com/hotchpotch/fluent-plugin-graphite">fluent-plugin-graphite</a> 利用時のメモ。</p>
 
 <p>Ops界隈での可視化というと、ここ何年かは<a href="http://graphite.wikidot.com/">Graphite</a>でグラフを作ってそれを他のツールで表示する、みたいなのが多い。<a href="http://fluentd.org/">Fluentd</a>のデータを可視化したい場合は<a href="http://kazeburo.github.com/GrowthForecast/">GrowthForecast</a>が使われることが多いけど、<a href="http://graphite.wikidot.com/">Graphite</a>使ってみるといろんなツールと組み合わせられておもしろい。</p>
 
 <!-- more -->
 
 
-<p><a href="https://github.com/hotchpotch/fluent-plugin-graphite">Fluent-plugin-graphite</a> 使えば簡単に実現できそうなんだけど、<code>:key</code> とか <code>:count</code> とかのインターフェースに合わせてデータを整形しておく必要がある。</p>
+<p>Fluentd から Graphite へデータを送るのは <a href="https://github.com/hotchpotch/fluent-plugin-graphite">Fluent-plugin-graphite</a> を使えば簡単に実現できそうなんだけど、プラグイン側のインターフェース(<code>:key</code> や <code>:count</code> といったキーが必要)に合わせて入力のデータを整形する必要がある。</p>
 
-<p>こういうキーの調整は out_map を使うと調整できる。</p>
+<p>こういった調整は、out_map を使うことで実現できる。</p>
 
 <pre><code>&lt;source&gt;
   type tail

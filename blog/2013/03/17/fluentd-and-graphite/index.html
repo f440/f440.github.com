@@ -3,11 +3,11 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>Fluentd で Graphite 使うときのTips - apatheia.info</title>
+	<title>FluentdのデータをGraphiteに出力するときのTips - apatheia.info</title>
 	<meta name="author" content="f440">
 
 	
-	<meta name="description" content="fluent-plugin-graphite 使うときのメモ。 Ops界隈での可視化というと、ここ何年かはGraphiteでグラフを作ってそれを他のツールで表示する、みたいなのが多い。Fluentdのデータを可視化したい場合はGrowthForecastが使われることが多いけど、 &hellip;">
+	<meta name="description" content="fluent-plugin-graphite 利用時のメモ。 Ops界隈での可視化というと、ここ何年かはGraphiteでグラフを作ってそれを他のツールで表示する、みたいなのが多い。Fluentdのデータを可視化したい場合はGrowthForecastが使われることが多いけど、 &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -93,17 +93,17 @@
 		
 	
 	<div id="content" class="inner"><article class="post">
-	<h2 class="title">Fluentd で Graphite 使うときのTips</h2>
-	<div class="entry-content"><p><a href="https://github.com/hotchpotch/fluent-plugin-graphite">fluent-plugin-graphite</a> 使うときのメモ。</p>
+	<h2 class="title">FluentdのデータをGraphiteに出力するときのTips</h2>
+	<div class="entry-content"><p><a href="https://github.com/hotchpotch/fluent-plugin-graphite">fluent-plugin-graphite</a> 利用時のメモ。</p>
 
 <p>Ops界隈での可視化というと、ここ何年かは<a href="http://graphite.wikidot.com/">Graphite</a>でグラフを作ってそれを他のツールで表示する、みたいなのが多い。<a href="http://fluentd.org/">Fluentd</a>のデータを可視化したい場合は<a href="http://kazeburo.github.com/GrowthForecast/">GrowthForecast</a>が使われることが多いけど、<a href="http://graphite.wikidot.com/">Graphite</a>使ってみるといろんなツールと組み合わせられておもしろい。</p>
 
 <!-- more -->
 
 
-<p><a href="https://github.com/hotchpotch/fluent-plugin-graphite">Fluent-plugin-graphite</a> 使えば簡単に実現できそうなんだけど、<code>:key</code> とか <code>:count</code> とかのインターフェースに合わせてデータを整形しておく必要がある。</p>
+<p>Fluentd から Graphite へデータを送るのは <a href="https://github.com/hotchpotch/fluent-plugin-graphite">Fluent-plugin-graphite</a> を使えば簡単に実現できそうなんだけど、プラグイン側のインターフェース(<code>:key</code> や <code>:count</code> といったキーが必要)に合わせて入力のデータを整形する必要がある。</p>
 
-<p>こういうキーの調整は out_map を使うと調整できる。</p>
+<p>こういった調整は、out_map を使うことで実現できる。</p>
 
 <pre><code>&lt;source&gt;
   type tail
