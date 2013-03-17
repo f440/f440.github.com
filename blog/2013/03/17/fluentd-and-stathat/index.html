@@ -1,0 +1,271 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Fluentd の出力結果をStatHatで可視化する - apatheia.info</title>
+	<meta name="author" content="f440">
+
+	
+	<meta name="description" content="Fluentdで取得した情報を可視化したいとき、fluent-plugin-growthforecastを使ってGrowthForecastにグラフを作る方法がよく知られている。GrowthForecastはインストール後すぐに使い始められるお手軽ツールなんだけど、それすら面倒くさい、 &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="apatheia.info" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	
+  
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35021317-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">apatheia.info</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:apatheia.info">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+		<a class="twitter" href="http://twitter.com/f440" title="Twitter">Twitter</a>
+		
+		
+		<a class="github" href="https://github.com/f440" title="GitHub">GitHub</a>
+		
+    
+    <a class="pinboard" href="https://pinboard.in/u:f440" title="Pinboard">Pinboard</a>
+    
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+	<form class="search" action="http://google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:apatheia.info">
+	</form>
+</nav>
+
+</header>
+	
+		
+	
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Fluentd の出力結果をStatHatで可視化する</h2>
+	<div class="entry-content"><p><a href="http://fluentd.org/">Fluentd</a>で取得した情報を可視化したいとき、<a href="https://github.com/tagomoris/fluent-plugin-growthforecast">fluent-plugin-growthforecast</a>を使って<a href="http://kazeburo.github.com/GrowthForecast/">GrowthForecast</a>にグラフを作る方法がよく知られている。<a href="http://kazeburo.github.com/GrowthForecast/">GrowthForecast</a>はインストール後すぐに使い始められるお手軽ツールなんだけど、それすら面倒くさい、自前で環境を作るのが面倒、というときには<a href="http://www.stathat.com/">StatHat</a>を使うと簡単に可視化を実現できるという話。</p>
+
+<!-- more -->
+
+
+<p><a href="http://www.stathat.com/">StatHat</a>はシンプルなインターフェースで必要十分な機能があり、しかも無料で使えるというサービス。HTTPでデータを登録するだけできれいなグラフが簡単に生成できるので、幅広い用途で利用できる。</p>
+
+<p>以降、<a href="http://fluentd.org/">Fluentd</a>と<a href="http://www.stathat.com/">StatHat</a>を組み合わせて利用するための設定を説明する。</p>
+
+<h1>作業</h1>
+
+<h2>StatHat</h2>
+
+<p>Stathatの<a href="https://www.stathat.com/sign_up">Sign up</a>にアクセスしてメールアドレスを登録し、折り返し届くメール内のURLからパスワードを登録すればすぐ使い始められる。グラフを作るための下準備は不要。まずは、curl を使って直接 POST してみる。</p>
+
+<pre><code>curl -d "email=登録時のメールアドレス&amp;stat=body temperature&amp;value=36.8" http://api.stathat.com/ez
+</code></pre>
+
+<p>すると、メールアドレス宛にグラフの追加が通知され、画面から確認できるようになる。</p>
+
+<p>(メールアドレスに<code>+</code>みたいなURLエンコードが必要な文字を含んでる場合は、 &#8211;data-urlencode を使って一つずつパラメータを指定すればいい)</p>
+
+<p>APIを利用するために必要となるキーは、初期状態だと登録時のメールアドレスになっている。これは<a href="https://www.stathat.com/settings">設定画面</a>から変更可能。タイムゾーンも修正できるので住んでいる地域に変更しておいた方がいい。</p>
+
+<h2>Fluentd</h2>
+
+<p>Fluentd から StatHat を利用するために<a href="https://github.com/f440/fluent-plugin-stathat">プラギン</a>作ったので、これを利用する。</p>
+
+<pre><code>fluent-gem install fluent-plugin-stathat
+</code></pre>
+
+<p>たとえば、よくある「HTTP ステータスコードのカウント」の場合、以下のような設定をすればいい。</p>
+
+<pre><code>&lt;source&gt;
+  type tail
+  format apache
+  path /var/log/httpd/access_log
+  tag apache.access
+&lt;/source&gt;
+&lt;match apache.access&gt;
+  type datacounter
+  unit minute
+  tag stathut.httpstatus
+  count_key code
+  pattern1 2xx ^2\d\d$
+  pattern2 3xx ^3\d\d$
+  pattern3 4xx ^4\d\d$
+  pattern4 5xx ^5\d\d$
+&lt;/match&gt;
+&lt;match stathut.httpstatus&gt;
+  type copy
+  &lt;store&gt;
+    type  stathat
+    stat 2xx
+    ezkey your_email@example.com
+    count apache.access_200_count
+  &lt;/store&gt;
+  &lt;store&gt;
+    type  stathat
+    stat 3xx
+    ezkey your_email@example.com
+    count apache.access_3xx_count
+  &lt;/store&gt;
+  &lt;store&gt;
+    type  stathat
+    stat 4xx
+    ezkey your_email@example.com
+    count apache.access_4xx_count
+  &lt;/store&gt;
+  &lt;store&gt;
+    type  stathat
+    stat 5xx
+    ezkey your_email@example.com
+    count apache.access_5xx_count
+  &lt;/store&gt;
+&lt;/match&gt;
+</code></pre>
+
+<p>これで、こういったグラフが作れる。</p>
+
+<p><img src="/images/2013-03-17-fluentd-and-stathat/httpstatus.png" alt="httpstatus" />
+<img src="/images/2013-03-17-fluentd-and-stathat/4xx.png" alt="4xx" /></p>
+
+<h1>まとめ</h1>
+
+<p><a href="http://www.stathat.com/">StatHat</a> 便利。</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-17T15:48:00+09:00" pubdate data-updated="true">2013-03-17</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/fluentd/'>fluentd</a>, <a class='category' href='/blog/categories/stathat/'>stathat</a>, <a class='category' href='/blog/categories/visualization/'>visualization</a>
+
+
+</div>
+	
+</div></article>
+
+	
+<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4f8eed8875190f92"></script>
+  <script type="text/javascript">
+    var addthis_config = {
+      data_track_clickback: false 
+    }
+  </script>
+</div>
+
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2013
+
+    f440
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'apatheiainfo';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://apatheia.info/blog/2013/03/17/fluentd-and-stathat/';
+        var disqus_url = 'http://apatheia.info/blog/2013/03/17/fluentd-and-stathat/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+</body>
+</html>
