@@ -3,7 +3,7 @@ layout: post
 title: "Fluentdの出力結果をStatHatで可視化する"
 date: 2013-03-17 15:48
 comments: true
-categories: fluentd stathat visualization
+categories: fluentd stathat logging visualization
 ---
 
 [Fluentd]で取得した情報を可視化したいとき、[fluent-plugin-growthforecast]を使って[GrowthForecast]にグラフを作る方法がよく知られている。[GrowthForecast]はインストール後すぐに使い始められるお手軽ツールなんだけど、それすら面倒くさい、自前で環境を作るのが面倒、というときには[StatHat]を使うと簡単に可視化を実現できるという話。
@@ -93,4 +93,3 @@ Fluentd から StatHat を利用するために[プラギン](https://github.com
 [Fluentd]: http://fluentd.org/
 [GrowthForecast]: http://kazeburo.github.com/GrowthForecast/
 [fluent-plugin-growthforecast]: https://github.com/tagomoris/fluent-plugin-growthforecast
-[Go]: http://golang.org/

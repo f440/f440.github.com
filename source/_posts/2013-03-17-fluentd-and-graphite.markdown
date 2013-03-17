@@ -3,7 +3,7 @@ layout: post
 title: "FluentdのデータをGraphiteに出力するときのTips"
 date: 2013-03-17 15:50
 comments: true
-categories: fluentd graphite visualization
+categories: fluentd graphite logging visualization
 ---
 
 [fluent-plugin-graphite] 利用時のメモ。
