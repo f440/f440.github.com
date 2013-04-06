@@ -1,0 +1,403 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>構成管理ツール Ansible について - apatheia.info</title>
+	<meta name="author" content="f440">
+
+	
+	<meta name="description" content="Ansible というサーバーの設定を管理するツールの説明。いわゆる構成管理 (CM: Configuration Management) にカテゴライズされるもので、Puppet や Chef の親戚みたいなものと考えてもらえればだいたいあってる。 概要 リード開発者は Michael &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="apatheia.info" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	
+  
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35021317-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">apatheia.info</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:apatheia.info">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+		<a class="twitter" href="http://twitter.com/f440" title="Twitter">Twitter</a>
+		
+		
+		<a class="github" href="https://github.com/f440" title="GitHub">GitHub</a>
+		
+    
+    <a class="pinboard" href="https://pinboard.in/u:f440" title="Pinboard">Pinboard</a>
+    
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+	<form class="search" action="http://google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:apatheia.info">
+	</form>
+</nav>
+
+</header>
+	
+		
+	
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">構成管理ツール Ansible について</h2>
+	<div class="entry-content"><p><a href="http://ansible.cc/">Ansible</a> というサーバーの設定を管理するツールの説明。いわゆる構成管理 (CM: Configuration Management) にカテゴライズされるもので、Puppet や Chef の親戚みたいなものと考えてもらえればだいたいあってる。</p>
+
+<!-- more -->
+
+
+<h1>概要</h1>
+
+<p>リード開発者は Michael DeHaan で、現職の AnsibleWorks の前は Redhat で <a href="http://cobbler.github.io/">Cobbler</a> や <a href="https://fedorahosted.org/func/">Func</a> に携わっていたり、Puppet labs でプロダクトマネージャーしたりしているという経歴の持ち主。</p>
+
+<p>Ansible は Python で書かれている。同じジャンルで Python 製というと <a href="http://saltstack.com/">Salt</a> が有名。Chef の場合、レシピを書くためには Ruby の知識が必要となってくるけど、Ansible はどんな言語でもモジュールが書けるようになっているので、運用にあたって Python の知識は必要無い。</p>
+
+<p>動作の点でも Puppet や Chef などのツールとまったく異なるアプローチをしている。Puppet や Chef は、サーバーとクライアントで構成され、クライアントとなるマシンはサーバーに設定を問い合わせながら、自分自身を「あるべき状態」に収束するよう変更を加えていく。Ansible の場合、サーバー側からクライアントとなるサーバー(群)に対して直接命令を送り込み結果を得る。これは <a href="https://fedorahosted.org/func/">Func</a>、<a href="http://capistranorb.com/">Capistrano</a>、<a href="http://fabfile.org/">Fabric</a> などに似ているが、これらのデプロイを目的としたツールにはない「何回やっても結果が同じ」(idempotence) という CM ツールらしさはちゃんと備えている。</p>
+
+<p>ドキュメントは12ページしかなく(ちなみに、さっき数えてみたらChefのドキュメントは2834ファイルあった) 非常に習得は簡単。サーバーを立てる必要もなく、クライアントマシンもエージェントレス、加えて短期間で学習できるので手軽感は非常に高いが、モジュール機構が強力なのできわめて実用的になっている。</p>
+
+<h1>基本的な概念</h1>
+
+<p>Ansible を理解する上で重要となる、モジュールとプレーブックについて説明する。</p>
+
+<h2>モジュール</h2>
+
+<p>クライアント内での動きはモジュールという形で定義する。</p>
+
+<p>パッケージのインストール、サービスの起動、ユーザーやグループの作成などの基本的なモジュールはあるが、実際には環境に合わせて不足分は自分でモジュールを作っていくことになる。</p>
+
+<p>モジュールは簡単に作れる。モジュールが役割を端的に言うと、以下を行うだけである。</p>
+
+<ul>
+<li>標準入力でオプションを受け取る</li>
+<li><p>標準出力で実行結果を返す</p>
+
+<ul>
+<li>出力形式は key=value を空白でつなげたものか JSON</li>
+</ul>
+</li>
+</ul>
+
+
+<p>これができる言語であれば、シェルスクリプトでも Perl でも問題ない。</p>
+
+<h2>プレーブック</h2>
+
+<p>実際の処理では単発のモジュールでサーバーの設定が終わることはないので、モジュールの使い方をまとめたものが必要になる。Ansible では、YAML で処理をまとめたものを プレーブック (Playbook)と呼んでいる。</p>
+
+<p>例: Apache と PHP をインストールする (webapp.yml)</p>
+
+<pre><code>- hosts: webserver
+  user: vagrant
+  sudo: yes
+  tasks:
+    - name: install apache
+      action: yum pkg=httpd state=installed
+    - name: install php
+      action: yum pkg=php state=installed
+</code></pre>
+
+<p>例: 実行</p>
+
+<pre><code># ansible-playbook プレーブック名
+$ ansible-playbook webapp.yml
+</code></pre>
+
+<p>以上は簡単な例だが、設定ファイルを配置したり、それに併せてサービスを再起動させたりといったことも記述可能。</p>
+
+<p>プレーブックには以下のような内容が含まれる:</p>
+
+<ul>
+<li>hosts: 対象のホスト</li>
+<li>user: 実行ユーザー</li>
+<li>vars: 変数</li>
+<li>tasks: タスク</li>
+</ul>
+
+
+<p><code>vars</code> の変数は、テンプレート内で展開される。設定ファイル配置時にパラメータを変更、といった場合に利用する。</p>
+
+<h1>インストール</h1>
+
+<p>以下では、インストールから簡単なコマンドの実行までの例を挙げる。サーバー、クライアント双方で CentOS 6.4 を利用した。</p>
+
+<p>Ansible を動かすためには、Python 2.6 以上と Ansible のソースコードとごくわずかな Python パッケージだけあればよい。CentOS 6 であれば Python の条件は満たせているし、EPEL で Ansible のパッケージが提供されているので、<code>yum</code> でインストール可能。</p>
+
+<pre><code># EPEL 有効化
+$ sudo rpm -ivh http://ftp.riken.jp/Linux/fedora/epel/6/i386/epel-release-6-8.noarch.rpm
+
+# Ansible インストール
+$ sudo yum install ansible
+</code></pre>
+
+<p>他の Unix 系OSであれば、<code>pip install ansible</code> でいい。</p>
+
+<pre><code>$ sudo pip install ansible
+</code></pre>
+
+<p>次に、サーバーからクライアントに SSH でログインできるように調整しておく。</p>
+
+<pre><code># 以下のマシンを用意した。
+# それぞれホスト名でアクセスできる
+#    Ansible 実行側 ... server
+#    変更対象 ... client1, client2
+
+# server側で公開鍵認証用の鍵を作成
+$ $ ssh-keygen -t rsa
+
+# client に公開鍵を配置する
+$ ssh-copy-id client1
+$ ssh-copy-id client2
+
+# 試しにログインしてみる
+# 頻繁に実行することになるので、公開鍵にパスフレーズを
+# 設定している場合は、ssh-agent を使ってパスフレーズの
+# 入力を省略できるようにしておく。
+$ ssh client1
+$ ssh client2
+</code></pre>
+
+<p>今度は、対象のサーバーを設定してみよう。環境変数 <code>ANSIBLE_HOSTS</code> にあるファイルでサーバーの指定が可能。</p>
+
+<pre><code>$ cat &lt;EOD &gt;~/target
+&gt; [webserver]
+&gt; client1
+&gt; 
+&gt; [dbserver]
+&gt; client2
+&gt; EOD
+$ export ANSIBLE_HOSTS=~/target
+</code></pre>
+
+<p>設定の中で、<code>[ ]</code> によりグループを作っている。つまり「webserver グループに client1、dbserver グループに client2 が所属している」ということを表している。グループはオプションなので、単純にホスト名を羅列するだけでもいい。試しに、対象のホストを調べてみよう。</p>
+
+<pre><code># ansible ホストパターン --list-hosts
+
+# ホスト名を直接指定
+$ ansible client1 --list-hosts
+client1
+
+# グループ名を指定
+$ ansible webserver --list-hosts
+client1
+$ ansible dbserver --list-hosts
+client2
+
+# all を指定した場合、全サーバーを列挙
+$ ansible all --list-hosts
+client1
+client2
+</code></pre>
+
+<p>これだけで準備は完了。実行してみる。</p>
+
+<pre><code># コマンドの書式
+ansible 対象 -m モジュール名 -a オプション
+
+# 例 ping モジュール
+$ ansible all -m ping
+client2 | success &gt;&gt; {
+    "changed": false,
+    "ping": "pong"
+}
+
+client1 | success &gt;&gt; {
+    "changed": false,
+    "ping": "pong"
+}
+</code></pre>
+
+<p><code>-m</code> をつけないで、直接コマンドを実行することも可能。</p>
+
+<pre><code># すべてのマシンでカーネルのバージョンを取得
+$ ansible all -a 'uname -r'
+client2 | success | rc=0 &gt;&gt;
+2.6.32-358.el6.x86_64
+
+client1 | success | rc=0 &gt;&gt;
+2.6.32-358.el6.x86_64
+</code></pre>
+
+<p>プレーブックを実行したときは以下のようになる。</p>
+
+<pre><code># 対象は webserver というグループ(client1 が所属)に対して、
+# Apache と PHP をインストールするプレーブック、webapp.yml を実行
+# Apache はすでにインストールされていたので、
+# PHP のみインストールされることとなった
+
+$ ansible-playbook webapp.yml
+
+PLAY [webserver] *********************
+
+GATHERING FACTS *********************
+ok: [client1]
+
+TASK: [install apache] *********************
+ok: [client1]
+
+TASK: [install php] *********************
+changed: [client1]
+
+PLAY RECAP *********************
+client1                        : ok=3    changed=1    unreachable=0    failed=0
+</code></pre>
+
+<h1>その他</h1>
+
+<ul>
+<li><a href="https://twitter.com/mitchellh/status/319914935910027264">Vagrant もバージョン 1.2 から Ansible でのプロビジョニングをサポート予定</a></li>
+<li>開発は活発</li>
+<li>リリース名がヴァンヘイレンの曲名 (1.0 は Eruptionだった)</li>
+<li>ロゴがださい (ML でも 90年代のデザインなんて言われている)</li>
+</ul>
+
+
+<h1>まとめ</h1>
+
+<p>ロゴのセンスは悪いけど、アプリケーション自体の仕組みはすごくセンスがいい。</p>
+
+<p>他の構成管理ツールと比べると、DSL を覚えるといった「ツールを使うまでののコスト」、ツールのためのサーバー構築・運用といった「ツールを使ってからのコスト」が軽微なので、よりやりたいことに目が向けられるのもうれしい。</p>
+
+<p>最近日本国内でも Chef の話題を聞くことが多いんだけど、Chef Server の運用とかオートスケールとのコンビネーションとかの情報はあまり聞かないので、たぶん割と小規模な環境でリモートサーバーの Chef-solo をキックみたいなケースが多いのかと思う。そういったところだと、Ansible のほうがふさわしいっていうことが多いんじゃないかな。</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-06T14:50:00+09:00" pubdate data-updated="true">2013-04-06</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/cm/'>cm</a>
+
+
+</div>
+	
+</div></article>
+
+	
+<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4f8eed8875190f92"></script>
+  <script type="text/javascript">
+    var addthis_config = {
+      data_track_clickback: false 
+    }
+  </script>
+</div>
+
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2013
+
+    f440
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'apatheiainfo';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://apatheia.info/blog/2013/04/06/about-ansible/';
+        var disqus_url = 'http://apatheia.info/blog/2013/04/06/about-ansible/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+</body>
+</html>
