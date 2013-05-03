@@ -1,0 +1,223 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>fpm で Mesos の RPM を作るまで - apatheia.info</title>
+	<meta name="author" content="f440">
+
+	
+	<meta name="description" content="Mesos をインストールするとき、各マシンでビルドはしんどいので fpm でパッケージを作って配布している。その際の作業メモ。 fpm は Ruby の gem や Node.js の npm などのプログラミング言語のライブラリ、あるいは直接ディレクトリから RPM やら Deb &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="apatheia.info" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	
+</head>
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">apatheia.info</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:apatheia.info">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+		<a class="twitter" href="http://twitter.com/f440" title="Twitter">Twitter</a>
+		
+		
+		<a class="github" href="https://github.com/f440" title="GitHub">GitHub</a>
+		
+    
+    <a class="pinboard" href="https://pinboard.in/u:f440" title="Pinboard">Pinboard</a>
+    
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+	<form class="search" action="http://google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:apatheia.info">
+	</form>
+</nav>
+
+</header>
+	
+		
+	
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Fpm で Mesos の RPM を作るまで</h2>
+	<div class="entry-content"><p><a href="http://incubator.apache.org/mesos/">Mesos</a> をインストールするとき、各マシンでビルドはしんどいので <a href="https://github.com/jordansissel/fpm">fpm</a> でパッケージを作って配布している。その際の作業メモ。</p>
+
+<!-- more -->
+
+
+<ul>
+<li><a href="https://github.com/jordansissel/fpm">fpm</a> は Ruby の gem や Node.js の npm などのプログラミング言語のライブラリ、あるいは直接ディレクトリから RPM やら Deb やらのパッケージを作成するソフトウェア。</li>
+<li><a href="http://incubator.apache.org/mesos/">Mesos</a> はクラスタ構成のリソースをよしなに管理するソフトウェア。
+
+<ul>
+<li>今回の話では具体的な使い方までは触れない</li>
+</ul>
+</li>
+</ul>
+
+
+<h1>手順</h1>
+
+<p>作業環境は CentOS 6.4 x86_64。</p>
+
+<p> Ruby をインストール。</p>
+
+<pre><code>sudo yum install ruby.x86_64 rubygems ruby-devel.x86_64 rpm-build.x86_64
+</code></pre>
+
+<p>fpm をインストール。</p>
+
+<pre><code>sudo gem install fpm --no-rdoc --no-ri
+</code></pre>
+
+<p>Mesos のソースをダウンロード、展開。</p>
+
+<pre><code>curl -LO http://ftp.meisei-u.ac.jp/mirror/apache/dist/incubator/mesos/mesos-0.10.0-incubating/mesos-0.10.0-incubating.tar.gz
+tar xf mesos-0.10.0-incubating.tar.gz
+cd mesos-0.10.0
+</code></pre>
+
+<p>Mesos のビルドに必要なパッケージをインストール。</p>
+
+<pre><code>sudo yum install gcc-c++.x86_64 patch.x86_64 python-devel.x86_64 \
+  cppunit-devel.x86_64 java-1.6.0-openjdk-devel.x86_64
+</code></pre>
+
+<p>ビルド。今回は、configure のオプションで Redhat っぽい配置を指定している。<code>/opt/mesos</code> とか <code>/usr/local/mesos</code> に全部まとめたければ &#8211;prefix を使うなど、このあたりはお好みで。
+<code>make install</code> 時には書き込み可能な場所を DESTDIR で指定。説明中では、<code>/tmp/mesos</code> を利用している。</p>
+
+<pre><code>JAVA_HOME=/etc/alternatives/java_sdk ./configure \
+  --bindir=/usr/bin --sbindir=/usr/sbin --libexecdir=/usr/libexec \
+  --localstatedir=/var --libdir=/usr/lib64 --includedir=/usr/include \
+  --datarootdir=/usr/share
+make
+make install DESTDIR=/tmp/mesos
+</code></pre>
+
+<p>fpm でパッケージを作成。詳細は fpm &#8211;help を参照。注意点としては、<code>--description</code> は RPM のメタ情報 <code>description</code>, <code>summary</code> で兼用されるので、あまり長い情報を入れると <code>yum search</code> とかがごちゃごちゃすることになる。適度に切り詰めた方がいい。</p>
+
+<pre><code>fpm -s dir -t rpm \
+  -v 0.10.0 \
+  -n mesos \
+  -C /tmp/mesos \
+  -a x86_64 \
+  --license "ASL 2.0" \
+  --url "http://incubator.apache.org/mesos/" \
+  --description "Dynamic resource sharing for clusters" \
+  -d python-devel \
+  -d java-1.6.0-openjdk-devel \
+  .
+</code></pre>
+
+<p>RPM ファイルのメタ情報やファイル一覧をチェック。</p>
+
+<pre><code>rpm -qpi mesos-0.10.0-1.x86_64.rpm
+rpm -qpl mesos-0.10.0-1.x86_64.rpm
+</code></pre>
+
+<p>あとは、できあがった RPM ファイルを他のマシンに持っていってインストール。</p>
+
+<pre><code>sudo yum install ./mesos-0.10.0-1.x86_64.rpm
+</code></pre>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-03T17:24:00+09:00" pubdate data-updated="true">2013-05-03</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/mesos/'>mesos</a>, <a class='category' href='/blog/categories/packaging/'>packaging</a>
+
+
+</div>
+	
+</div></article>
+
+	
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2013
+
+    f440
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35021317-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+</body>
+</html>

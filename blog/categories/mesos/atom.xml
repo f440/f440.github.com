@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: mesos | apatheia.info]]></title>
+  <link href="http://apatheia.info/blog/categories/mesos/atom.xml" rel="self"/>
+  <link href="http://apatheia.info/"/>
+  <updated>2013-05-03T20:39:52+09:00</updated>
+  <id>http://apatheia.info/</id>
+  <author>
+    <name><![CDATA[f440]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[fpm で Mesos の RPM を作るまで]]></title>
+    <link href="http://apatheia.info/blog/2013/05/03/create-mesos-rpm-using-fpm/"/>
+    <updated>2013-05-03T17:24:00+09:00</updated>
+    <id>http://apatheia.info/blog/2013/05/03/create-mesos-rpm-using-fpm</id>
+    <content type="html"><![CDATA[<p><a href="http://incubator.apache.org/mesos/">Mesos</a> をインストールするとき、各マシンでビルドはしんどいので <a href="https://github.com/jordansissel/fpm">fpm</a> でパッケージを作って配布している。その際の作業メモ。</p>
+
+<!-- more -->
+
+
+<ul>
+<li><a href="https://github.com/jordansissel/fpm">fpm</a> は Ruby の gem や Node.js の npm などのプログラミング言語のライブラリ、あるいは直接ディレクトリから RPM やら Deb やらのパッケージを作成するソフトウェア。</li>
+<li><a href="http://incubator.apache.org/mesos/">Mesos</a> はクラスタ構成のリソースをよしなに管理するソフトウェア。
+
+<ul>
+<li>今回の話では具体的な使い方までは触れない</li>
+</ul>
+</li>
+</ul>
+
+
+<h1>手順</h1>
+
+<p>作業環境は CentOS 6.4 x86_64。</p>
+
+<p> Ruby をインストール。</p>
+
+<pre><code>sudo yum install ruby.x86_64 rubygems ruby-devel.x86_64 rpm-build.x86_64
+</code></pre>
+
+<p>fpm をインストール。</p>
+
+<pre><code>sudo gem install fpm --no-rdoc --no-ri
+</code></pre>
+
+<p>Mesos のソースをダウンロード、展開。</p>
+
+<pre><code>curl -LO http://ftp.meisei-u.ac.jp/mirror/apache/dist/incubator/mesos/mesos-0.10.0-incubating/mesos-0.10.0-incubating.tar.gz
+tar xf mesos-0.10.0-incubating.tar.gz
+cd mesos-0.10.0
+</code></pre>
+
+<p>Mesos のビルドに必要なパッケージをインストール。</p>
+
+<pre><code>sudo yum install gcc-c++.x86_64 patch.x86_64 python-devel.x86_64 \
+  cppunit-devel.x86_64 java-1.6.0-openjdk-devel.x86_64
+</code></pre>
+
+<p>ビルド。今回は、configure のオプションで Redhat っぽい配置を指定している。<code>/opt/mesos</code> とか <code>/usr/local/mesos</code> に全部まとめたければ --prefix を使うなど、このあたりはお好みで。
+<code>make install</code> 時には書き込み可能な場所を DESTDIR で指定。説明中では、<code>/tmp/mesos</code> を利用している。</p>
+
+<pre><code>JAVA_HOME=/etc/alternatives/java_sdk ./configure \
+  --bindir=/usr/bin --sbindir=/usr/sbin --libexecdir=/usr/libexec \
+  --localstatedir=/var --libdir=/usr/lib64 --includedir=/usr/include \
+  --datarootdir=/usr/share
+make
+make install DESTDIR=/tmp/mesos
+</code></pre>
+
+<p>fpm でパッケージを作成。詳細は fpm --help を参照。注意点としては、<code>--description</code> は RPM のメタ情報 <code>description</code>, <code>summary</code> で兼用されるので、あまり長い情報を入れると <code>yum search</code> とかがごちゃごちゃすることになる。適度に切り詰めた方がいい。</p>
+
+<pre><code>fpm -s dir -t rpm \
+  -v 0.10.0 \
+  -n mesos \
+  -C /tmp/mesos \
+  -a x86_64 \
+  --license "ASL 2.0" \
+  --url "http://incubator.apache.org/mesos/" \
+  --description "Dynamic resource sharing for clusters" \
+  -d python-devel \
+  -d java-1.6.0-openjdk-devel \
+  .
+</code></pre>
+
+<p>RPM ファイルのメタ情報やファイル一覧をチェック。</p>
+
+<pre><code>rpm -qpi mesos-0.10.0-1.x86_64.rpm
+rpm -qpl mesos-0.10.0-1.x86_64.rpm
+</code></pre>
+
+<p>あとは、できあがった RPM ファイルを他のマシンに持っていってインストール。</p>
+
+<pre><code>sudo yum install ./mesos-0.10.0-1.x86_64.rpm
+</code></pre>
+]]></content>
+  </entry>
+  
+</feed>

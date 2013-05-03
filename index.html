@@ -7,7 +7,7 @@
 	<meta name="author" content="f440">
 
 	
-	<meta name="description" content="Ansible というサーバーの設定を管理するツールの説明。いわゆる構成管理 (CM: Configuration Management) にカテゴライズされるもので、Puppet や Chef の親戚みたいなものと考えてもらえればだいたいあってる。 Read on &rarr; 2013-04 &hellip;">
+	<meta name="description" content=" Mesos をインストールするとき、各マシンでビルドはしんどいので fpm でパッケージを作って配布している。その際の作業メモ。 Read on &rarr; 2013-05-03 mesos, packaging ">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -18,22 +18,7 @@
 	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	
-  
-	<script type="text/javascript">
-		var _gaq = _gaq || [];
-		_gaq.push(['_setAccount', 'UA-35021317-1']);
-		_gaq.push(['_trackPageview']);
-
-		(function() {
-			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-		})();
-	</script>
-
-
 </head>
-
 
 <body>
 	<header id="header" class="inner"><h1><a href="/">apatheia.info</a></h1>
@@ -93,6 +78,47 @@
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2013/05/03/create-mesos-rpm-using-fpm/">
+		
+			Fpm で Mesos の RPM を作るまで</a>
+	</h2>
+	<div class="entry-content">
+		<p><a href="http://incubator.apache.org/mesos/">Mesos</a> をインストールするとき、各マシンでビルドはしんどいので <a href="https://github.com/jordansissel/fpm">fpm</a> でパッケージを作って配布している。その際の作業メモ。</p>
+
+
+		
+		<a href="/blog/2013/05/03/create-mesos-rpm-using-fpm/" class="more-link">Read on &rarr;</a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-03T17:24:00+09:00" pubdate data-updated="true">2013-05-03</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/mesos/'>mesos</a>, <a class='category' href='/blog/categories/packaging/'>packaging</a>
+
+
+</div>
+	
+</div></article>
 
 
     <article class="post">
@@ -337,7 +363,7 @@
 	<div class="tags">
 
 
-	<a class='category' href='/blog/categories/node-js/'>node.js</a>, <a class='category' href='/blog/categories/windows/'>windows</a>
+	<a class='category' href='/blog/categories/node-dot-js/'>node.js</a>, <a class='category' href='/blog/categories/windows/'>windows</a>
 
 
 </div>
@@ -467,43 +493,6 @@
 	
 </div></article>
 
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2012/09/22/head-tail/">
-		
-			Head と Tail の行数指定方法</a>
-	</h2>
-	<div class="entry-content">
-		<p>head と tail を使うとき、行数指定方法について。動作確認は GNU coreutils 8.19 で行っている。</p>
-
-
-		
-		<a href="/blog/2012/09/22/head-tail/" class="more-link">Read on &rarr;</a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-09-22T19:00:00+09:00" pubdate data-updated="true">2012-09-22</time></div>
-	<div class="tags">
-
-</div>
-	
-</div></article>
-
 <nav id="pagenavi">
     
     
@@ -538,6 +527,19 @@
     }());
 </script>
 
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35021317-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
 
 
 
