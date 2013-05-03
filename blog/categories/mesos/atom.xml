@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mesos | apatheia.info]]></title>
   <link href="http://apatheia.info/blog/categories/mesos/atom.xml" rel="self"/>
   <link href="http://apatheia.info/"/>
-  <updated>2013-05-03T20:39:52+09:00</updated>
+  <updated>2013-05-03T20:45:07+09:00</updated>
   <id>http://apatheia.info/</id>
   <author>
     <name><![CDATA[f440]]></name>
@@ -18,7 +18,7 @@
     <link href="http://apatheia.info/blog/2013/05/03/create-mesos-rpm-using-fpm/"/>
     <updated>2013-05-03T17:24:00+09:00</updated>
     <id>http://apatheia.info/blog/2013/05/03/create-mesos-rpm-using-fpm</id>
-    <content type="html"><![CDATA[<p><a href="http://incubator.apache.org/mesos/">Mesos</a> をインストールするとき、各マシンでビルドはしんどいので <a href="https://github.com/jordansissel/fpm">fpm</a> でパッケージを作って配布している。その際の作業メモ。</p>
+    <content type="html"><![CDATA[<p><a href="http://incubator.apache.org/mesos/">Mesos</a> をインストールするとき各マシンでビルドはしんどいので、<a href="https://github.com/jordansissel/fpm">fpm</a> で Mesos の RPM を作ってインストールしている。ビルドからパッケージ作成までの作業ログを残しておく。</p>
 
 <!-- more -->
 

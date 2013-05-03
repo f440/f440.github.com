@@ -7,7 +7,7 @@
 	<meta name="author" content="f440">
 
 	
-	<meta name="description" content="Mesos をインストールするとき、各マシンでビルドはしんどいので fpm でパッケージを作って配布している。その際の作業メモ。 fpm は Ruby の gem や Node.js の npm などのプログラミング言語のライブラリ、あるいは直接ディレクトリから RPM やら Deb &hellip;">
+	<meta name="description" content="Mesos をインストールするとき各マシンでビルドはしんどいので、fpm で Mesos の RPM を作ってインストールしている。ビルドからパッケージ作成までの作業ログを残しておく。 fpm は Ruby の gem や Node.js の npm などのプログラミング言語のライブラリ、 &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -79,7 +79,7 @@
 	
 	<div id="content" class="inner"><article class="post">
 	<h2 class="title">Fpm で Mesos の RPM を作るまで</h2>
-	<div class="entry-content"><p><a href="http://incubator.apache.org/mesos/">Mesos</a> をインストールするとき、各マシンでビルドはしんどいので <a href="https://github.com/jordansissel/fpm">fpm</a> でパッケージを作って配布している。その際の作業メモ。</p>
+	<div class="entry-content"><p><a href="http://incubator.apache.org/mesos/">Mesos</a> をインストールするとき各マシンでビルドはしんどいので、<a href="https://github.com/jordansissel/fpm">fpm</a> で Mesos の RPM を作ってインストールしている。ビルドからパッケージ作成までの作業ログを残しておく。</p>
 
 <!-- more -->
 
@@ -186,8 +186,31 @@ rpm -qpl mesos-0.10.0-1.x86_64.rpm
 </div></article>
 
 	
+<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4f8eed8875190f92"></script>
+  <script type="text/javascript">
+    var addthis_config = {
+      data_track_clickback: false
+    }
+  </script>
+</div>
 
 
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
 </div>
 	<footer id="footer" class="inner">Copyright &copy; 2013
 
@@ -202,6 +225,22 @@ rpm -qpl mesos-0.10.0-1.x86_64.rpm
 })(jQuery);
 </script> <!-- Delete or comment this line to disable Fancybox -->
 
+
+<script type="text/javascript">
+      var disqus_shortname = 'apatheiainfo';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://apatheia.info/blog/2013/05/03/create-mesos-rpm-using-fpm/';
+        var disqus_url = 'http://apatheia.info/blog/2013/05/03/create-mesos-rpm-using-fpm/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
 
 
 
