@@ -4,7 +4,7 @@
   <title><![CDATA[apatheia.info]]></title>
   <link href="http://apatheia.info/atom.xml" rel="self"/>
   <link href="http://apatheia.info/"/>
-  <updated>2013-05-03T20:45:07+09:00</updated>
+  <updated>2013-06-17T09:51:40+09:00</updated>
   <id>http://apatheia.info/</id>
   <author>
     <name><![CDATA[f440]]></name>
@@ -12,6 +12,614 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[仮想環境構築に docker を使う]]></title>
+    <link href="http://apatheia.info/blog/2013/06/17/docker/"/>
+    <updated>2013-06-17T09:13:00+09:00</updated>
+    <id>http://apatheia.info/blog/2013/06/17/docker</id>
+    <content type="html"><![CDATA[<p>ちょっと前から <a href="http://www.docker.io/">Docker</a> を使っているので、その話。</p>
+
+<!-- more -->
+
+
+<h1>Dockr について</h1>
+
+<p><a href="http://www.docker.io/">Docker</a> は <a href="https://www.dotcloud.com/">dotcloud</a> がオープンソースで公開している、コンテナ技術による仮想化ソフトウェア。</p>
+
+<p>以下のテクノロジーベースにしている:</p>
+
+<ul>
+<li><a href="http://lxc.sourceforge.net/">LXC</a>
+
+<ul>
+<li><a href="http://apatheia.info/blog/2012/05/13/vps-lxc-xtradb-cluster/">前にも書いた</a>。Xen とか VirtualBOX みたいにホスト内に仮想マシンを立ち上げるんじゃなくて、ホスト内の隔離された環境で仮想マシンを動かす技術。物理マシンをシミュレーションしているんじゃないってことは、VPS とか EC2 とかの仮想マシン上でも問題なく動くし、マシンを起動するプロセスが不要となるので、一瞬で使い始められるというメリットにつながっている。</li>
+</ul>
+</li>
+<li><a href="http://aufs.sourceforge.net/">AUFS</a>
+
+<ul>
+<li>UnionFS(ディレクトリを重ね合わせることができる)の実装の一つ。元の仮想マシンイメージを書き換えないで、更新が発生した部分は別の場所に書き込んでいくようになっている。これにより、仮想マシンの立ち上げ時にイメージのコピーが発生しないので、すぐに使い始められる。</li>
+</ul>
+</li>
+</ul>
+
+
+<p>Docker を使う前は LXC のラッパーとして取っつきにくさを緩和してくれる、とかそういうレベルだと思ったんだけど、予想はよい方向に裏切られた。</p>
+
+<p><a href="http://docs.docker.io/en/latest/commandline/command/images/">仮想マシンのイメージを可視化したもの</a>を見ると、まるで Git のコミットログみたいに見えると思う。実際、情報は差分で管理され、履歴を残したり分岐させたりといった操作が非常に軽量にできていて、Git を操作するかのように仮想マシンを操作できるようになっている。</p>
+
+<h1>動かし方</h1>
+
+<p>Arch Linux や Debian で動かしている人がいるみたいだけど、公式サポートは今のところ Ubuntu のみ。Ubuntu 12.04 LTS を使っているのであれば、<code>curl get.docker.io | sh -x</code> で動くようになる。</p>
+
+<p>ちゃんとしたやり方は <a href="http://docs.docker.io/en/latest/installation/">ドキュメント</a>を見れば、特にはまることもないと思う。できるだけ新しい Ubuntu を使っておけばいい。</p>
+
+<p>すぐに試してみたいんなら、Vagrant 経由で簡単に使い始められる。</p>
+
+<pre><code>git clone https://github.com/dotcloud/docker.git
+cd docker
+vagrant up --provider virtualbox # or vagrant up --provider aws
+</code></pre>
+
+<h1>基礎的な操作方法</h1>
+
+<p>インストールがうまくいって Docker が起動しているものとして、早速使ってみる。</p>
+
+<pre><code>$ docker
+Usage: docker [OPTIONS] COMMAND [arg...]
+  -H="127.0.0.1:4243": Host:port to bind/connect to
+
+  A self-sufficient runtime for linux containers.
+
+  Commands:
+  attach    Attach to a running container
+  build     Build a container from a Dockerfile
+  commit    Create a new image from a container's changes
+(以下省略)
+</code></pre>
+
+<p>コマンドがずらっと表示されるかと思う。まずは単発のコマンドをコンテナ内で実行してみる。</p>
+
+<pre><code>$ docker run base /bin/echo hi
+Pulling repository base from https://index.docker.io/v1
+Pulling image b750fe79269d2ec9a3c593ef05b4332b1d1a02a62b4accb2c21d589ff2f5f2dc (latest) from base
+Pulling b750fe79269d2ec9a3c593ef05b4332b1d1a02a62b4accb2c21d589ff2f5f2dc metadata
+Pulling b750fe79269d2ec9a3c593ef05b4332b1d1a02a62b4accb2c21d589ff2f5f2dc fs layer
+Downloading 10240/? (n/a)
+Pulling 27cf784147099545 metadata
+Pulling 27cf784147099545 fs layer
+Downloading 94863360/? (n/a)
+Pulling image 27cf784147099545 () from base
+hi
+</code></pre>
+
+<p>「<code>docker</code> コマンドに run サブコマンドを指定して、<code>base</code> という仮想マシンで <code>/bin/echo hi</code> コマンドを実行する」という意味になる。仮想マシンがダウンロードされるが、これは初回実行時のみ。最後に表示された「hi」というのが今回の実行結果で、このコンテナの役割はこれで終わり。</p>
+
+<p>今度は作ったマシンの中に入ってみるために、<code>-i</code> と <code>-t</code> オプションで入出力できるようにして <code>/bin/bash</code> を起動してみる。</p>
+
+<pre><code>$ docker run -i -t base /bin/bash
+root@bc43a290f0ce:/#
+</code></pre>
+
+<p>端末から抜けるとホスト側に制御が戻る。</p>
+
+<pre><code>root@bc43a290f0ce:/# exit
+exit
+$
+</code></pre>
+
+<p>今度は <code>-d</code> オプションでコマンドを実行しっぱなしにする。</p>
+
+<pre><code>$ docker run -i -t -d base /bin/ping -i 5 www.aikatsu.net
+79365b2985c4
+$
+</code></pre>
+
+<p>ID が返されて、すぐに端末が利用可能になる。稼働中のプロセスを確認してみる。</p>
+
+<pre><code>$ docker ps
+ID                  IMAGE               COMMAND                CREATED             STATUS              PORTS
+79365b2985c4        base:latest         /bin/ping -i 5 www.a   22 seconds ago      Up 21 seconds
+</code></pre>
+
+<p>次に実行中の出力をのぞいてみよう。</p>
+
+<pre><code>$ docker logs 79365b2985c4
+PING www.aikatsu.net (60.32.7.37) 56(84) bytes of data.
+64 bytes from www3.sunrise-anime.jp (60.32.7.37): icmp_req=1 ttl=49 time=282 ms
+64 bytes from www3.sunrise-anime.jp (60.32.7.37): icmp_req=3 ttl=49 time=278 ms
+64 bytes from www3.sunrise-anime.jp (60.32.7.37): icmp_req=4 ttl=49 time=283 ms
+64 bytes from www3.sunrise-anime.jp (60.32.7.37): icmp_req=5 ttl=49 time=266 ms
+64 bytes from www3.sunrise-anime.jp (60.32.7.37): icmp_req=6 ttl=49 time=268 ms
+64 bytes from www3.sunrise-anime.jp (60.32.7.37): icmp_req=8 ttl=49 time=264 ms
+64 bytes from www3.sunrise-anime.jp (60.32.7.37): icmp_req=9 ttl=49 time=270 ms
+64 bytes from www3.sunrise-anime.jp (60.32.7.37): icmp_req=10 ttl=49 time=290 ms
+64 bytes from www3.sunrise-anime.jp (60.32.7.37): icmp_req=11 ttl=49 time=284 ms
+</code></pre>
+
+<p>順調に動き続けているようなので、このジョブにアタッチしてみる。</p>
+
+<pre><code>$ docker attach 79365b2985c4
+64 bytes from www3.sunrise-anime.jp (60.32.7.37): icmp_req=18 ttl=49 time=239 ms
+64 bytes from www3.sunrise-anime.jp (60.32.7.37): icmp_req=19 ttl=49 time=291 ms
+64 bytes from www3.sunrise-anime.jp (60.32.7.37): icmp_req=20 ttl=49 time=275 ms
+(出力が続く)
+</code></pre>
+
+<p>アタッチ中の端末は <code>Ctrl-p Ctrl-q</code> でデタッチできる。(このとき use of closed network connection っていうエラーが出る場合 Ctrl-c で抜けるしかないっぽい。バグレポートは上がっているので、じきに直ると思う。)</p>
+
+<p>最後に<code>kill</code>でこのプロセスを消してみる。</p>
+
+<pre><code>$ docker kill 79365b2985c4
+$ docker ps
+$
+</code></pre>
+
+<p><code>ps</code>からプロセスが消えた。基礎的なコンテナの操作の説明は以上。</p>
+
+<h1>詳細</h1>
+
+<h3>コンテナ</h3>
+
+<p>これまでコマンドを実行したり、<code>kill</code> されたコンテナはどうなっているのか。実は全部残っている。停止したコンテナを表示するために<code>-a</code>をつける。ついでに、情報を省略しないで表示するために<code>-notrunc</code> もつける。</p>
+
+<pre><code>$ docker ps -a -notrunc
+ID                                                                 IMAGE               COMMAND                          CREATED             STATUS              PORTS
+79365b2985c43a2a6977764f4dde2d375084020fbc04cc855508c417a36f88c2   base:latest         /bin/ping -i 5 www.aikatsu.net   14 minutes ago      Exit 0
+bc43a290f0ced4677ee7eb1a0d662cca496cc720d8db20e746dda45e4659f503   base:latest         /bin/bash                        16 minutes ago      Exit 0
+7a666192cca72cea81cade398b22700c982fbb9271a7eca23ff51c6c504d5971   base:latest         /bin/echo hi                     16 minutes ago      Exit 0
+8b0af4fc390d762c33dadc1b149516ba95bdb70d093e991ec2df563817f55ffb   base:latest         /bin/bash                        21 minutes ago      Exit 0
+4637bc6341706c25e066c5ccfe92e10c923bfe4955a9e8b3ce07237fda0fb34a   base:latest         /bin/echo hi                     21 minutes ago      Exit 0
+</code></pre>
+
+<p>正常終了しているので、すべて<code>Exit 0</code>になっている。また、ID は省略表記されていたこともわかる。コンテナの実体は <code>/var/lib/docker/containers/&lt;ID&gt;</code> 以下に格納されている。</p>
+
+<pre><code>$ sudo ls /var/lib/docker/containers/
+4637bc6341706c25e066c5ccfe92e10c923bfe4955a9e8b3ce07237fda0fb34a
+79365b2985c43a2a6977764f4dde2d375084020fbc04cc855508c417a36f88c2
+7a666192cca72cea81cade398b22700c982fbb9271a7eca23ff51c6c504d5971
+8b0af4fc390d762c33dadc1b149516ba95bdb70d093e991ec2df563817f55ffb
+bc43a290f0ced4677ee7eb1a0d662cca496cc720d8db20e746dda45e4659f503
+</code></pre>
+
+<p>どんどんたまっていくから心配かもしれないけど、各コンテナはベースイメージからの差分しかもたないので、問題にならない。もし、消したくなったら <code>docker rm &lt;コンテナのID&gt;</code> で消せる。</p>
+
+<p>作業領域であったコンテナを <code>commit</code> するとイメージとして使い回せるようになる。<code>ユーザー名/名称</code>にするのが作法っぽい。</p>
+
+<pre><code>$ docker commit -m "My first container" 4637bc634170 f440/first_container
+02036952e5dc
+$ docker images
+REPOSITORY             TAG                 ID                  CREATED
+base                   latest              b750fe79269d        12 weeks ago
+base                   ubuntu-quantl       b750fe79269d        12 weeks ago
+base                   ubuntu-quantal      b750fe79269d        12 weeks ago
+base                   ubuntu-12.10        b750fe79269d        12 weeks ago
+f440/first_container   latest              02036952e5dc        3 seconds ago
+</code></pre>
+
+<p>これで今後は <code>docker run f440/first_container</code> をベースにしたコンテナを作れるようになる。</p>
+
+<h3>イメージ</h3>
+
+<p>もう一回イメージの一覧を内容を確認してみよう。</p>
+
+<pre><code>$ docker images
+REPOSITORY             TAG                 ID                  CREATED
+f440/first-container   latest              141fef9a2f57        14 seconds ago
+base                   latest              b750fe79269d        12 weeks ago
+base                   ubuntu-12.10        b750fe79269d        12 weeks ago
+base                   ubuntu-quantl       b750fe79269d        12 weeks ago
+base                   ubuntu-quantal      b750fe79269d        12 weeks ago
+</code></pre>
+
+<p>base イメージは latest, ubuntu-quantl, ubuntu-quantal, ubuntu-12.10 といった複数のタグがついていることがわかる。イメージは複数の名称をタグ付けできるようになっており、<code>base:latest</code>, <code>base:ubuntu-12.10</code> といった形で異なるイメージを呼び出せるようになっている。省略時は <code>base:latest</code> と同じ。</p>
+
+<p>pull してくるイメージは <a href="https://index.docker.io/">https://index.docker.io/</a> から情報を持ってくる。コマンドラインで検索したい場合は <code>search</code> コマンドを利用する。</p>
+
+<pre><code>$ docker search centos
+Found 4 results matching your query ("centos")
+NAME                          DESCRIPTION
+centos
+backjlack/centos-6.4-x86_64
+creack/centos
+mbkan/lamp                    centos with ssh, LAMP, PHPMyAdmin(root pas...
+</code></pre>
+
+<p>ローカルにキャッシュされたイメージを消すには <code>docker rmi &lt;イメージのID&gt;</code>でいい。</p>
+
+<p>自前で作ったイメージを <a href="https://index.docker.io/">https://index.docker.io/</a>  に登録するには、あらかじめサイト上でアカウントを作っておき、 <code>docker login</code> した後に <code>docker push</code> する。イメージ名にアンダーバー使っていると <code>push</code> で失敗するのと、アップロードしたイメージを消す機能がまだなかったりするので注意。</p>
+
+<p>イメージの実体は <code>/var/lib/docker/graph/</code> にある。</p>
+
+<pre><code>$ docker images -a -notrunc
+REPOSITORY          TAG                 ID                                                                 CREATED
+base                latest              b750fe79269d2ec9a3c593ef05b4332b1d1a02a62b4accb2c21d589ff2f5f2dc   12 weeks ago
+base                ubuntu-12.10        b750fe79269d2ec9a3c593ef05b4332b1d1a02a62b4accb2c21d589ff2f5f2dc   12 weeks ago
+base                ubuntu-quantl       b750fe79269d2ec9a3c593ef05b4332b1d1a02a62b4accb2c21d589ff2f5f2dc   12 weeks ago
+base                ubuntu-quantal      b750fe79269d2ec9a3c593ef05b4332b1d1a02a62b4accb2c21d589ff2f5f2dc   12 weeks ago
+&lt;none&gt;              &lt;none&gt;              27cf784147099545                                                   12 weeks ago
+
+$ sudo ls -1 /var/lib/docker/graph
+141fef9a2f57e86dd6d9aa58fe9318b0d9d71d91053079842051d9738bad6e45
+27cf784147099545
+b750fe79269d2ec9a3c593ef05b4332b1d1a02a62b4accb2c21d589ff2f5f2dc
+checksums
+:tmp:
+</code></pre>
+
+<p>ここで images に ID: 27cf784147099545 というのが現れた。これは何か。<code>inspect</code> を使うとイメージの詳細を表示できる。</p>
+
+<pre><code>$ docker inspect base
+{
+    "id": "b750fe79269d2ec9a3c593ef05b4332b1d1a02a62b4accb2c21d589ff2f5f2dc",
+    "parent": "27cf784147099545",
+    "created": "2013-03-23T22:24:18.818426-07:00",
+    "container": "3d67245a8d72ecf13f33dffac9f79dcdf70f75acb84d308770391510e0c23ad0",
+    "container_config": {
+        "Hostname": "",
+        "User": "",
+        "Memory": 0,
+        "MemorySwap": 0,
+        "CpuShares": 0,
+        "AttachStdin": false,
+        "AttachStdout": false,
+        "AttachStderr": false,
+        "PortSpecs": null,
+        "Tty": true,
+        "OpenStdin": true,
+        "StdinOnce": false,
+        "Env": null,
+        "Cmd": [
+            "/bin/bash"
+        ],
+        "Dns": null,
+        "Image": "base",
+        "Volumes": null,
+        "VolumesFrom": ""
+    }
+}
+</code></pre>
+
+<p>ID: 27cf784147099545 は base イメージの親イメージの ID であることがわかる。イメージは差分になっているので、親のイメージが必要ということで初回実行のタイミングで base と一緒に 27cf784147099545 もダウンロードされていたのだった。</p>
+
+<h3>ネットワーク</h3>
+
+<p><code>docker run</code> 時に <code>-p</code> をつけることで、コンテナから外部にさらすポートを決められる。コンテナ側のポートはホスト側のポートに変換される際、ポート番号が変更される(49153以降になる)ので、<code>docker port &lt;ジョブのID&gt; &lt;ポート番号&gt;</code> あるいは <code>docker ps</code> でポートの対応状況を確認する必要がある。</p>
+
+<p>ドキュメントの <a href="https://github.com/dotcloud/docker#expose-a-service-on-a-tcp-port">Expose a service on a TCP port</a> がわかりやすい。</p>
+
+<pre><code># 以下、コメントは書き換えてある
+# また、途中経過がわかりやすいように set -x しておく
+set -x
+
+# 4444 を晒すよう -p オプションをつけて docker run しつつ、
+# コンテナは netcat で4444を待ち受ける
+JOB=$(docker run -d -p 4444 base /bin/nc -l -p 4444)
+++ docker run -d -p 4444 base /bin/nc -l -p 4444
++ JOB=c86c892574f7
+
+# 4444 がローカルのどのポートに対応するのか確認
+# docker ps でも調べることはできる
+PORT=$(docker port $JOB 4444)
+++ docker port c86c892574f7 4444
++ PORT=49166
+
+# ルーティングによっては localhost とか 127.0.0.1 だと
+# うまくいかないことがあるので、eth0 のIPアドレスを使おう、
+# ってことらしい
+IP=$(ifconfig eth0 | perl -n -e 'if (m/inet addr:([\d\.]+)/g) { print $1 }')
+++ perl -n -e 'if (m/inet addr:([\d\.]+)/g) { print $1 }'
+++ ifconfig eth0
++ IP=10.156.137.111
+echo hello world | nc $IP $PORT
++ nc 10.156.137.111 49166
++ echo hello world
+
+# コンテナが受信したメッセージを logs で表示
+echo "Daemon received: $(docker logs $JOB)"
+++ docker logs c86c892574f7
++ echo 'Daemon received: hello world'
+Daemon received: hello world
+</code></pre>
+
+<h3>Dockerfile</h3>
+
+<p>DSLで書かれた設定(通常ファイル名は<code>Dockerfile</code>とする)をあらかじめ用意することで、手順に従ってイメージを作ることができる。</p>
+
+<pre><code>読み込ませ方 (1)
+docker build &lt;Dockerfileのあるディレクトリ&gt;
+# ex. docker build .
+
+読み込ませ方 (2)
+docker build -
+# ex. docker build - &lt; /foo/bar/Dockerfile
+</code></pre>
+
+<p>Dockerfile の例</p>
+
+<pre><code>FROM base
+RUN /bin/echo hi
+</code></pre>
+
+<p>これで、<code>docker build</code> すれば <code>docker run base /bin/echo hi</code> と同じ効果が得られる。</p>
+
+<p>指定できるはコマンドは以下の通り。大文字小文字は区別しないけど、引数と見分けやすいように大文字が使われる。</p>
+
+<ul>
+<li><code>FROM &lt;image&gt;</code> ベースとなるイメージを指定</li>
+<li><code>MAINTAINER &lt;name&gt;</code> メンテナの名前を指定</li>
+<li><code>RUN &lt;command&gt;</code> ビルド中に実行したいコマンドを指定</li>
+<li><code>CMD &lt;command&gt;</code> 起動後のコンテナで実行したいコマンドを指定</li>
+<li><code>EXPOSE &lt;port&gt; [&lt;port&gt; ...]</code> 外部に晒すポートの指定</li>
+<li><code>ENV &lt;key&gt; &lt;value&gt;</code> 環境変数の設定</li>
+<li><code>INSERT &lt;file url&gt; &lt;path&gt;</code> deprecated なので ADD を利用すること</li>
+<li><code>ADD &lt;src&gt; &lt;dest&gt;</code> ファイルを配置</li>
+</ul>
+
+
+<p><code>RUN</code> と <code>CMD</code> の違いがわかりにくいかもしれない。例を出す。</p>
+
+<pre><code># RUN, CMD で指定したコマンドが実行されたとき、
+# 標準出力と /tmp/*.log に記録を残す
+
+$ cat &lt;&lt;SCRIPT &gt;Dockerfile
+&gt; FROM base
+&gt; RUN /bin/echo run | tee /tmp/run.log
+&gt; CMD /bin/echo cmd | tee /tmp/cmd.log
+&gt; SCRIPT
+
+# ビルドの実行
+
+$ docker build .
+Caching Context 10240/? (n/a)
+FROM base ()
+===&gt; b750fe79269d2ec9a3c593ef05b4332b1d1a02a62b4accb2c21d589ff2f5f2dc
+RUN /bin/echo run | tee /tmp/run.log (b750fe79269d2ec9a3c593ef05b4332b1d1a02a62b4accb2c21d589ff2f5f2dc)
+===&gt; d10b6bd1321d45b0228b5741c01d1f76fd0288052e56836609f9bdf217854f3d
+CMD /bin/echo cmd | tee /tmp/cmd.log (d10b6bd1321d45b0228b5741c01d1f76fd0288052e56836609f9bdf217854f3d)
+===&gt; 60671e9969185841032fb02f623917672c4f871a6be68e5aa575e8fdf1f94229
+Build successful.
+===&gt; 60671e9969185841032fb02f623917672c4f871a6be68e5aa575e8fdf1f94229
+
+# run, cmd の実行結果を確認
+# =&gt; run だけが実行されている
+
+$ docker run 60671e99691 /bin/ls /tmp/
+run.log
+
+# イメージを inspect する
+# =&gt; どうやらコンテナは記憶していることがわかる
+
+$ docker inspect 60671e99691
+{
+    "id": "60671e9969185841032fb02f623917672c4f871a6be68e5aa575e8fdf1f94229",
+    "parent": "d10b6bd1321d45b0228b5741c01d1f76fd0288052e56836609f9bdf217854f3d",
+    "created": "2013-06-16T16:29:14.602237Z",
+    "container": "4c54683cec90500f329dfaad2e0856cc408483be0ae3166018121d4d4b9b3282",
+    "container_config": {
+        "Hostname": "78c72f8ba6ad",
+        "User": "",
+        "Memory": 0,
+        "MemorySwap": 0,
+        "CpuShares": 0,
+        "AttachStdin": false,
+        "AttachStdout": false,
+        "AttachStderr": false,
+        "PortSpecs": null,
+        "Tty": false,
+        "OpenStdin": false,
+        "StdinOnce": false,
+        "Env": null,
+        "Cmd": [
+            "/bin/sh",
+            "-c",
+            "#(nop) CMD [/bin/sh -c /bin/echo cmd | tee /tmp/cmd.log]"
+        ],
+        "Dns": null,
+        "Image": "d10b6bd1321d45b0228b5741c01d1f76fd0288052e56836609f9bdf217854f3d",
+        "Volumes": null,
+
+# 引数でコマンドを指定せずに run を実行
+# =&gt; cmd で登録した内容が実行される
+
+$ docker run 60671e99691
+cmd
+</code></pre>
+
+<p>つまり、<code>RUN</code> は <code>Dockerfile</code> を元にビルドしているときに参照され、<code>CMD</code> はコンテナを実行する際に参照されるということがわかる。パッケージをインストールしたりといった用途では通常 <code>RUN</code> を使う。</p>
+
+<h1>まとめ</h1>
+
+<p>仮想環境の発達で、プログラマブルなインフラストラクチャーは実現できてきているけど、マシンを上げたり下げたりするのにどうしても時間がかかるし、それは仕方が無いものと我慢していた。<code>Docker</code> を使ってみると、今までのそういった不満から解放されることができそう。一応開発中というステータスなのでプロダクション環境では使いづらいけど、開発やテスト、とくに構成管理ツールを設定するときなどは、この俊敏性、柔軟性は有効になると思う。</p>
+
+<h1>参考</h1>
+
+<ul>
+<li><a href="http://docs.docker.io/en/latest/">Documentation</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[yum のパッケージキャッシュについて]]></title>
+    <link href="http://apatheia.info/blog/2013/05/16/yum-cache/"/>
+    <updated>2013-05-16T01:26:00+09:00</updated>
+    <id>http://apatheia.info/blog/2013/05/16/yum-cache</id>
+    <content type="html"><![CDATA[<p><code>/etc/yum.conf</code>で<code>keepcache=1</code>にしておくと、インストールしたパッケージがキャッシュされるようになる。これが無効化された状態だと、パッケージアップグレード時に問題が起きても元に戻せなくなるので有効化しておいた方がいい。</p>
+
+<!-- more -->
+
+
+<p>あるパッケージについて、どのバージョンが利用可能な状態かは以下で確認できる。</p>
+
+<pre><code>$ sudo yum --showduplicates list パッケージ名
+</code></pre>
+
+<p>RHEL なら過去のバージョンまですべて手に入るけど、CentOS だとOSリリース時のバージョンと最新版しか手に入らない模様。リポジトリ上なりキャッシュなりで過去のバージョンが手に入るのであれば、<code>yum install</code> や <code>yum update</code> は以下の手順でロールバックが行える。</p>
+
+<pre><code># yum の利用履歴を確認
+$ sudo yum history
+
+# 履歴から詳細を確認
+# 未引数なら直近、引数ありなら該当する ID を表示
+$ sudo yum history info 4
+
+# 仮に ID 4 で問題のバージョンアップが行われたようだということが確認できたら、その ID を指定して操作をアンドゥ
+$ sudo yum history undo 4
+</code></pre>
+
+<p>アンドゥ(リドゥもある)では、対象パッケージおよび依存パッケージがまとめて一度に入れ替えられる。これはパッケージの操作がちゃんとトランザクションになっているため。</p>
+
+<p>話がそれるけど、パッケージの操作にトランザクションがかかるというのはかなり重要だ。たとえば syslog-ng から rsyslog に入れ替えるとき、単純にアンインストール、インストールの順番でやろうとするとアンインストールのタイミングで大量の Syslog 依存なパッケージが道連れになるけど、以下のようにすればひとつのトランザクションでパッケージを入れ替えることができる。(情報源: <a href="http://wiki.rsyslog.com/index.php/Install_rsyslog_with_yum">Rsyslog Wiki</a>)</p>
+
+<pre><code>$ sudo yum shell
+&gt; remove syslog-ng
+&gt; install rsyslog
+&gt; run
+</code></pre>
+
+<p>話がそれたついでにふれておくと、vagrant を使っているのであれば <a href="https://github.com/fgrehm/vagrant-cachier">vagrant-cachier</a> を使うとパッケージのキャッシュ保存先を仮想マシン外の領域(ホストOSとの共有ディスク部分など)に変更してくれる。こうすることで、仮想マシンを破棄してもパッケージのキャッシュが永続化されるため、2回目以降はダウンロードがスキップされて高速化する。</p>
+
+<p>話を戻すと、世の中何が起きるかわからないので古いパッケージもとっておいたほうがいいかと。ディスク容量が気になりだしたら、<code>yum clean packages</code> を実行すればキャッシュは消せる。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[omnibus を使って オムニバスインストーラーを作成する]]></title>
+    <link href="http://apatheia.info/blog/2013/05/07/create-ominibus-installer/"/>
+    <updated>2013-05-07T01:41:00+09:00</updated>
+    <id>http://apatheia.info/blog/2013/05/07/create-ominibus-installer</id>
+    <content type="html"><![CDATA[<p>Chef のインストールは結構面倒くさかったんだけど、<a href="http://www.opscode.com/chef/install/">オムニバスインストーラー</a>が出たことで状況はがらっと変わって、簡単に導入できるようになった。このオムニバスインストーラーの仕組みは汎用的に作られているので、他のツールでも適用できるという話。</p>
+
+<!-- more -->
+
+
+<h2>オムニバスインストーラーについて</h2>
+
+<p>Chef のオムニバスインストーラーを実行すると以下のようなディレクトリ構成でファイルが置かれる:</p>
+
+<ul>
+<li>/opt/chef/bin/ &#8230; Chef 関連のスクリプト</li>
+<li>/opt/chef/embedded/ &#8230; ruby インタプリタ、Chef とその他依存パッケージ</li>
+<li>(/usr/bin/ &#8230; /opt/chef/bin/ 以下のものがシンボリックリンクが配置される)</li>
+</ul>
+
+
+<p>以上の通り、<code>/opt/chef</code> の中に動作に必要なものがごっそり置かれる。アプリケーションレベルでプログラミングの処理系を持っちゃうというのはこれに限らずよく見る光景で、理由としてはパッケージ提供されていない最新版が使いたかったり、バージョンアップやライブラリインストールの影響範囲を限定させたかったりだと思う。</p>
+
+<p>ここしばらくは手軽なパッケージ作成ツールとして<a href="https://github.com/jordansissel/fpm">fpm</a>がよく使われているけど、オムニバスインストーラーは<a href="https://github.com/opscode/omnibus-ruby">omnibus</a>という「ビルドツール」＋「fpm ラッパー」といった感じのもので作られている。以下は実際に <a href="https://github.com/opscode/omnibus-ruby">omnibus</a> を使ったインストーラー作成の手順についてまとめる。</p>
+
+<h2>パッケージ作成</h2>
+
+<p><a href="https://github.com/etsy/statsd">statsd</a> および <a href="https://github.com/etsy/statsd">statsd</a> を動かすために必要な Node.js を /opt/statsd にインストールする RPM, Deb パッケージの作成を行ってみる。</p>
+
+<h3>環境</h3>
+
+<ul>
+<li>Macbook Air Mountain Lion</li>
+<li>Ruby 2.0.0-p0</li>
+<li>Vagrant 1.2.2</li>
+</ul>
+
+
+<h3>手順</h3>
+
+<pre><code># omnibus のインストール
+gem install omnibus
+
+# 必要となる vagrant 用の plugin をインストール
+vagrant plugin install vagrant-omnibus
+vagrant plugin install vagrant-berkshelf
+
+# プロジェクトディレクトリの作成(ディレクトリ名は `omnibus-プロジェクト` となる)
+omnibus project statsd
+cd omnibus-statsd
+
+# プロジェクトディレクトリ内のファイルを適宜修正:
+    Berksfile
+      Berkshelf 用の設定。変更する必要無い。
+    Vagrantfile
+      Vagrant 用の設定。2013-06-07 現在だと CentOS 5, 6 Ubuntu 10.04, 11.04, 12.04 の設定が導入済み。
+    README.md
+    omnibus.rb.example
+      成果物を S3 上にキャッシュする場合などに利用。使わないなら気にしなくていい。
+    config/projects/statsd.rb
+      後述
+    config/software/*
+      後述
+    package-scripts/statsd/*
+      インストール時、アンインストール時などに実行したいスクリプトなど。
+</code></pre>
+
+<p>この中で、実際のビルドプロセスを定義するのは、config/projects/ 以下と config/software 以下になる。</p>
+
+<p><code>config/projects/</code> はプロジェクトの設定を格納するディレクトリで、初期状態では statsd 用のプロジェクトファイル <code>config/projects/statsd.rb</code> が作られている。このファイルを修正していくことになる。</p>
+
+<pre><code>name "statsd"
+maintainer "f440"
+homepage "https://github.com/f440/omnibus-statsd"
+
+install_path    "/opt/statsd"
+build_version   "0.6.0"
+build_iteration 1
+
+dependency "preparation"
+dependency "node"
+dependency "statsd"
+
+exclude "\.git*"
+</code></pre>
+
+<p>おおむね想像がつく名前だけど、dependency だけはよく分からないと思う。dependency で指定したものはプロジェクトを構成する software という扱いで、<code>config/software/</code> 以下でその設定を行っていく。</p>
+
+<p>software の例を示す。典型的な例だと、指定した URL からダウンロードしてきたものを一時ディレクトリで展開して、<code>configure &amp;&amp; make &amp;&amp; make install</code> を実行、などだが今回の作業では Node.js のバイナリを展開して <code>/opt/embedded</code> 以下にコピーしているだけである。</p>
+
+<pre><code>name "node"
+version "0.10.5"
+
+source :url =&gt; "http://nodejs.org/dist/v0.10.5/node-v0.10.5-linux-x64.tar.gz",
+       :md5 =&gt; "fb65723d395c559393201dd41e0eb275"
+
+relative_path "node-v0.10.5-linux-x64"
+
+build do
+  command "rsync -av . #{install_dir}/embedded/"
+end
+</code></pre>
+
+<p>必要となる software の設定を全部そろえたらビルドを実行する。マシンの起動、Chef のインストール、omnibus の Cookbook 実行、ビルド環境構築、ビルド実行、パッケージ作成 といったことが行われることになるため、初回はかなり待つことになる。</p>
+
+<pre><code>vagrant up
+(vagrant up centos-6 など、直接マシンを指定してもいい)
+(もし Linux 上で作業しているのであれば、omnibus build project statsd で直接パッケージ作成を開始出来る)
+</code></pre>
+
+<p>問題なければ、pkg/ 以下に statsd-0.6.0-1.el6.x86_64.rpm, statsd_0.6.0-1.ubuntu.12.04_amd64.deb といったファイルが出来る。</p>
+
+<h2>まとめ</h2>
+
+<p>やっていることは <a href="https://github.com/jordansissel/fpm">fpm</a> でパッケージを作っているだけなんだけど、<a href="http://www.vagrantup.com/">Vagrant</a> x <a href="http://berkshelf.com/">Berkshelf</a> x <a href="http://www.opscode.com/chef/">Chef</a> のコンビネーションのおかげで、パッケージとそのパッケージを作るための環境が簡単に手に入るのはとてもいい。複数環境のパッケージを作る予定がなくっても、最初から<a href="https://github.com/opscode/omnibus-ruby">omnibus</a>上でパッケージを作れるようにしておくと運用が楽そう。</p>
+
+<h2>備考</h2>
+
+<p>似たようなツールとして、<a href="https://github.com/joemiller/bunchr">bunchr</a> が存在する。</p>
+
+<h2>参考</h2>
+
+<ul>
+<li><a href="https://github.com/etsy/statsd">Statsd</a></li>
+<li><a href="http://www.opscode.com/chef/install/">Install Chef</a></li>
+<li><a href="https://github.com/opscode/omnibus-ruby">omnibus</a></li>
+<li><a href="https://github.com/joemiller/bunchr">bunchr</a></li>
+<li><a href="https://github.com/jordansissel/fpm">fpm</a></li>
+<li><a href="http://www.vagrantup.com/">Vagrant</a></li>
+<li><a href="http://berkshelf.com/">Berkshelf</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[fpm で Mesos の RPM を作るまで]]></title>
@@ -2157,569 +2765,6 @@ OS名」とかで検索してみる。</p>
 <li><a href="http://www.percona.com/doc/percona-xtradb-cluster/index.html">http://www.percona.com/doc/percona-xtradb-cluster/index.html</a></li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[rundeckをセットアップして、jenkins上のjava成果物をデプロイする]]></title>
-    <link href="http://apatheia.info/blog/2012/01/03/rundeck-jenkins-java/"/>
-    <updated>2012-01-03T00:00:00+09:00</updated>
-    <id>http://apatheia.info/blog/2012/01/03/rundeck-jenkins-java</id>
-    <content type="html"><![CDATA[<p>rundeck でjenkins上の成果物をデプロイしよう、という話。</p>
-
-<!-- more -->
-
-
-<h2>rundeck について</h2>
-
-<p><a href="http://rundeck.org/">公式サイト</a></p>
-
-<p>ITオペレーションのコンサルやってる<a href="http://www.dtosolutions.com/">DTO Solution</a>（Depops関連の資料とかでよ
-く会社名は見かけますね）が作っているデプロイ用のツール。元々は<a href="http://doc36.controltier.org/wiki%0A/Main_Page">ControlTier</a>っていう管理ツールがあって、そこから分家した。ControlTierはサーバー/クライアントモデルだけど、サーバー側しか用意しなくてい
-いRundeckのほうがお手軽度高い。</p>
-
-<p>複数のサーバーを対象に状態を変更するのが目的で、<a href="https://github.com/capistrano/capistrano">capistrano</a>
-とか <a href="http://docs.fabfile.org">fabric</a>
-とかと同じジャンル。GUIで操作するのが特徴なので、<a href="https://github.com/peritor/webistrano">webistrano</a>
-とかに近い。</p>
-
-<p>GUI（笑）みたいに思うかもしれないけど、画面上から履歴が確認できたり、ブラウザがあればどこからでもデプロイ出来るのって、運用の敷居下げるのに貢献してくれる
-と思う。</p>
-
-<h2>rundeck 設定</h2>
-
-<h3>インストール</h3>
-
-<p>とりあえずインストールしてみる。以降の説明は、rundeck インストールサーバー、デプロイ対象サーバーともに CentOS 5 の場合。</p>
-
-<p><a href="http://rundeck.org/docs/RunDeck-Guide.html#installing-rundeck">http://rundeck.org/docs/RunDeck-Guide.html#installing-
-rundeck</a> , <a href="http://kb.dtosolutions.com/wik%0Ai/Rundeck_on_CentOS">htt
-p://kb.dtosolutions.com/wiki/Rundeck_on_CentOS</a> 参照。CentOSならyumで簡単にインストールできる。</p>
-
-<pre><code>$ sudo rpm -Uvh [http://repo.rundeck.org/latest.rpm](http://repo.rundeck.org/latest.rpm)
-$ sudo yum install rundeck
-</code></pre>
-
-<p>まずはインストールされたファイルを確認してみよう。</p>
-
-<pre><code>$ rpm -ql rundeck
-$ rpm -ql rundeck-config
-</code></pre>
-
-<p>以下のようなことがわかる。</p>
-
-<ul>
-<li>設定系のファイル /etc/rundeck は本体と別の RPM (rundeck-config) に入っている</li>
-<li>/var/lib/rundeck 以下にシステム関係のデータがおかれて、/var/rundeck 以下にユーザーが作成したデータをおくっぽい
-
-<ul>
-<li>僕は試してないけど、保存先はDBも使えるみたい。http://rundeck.org/docs/RunDeck-Guide.html#relational-database</li>
-</ul>
-</li>
-</ul>
-
-
-<h3>起動</h3>
-
-<p>さっそく起動してみる。</p>
-
-<pre><code>$ sudo /sbin/service rundeckd start
-</code></pre>
-
-<p>既定のポートは 4440 なので http://RUNDECK_HOST:4440/ にアクセスしてみる。</p>
-
-<p><img src="http://apatheia.info/images/2012-01-03-rundeckjenkinsjava/tumblr_lx82ozkABF1qz5yk8.png" alt="ログイン画面" /></p>
-
-<p>アクセスできなければ、ちゃんと起動出来てるかどうかとか、iptables が邪魔していないかとか確認。この時点ではまだログイン出来ない。</p>
-
-<p>ログインできるようにするために、ユーザーを作る。[公式サイトの説明](http://rundeck.org/docs/RunDeck-Guide.html</p>
-
-<h1>managing-logins)</h1>
-
-<p>パスワードのハッシュ化はmd5sumコマンドとかでもいいけど、手順に沿って付属のライブラリ使ってみる。RPMでインストールすると、説明文中の$RUNDECK
-_BASE相当がないので、読み替えて以下のように実行</p>
-
-<pre><code>$ cd /var/lib/rundeck/
-$ java -cp exp/webapp/WEB-INF/lib/jetty-6.1.21.jar:exp/webapp/WEB-INF/lib/jetty-util-6.1.21.jar org.mortbay.jetty.security.Password f440 secret_password
-OBF:1vny1vn61unn1z7e1vu91ytc1r3x1xfj1r411yta1vv11z7o1uob1vnw1vn4
-MD5:be6cb1069f01cd207e6484538367bd1d
-CRYPT:f4Ou7EnVsEzMg
-</code></pre>
-
-<p>ユーザー一覧に追加</p>
-
-<pre><code>$ sudo vim /etc/rundeck/realm.properties
-// 末尾に以下を追加
-f440: MD5:be6cb1069f01cd207e6484538367bd1d,admin,user
-</code></pre>
-
-<p>これで利用可能になった。ユーザー情報を読み込むために、サービス再起動 （今後もユーザー設定の変更ごとに再起動させる）</p>
-
-<pre><code>$ sudo /sbin/service rundeckd restart
-</code></pre>
-
-<p>アクセス出来るようになったはず。ログインしてみる。</p>
-
-<p><img src="http://apatheia.info/images/2012-01-03-rundeckjenkinsjava/tumblr_lx838slUR51qz5yk8.png" alt="ログイン直後" /></p>
-
-<p>やりましたね。</p>
-
-<p>プロジェクトの名前はお好きに。SSHのキーについては、RPMインストール時に作られるrundeckユーザーのキーが<code>/home/rundeck/.ssh/r
-undeck.id_rsa</code>なので、ここにしておくと手間が少なくて済む。他の値については、今回はデフォルトで。</p>
-
-<p>この後説明するホストやジョブはプロジェクト単位で管理していくことになる。</p>
-
-<p><img src="http://apatheia.info/images/2012-01-03-rundeckjenkinsjava/tumblr_lx840qzSI71qz5yk8.png" alt="Run" /></p>
-
-<p>左上のメニューに注目</p>
-
-<ul>
-<li>Run … 一回こっきりのコマンド。非定型な処理（緊急でアプリケーションサーバー順々に再起動かけたいとか）はここから実行できる。capistrano の <code>cap shell</code> みたいなイメージ</li>
-<li>Job … 複数のコマンドや条件を保存はここに登録。</li>
-<li>Histoly … 実行履歴が確認出来る。</li>
-</ul>
-
-
-<p>最初は localhost だけがホストに登録されているから、Run を選択後、真ん中の入力フォームからコマンドを実行してみる。</p>
-
-<p><img src="http://apatheia.info/images/2012-01-03-rundeckjenkinsjava/tumblr_lx84c0tw7g1qz5yk8.png" alt="exec_uname" /></p>
-
-<p>実行できた。</p>
-
-<h3>ホスト追加</h3>
-
-<p>ローカルホストにばかりいじっていても不毛なので、ホストを追加していく。ユーザー同様ホストについても設定ファイルを編集する必要がある。</p>
-
-<p>rundeck をインストールしたサーバーで公開鍵をメモ</p>
-
-<pre><code>rundeck$ sudo su - rundeck
-rundeck$ cat .ssh/rundeck.id_rsa.pub # 出力結果をメモ
-</code></pre>
-
-<p>各ホストに作業用ユーザー「deploy」を追加する - パスワード不要でsudo可能。 - パスワードは設定しない - SSH
-の鍵認証でパスフレーズ無しにログイン可能</p>
-
-<pre><code>以下、デプロイ対象サーバー(仮に192.168.10.10とする)
-192.168.10.10$ sudo /sbin/useradd deploy
-192.168.10.10$ sudo /usr/sbin/visudo
-
-  // tty が使えないとSSH経由のコマンドに問題が起きるので、無効化する
-  Defaults:deploy    !requiretty
-  deploy  ALL=(ALL)       NOPASSWD: ALL
-
-192.168.10.10$ mkdir -m 700 /home/deploy/.ssh
-192.168.10.10$ sudo vim /home/deploy/.ssh/authorized_keys # rundeck の公開鍵を登録
-192.168.10.10$ sudo chown -R deploy.deploy /home/deploy/.ssh
-</code></pre>
-
-<p>いったん rundeck 側からログインしてみる。</p>
-
-<pre><code> ここからはまた rundeck をインストールしたサーバーの話
-$ sudo su - rundeck
-$ touch .ssh/config
-$ chmod 600 .ssh/config
-$ vim .ssh/config
-    このあともがしがしサーバー追加していくので、LAN内のマシンについては指紋チェック無効化しておく
-    Host 192.168.*.*
-        StrictHostKeyChecking no
-$ ssh -i ~/.ssh/rundeck.id_rsa deploy@192.168.10.10
-</code></pre>
-
-<p>次に設定ファイル編集</p>
-
-<pre><code>$ sudo vim /var/rundeck/projects/example/etc/resources.xml
-
-以下のような行を追加。name, hostname, username 辺りは重要だけど、それ以外は適当に指定。絞り込みの時に使えるので、tags あたりはしっかり入力しておいたほうがいい。
-&lt;node name="target1" description="適当" tags="適当" hostname="192.168.10.10" osArch="適当" osFamily="適当" osName="適当" osVersion="適当" username="deploy" /&gt;
-</code></pre>
-
-<p>これで再起動させればrundeck側からホストが操作できるようになっているはず。target1(192.168.115.60),
-target2(192.168.115.61)を追加して画面から確認してみる。</p>
-
-<p><img src="http://apatheia.info/images/2012-01-03-rundeckjenkinsjava/tumblr_lx96zd197m1qz5yk8.png" alt="フィルタ変更" /></p>
-
-<p>フィルタの変更でとりあえず全部外して、全台表示にする。</p>
-
-<p><img src="http://apatheia.info/images/2012-01-03-rundeckjenkinsjava/tumblr_lx96zqf2uJ1qz5yk8.png" alt="フィルタ変更後" /></p>
-
-<p>確認できた。ここでコマンドを打てば全台に適用される。</p>
-
-<h3>ジョブ追加</h3>
-
-<p>サーバーがセットアップ出来たので、ジョブを追加していく。メニューから<code>Jobs</code>を選択して、<code>New job</code>
-をクリックすればいい。全部画面に書いてあるけど、一応説明すると:</p>
-
-<ul>
-<li>Saved this job? ジョブを保存するかどうか
-
-<ul>
-<li>Job Name … 名前</li>
-<li>Group … グループ。スラッシュ区切りで入力しておくと、階層構造で表示してくれる</li>
-<li>Description … 説明</li>
-<li>UUID … UUID （これとは別に、ジョブを作ると勝手にID割り振られる）</li>
-</ul>
-</li>
-<li>Project どのプロジェクトを対象とするか</li>
-<li>Workflow
-
-<ul>
-<li>Keepgoing エラーで止まるかそのまま進むか</li>
-<li>Strategy ノードが3台、ステップが2個あったとして、node1-step1, node1-step2, node1-step3, node2-step1 … とすすむのがNode-oriented、Node-oriented、node1-step1, node2-step1, node3-step1 と進んでいくのが Step-oriented</li>
-</ul>
-</li>
-<li>Step 実行するステップを指定。各行の右端にマウスをあわせると（入れ替えたり編集、削除したりできる）
-
-<ul>
-<li>Command … コマンドの実行（Runでやったのと同じ）</li>
-<li>Script … 複数行のスクリプトの実行</li>
-<li>Script file … サーバー上にあるスクリプトファイルの実行</li>
-<li>Job Reference … 他のジョブを実行</li>
-</ul>
-</li>
-<li>Dispatch to Nodes … これを選択しないと、ローカルホストだけで実行される。選択すると実行対象の絞り込み画面が表示されるので、タグやホスト名、その他条件を設定する。</li>
-<li>Log level … ログの出力多寡を決定</li>
-</ul>
-
-
-<p>サクサク作れるので、必要に応じてがしがし増やしていく。</p>
-
-<p><img src="http://apatheia.info/images/2012-01-03-rundeckjenkinsjava/tumblr_lx99jg4sze1qz5yk8.png" alt="" /></p>
-
-<h2>jenkins との連動</h2>
-
-<p>rundeck は<a href="http://jenkins-ci.org/">jenkins</a>および<a href="https://wiki%0A.jenkins-ci.org/display/JENKINS/RunDeck+Plugin">rundeckプラグイン</a>と連動して利用することが出来る。</p>
-
-<p>プラグインはjenkinsのプラグイン管理画面に表示されるので、それを選択するだけでいい。</p>
-
-<h3>jenkins から rundeck をキックする</h3>
-
-<p>jenkinsでビルド完了→rundeckでデプロイ→jenkinsで統合テスト実施、といった0-clickのデプロイパイプが作れるようになる。<a href="http://www.otsune.com/diary/2008/09/11/1.html#200809111">0-cli
-ckは革命</a> 。</p>
-
-<p>jenkinsの設定方法は<a href="https://wiki.jenkins-%0Aci.org/display/JENKINS/RunDeck+Plugin#RunDeckPlugin-DeploymentPipeline">プラグインの説明ページ</a>参照。</p>
-
-<h3>rundeck からjenkins上の成果物を選択できるようにする。</h3>
-
-<p>rundeckで手動デプロイするとき、成果物名やビルドの名前を選択できるようにする。</p>
-
-<p>jenkins rundeck プラグインは以下を利用出来るようにしてくれる:</p>
-
-<ul>
-<li>特定の成果物を起点に、ビルド履歴とその際の成果物を提供するAPI</li>
-<li>特定のビルドを起点に、その最新成果物一覧を提供するAPI</li>
-</ul>
-
-
-<p>rundeck でジョブを実行するとき、ユーザー入力を受け付けることが出来るんだけど、この選択項目には外部から取得したJSONなども設定できる。この機能と先
-ほどのAPIを組み合わせることで実現出来る。</p>
-
-<p>やってみよう。ジョブの保存画面でオプションを選択。</p>
-
-<p><img src="http://apatheia.info/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9bfrJrHn1qz5yk8.png" alt="オプション設定画面" /></p>
-
-<p><img src="http://apatheia.info/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9c296d8I1qz5yk8.png" alt="オプション設定画面2" /></p>
-
-<ul>
-<li>Option Name … 変数名として使われる値。artifact を指定</li>
-<li>Description … 適当</li>
-<li>Default Value … 未設定でいい</li>
-<li>Allowed Value … Remote URL からAPIのURLを指定（URLの形式は<a href="https://wiki.jenkins-ci.org/display/JENKINS/RunDeck+Plugin#RunDeckPlugin-OptionProvider">ドキュメント参照</a>）</li>
-<li>Restrictions … 値の形式チェック。Remote URLの値しか指定させたくないので、「Enforced from Allowed Values」を指定</li>
-<li>Requirement … 必須かどうか。必須なので、当然「yes」</li>
-<li>Multi-valued … 複数の値をとれるようにするか。複数の成果物を同時にデプロイしたい、とかであれば使えるかもしれないけど、今回は「No」</li>
-<li>Usage … ここで指定した値をステップの部分でどのように使えばいいのか説明してくれている。</li>
-</ul>
-
-
-<p>併せて、受け取った値を表示するだけのステップを作ってみる。</p>
-
-<p><img src="http://apatheia.info/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9cj2ACEP1qz5yk8.png" alt="ステップ" /></p>
-
-<p>実行してみよう。最初にビルド番号を聞かれる。</p>
-
-<p><img src="http://apatheia.info/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9cobBFg31qz5yk8.png" alt="成果物一覧" /></p>
-
-<p>適当に選んで「Run Job
-Now」すると、さっき作った変数を表示するだけのスクリプトが動いて、指定した成果物のURLが表示され、連携がうまくいっていたことが確認出来る。</p>
-
-<p><img src="http://apatheia.info/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9dlhjwmr1qz5yk8.png" alt="実行結果" /></p>
-
-<p>詳細なデプロイ手順については、各環境ごとにあるだろうから、アレンジしてもらえればと思う。</p>
-
-<h2>まとめ</h2>
-
-<p>ホストやユーザーの設定をいちいちファイル編集しなくちゃいけなかったりするのが、ちょっとかっこわるいかな。ただ、UIはわかりやすいし、セットアップも簡単なので
-、気軽に試してみるといいと思う。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[MySQL::Sandboxで環境を作ってBLACKHOLEエンジンを試す]]></title>
-    <link href="http://apatheia.info/blog/2011/12/31/mysql-sandbox-blackhole/"/>
-    <updated>2011-12-31T00:00:00+09:00</updated>
-    <id>http://apatheia.info/blog/2011/12/31/mysql-sandbox-blackhole</id>
-    <content type="html"><![CDATA[<p>ちょっとMySQLのBLACKHOLEエンジン使って調べたいことがあったんだけど、
-<a href="http://mysqlsandbox.net/">MySQL::Sandbox</a> 使うとレプリケーション環境が簡単に構築できて便利。</p>
-
-<!-- more -->
-
-
-<p>以下は、MySQL::SandboxのセットアップからBLACKHOLEエンジン使うところまでの記録。</p>
-
-<h3>前提</h3>
-
-<ul>
-<li>確認した環境は Debian 6.0.3, perl v5.12.3</li>
-<li>cpanm &amp; perlbrew インストール済み（<code>cpan</code>コマンドでも問題無いはず）</li>
-<li>MySQL 5.5 はサーバーを起動するためにlibaio1が必要なので、あらかじめパッケージをインストールしておく</li>
-</ul>
-
-
-<h3>手順</h3>
-
-<h4>インストール</h4>
-
-<p><code>cpanm</code> でMySQL::Sandbox をインストール。</p>
-
-<pre><code>$ cpanm MySQL::Sandbox
-</code></pre>
-
-<p>これで make_sandbox などのコマンド群がインストールされる。</p>
-
-<p>データファイルは以下のようなファイル構成を取る</p>
-
-<ul>
-<li>$HOME/opt/mysql 以下のサブディレクトリにサーバーを設置 (環境変数 SANDBOX_BINARY で変更可能)</li>
-<li>$HOME/sandboxes 以下のサブディレクトリにMySQLのデータや起動スクリプトを設置 (環境変数 SANDBOX_HOME で変更可能)</li>
-</ul>
-
-
-<h4>サーバーセットアップ</h4>
-
-<p>サーバーを起動してみる。</p>
-
-<pre><code># 使用するディレクトリ設定
-$ export SANDBOX_BINARY=$HOME/opt/mysql
-$ export SANDBOX_HOME=$HOME/opt/sandboxes
-# ソース取得
-$ cd SANDBOX_HOME
-$ curl -L -o mysql-5.5.19-linux2.6-x86_64.tar.gz http://www-jp.mysql.com/get/Downloads/MySQL-5.5/mysql-5.5.19-linux2.6-x86_64.tar.gz/from/http://ftp.jaist.ac.jp/pub/mysql/
-# Sandbox 作成
-$ make_sandbox $SANDBOX_BINARY/mysql-5.5.19-linux2.6-x86_64.tar.gz
-</code></pre>
-
-<p>これで$SANDBOX_BINARY/5.5.19 にサーバーが、また $SANDBOX_HOME/msb_5_5_19 以下にインスタンスが作成される。</p>
-
-<p>この時点で起動出来ているはずなので、接続してみる。以下で mysql クライアントが起動するはず。</p>
-
-<pre><code>$ $SANDBOX_HOME/msb_5_5_19/use
-</code></pre>
-
-<p><code>use</code>以外には、<code>start</code>, <code>stop</code>, <code>status</code> などの名前から動作が推測できそうなコマンド群がある。$SANDBOX_HOME
-には複数のサンドボックスを操作するコマンド <code>use_all</code>, <code>start_all</code>, <code>stop_all</code> などがある。</p>
-
-<pre><code>$ make_replication_sandbox 5.5.19 
-# 第二引数はtar.gzまでのパスでもいいが、一度展開されたらバージョン番号指定でもいい。make_sandboxも同様
-</code></pre>
-
-<p>以上で、 master, node1, node2 というサーバーが起動する。node1, node2 は master
-を参照したレプリケーション構成となる。デフォルトでノードは2台だが、<code>--how_many_nodes</code> オプションで台数は変更可能。</p>
-
-<p>同様に<a href="http://dev.mysql.com/doc/refman/5.1/ja/replication-%0Atopology-circular.html">Circular recplication</a>(日本語訳だとなんになるんだろう)も簡単に作れる。マスター/マスターレプリケーションはCircular
-replication が2台のみの構成だった場合に同じ。</p>
-
-<pre><code>$ make_replication_sandbox --circular=4 5.5.19
-</code></pre>
-
-<p>これで node1 -> node2, node2 -> nod3, node3 -> node4, node4 -> node1
-という循環関係のレプリケーションが作れる。</p>
-
-<p>使い終わったら止めておこう。</p>
-
-<pre><code>$ $SANDBOX_HOME/stop_all
-</code></pre>
-
-<h3>BLACKHOLEエンジンを試す</h3>
-
-<p>準備ができたので、<a href="http://dev.mysql.com/doc/refman/5.1/ja/blackhole-%0Astorage-engine.html">BLACKHOLEエンジン</a>を使ってみる。BLACKHOLEエンジンはバイナリログは記録するが、データは残さないストレージエンジンのこと。</p>
-
-<p>まずは、サンドボックス作成</p>
-
-<p>$ make_replication_sandbox &#8211;circular=3 5.5.19</p>
-
-<p>デフォルトストレージエンジンをnode1, node3はInnoDB、node2 はBLACKHOLEに変更</p>
-
-<pre><code>$ echo default_storage_engine=InnoDB &gt;&gt; $SANDBOX_HOME/rcsandbox_5_5_19/node1/my.sandbox.cnf
-$ echo default_storage_engine=BLACKHOLE &gt;&gt; $SANDBOX_HOME/rcsandbox_5_5_19/node2/my.sandbox.cnf
-$ echo default_storage_engine=InnoDB &gt;&gt; $SANDBOX_HOME/rcsandbox_5_5_19/node3/my.sandbox.cnf
-$ $SANDBOX_HOME/rcsandbox_5_5_19/restart_all
-</code></pre>
-
-<p>node2, node3 のレプリケーションだけ再開して、node1 -> node2 -> node3 の2階層スレーブにする。</p>
-
-<pre><code>$ $SANDBOX_HOME/rcsandbox_5_5_19/node2/use -e start slave
-$ $SANDBOX_HOME/rcsandbox_5_5_19/node3/use -e start slave
-</code></pre>
-
-<p>実験のための構成が完成した。ここで、node1 にデータを流し込んだとき、node2 にはデータが残らなくて、node3 にデータが出来たら成功。</p>
-
-<p>サンプルデータには、<a href="https://launchpad.net/test-%0Adb/">Sample database with test suite</a>を利用する。</p>
-
-<pre><code>$ curl -LO [http://launchpad.net/test-db/employees-db-1/1.0.6/+download/employees_db-full-1.0.6.tar.bz2](http://launchpad.net/test-db/employees-db-1/1.0.6/+download/employees_db-full-1.0.6.tar.bz2)
-$ tar xf employees_db-full-1.0.6.tar.bz2
-$ cd employees_db
-# InnoDB が決めうちで設定されているので、コメントアウト
-$ sed -i -re s/^\s+(set storage_engine = InnoDB;)/-- \1/ *.sql
-# 取り込み
-$ $SANDBOX_HOME/rcsandbox_5_5_19/node1/use  -t &lt; ./employees.sql
-</code></pre>
-
-<p>結果</p>
-
-<pre><code>$ cd $SANDBOX_HOME
-$ du -sh rcsandbox_5_5_19/node?/data/ibdata1
-219M    rcsandbox_5_5_19/node1/data/ibdata1
-18M     rcsandbox_5_5_19/node2/data/ibdata1
-219M    rcsandbox_5_5_19/node3/data/ibdata1
-</code></pre>
-
-<p>node2 だけデータファイルがふくらまない。</p>
-
-<pre><code>$ ls -l rcsandbox_5_5_19/node2/data/
-合計 357652
-drwx------ 2 f440 f440      4096 2011-12-31 17:15 employees/
--rw-rw---- 1 f440 f440   5242880 2011-12-31 17:14 ib_logfile0
--rw-rw---- 1 f440 f440   5242880 2011-12-31 17:11 ib_logfile1
--rw-rw---- 1 f440 f440  18874368 2011-12-31 17:14 ibdata1
--rw-rw---- 1 f440 f440        88 2011-12-31 17:16 master.info
--rw-rw---- 1 f440 f440      5925 2011-12-31 17:14 msandbox.err
-drwx------ 2 f440 f440      4096 2011-12-31 17:11 mysql/
--rw-rw---- 1 f440 f440      6273 2011-12-31 17:14 mysql-bin.000001
--rw-rw---- 1 f440 f440 168403385 2011-12-31 17:16 mysql-bin.000002
--rw-rw---- 1 f440 f440        38 2011-12-31 17:14 mysql-bin.index
--rw-rw---- 1 f440 f440       315 2011-12-31 17:14 mysql_sandbox15902-relay-bin.000005
--rw-rw---- 1 f440 f440 168399499 2011-12-31 17:16 mysql_sandbox15902-relay-bin.000006
--rw-rw---- 1 f440 f440        76 2011-12-31 17:14 mysql_sandbox15902-relay-bin.index
--rw-rw---- 1 f440 f440         5 2011-12-31 17:14 mysql_sandbox15902.pid
-drwx------ 2 f440 f440      4096 2011-12-31 17:11 performance_schema/
--rw-rw---- 1 f440 f440        75 2011-12-31 17:16 relay-log.info
-drwx------ 2 f440 f440      4096 2011-12-31 17:11 test/
-</code></pre>
-
-<p>node2 のバイナリログ、リレーログはちゃんと出来ているので、BLACKHOLEエンジンの適用を確認できた。</p>
-
-<h3>メモ</h3>
-
-<ul>
-<li><code>$SANDBOX_HOME/clear_all</code> でデータ消せるの便利。</li>
-<li>MySQL::Sandbox 3.0.19 からは、<a href="http://mysqlsandbox.net/news.html">Percona や Maria DB などの派生DBも扱える</a>みたい。いろいろなバージョンで試すことが多いのでうれしい。</li>
-</ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[プロセス管理にsuperviserを使う]]></title>
-    <link href="http://apatheia.info/blog/2011/12/24/superviser/"/>
-    <updated>2011-12-24T00:00:00+09:00</updated>
-    <id>http://apatheia.info/blog/2011/12/24/superviser</id>
-    <content type="html"><![CDATA[<p>ちょっと前にsupervisorを使ったのでやり方をまとめておく。</p>
-
-<!-- more -->
-
-
-<p>公式サイト: <a href="http://supervisord.org/">supervisor</a></p>
-
-<p>supervisorはプログラムの起動、停止を管理するツール。daemontools
-がわかるなら、あんな感じのソフトだと思ってもらえれば早い。daemontoolsよりも標準的なディレクトリ構成で使えるぶん、導入障壁は低いと思う。</p>
-
-<p>最近のLinuxなら、パッケージですぐインストール出来る。以降の説明は debian (6.0.3)、superviser 3 系によるもの。</p>
-
-<h2>インストール</h2>
-
-<pre><code>$ sudo apt-get install superviser
-</code></pre>
-
-<h3>確認</h3>
-
-<pre><code>$ sudo service supervisor status # 起動確認（名前表示されない……）
- is running
-$ sudo service supervisor stop # 停止
-Stopping supervisor: supervisord.
-$ sudo service supervisor start # 起動
-Starting supervisor: supervisord.
-</code></pre>
-
-<h2>例</h2>
-
-<p>例のために、自分のホームにインストールしてあったmemcachedを起動してみる。</p>
-
-<p>まずは、コマンドラインから問題無く起動出来ることを確認</p>
-
-<pre><code>$ /home/f440/opt/bin/memcached # 起動
-</code></pre>
-
-<p>プログラムはフォアグラウンドで起動する。memcached の例で言うと、-d オプション (run as a daemon) はつけない。</p>
-
-<p>設定ファイルを配置する。もともと /etc/supervisor/supervisord.conf 内で
-/etc/supervisor/conf.d/*.conf を Include
-するよう設定されていた読み込むように設定されていたので、以下のようなファイルを作った。</p>
-
-<pre><code>$ cat /etc/supervisor/conf.d/memcached.conf
-[program:memcached]
-command=/home/f440/opt/bin/memcached
-user=f440
-</code></pre>
-
-<p>デフォルトだと設定したプログラムは自動起動する(autostart=true)なので、supervisor を再起動させれば memcached
-も起動する。memcached がいつまでも起動しなければ /var/log/supervisor 以下のログを確認する。</p>
-
-<p>何らかの原因で停止したとき、自動起動して欲しければ autorestart=true を指定しておく。</p>
-
-<h2>コマンドで操作</h2>
-
-<p>起動中は supervisorctl 経由で操作ができるようになる。</p>
-
-<pre><code>$ sudo supervisor 
-memcached                        RUNNING    pid 24928, uptime 0:08:21
-supervisor&gt; # help でヘルプを表示
-supervisor&gt; exit
-$ sudo supervisor status # 直接引数を渡すこともできる
-memcached                        RUNNING    pid 24928, uptime 0:08:21
-</code></pre>
-
-<h2>Webで操作</h2>
-
-<p>設定を追加するとWebから操作できるようになる。外部から好き放題できるので、安全な場所以外では適切な権限設定必須。</p>
-
-<p>ポート9001で、どこからでもアクセスできるよう設定</p>
-
-<pre><code>diff --git a/supervisor/supervisord.conf b/supervisor/supervisord.conf
-index 61b3020..86e04f2 100644
---- a/supervisor/supervisord.conf
-+++ b/supervisor/supervisord.conf
-@@ -4,6 +4,9 @@
- file=/var/run//supervisor.sock   ; (the path to the socket file)
- chmod=0700                       ; sockef file mode (default 0700)
-
-+[inet_http_server]
-+port=*:9001
-+
- [supervisord]
- logfile=/var/log/supervisor/supervisord.log ; (main log file;default $CWD/supervisord.log)
- pidfile=/var/run/supervisord.pid ; (supervisord pidfile;default supervisord.pid)
-</code></pre>
-
-<p>設定ファイル再読込</p>
-
-<pre><code> $ sudo supervisor reload
-</code></pre>
-
-<p>アクセス出来るようになる</p>
-
-<p><img src="http://apatheia.info/images/2011-12-24-superviser/tumblr_lx9eq9SHXa1qz5yk8.jpg" alt="Web管理画面" /></p>
-
-<p>終わり。</p>
 ]]></content>
   </entry>
   

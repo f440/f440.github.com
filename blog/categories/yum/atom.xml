@@ -4,7 +4,7 @@
   <title><![CDATA[Category: yum | apatheia.info]]></title>
   <link href="http://apatheia.info/blog/categories/yum/atom.xml" rel="self"/>
   <link href="http://apatheia.info/"/>
-  <updated>2013-05-03T20:45:07+09:00</updated>
+  <updated>2013-06-17T09:51:40+09:00</updated>
   <id>http://apatheia.info/</id>
   <author>
     <name><![CDATA[f440]]></name>
@@ -12,6 +12,50 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[yum のパッケージキャッシュについて]]></title>
+    <link href="http://apatheia.info/blog/2013/05/16/yum-cache/"/>
+    <updated>2013-05-16T01:26:00+09:00</updated>
+    <id>http://apatheia.info/blog/2013/05/16/yum-cache</id>
+    <content type="html"><![CDATA[<p><code>/etc/yum.conf</code>で<code>keepcache=1</code>にしておくと、インストールしたパッケージがキャッシュされるようになる。これが無効化された状態だと、パッケージアップグレード時に問題が起きても元に戻せなくなるので有効化しておいた方がいい。</p>
+
+<!-- more -->
+
+
+<p>あるパッケージについて、どのバージョンが利用可能な状態かは以下で確認できる。</p>
+
+<pre><code>$ sudo yum --showduplicates list パッケージ名
+</code></pre>
+
+<p>RHEL なら過去のバージョンまですべて手に入るけど、CentOS だとOSリリース時のバージョンと最新版しか手に入らない模様。リポジトリ上なりキャッシュなりで過去のバージョンが手に入るのであれば、<code>yum install</code> や <code>yum update</code> は以下の手順でロールバックが行える。</p>
+
+<pre><code># yum の利用履歴を確認
+$ sudo yum history
+
+# 履歴から詳細を確認
+# 未引数なら直近、引数ありなら該当する ID を表示
+$ sudo yum history info 4
+
+# 仮に ID 4 で問題のバージョンアップが行われたようだということが確認できたら、その ID を指定して操作をアンドゥ
+$ sudo yum history undo 4
+</code></pre>
+
+<p>アンドゥ(リドゥもある)では、対象パッケージおよび依存パッケージがまとめて一度に入れ替えられる。これはパッケージの操作がちゃんとトランザクションになっているため。</p>
+
+<p>話がそれるけど、パッケージの操作にトランザクションがかかるというのはかなり重要だ。たとえば syslog-ng から rsyslog に入れ替えるとき、単純にアンインストール、インストールの順番でやろうとするとアンインストールのタイミングで大量の Syslog 依存なパッケージが道連れになるけど、以下のようにすればひとつのトランザクションでパッケージを入れ替えることができる。(情報源: <a href="http://wiki.rsyslog.com/index.php/Install_rsyslog_with_yum">Rsyslog Wiki</a>)</p>
+
+<pre><code>$ sudo yum shell
+&gt; remove syslog-ng
+&gt; install rsyslog
+&gt; run
+</code></pre>
+
+<p>話がそれたついでにふれておくと、vagrant を使っているのであれば <a href="https://github.com/fgrehm/vagrant-cachier">vagrant-cachier</a> を使うとパッケージのキャッシュ保存先を仮想マシン外の領域(ホストOSとの共有ディスク部分など)に変更してくれる。こうすることで、仮想マシンを破棄してもパッケージのキャッシュが永続化されるため、2回目以降はダウンロードがスキップされて高速化する。</p>
+
+<p>話を戻すと、世の中何が起きるかわからないので古いパッケージもとっておいたほうがいいかと。ディスク容量が気になりだしたら、<code>yum clean packages</code> を実行すればキャッシュは消せる。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[githubを使ってyumリポジトリを公開する]]></title>
