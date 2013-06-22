@@ -13,12 +13,13 @@
 
 	<link href="/atom.xml" rel="alternate" title="apatheia.info" type="application/atom+xml">
 	<link rel="canonical" href="">
-	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/favicon.ico" rel="shortcut icon">
 	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
 	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	
 </head>
+
 
 <body>
 	<header id="header" class="inner"><h1><a href="/">apatheia.info</a></h1>
@@ -66,6 +67,7 @@
 		
 		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
 		
+    
 	</div>
 	<form class="search" action="http://google.com/search" method="get">
 		<input class="alignright" type="text" name="q" results="0">
@@ -122,7 +124,7 @@ cd mesos-0.10.0
   cppunit-devel.x86_64 java-1.6.0-openjdk-devel.x86_64
 </code></pre>
 
-<p>ビルド。今回は、configure のオプションで Redhat っぽい配置を指定している。<code>/opt/mesos</code> とか <code>/usr/local/mesos</code> に全部まとめたければ &#8211;prefix を使うなど、このあたりはお好みで。
+<p>ビルド。今回は、configure のオプションで Redhat っぽい配置を指定している。<code>/opt/mesos</code> とか <code>/usr/local/mesos</code> に全部まとめたければ &mdash;prefix を使うなど、このあたりはお好みで。
 <code>make install</code> 時には書き込み可能な場所を DESTDIR で指定。説明中では、<code>/tmp/mesos</code> を利用している。</p>
 
 <pre><code>JAVA_HOME=/etc/alternatives/java_sdk ./configure \
@@ -133,7 +135,7 @@ make
 make install DESTDIR=/tmp/mesos
 </code></pre>
 
-<p>fpm でパッケージを作成。詳細は fpm &#8211;help を参照。注意点としては、<code>--description</code> は RPM のメタ情報 <code>description</code>, <code>summary</code> で兼用されるので、あまり長い情報を入れると <code>yum search</code> とかがごちゃごちゃすることになる。適度に切り詰めた方がいい。</p>
+<p>fpm でパッケージを作成。詳細は fpm &mdash;help を参照。注意点としては、<code>--description</code> は RPM のメタ情報 <code>description</code>, <code>summary</code> で兼用されるので、あまり長い情報を入れると <code>yum search</code> とかがごちゃごちゃすることになる。適度に切り詰めた方がいい。</p>
 
 <pre><code>fpm -s dir -t rpm \
   -v 0.10.0 \
@@ -183,7 +185,8 @@ rpm -qpl mesos-0.10.0-1.x86_64.rpm
 
 </div>
 	
-</div></article>
+</div>
+</article>
 
 	
 <div class="share">

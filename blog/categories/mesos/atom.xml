@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mesos | apatheia.info]]></title>
   <link href="http://apatheia.info/blog/categories/mesos/atom.xml" rel="self"/>
   <link href="http://apatheia.info/"/>
-  <updated>2013-06-17T10:52:22+09:00</updated>
+  <updated>2013-06-22T23:31:03+09:00</updated>
   <id>http://apatheia.info/</id>
   <author>
     <name><![CDATA[f440]]></name>
@@ -61,7 +61,7 @@ cd mesos-0.10.0
   cppunit-devel.x86_64 java-1.6.0-openjdk-devel.x86_64
 </code></pre>
 
-<p>ビルド。今回は、configure のオプションで Redhat っぽい配置を指定している。<code>/opt/mesos</code> とか <code>/usr/local/mesos</code> に全部まとめたければ --prefix を使うなど、このあたりはお好みで。
+<p>ビルド。今回は、configure のオプションで Redhat っぽい配置を指定している。<code>/opt/mesos</code> とか <code>/usr/local/mesos</code> に全部まとめたければ &mdash;prefix を使うなど、このあたりはお好みで。
 <code>make install</code> 時には書き込み可能な場所を DESTDIR で指定。説明中では、<code>/tmp/mesos</code> を利用している。</p>
 
 <pre><code>JAVA_HOME=/etc/alternatives/java_sdk ./configure \
@@ -72,7 +72,7 @@ make
 make install DESTDIR=/tmp/mesos
 </code></pre>
 
-<p>fpm でパッケージを作成。詳細は fpm --help を参照。注意点としては、<code>--description</code> は RPM のメタ情報 <code>description</code>, <code>summary</code> で兼用されるので、あまり長い情報を入れると <code>yum search</code> とかがごちゃごちゃすることになる。適度に切り詰めた方がいい。</p>
+<p>fpm でパッケージを作成。詳細は fpm &mdash;help を参照。注意点としては、<code>--description</code> は RPM のメタ情報 <code>description</code>, <code>summary</code> で兼用されるので、あまり長い情報を入れると <code>yum search</code> とかがごちゃごちゃすることになる。適度に切り詰めた方がいい。</p>
 
 <pre><code>fpm -s dir -t rpm \
   -v 0.10.0 \

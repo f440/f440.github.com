@@ -4,7 +4,7 @@
   <title><![CDATA[apatheia.info]]></title>
   <link href="http://apatheia.info/atom.xml" rel="self"/>
   <link href="http://apatheia.info/"/>
-  <updated>2013-06-17T10:52:22+09:00</updated>
+  <updated>2013-06-22T23:31:03+09:00</updated>
   <id>http://apatheia.info/</id>
   <author>
     <name><![CDATA[f440]]></name>
@@ -501,9 +501,9 @@ $ sudo yum history undo 4
 <p>Chef のオムニバスインストーラーを実行すると以下のようなディレクトリ構成でファイルが置かれる:</p>
 
 <ul>
-<li>/opt/chef/bin/ &#8230; Chef 関連のスクリプト</li>
-<li>/opt/chef/embedded/ &#8230; ruby インタプリタ、Chef とその他依存パッケージ</li>
-<li>(/usr/bin/ &#8230; /opt/chef/bin/ 以下のものがシンボリックリンクが配置される)</li>
+<li>/opt/chef/bin/ &hellip; Chef 関連のスクリプト</li>
+<li>/opt/chef/embedded/ &hellip; ruby インタプリタ、Chef とその他依存パッケージ</li>
+<li>(/usr/bin/ &hellip; /opt/chef/bin/ 以下のものがシンボリックリンクが配置される)</li>
 </ul>
 
 
@@ -669,7 +669,7 @@ cd mesos-0.10.0
   cppunit-devel.x86_64 java-1.6.0-openjdk-devel.x86_64
 </code></pre>
 
-<p>ビルド。今回は、configure のオプションで Redhat っぽい配置を指定している。<code>/opt/mesos</code> とか <code>/usr/local/mesos</code> に全部まとめたければ &#8211;prefix を使うなど、このあたりはお好みで。
+<p>ビルド。今回は、configure のオプションで Redhat っぽい配置を指定している。<code>/opt/mesos</code> とか <code>/usr/local/mesos</code> に全部まとめたければ &mdash;prefix を使うなど、このあたりはお好みで。
 <code>make install</code> 時には書き込み可能な場所を DESTDIR で指定。説明中では、<code>/tmp/mesos</code> を利用している。</p>
 
 <pre><code>JAVA_HOME=/etc/alternatives/java_sdk ./configure \
@@ -680,7 +680,7 @@ make
 make install DESTDIR=/tmp/mesos
 </code></pre>
 
-<p>fpm でパッケージを作成。詳細は fpm &#8211;help を参照。注意点としては、<code>--description</code> は RPM のメタ情報 <code>description</code>, <code>summary</code> で兼用されるので、あまり長い情報を入れると <code>yum search</code> とかがごちゃごちゃすることになる。適度に切り詰めた方がいい。</p>
+<p>fpm でパッケージを作成。詳細は fpm &mdash;help を参照。注意点としては、<code>--description</code> は RPM のメタ情報 <code>description</code>, <code>summary</code> で兼用されるので、あまり長い情報を入れると <code>yum search</code> とかがごちゃごちゃすることになる。適度に切り詰めた方がいい。</p>
 
 <pre><code>fpm -s dir -t rpm \
   -v 0.10.0 \
@@ -1041,7 +1041,7 @@ client1                        : ok=3    changed=1    unreachable=0    failed=0
 
 <p>すると、メールアドレス宛にグラフの追加が通知され、画面から確認できるようになる。</p>
 
-<p>(メールアドレスに<code>+</code>みたいなURLエンコードが必要な文字を含んでる場合は、 &#8211;data-urlencode を使って一つずつパラメータを指定すればいい)</p>
+<p>(メールアドレスに<code>+</code>みたいなURLエンコードが必要な文字を含んでる場合は、 &mdash;data-urlencode を使って一つずつパラメータを指定すればいい)</p>
 
 <p>APIを利用するために必要となるキーは、初期状態だと登録時のメールアドレスになっている。これは<a href="https://www.stathat.com/settings">設定画面</a>から変更可能。タイムゾーンも修正できるので住んでいる地域に変更しておいた方がいい。</p>
 
@@ -1257,10 +1257,10 @@ npm install grunt
 <p>あとは好みにあわせて開発ツールを <code>cinst</code> でインストールしていく</p>
 
 <ul>
-<li>バージョン管理 (git &#8230;)</li>
-<li>エディタ (sublimetext2, vim &#8230;)</li>
-<li>データストア (redis, mongodb &#8230;)</li>
-<li>ユーティリティ (Gow, &#8230;)</li>
+<li>バージョン管理 (git &hellip;)</li>
+<li>エディタ (sublimetext2, vim &hellip;)</li>
+<li>データストア (redis, mongodb &hellip;)</li>
+<li>ユーティリティ (Gow, &hellip;)</li>
 </ul>
 
 
@@ -1492,7 +1492,7 @@ Some useful browse commands are:
 See 'browse help &lt;command&gt;' for information on a specific command.
 </code></pre>
 
-<p>あとは、libexec-chrome, libexec-opera, &#8230; とサブコマンドを追加していくことができる。</p>
+<p>あとは、libexec-chrome, libexec-opera, &hellip; とサブコマンドを追加していくことができる。</p>
 
 <h2>雑感</h2>
 
@@ -2205,7 +2205,7 @@ extensions</a></p>
 <pre><code>foreman start
 </code></pre>
 
-<p>ブラウザで http://localhost:3000/ (3000以外にしたい場合は Procfile 内で変更)
+<p>ブラウザで <a href="http://localhost:3000/">http://localhost:3000/</a> (3000以外にしたい場合は Procfile 内で変更)
 にアクセスしてlivereloadのブラウザ拡張を有効化すれば、あとはファイルの更新に合わせて自動的にビルドとブラウザのリロードが行われる。</p>
 
 <h2>参考</h2>

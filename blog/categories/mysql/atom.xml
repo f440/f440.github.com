@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mysql | apatheia.info]]></title>
   <link href="http://apatheia.info/blog/categories/mysql/atom.xml" rel="self"/>
   <link href="http://apatheia.info/"/>
-  <updated>2013-06-17T10:52:22+09:00</updated>
+  <updated>2013-06-22T23:31:03+09:00</updated>
   <id>http://apatheia.info/</id>
   <author>
     <name><![CDATA[f440]]></name>
@@ -641,7 +641,7 @@ replication が2台のみの構成だった場合に同じ。</p>
 <pre><code>$ make_replication_sandbox --circular=4 5.5.19
 </code></pre>
 
-<p>これで node1 -> node2, node2 -> nod3, node3 -> node4, node4 -> node1
+<p>これで node1 &ndash;> node2, node2 &ndash;> nod3, node3 &ndash;> node4, node4 &ndash;> node1
 という循環関係のレプリケーションが作れる。</p>
 
 <p>使い終わったら止めておこう。</p>
@@ -655,7 +655,7 @@ replication が2台のみの構成だった場合に同じ。</p>
 
 <p>まずは、サンドボックス作成</p>
 
-<p>$ make_replication_sandbox --circular=3 5.5.19</p>
+<p>$ make_replication_sandbox &mdash;circular=3 5.5.19</p>
 
 <p>デフォルトストレージエンジンをnode1, node3はInnoDB、node2 はBLACKHOLEに変更</p>
 
@@ -665,7 +665,7 @@ $ echo default_storage_engine=InnoDB &gt;&gt; $SANDBOX_HOME/rcsandbox_5_5_19/nod
 $ $SANDBOX_HOME/rcsandbox_5_5_19/restart_all
 </code></pre>
 
-<p>node2, node3 のレプリケーションだけ再開して、node1 -> node2 -> node3 の2階層スレーブにする。</p>
+<p>node2, node3 のレプリケーションだけ再開して、node1 &ndash;> node2 &ndash;> node3 の2階層スレーブにする。</p>
 
 <pre><code>$ $SANDBOX_HOME/rcsandbox_5_5_19/node2/use -e start slave
 $ $SANDBOX_HOME/rcsandbox_5_5_19/node3/use -e start slave

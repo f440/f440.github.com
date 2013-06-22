@@ -14,12 +14,13 @@ MySQL::Sandbox 使うとレプリケーション環境が簡単に構築でき�
 
 	<link href="/atom.xml" rel="alternate" title="apatheia.info" type="application/atom+xml">
 	<link rel="canonical" href="">
-	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/favicon.ico" rel="shortcut icon">
 	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
 	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	
 </head>
+
 
 <body>
 	<header id="header" class="inner"><h1><a href="/">apatheia.info</a></h1>
@@ -67,6 +68,7 @@ MySQL::Sandbox 使うとレプリケーション環境が簡単に構築でき�
 		
 		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
 		
+    
 	</div>
 	<form class="search" action="http://google.com/search" method="get">
 		<input class="alignright" type="text" name="q" results="0">
@@ -153,7 +155,7 @@ replication が2台のみの構成だった場合に同じ。</p>
 <pre><code>$ make_replication_sandbox --circular=4 5.5.19
 </code></pre>
 
-<p>これで node1 -> node2, node2 -> nod3, node3 -> node4, node4 -> node1
+<p>これで node1 &ndash;> node2, node2 &ndash;> nod3, node3 &ndash;> node4, node4 &ndash;> node1
 という循環関係のレプリケーションが作れる。</p>
 
 <p>使い終わったら止めておこう。</p>
@@ -167,7 +169,7 @@ replication が2台のみの構成だった場合に同じ。</p>
 
 <p>まずは、サンドボックス作成</p>
 
-<p>$ make_replication_sandbox &#8211;circular=3 5.5.19</p>
+<p>$ make_replication_sandbox &mdash;circular=3 5.5.19</p>
 
 <p>デフォルトストレージエンジンをnode1, node3はInnoDB、node2 はBLACKHOLEに変更</p>
 
@@ -177,7 +179,7 @@ $ echo default_storage_engine=InnoDB &gt;&gt; $SANDBOX_HOME/rcsandbox_5_5_19/nod
 $ $SANDBOX_HOME/rcsandbox_5_5_19/restart_all
 </code></pre>
 
-<p>node2, node3 のレプリケーションだけ再開して、node1 -> node2 -> node3 の2階層スレーブにする。</p>
+<p>node2, node3 のレプリケーションだけ再開して、node1 &ndash;> node2 &ndash;> node3 の2階層スレーブにする。</p>
 
 <pre><code>$ $SANDBOX_HOME/rcsandbox_5_5_19/node2/use -e start slave
 $ $SANDBOX_HOME/rcsandbox_5_5_19/node3/use -e start slave
@@ -262,7 +264,8 @@ drwx------ 2 f440 f440      4096 2011-12-31 17:11 test/
 
 </div>
 	
-</div></article>
+</div>
+</article>
 
 	
 <div class="share">

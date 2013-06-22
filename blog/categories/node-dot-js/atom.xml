@@ -4,7 +4,7 @@
   <title><![CDATA[Category: node.js | apatheia.info]]></title>
   <link href="http://apatheia.info/blog/categories/node-dot-js/atom.xml" rel="self"/>
   <link href="http://apatheia.info/"/>
-  <updated>2013-06-17T10:52:22+09:00</updated>
+  <updated>2013-06-22T23:31:03+09:00</updated>
   <id>http://apatheia.info/</id>
   <author>
     <name><![CDATA[f440]]></name>
@@ -51,10 +51,10 @@ npm install grunt
 <p>あとは好みにあわせて開発ツールを <code>cinst</code> でインストールしていく</p>
 
 <ul>
-<li>バージョン管理 (git ...)</li>
-<li>エディタ (sublimetext2, vim ...)</li>
-<li>データストア (redis, mongodb ...)</li>
-<li>ユーティリティ (Gow, ...)</li>
+<li>バージョン管理 (git &hellip;)</li>
+<li>エディタ (sublimetext2, vim &hellip;)</li>
+<li>データストア (redis, mongodb &hellip;)</li>
+<li>ユーティリティ (Gow, &hellip;)</li>
 </ul>
 
 
