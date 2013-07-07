@@ -1,107 +1,70 @@
-
-<!DOCTYPE HTML>
+<!doctype html>
 <html>
-<head>
-	<meta charset="utf-8">
-	<title>さくらのVPSにLXCで仮想環境構築してXtraDB Cluster動かす - apatheia.info</title>
-	<meta name="author" content="f440">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>さくらのVPSにLXCで仮想環境構築してXtraDB Cluster動かす - apatheia.info</title>
+    <link href="http://yui.yahooapis.com/pure/0.2.0/pure-min.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/screen.css" media="screen" rel="stylesheet" type="text/css" />
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-35021317-1']);
+  _gaq.push(['_trackPageview']);
 
-	
-	<meta name="description" content="ほんの数年前までVPSといえばLinode、Slicehostなどの海外のサーバーしか選択肢がなかった。ls を実行しても一呼吸おくほどのレイテンシーがあるような環境で、128MBくらいのメモリを何とかやりくりしてRailsを動かしていたが、 &hellip;">
-	
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
 
-	<link href="/atom.xml" rel="alternate" title="apatheia.info" type="application/atom+xml">
-	<link rel="canonical" href="">
-	<link href="/favicon.ico" rel="shortcut icon">
-	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-	
-</head>
+  </head>
+  <body class="blog blog_2012 blog_2012_05 blog_2012_05_13 blog_2012_05_13_vps-lxc-xtradb-cluster blog_2012_05_13_vps-lxc-xtradb-cluster_index">
+    <header>
+      <div id="site-title">
+        <h1><a href="/">apatheia.info</a></h1>
+      </div>
+      <nav class="pure-menu pure-menu-open pure-menu-horizontal">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/archives/">Archive</a></li>
+          <li>
+            <form action="http://google.com/search" method="get">
+              <input type="search" name="q" results="0" placeholder="search">
+              <input type="hidden" name="q" value="site:apatheia.info">
+            </form>
+          </li>
+        </ul>
+      </nav>
+    </header>
+      <article>
+    <h1>さくらのVPSにLXCで仮想環境構築してXtraDB Cluster動かす</h1>
+    <p id="article-info">
+      Published on 13 May 2012
+        <a class="pure-button" href="/blog/categories/mysql/">mysql</a>
+  <a class="pure-button" href="/blog/categories/lxc/">lxc</a>
+  <a class="pure-button" href="/blog/categories/linux/">linux</a>
 
+    </p>
+    <p>ほんの数年前までVPSといえばLinode、Slicehostなどの海外のサーバーしか選択肢がなかった。ls を実行しても一呼吸おくほどのレイテンシーがあるような環境で、128MBくらいのメモリを何とかやりくりしてRailsを動かしていたが、現在では月1000円程度で用途によっては手に余るようなスペックが手に入るようになっている。そんなVPSの余ったリソースを使って、仮想環境をたてようというのが今回の目的だ。</p>
 
-<body>
-	<header id="header" class="inner"><h1><a href="/">apatheia.info</a></h1>
-<nav id="main-nav"><ul class="main">
-	<li><a href="/">Blog</a></li>
-	<li><a href="/blog/archives">Archives</a></li>
-</ul>
-</nav>
-<nav id="mobile-nav">
-	<div class="alignleft menu">
-		<a class="button">Menu</a>
-		<div class="container"><ul class="main">
-	<li><a href="/">Blog</a></li>
-	<li><a href="/blog/archives">Archives</a></li>
-</ul>
-</div>
-	</div>
-	<div class="alignright search">
-		<a class="button"></a>
-		<div class="container">
-			<form action="http://google.com/search" method="get">
-				<input type="text" name="q" results="0">
-				<input type="hidden" name="q" value="site:apatheia.info">
-			</form>
-		</div>
-	</div>
-</nav>
-<nav id="sub-nav" class="alignright">
-	<div class="social">
-		
-		
-		
-		<a class="twitter" href="http://twitter.com/f440" title="Twitter">Twitter</a>
-		
-		
-		<a class="github" href="https://github.com/f440" title="GitHub">GitHub</a>
-		
-    
-    <a class="pinboard" href="https://pinboard.in/u:f440" title="Pinboard">Pinboard</a>
-    
-		
-		
-		
-		
-		
-		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
-		
-    
-	</div>
-	<form class="search" action="http://google.com/search" method="get">
-		<input class="alignright" type="text" name="q" results="0">
-		<input type="hidden" name="q" value="site:apatheia.info">
-	</form>
-</nav>
-
-</header>
-	
-		
-	
-	<div id="content" class="inner"><article class="post">
-	<h2 class="title">さくらのVPSにLXCで仮想環境構築してXtraDB Cluster動かす</h2>
-	<div class="entry-content"><p>ほんの数年前までVPSといえばLinode、Slicehostなどの海外のサーバーしか選択肢がなかった。ls を実行しても一呼吸おくほどのレイテンシーがあるような環境で、128MBくらいのメモリを何とかやりくりしてRailsを動かしていたが、現在では月1000円程度で用途によっては手に余るようなスペックが手に入るようになっている。そんなVPSの余ったリソースを使って、仮想環境をたてようというのが今回の目的だ。</p>
-
-<!-- more -->
 
 
 <p><a href="http://lxc.sourceforge.net/">LXC</a>は、他の仮想化方式と比べてオーバーヘッドが少なくきびきび動くし、必要であればCPUやメモリの制限をつけることもできる。RPMやDebのパッケージ作成をしたり、Chefのcookbook作成などで独立した環境を手軽に構築したい人には特に有用に思う。また、簡単にネットワークが作れるので、複数台構成のソフトウェアを1台のマシンのなかで動かすことが出来る。今回は動作確認として <a href="http://www.percona.com/software/percona-xtradb-cluster/">PerconaXtraDB Cluster</a>を動かしてみることにする。</p>
 
-<h2>前提について</h2>
+<h2 id="section">前提について</h2>
 
 <p>作業環境は以下を想定している。</p>
 
 <ul>
-<li>さくらのVPS(v3) 1G
-
-<ul>
-<li>CentOS 6.2 x86_64</li>
+  <li>さくらのVPS(v3) 1G 
+    <ul>
+      <li>CentOS 6.2 x86_64</li>
+    </ul>
+  </li>
+  <li>LXC 0.7.5</li>
 </ul>
-</li>
-<li>LXC 0.7.5</li>
-</ul>
-
 
 <p>CentOSを使っているのはデフォルトのOSイメージだからというのが理由。</p>
 
@@ -109,11 +72,11 @@
 
 <p>仮想環境としては、lxcに同梱されているテンプレートを利用してUbuntuを、またOSイメージの作成からCentOSを構築する。</p>
 
-<h2>構築方法</h2>
+<h2 id="section-1">構築方法</h2>
 
 <p>以降の作業はすべて root で行うものとする。</p>
 
-<h3>ネットワークの設定</h3>
+<h3 id="section-2">ネットワークの設定</h3>
 
 <p>仮想環境とのやりとりで使うブリッジを作る。</p>
 
@@ -130,17 +93,17 @@
 # ifup lxcbr0 # 起動
 </code></pre>
 
-<h3>cgroup</h3>
+<h3 id="cgroup">cgroup</h3>
 
 <pre><code># mount | grep cgroup # cgroup がないこと確認
 # mkdir -p /cgroup
-# printf "none          /cgroup     cgroup  defaults        0 0
+# printf "none			/cgroup		cgroup	defaults		0 0
 " &gt;&gt; /etc/fstab
 # mount -a
 # mount | grep cgroup # cgroup があること確認
 </code></pre>
 
-<h3>lxc セットアップ</h3>
+<h3 id="lxc-">lxc セットアップ</h3>
 
 <pre><code># yum install libcap-devel docbook-utils
 # yum groupinstall "Development Tools"
@@ -155,7 +118,7 @@
 # mkdir -p /var/lib/lxc
 </code></pre>
 
-<h3>dnsmasq (DHCP, DNS サーバー) セットアップ</h3>
+<h3 id="dnsmasq-dhcp-dns--">dnsmasq (DHCP, DNS サーバー) セットアップ</h3>
 
 <p>環境を増やすごとに毎回NICの設定を編集するのは手間なので、ホスト側で dncp, dns の設定をする。</p>
 
@@ -177,7 +140,7 @@
 # service dnsmasq reload
 </code></pre>
 
-<h3>ネットワークセットアップ</h3>
+<h3 id="section-3">ネットワークセットアップ</h3>
 
 <p>仮想環境から外部へのやりとりが出来るようにネットワークの設定を変更する。</p>
 
@@ -187,7 +150,7 @@
 # service iptables save # 設定を /etc/sysconfig/iptables に保存
 </code></pre>
 
-<h3>仮想環境構築 (1) 同梱のスクリプトを使った Ubuntu のインストール</h3>
+<h3 id="ubuntu-">仮想環境構築 (1) 同梱のスクリプトを使った Ubuntu のインストール</h3>
 
 <p>lxcに同梱のスクリプト /usr/lib64/lxc/templates/lxc-ubuntu を使ってUbuntuをインストールする。</p>
 
@@ -274,11 +237,11 @@
 <pre><code># lxc-destroy -n vm0
 </code></pre>
 
-<h3>仮想環境構築 (2) 独自に構築した CentOS 6 のインストール</h3>
+<h3 id="centos-6-">仮想環境構築 (2) 独自に構築した CentOS 6 のインストール</h3>
 
 <p>lxc-console の標準テンプレートでは CentOS が用意されていないので、自力でセットアップする。</p>
 
-<h4>イメージ作成</h4>
+<h4 id="section-4">イメージ作成</h4>
 
 <p>基本的に <a href="http://wiki.1tux.org/wiki/Centos6/Installation/Minimal_installation_using_yum">Centos6/Installation/Minimal installation using yum</a> の通り。ただし 64 bit 版をインストールする</p>
 
@@ -361,7 +324,7 @@ END
 # tar cvfz /centos6-lxc-root.tgz .
 </code></pre>
 
-<h4>設定</h4>
+<h4 id="section-5">設定</h4>
 
 <pre><code># mkdir /var/lib/lxc/vm0
 # cd /var/lib/lxc/vm0
@@ -419,7 +382,7 @@ sysfs           /var/lib/lxc/vm0/rootfs/sys          sysfs defaults  0 0
 END
 </code></pre>
 
-<h4>起動</h4>
+<h4 id="section-6">起動</h4>
 
 <pre><code># lxc-start -n vm0 -l debug -o debug.out -d
 # lxc-console -n vm0
@@ -429,26 +392,24 @@ OpenSSH がなければ入れておく
 # service sshd start
 </code></pre>
 
-<h2>動作確認 (Percona XtraDB Cluster の稼働確認)</h2>
+<h2 id="percona-xtradb-cluster-">動作確認 (Percona XtraDB Cluster の稼働確認)</h2>
 
 <p>動作確認として Percona XtraDB Cluster を動かしてみる。</p>
 
 <p>すでにこれまでの作業を通して vm0 としてCentOS 6がインストール済みとする。</p>
 
-<h3>ホスト側設定</h3>
+<h3 id="section-7">ホスト側設定</h3>
 
 <ul>
-<li>構成
-
-<ul>
-<li>ホスト, IPアドレス 10.0.3.1</li>
-<li>仮想0 vm0, IPアドレス 10.0.3.2</li>
-<li>仮想1 vm1, IPアドレス 10.0.3.3</li>
-<li>仮想2 vm2, IPアドレス 10.0.3.4</li>
+  <li>構成 
+    <ul>
+      <li>ホスト, IPアドレス 10.0.3.1</li>
+      <li>仮想0 vm0, IPアドレス 10.0.3.2</li>
+      <li>仮想1 vm1, IPアドレス 10.0.3.3</li>
+      <li>仮想2 vm2, IPアドレス 10.0.3.4</li>
+    </ul>
+  </li>
 </ul>
-</li>
-</ul>
-
 
 <p>各仮想環境に簡単にアクセスできるように hosts を設定しておく。ホスト側に設定しておけば、dnsmasq のおかげで仮想側でも名前が引けるようになる。</p>
 
@@ -459,7 +420,7 @@ OpenSSH がなければ入れておく
     10.0.3.4 vm2
 </code></pre>
 
-<h3>コピー元(vm0) 設定</h3>
+<h3 id="vm0-">コピー元(vm0) 設定</h3>
 
 <pre><code># ssh vm0
   ここからはvm0の中
@@ -493,7 +454,7 @@ END
 # poweroff
 </code></pre>
 
-<h3>コピー、起動</h3>
+<h3 id="section-8">コピー、起動</h3>
 
 <pre><code># lxc-clone -n vm1 -o vm0
   -n はこれから作る仮想環境の名前
@@ -516,7 +477,7 @@ END
 # lxc-start -n vm2 -l debug -o debug.2.out -d
 </code></pre>
 
-<h3>動作確認</h3>
+<h3 id="section-9">動作確認</h3>
 
 <p>vm0 にログインして実行</p>
 
@@ -577,14 +538,13 @@ mysql&gt; select * from sample;
 <p>これにより、XtraDB Cluster の以下の動作が確認出来た。</p>
 
 <ul>
-<li>すべてのサーバーで書き込みと参照がおこなえること</li>
-<li>オートインクリメントがバッティングしないように、値が自動的にオフセットをつけて挿入されること</li>
+  <li>すべてのサーバーで書き込みと参照がおこなえること</li>
+  <li>オートインクリメントがバッティングしないように、値が自動的にオフセットをつけて挿入されること</li>
 </ul>
 
+<h2 id="section-10">メモ</h2>
 
-<h1>メモ</h1>
-
-<h2>外部から仮想環境へ直接アクセスしたい場合</h2>
+<h3 id="section-11">外部から仮想環境へ直接アクセスしたい場合</h3>
 
 <p>たとえば、外部からポート10080でアクセスされたとき、仮想環境の 10.0.3.51 のポート 80 へ転送させたい場合は iptables
 で以下のような設定をする。</p>
@@ -596,7 +556,7 @@ mysql&gt; select * from sample;
 # iptables -L -t nat # NATテーブルから設定追加を確認
 </code></pre>
 
-<h2>新しい Ubuntu を入れたい場合</h2>
+<h3 id="ubuntu--1">新しい Ubuntu を入れたい場合</h3>
 
 <p>元の手順だとlucid (10.04) がインストールされるが、たとえば oneiric (11.10) であれば以下でインストール可能。</p>
 
@@ -606,61 +566,30 @@ mysql&gt; select * from sample;
     lxc-create ではなく -r はテンプレートへの引数
 </code></pre>
 
-<h2>他の OS もインストールしてみたい場合</h2>
+<h3 id="os-">他の OS もインストールしてみたい場合</h3>
 
 <p>/usr/lib64/lxc/templates/ には lxc-busybox,lxc-debian,lxc-fedora,lxc-lenny,lxc-
 opensuse,lxc-sshd,lxc-ubuntu の テンプレートがある。これ以外の環境が必要であれば、「lxc guset
 OS名」とかで検索してみる。</p>
 
-<h1>参考</h1>
+<h2 id="section-12">参考</h2>
 
 <ul>
-<li><a href="http://www.activestate.com/blog/2011/10/virtualization-ec2-cloud-using-lxc">http://www.activestate.com/blog/2011/10/virtualization-ec2-cloud-using-lxc</a></li>
-<li><a href="http://wiki.debian.org/LXC">http://wiki.debian.org/LXC</a></li>
-<li><a href="https://help.ubuntu.com/12.04/serverguide/lxc.html">https://help.ubuntu.com/12.04/serverguide/lxc.html</a></li>
-<li><a href="http://www.lacerta.be/d7/content/lxc-installation-ubuntu-server-1104">http://www.lacerta.be/d7/content/lxc-installation-ubuntu-server-1104</a></li>
-<li><a href="http://wiki.1tux.org/wiki/Lxc/Installation/Guest/Centos/6">http://wiki.1tux.org/wiki/Lxc/Installation/Guest/Centos/6</a></li>
-<li><a href="http://www.percona.com/doc/percona-xtradb-cluster/index.html">http://www.percona.com/doc/percona-xtradb-cluster/index.html</a></li>
+  <li><a href="http://www.activestate.com/blog/2011/10/virtualization-ec2-cloud-using-lxc">http://www.activestate.com/blog/2011/10/virtualization-ec2-cloud-using-lxc</a></li>
+  <li><a href="http://wiki.debian.org/LXC">http://wiki.debian.org/LXC</a></li>
+  <li><a href="https://help.ubuntu.com/12.04/serverguide/lxc.html">https://help.ubuntu.com/12.04/serverguide/lxc.html</a></li>
+  <li><a href="http://www.lacerta.be/d7/content/lxc-installation-ubuntu-server-1104">http://www.lacerta.be/d7/content/lxc-installation-ubuntu-server-1104</a></li>
+  <li><a href="http://wiki.1tux.org/wiki/Lxc/Installation/Guest/Centos/6">http://wiki.1tux.org/wiki/Lxc/Installation/Guest/Centos/6</a></li>
+  <li><a href="http://www.percona.com/doc/percona-xtradb-cluster/index.html">http://www.percona.com/doc/percona-xtradb-cluster/index.html</a></li>
 </ul>
 
-</div>
 
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-05-13T00:00:00+09:00" pubdate data-updated="true">2012-05-13</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/linux/'>linux</a>, <a class='category' href='/blog/categories/lxc/'>lxc</a>, <a class='category' href='/blog/categories/mysql/'>mysql</a>
-
-
-</div>
-	
-</div>
-</article>
-
-	
-<div class="share">
-	<div class="addthis_toolbox addthis_default_style ">
-	
-	
-	<a class="addthis_button_tweet"></a>
-	
-	
-	<a class="addthis_counter addthis_pill_style"></a>
-	</div>
+    
+    <aside>
+    <div class="share">
+  <div class="addthis_toolbox addthis_default_style ">
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
   <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4f8eed8875190f92"></script>
   <script type="text/javascript">
     var addthis_config = {
@@ -669,60 +598,44 @@ OS名」とかで検索してみる。</p>
   </script>
 </div>
 
-
-
-
-<section id="comment">
-    <h2 class="title">Comments</h2>
-    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-</section>
-</div>
-	<footer id="footer" class="inner">Copyright &copy; 2013
-
-    f440
-
-</footer>
-	<script src="/javascripts/slash.js"></script>
-<script src="/javascripts/jquery.fancybox.pack.js"></script>
+    <div id="disqus_thread"></div>
 <script type="text/javascript">
-(function($){
-	$('.fancybox').fancybox();
-})(jQuery);
-</script> <!-- Delete or comment this line to disable Fancybox -->
-
-
-<script type="text/javascript">
-      var disqus_shortname = 'apatheiainfo';
-      
-        
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://apatheia.info/blog/2012/05/13/vps-lxc-xtradb-cluster/';
-        var disqus_url = 'http://apatheia.info/blog/2012/05/13/vps-lxc-xtradb-cluster/';
-        var disqus_script = 'embed.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
+  var disqus_shortname = 'apatheiainfo';
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
 </script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
+    </aside>
+    
+  </article>
 
-
-	<script type="text/javascript">
-		var _gaq = _gaq || [];
-		_gaq.push(['_setAccount', 'UA-35021317-1']);
-		_gaq.push(['_trackPageview']);
-
-		(function() {
-			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-		})();
-	</script>
-
-
-
-</body>
+    <footer>
+    <div class="pure-menu pure-menu-open pure-menu-horizontal">
+      <a href="#" class="pure-menu-heading">Link</a>
+      <ul>
+        <li><a href="https://twitter.com/f440">Twitter</a></li>
+        <li><a href="https://github.com/f440">Github</a></li>
+        <li><a href="https://pinboard.in/u:f440">Pinboard</a></li>
+      </ul>
+    </div>
+    </footer>
+  </body>
 </html>
+<script>
+;(function(document) {
+  var imgs = document.getElementsByTagName("img");
+    for (var i = 0, len = imgs.length; i < len; i++) {
+    var img = imgs[i];
+    var a = document.createElement("a");
+    a.setAttribute("href", img.src);
+    a.setAttribute("title", img.alt);
+    a.appendChild(img.cloneNode(true));
+    img.parentNode.replaceChild(a, img);
+  }
+})(document);
+</script>

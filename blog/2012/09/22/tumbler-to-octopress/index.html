@@ -1,98 +1,60 @@
-
-<!DOCTYPE HTML>
+<!doctype html>
 <html>
-<head>
-	<meta charset="utf-8">
-	<title>TumblerからOctopressへの移行 - apatheia.info</title>
-	<meta name="author" content="f440">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TumblerからOctopressへの移行 - apatheia.info</title>
+    <link href="http://yui.yahooapis.com/pure/0.2.0/pure-min.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/screen.css" media="screen" rel="stylesheet" type="text/css" />
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-35021317-1']);
+  _gaq.push(['_trackPageview']);
 
-	
-	<meta name="description" content="Tumblerでブログ書いていたけど、ローカルで記事書く => フォームに貼り付け =>
-プレビューのサイクルが結構面倒くさいな、と常々思っていたので、Octopressに移行した。 ホスティングには Github Pages を利用している。 手順 設定 $ git clone git:// &hellip;">
-	
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
 
-	<link href="/atom.xml" rel="alternate" title="apatheia.info" type="application/atom+xml">
-	<link rel="canonical" href="">
-	<link href="/favicon.ico" rel="shortcut icon">
-	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-	
-</head>
+  </head>
+  <body class="blog blog_2012 blog_2012_09 blog_2012_09_22 blog_2012_09_22_tumbler-to-octopress blog_2012_09_22_tumbler-to-octopress_index">
+    <header>
+      <div id="site-title">
+        <h1><a href="/">apatheia.info</a></h1>
+      </div>
+      <nav class="pure-menu pure-menu-open pure-menu-horizontal">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/archives/">Archive</a></li>
+          <li>
+            <form action="http://google.com/search" method="get">
+              <input type="search" name="q" results="0" placeholder="search">
+              <input type="hidden" name="q" value="site:apatheia.info">
+            </form>
+          </li>
+        </ul>
+      </nav>
+    </header>
+      <article>
+    <h1>TumblerからOctopressへの移行</h1>
+    <p id="article-info">
+      Published on 22 Sep 2012
+        <a class="pure-button" href="/blog/categories/octopress/">octopress</a>
 
-
-<body>
-	<header id="header" class="inner"><h1><a href="/">apatheia.info</a></h1>
-<nav id="main-nav"><ul class="main">
-	<li><a href="/">Blog</a></li>
-	<li><a href="/blog/archives">Archives</a></li>
-</ul>
-</nav>
-<nav id="mobile-nav">
-	<div class="alignleft menu">
-		<a class="button">Menu</a>
-		<div class="container"><ul class="main">
-	<li><a href="/">Blog</a></li>
-	<li><a href="/blog/archives">Archives</a></li>
-</ul>
-</div>
-	</div>
-	<div class="alignright search">
-		<a class="button"></a>
-		<div class="container">
-			<form action="http://google.com/search" method="get">
-				<input type="text" name="q" results="0">
-				<input type="hidden" name="q" value="site:apatheia.info">
-			</form>
-		</div>
-	</div>
-</nav>
-<nav id="sub-nav" class="alignright">
-	<div class="social">
-		
-		
-		
-		<a class="twitter" href="http://twitter.com/f440" title="Twitter">Twitter</a>
-		
-		
-		<a class="github" href="https://github.com/f440" title="GitHub">GitHub</a>
-		
-    
-    <a class="pinboard" href="https://pinboard.in/u:f440" title="Pinboard">Pinboard</a>
-    
-		
-		
-		
-		
-		
-		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
-		
-    
-	</div>
-	<form class="search" action="http://google.com/search" method="get">
-		<input class="alignright" type="text" name="q" results="0">
-		<input type="hidden" name="q" value="site:apatheia.info">
-	</form>
-</nav>
-
-</header>
-	
-		
-	
-	<div id="content" class="inner"><article class="post">
-	<h2 class="title">TumblerからOctopressへの移行</h2>
-	<div class="entry-content"><p>Tumblerでブログ書いていたけど、ローカルで記事書く => フォームに貼り付け =>
+    </p>
+    <p>Tumblerでブログ書いていたけど、ローカルで記事書く =&gt; フォームに貼り付け =&gt; 
 プレビューのサイクルが結構面倒くさいな、と常々思っていたので、Octopressに移行した。</p>
 
 <p>ホスティングには <a href="http://pages.github.com/">Github Pages</a> を利用している。</p>
 
-<!-- more -->
 
 
-<h2>手順</h2>
+<h2 id="section">手順</h2>
 
-<h3>設定</h3>
+<h3 id="section-1">設定</h3>
 
 <pre><code>$ git clone git://github.com/imathis/octopress.git octopress
 
@@ -104,7 +66,7 @@ $ rake 'install[slash]' # zsh だとクォートなりエスケープするな�
 
 <p>このままだと header の canonical が設定されないかったので、同梱テンプレート <code>.themes/classic/source/_includes/head.html</code> を参考に <code>./source/_includes/head.html</code> をちょっとといじった。</p>
 
-<h3>Tumbler の記事をインポート</h3>
+<h3 id="tumbler-">Tumbler の記事をインポート</h3>
 
 <p><a href="http://tsurayogoshi.tumblr.com/archive">ブログの過去記事</a>を全部インポートする
 ( 参考: <a href="http://blog.assimov.net/blog/2012/03/24/tumblr-to-octopress-powered-by-jekyll-and-markdown/">Goodbye Tumblr. Hello, Octopress Powered by Jekyll and Markdown!</a> )</p>
@@ -119,24 +81,22 @@ $ mv post source/
 <p>後は細かい調整</p>
 
 <ul>
-<li>画像のパスが tumblr を参照しているので、全部ダウンロードして <code>source/images</code>
+  <li>画像のパスが tumblr を参照しているので、全部ダウンロードして <code>source/images</code>
 以下に保存</li>
-<li>記事のメタデータ部分
-
-<ul>
-<li><code>comments: true</code>を追加</li>
-<li><code>tags</code> を <code>categories</code> に書き換え。</li>
+  <li>記事のメタデータ部分
+    <ul>
+      <li><code>comments: true</code>を追加</li>
+      <li><code>tags</code> を <code>categories</code> に書き換え。</li>
+    </ul>
+  </li>
+  <li>各種外部サイト向けパーツの設定</li>
 </ul>
-</li>
-<li>各種外部サイト向けパーツの設定</li>
-</ul>
-
 
 <p><code>source/post</code> には、tumbler と同じURLでアクセスしたとき、移行後のコンテンツにア
 クセスするリダイレクト設定が入っている。tumbler の頃からカスタムドメインを使っ
 ていた場合は、後述のドメイン設定で前と同じドメインにすればいい。</p>
 
-<h3>ドメインの設定</h3>
+<h3 id="section-2">ドメインの設定</h3>
 
 <p>独自ドメインを使う場合、source/ 以下に CNAME というファイルを作り、そこにドメイ
 ンを書いておく。その後、指定の IP アドレスに名前を向ける。</p>
@@ -147,7 +107,7 @@ $ mv post source/
 <a href="https://help.github.com/articles/setting-up-a-custom-domain-with-pages">公式の説明</a>のもの
 を参照すること。</p>
 
-<h3>Github Pages へデプロイ</h3>
+<h3 id="github-pages-">Github Pages へデプロイ</h3>
 
 <p><a href="http://octopress.org/docs/deploying/github/">ドキュメント</a>を読めばわかるので詳
 細は割愛。</p>
@@ -160,47 +120,17 @@ $ mv post source/
 ディレクトリに <code>source</code> ブランチ、公開用の <code>_deploy</code> ディレクトリに <code>maste</code> ブ
 ランチという二つのリポジトリが配置されることになる。</p>
 
-<h2>感想</h2>
+<h2 id="section-3">感想</h2>
 
-<p>vim で書く => すぐに確認 => github にデプロイ => 公開の流れは気持ちいい。tumblr の頃と同じく、markdown で書けるのもとても具合がいい。</p>
-</div>
-
-
-<div class="meta">
-	<div class="date">
+<p>vim で書く =&gt; すぐに確認 =&gt; github にデプロイ =&gt; 公開の流れは気持ちいい。tumblr の頃と同じく、markdown で書けるのもとても具合がいい。</p>
 
 
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-09-22T17:28:00+09:00" pubdate data-updated="true">2012-09-22</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/octopress/'>octopress</a>
-
-
-</div>
-	
-</div>
-</article>
-
-	
-<div class="share">
-	<div class="addthis_toolbox addthis_default_style ">
-	
-	
-	<a class="addthis_button_tweet"></a>
-	
-	
-	<a class="addthis_counter addthis_pill_style"></a>
-	</div>
+    
+    <aside>
+    <div class="share">
+  <div class="addthis_toolbox addthis_default_style ">
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
   <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4f8eed8875190f92"></script>
   <script type="text/javascript">
     var addthis_config = {
@@ -209,60 +139,44 @@ $ mv post source/
   </script>
 </div>
 
-
-
-
-<section id="comment">
-    <h2 class="title">Comments</h2>
-    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-</section>
-</div>
-	<footer id="footer" class="inner">Copyright &copy; 2013
-
-    f440
-
-</footer>
-	<script src="/javascripts/slash.js"></script>
-<script src="/javascripts/jquery.fancybox.pack.js"></script>
+    <div id="disqus_thread"></div>
 <script type="text/javascript">
-(function($){
-	$('.fancybox').fancybox();
-})(jQuery);
-</script> <!-- Delete or comment this line to disable Fancybox -->
-
-
-<script type="text/javascript">
-      var disqus_shortname = 'apatheiainfo';
-      
-        
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://apatheia.info/blog/2012/09/22/tumbler-to-octopress/';
-        var disqus_url = 'http://apatheia.info/blog/2012/09/22/tumbler-to-octopress/';
-        var disqus_script = 'embed.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
+  var disqus_shortname = 'apatheiainfo';
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
 </script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
+    </aside>
+    
+  </article>
 
-
-	<script type="text/javascript">
-		var _gaq = _gaq || [];
-		_gaq.push(['_setAccount', 'UA-35021317-1']);
-		_gaq.push(['_trackPageview']);
-
-		(function() {
-			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-		})();
-	</script>
-
-
-
-</body>
+    <footer>
+    <div class="pure-menu pure-menu-open pure-menu-horizontal">
+      <a href="#" class="pure-menu-heading">Link</a>
+      <ul>
+        <li><a href="https://twitter.com/f440">Twitter</a></li>
+        <li><a href="https://github.com/f440">Github</a></li>
+        <li><a href="https://pinboard.in/u:f440">Pinboard</a></li>
+      </ul>
+    </div>
+    </footer>
+  </body>
 </html>
+<script>
+;(function(document) {
+  var imgs = document.getElementsByTagName("img");
+    for (var i = 0, len = imgs.length; i < len; i++) {
+    var img = imgs[i];
+    var a = document.createElement("a");
+    a.setAttribute("href", img.src);
+    a.setAttribute("title", img.alt);
+    a.appendChild(img.cloneNode(true));
+    img.parentNode.replaceChild(a, img);
+  }
+})(document);
+</script>

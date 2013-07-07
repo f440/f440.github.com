@@ -1,98 +1,60 @@
-
-<!DOCTYPE HTML>
+<!doctype html>
 <html>
-<head>
-	<meta charset="utf-8">
-	<title>rundeckをセットアップして、jenkins上のjava成果物をデプロイする - apatheia.info</title>
-	<meta name="author" content="f440">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>rundeckをセットアップして、jenkins上のjava成果物をデプロイする - apatheia.info</title>
+    <link href="http://yui.yahooapis.com/pure/0.2.0/pure-min.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/screen.css" media="screen" rel="stylesheet" type="text/css" />
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-35021317-1']);
+  _gaq.push(['_trackPageview']);
 
-	
-	<meta name="description" content="rundeck でjenkins上の成果物をデプロイしよう、という話。 rundeck について 公式サイト ITオペレーションのコンサルやってるDTO Solution（Depops関連の資料とかでよ
-く会社名は見かけますね）が作っているデプロイ用のツール。 &hellip;">
-	
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
 
-	<link href="/atom.xml" rel="alternate" title="apatheia.info" type="application/atom+xml">
-	<link rel="canonical" href="">
-	<link href="/favicon.ico" rel="shortcut icon">
-	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-	
-</head>
-
-
-<body>
-	<header id="header" class="inner"><h1><a href="/">apatheia.info</a></h1>
-<nav id="main-nav"><ul class="main">
-	<li><a href="/">Blog</a></li>
-	<li><a href="/blog/archives">Archives</a></li>
-</ul>
-</nav>
-<nav id="mobile-nav">
-	<div class="alignleft menu">
-		<a class="button">Menu</a>
-		<div class="container"><ul class="main">
-	<li><a href="/">Blog</a></li>
-	<li><a href="/blog/archives">Archives</a></li>
-</ul>
-</div>
-	</div>
-	<div class="alignright search">
-		<a class="button"></a>
-		<div class="container">
-			<form action="http://google.com/search" method="get">
-				<input type="text" name="q" results="0">
-				<input type="hidden" name="q" value="site:apatheia.info">
-			</form>
-		</div>
-	</div>
-</nav>
-<nav id="sub-nav" class="alignright">
-	<div class="social">
-		
-		
-		
-		<a class="twitter" href="http://twitter.com/f440" title="Twitter">Twitter</a>
-		
-		
-		<a class="github" href="https://github.com/f440" title="GitHub">GitHub</a>
-		
-    
-    <a class="pinboard" href="https://pinboard.in/u:f440" title="Pinboard">Pinboard</a>
-    
-		
-		
-		
-		
-		
-		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
-		
-    
-	</div>
-	<form class="search" action="http://google.com/search" method="get">
-		<input class="alignright" type="text" name="q" results="0">
-		<input type="hidden" name="q" value="site:apatheia.info">
-	</form>
-</nav>
-
-</header>
-	
-		
-	
-	<div id="content" class="inner"><article class="post">
-	<h2 class="title">Rundeckをセットアップして、jenkins上のjava成果物をデプロイする</h2>
-	<div class="entry-content"><p>rundeck でjenkins上の成果物をデプロイしよう、という話。</p>
-
-<!-- more -->
+  </head>
+  <body class="blog blog_2012 blog_2012_01 blog_2012_01_03 blog_2012_01_03_rundeck-jenkins-java blog_2012_01_03_rundeck-jenkins-java_index">
+    <header>
+      <div id="site-title">
+        <h1><a href="/">apatheia.info</a></h1>
+      </div>
+      <nav class="pure-menu pure-menu-open pure-menu-horizontal">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/archives/">Archive</a></li>
+          <li>
+            <form action="http://google.com/search" method="get">
+              <input type="search" name="q" results="0" placeholder="search">
+              <input type="hidden" name="q" value="site:apatheia.info">
+            </form>
+          </li>
+        </ul>
+      </nav>
+    </header>
+      <article>
+    <h1>rundeckをセットアップして、jenkins上のjava成果物をデプロイする</h1>
+    <p id="article-info">
+      Published on 03 Jan 2012
+      
+    </p>
+    <p>rundeck でjenkins上の成果物をデプロイしよう、という話。</p>
 
 
-<h2>rundeck について</h2>
+
+<h2 id="rundeck-">rundeck について</h2>
 
 <p><a href="http://rundeck.org/">公式サイト</a></p>
 
 <p>ITオペレーションのコンサルやってる<a href="http://www.dtosolutions.com/">DTO Solution</a>（Depops関連の資料とかでよ
-く会社名は見かけますね）が作っているデプロイ用のツール。元々は<a href="http://doc36.controltier.org/wiki%0A/Main_Page">ControlTier</a>っていう管理ツールがあって、そこから分家した。ControlTierはサーバー/クライアントモデルだけど、サーバー側しか用意しなくてい
+く会社名は見かけますね）が作っているデプロイ用のツール。元々は<a href="http://doc36.controltier.org/wiki
+/Main_Page">ControlTier</a>っていう管理ツールがあって、そこから分家した。ControlTierはサーバー/クライアントモデルだけど、サーバー側しか用意しなくてい
 いRundeckのほうがお手軽度高い。</p>
 
 <p>複数のサーバーを対象に状態を変更するのが目的で、<a href="https://github.com/capistrano/capistrano">capistrano</a>
@@ -103,14 +65,15 @@
 <p>GUI（笑）みたいに思うかもしれないけど、画面上から履歴が確認できたり、ブラウザがあればどこからでもデプロイ出来るのって、運用の敷居下げるのに貢献してくれる
 と思う。</p>
 
-<h2>rundeck 設定</h2>
+<h2 id="rundeck--1">rundeck 設定</h2>
 
-<h3>インストール</h3>
+<h3 id="section">インストール</h3>
 
 <p>とりあえずインストールしてみる。以降の説明は、rundeck インストールサーバー、デプロイ対象サーバーともに CentOS 5 の場合。</p>
 
 <p><a href="http://rundeck.org/docs/RunDeck-Guide.html#installing-rundeck">http://rundeck.org/docs/RunDeck-Guide.html#installing-
-rundeck</a> , <a href="http://kb.dtosolutions.com/wik%0Ai/Rundeck_on_CentOS">htt
+rundeck</a> , <a href="http://kb.dtosolutions.com/wik
+i/Rundeck_on_CentOS">htt
 p://kb.dtosolutions.com/wiki/Rundeck_on_CentOS</a> 参照。CentOSならyumで簡単にインストールできる。</p>
 
 <pre><code>$ sudo rpm -Uvh [http://repo.rundeck.org/latest.rpm](http://repo.rundeck.org/latest.rpm)
@@ -126,32 +89,29 @@ $ rpm -ql rundeck-config
 <p>以下のようなことがわかる。</p>
 
 <ul>
-<li>設定系のファイル /etc/rundeck は本体と別の RPM (rundeck-config) に入っている</li>
-<li>/var/lib/rundeck 以下にシステム関係のデータがおかれて、/var/rundeck 以下にユーザーが作成したデータをおくっぽい
-
-<ul>
-<li>僕は試してないけど、保存先はDBも使えるみたい。<a href="http://rundeck.org/docs/RunDeck-Guide.html#relational-database">http://rundeck.org/docs/RunDeck-Guide.html#relational-database</a></li>
+  <li>設定系のファイル /etc/rundeck は本体と別の RPM (rundeck-config) に入っている</li>
+  <li>/var/lib/rundeck 以下にシステム関係のデータがおかれて、/var/rundeck 以下にユーザーが作成したデータをおくっぽい 
+    <ul>
+      <li>僕は試してないけど、保存先はDBも使えるみたい。http://rundeck.org/docs/RunDeck-Guide.html#relational-database</li>
+    </ul>
+  </li>
 </ul>
-</li>
-</ul>
 
-
-<h3>起動</h3>
+<h3 id="section-1">起動</h3>
 
 <p>さっそく起動してみる。</p>
 
 <pre><code>$ sudo /sbin/service rundeckd start
 </code></pre>
 
-<p>既定のポートは 4440 なので <a href="http://RUNDECK_HOST:4440/">http://RUNDECK_HOST:4440/</a> にアクセスしてみる。</p>
+<p>既定のポートは 4440 なので http://RUNDECK_HOST:4440/ にアクセスしてみる。</p>
 
 <p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx82ozkABF1qz5yk8.png" alt="ログイン画面" /></p>
 
 <p>アクセスできなければ、ちゃんと起動出来てるかどうかとか、iptables が邪魔していないかとか確認。この時点ではまだログイン出来ない。</p>
 
-<p>ログインできるようにするために、ユーザーを作る。[公式サイトの説明](<a href="http://rundeck.org/docs/RunDeck-Guide.html">http://rundeck.org/docs/RunDeck-Guide.html</a></p>
-
-<h1>managing-logins)</h1>
+<p>ログインできるようにするために、ユーザーを作る。<a href="http://rundeck.org/docs/RunDeck-Guide.html
+#managing-logins">公式サイトの説明</a></p>
 
 <p>パスワードのハッシュ化はmd5sumコマンドとかでもいいけど、手順に沿って付属のライブラリ使ってみる。RPMでインストールすると、説明文中の$RUNDECK
 _BASE相当がないので、読み替えて以下のように実行</p>
@@ -191,11 +151,10 @@ undeck.id_rsa</code>なので、ここにしておくと手間が少なくて済
 <p>左上のメニューに注目</p>
 
 <ul>
-<li>Run … 一回こっきりのコマンド。非定型な処理（緊急でアプリケーションサーバー順々に再起動かけたいとか）はここから実行できる。capistrano の <code>cap shell</code> みたいなイメージ</li>
-<li>Job … 複数のコマンドや条件を保存はここに登録。</li>
-<li>Histoly … 実行履歴が確認出来る。</li>
+  <li>Run … 一回こっきりのコマンド。非定型な処理（緊急でアプリケーションサーバー順々に再起動かけたいとか）はここから実行できる。capistrano の <code>cap shell</code> みたいなイメージ</li>
+  <li>Job … 複数のコマンドや条件を保存はここに登録。</li>
+  <li>Histoly … 実行履歴が確認出来る。</li>
 </ul>
-
 
 <p>最初は localhost だけがホストに登録されているから、Run を選択後、真ん中の入力フォームからコマンドを実行してみる。</p>
 
@@ -203,7 +162,7 @@ undeck.id_rsa</code>なので、ここにしておくと手間が少なくて済
 
 <p>実行できた。</p>
 
-<h3>ホスト追加</h3>
+<h3 id="section-2">ホスト追加</h3>
 
 <p>ローカルホストにばかりいじっていても不毛なので、ホストを追加していく。ユーザー同様ホストについても設定ファイルを編集する必要がある。</p>
 
@@ -213,7 +172,7 @@ undeck.id_rsa</code>なので、ここにしておくと手間が少なくて済
 rundeck$ cat .ssh/rundeck.id_rsa.pub # 出力結果をメモ
 </code></pre>
 
-<p>各ホストに作業用ユーザー「deploy」を追加する &ndash; パスワード不要でsudo可能。 &ndash; パスワードは設定しない &ndash; SSH
+<p>各ホストに作業用ユーザー「deploy」を追加する - パスワード不要でsudo可能。 - パスワードは設定しない - SSH
 の鍵認証でパスフレーズ無しにログイン可能</p>
 
 <pre><code>以下、デプロイ対象サーバー(仮に192.168.10.10とする)
@@ -261,71 +220,68 @@ target2(192.168.115.61)を追加して画面から確認してみる。</p>
 
 <p>確認できた。ここでコマンドを打てば全台に適用される。</p>
 
-<h3>ジョブ追加</h3>
+<h3 id="section-3">ジョブ追加</h3>
 
 <p>サーバーがセットアップ出来たので、ジョブを追加していく。メニューから<code>Jobs</code>を選択して、<code>New job</code>
 をクリックすればいい。全部画面に書いてあるけど、一応説明すると:</p>
 
 <ul>
-<li>Saved this job? ジョブを保存するかどうか
-
-<ul>
-<li>Job Name … 名前</li>
-<li>Group … グループ。スラッシュ区切りで入力しておくと、階層構造で表示してくれる</li>
-<li>Description … 説明</li>
-<li>UUID … UUID （これとは別に、ジョブを作ると勝手にID割り振られる）</li>
+  <li>Saved this job? ジョブを保存するかどうか 
+    <ul>
+      <li>Job Name … 名前</li>
+      <li>Group … グループ。スラッシュ区切りで入力しておくと、階層構造で表示してくれる</li>
+      <li>Description … 説明</li>
+      <li>UUID … UUID （これとは別に、ジョブを作ると勝手にID割り振られる）</li>
+    </ul>
+  </li>
+  <li>Project どのプロジェクトを対象とするか</li>
+  <li>Workflow 
+    <ul>
+      <li>Keepgoing エラーで止まるかそのまま進むか</li>
+      <li>Strategy ノードが3台、ステップが2個あったとして、node1-step1, node1-step2, node1-step3, node2-step1 … とすすむのがNode-oriented、Node-oriented、node1-step1, node2-step1, node3-step1 と進んでいくのが Step-oriented</li>
+    </ul>
+  </li>
+  <li>Step 実行するステップを指定。各行の右端にマウスをあわせると（入れ替えたり編集、削除したりできる） 
+    <ul>
+      <li>Command … コマンドの実行（Runでやったのと同じ）</li>
+      <li>Script … 複数行のスクリプトの実行</li>
+      <li>Script file … サーバー上にあるスクリプトファイルの実行</li>
+      <li>Job Reference … 他のジョブを実行</li>
+    </ul>
+  </li>
+  <li>Dispatch to Nodes … これを選択しないと、ローカルホストだけで実行される。選択すると実行対象の絞り込み画面が表示されるので、タグやホスト名、その他条件を設定する。</li>
+  <li>Log level … ログの出力多寡を決定</li>
 </ul>
-</li>
-<li>Project どのプロジェクトを対象とするか</li>
-<li>Workflow
-
-<ul>
-<li>Keepgoing エラーで止まるかそのまま進むか</li>
-<li>Strategy ノードが3台、ステップが2個あったとして、node1-step1, node1-step2, node1-step3, node2-step1 … とすすむのがNode-oriented、Node-oriented、node1-step1, node2-step1, node3-step1 と進んでいくのが Step-oriented</li>
-</ul>
-</li>
-<li>Step 実行するステップを指定。各行の右端にマウスをあわせると（入れ替えたり編集、削除したりできる）
-
-<ul>
-<li>Command … コマンドの実行（Runでやったのと同じ）</li>
-<li>Script … 複数行のスクリプトの実行</li>
-<li>Script file … サーバー上にあるスクリプトファイルの実行</li>
-<li>Job Reference … 他のジョブを実行</li>
-</ul>
-</li>
-<li>Dispatch to Nodes … これを選択しないと、ローカルホストだけで実行される。選択すると実行対象の絞り込み画面が表示されるので、タグやホスト名、その他条件を設定する。</li>
-<li>Log level … ログの出力多寡を決定</li>
-</ul>
-
 
 <p>サクサク作れるので、必要に応じてがしがし増やしていく。</p>
 
 <p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx99jg4sze1qz5yk8.png" alt="" /></p>
 
-<h2>jenkins との連動</h2>
+<h2 id="jenkins-">jenkins との連動</h2>
 
-<p>rundeck は<a href="http://jenkins-ci.org/">jenkins</a>および<a href="https://wiki%0A.jenkins-ci.org/display/JENKINS/RunDeck+Plugin">rundeckプラグイン</a>と連動して利用することが出来る。</p>
+<p>rundeck は<a href="http://jenkins-ci.org/">jenkins</a>および<a href="https://wiki
+.jenkins-ci.org/display/JENKINS/RunDeck+Plugin">rundeckプラグイン</a>と連動して利用することが出来る。</p>
 
 <p>プラグインはjenkinsのプラグイン管理画面に表示されるので、それを選択するだけでいい。</p>
 
-<h3>jenkins から rundeck をキックする</h3>
+<h3 id="jenkins--rundeck-">jenkins から rundeck をキックする</h3>
 
 <p>jenkinsでビルド完了→rundeckでデプロイ→jenkinsで統合テスト実施、といった0-clickのデプロイパイプが作れるようになる。<a href="http://www.otsune.com/diary/2008/09/11/1.html#200809111">0-cli
 ckは革命</a> 。</p>
 
-<p>jenkinsの設定方法は<a href="https://wiki.jenkins-%0Aci.org/display/JENKINS/RunDeck+Plugin#RunDeckPlugin-DeploymentPipeline">プラグインの説明ページ</a>参照。</p>
+<p>jenkinsの設定方法は<a href="https://wiki.jenkins-
+ci.org/display/JENKINS/RunDeck+Plugin#RunDeckPlugin-DeploymentPipeline">プラグインの説明ページ</a>参照。</p>
 
-<h3>rundeck からjenkins上の成果物を選択できるようにする。</h3>
+<h3 id="rundeck-jenkins">rundeck からjenkins上の成果物を選択できるようにする。</h3>
 
 <p>rundeckで手動デプロイするとき、成果物名やビルドの名前を選択できるようにする。</p>
 
 <p>jenkins rundeck プラグインは以下を利用出来るようにしてくれる:</p>
 
 <ul>
-<li>特定の成果物を起点に、ビルド履歴とその際の成果物を提供するAPI</li>
-<li>特定のビルドを起点に、その最新成果物一覧を提供するAPI</li>
+  <li>特定の成果物を起点に、ビルド履歴とその際の成果物を提供するAPI</li>
+  <li>特定のビルドを起点に、その最新成果物一覧を提供するAPI</li>
 </ul>
-
 
 <p>rundeck でジョブを実行するとき、ユーザー入力を受け付けることが出来るんだけど、この選択項目には外部から取得したJSONなども設定できる。この機能と先
 ほどのAPIを組み合わせることで実現出来る。</p>
@@ -337,16 +293,15 @@ ckは革命</a> 。</p>
 <p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9c296d8I1qz5yk8.png" alt="オプション設定画面2" /></p>
 
 <ul>
-<li>Option Name … 変数名として使われる値。artifact を指定</li>
-<li>Description … 適当</li>
-<li>Default Value … 未設定でいい</li>
-<li>Allowed Value … Remote URL からAPIのURLを指定（URLの形式は<a href="https://wiki.jenkins-ci.org/display/JENKINS/RunDeck+Plugin#RunDeckPlugin-OptionProvider">ドキュメント参照</a>）</li>
-<li>Restrictions … 値の形式チェック。Remote URLの値しか指定させたくないので、「Enforced from Allowed Values」を指定</li>
-<li>Requirement … 必須かどうか。必須なので、当然「yes」</li>
-<li>Multi-valued … 複数の値をとれるようにするか。複数の成果物を同時にデプロイしたい、とかであれば使えるかもしれないけど、今回は「No」</li>
-<li>Usage … ここで指定した値をステップの部分でどのように使えばいいのか説明してくれている。</li>
+  <li>Option Name … 変数名として使われる値。artifact を指定</li>
+  <li>Description … 適当</li>
+  <li>Default Value … 未設定でいい</li>
+  <li>Allowed Value … Remote URL からAPIのURLを指定（URLの形式は<a href="https://wiki.jenkins-ci.org/display/JENKINS/RunDeck+Plugin#RunDeckPlugin-OptionProvider">ドキュメント参照</a>）</li>
+  <li>Restrictions … 値の形式チェック。Remote URLの値しか指定させたくないので、「Enforced from Allowed Values」を指定</li>
+  <li>Requirement … 必須かどうか。必須なので、当然「yes」</li>
+  <li>Multi-valued … 複数の値をとれるようにするか。複数の成果物を同時にデプロイしたい、とかであれば使えるかもしれないけど、今回は「No」</li>
+  <li>Usage … ここで指定した値をステップの部分でどのように使えばいいのか説明してくれている。</li>
 </ul>
-
 
 <p>併せて、受け取った値を表示するだけのステップを作ってみる。</p>
 
@@ -363,44 +318,18 @@ Now」すると、さっき作った変数を表示するだけのスクリプ�
 
 <p>詳細なデプロイ手順については、各環境ごとにあるだろうから、アレンジしてもらえればと思う。</p>
 
-<h2>まとめ</h2>
+<h2 id="section-4">まとめ</h2>
 
 <p>ホストやユーザーの設定をいちいちファイル編集しなくちゃいけなかったりするのが、ちょっとかっこわるいかな。ただ、UIはわかりやすいし、セットアップも簡単なので
 、気軽に試してみるといいと思う。</p>
-</div>
 
 
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-01-03T00:00:00+09:00" pubdate data-updated="true">2012-01-03</time></div>
-	<div class="tags">
-
-</div>
-	
-</div>
-</article>
-
-	
-<div class="share">
-	<div class="addthis_toolbox addthis_default_style ">
-	
-	
-	<a class="addthis_button_tweet"></a>
-	
-	
-	<a class="addthis_counter addthis_pill_style"></a>
-	</div>
+    
+    <aside>
+    <div class="share">
+  <div class="addthis_toolbox addthis_default_style ">
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
   <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4f8eed8875190f92"></script>
   <script type="text/javascript">
     var addthis_config = {
@@ -409,60 +338,44 @@ Now」すると、さっき作った変数を表示するだけのスクリプ�
   </script>
 </div>
 
-
-
-
-<section id="comment">
-    <h2 class="title">Comments</h2>
-    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-</section>
-</div>
-	<footer id="footer" class="inner">Copyright &copy; 2013
-
-    f440
-
-</footer>
-	<script src="/javascripts/slash.js"></script>
-<script src="/javascripts/jquery.fancybox.pack.js"></script>
+    <div id="disqus_thread"></div>
 <script type="text/javascript">
-(function($){
-	$('.fancybox').fancybox();
-})(jQuery);
-</script> <!-- Delete or comment this line to disable Fancybox -->
-
-
-<script type="text/javascript">
-      var disqus_shortname = 'apatheiainfo';
-      
-        
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://apatheia.info/blog/2012/01/03/rundeck-jenkins-java/';
-        var disqus_url = 'http://apatheia.info/blog/2012/01/03/rundeck-jenkins-java/';
-        var disqus_script = 'embed.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
+  var disqus_shortname = 'apatheiainfo';
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
 </script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
+    </aside>
+    
+  </article>
 
-
-	<script type="text/javascript">
-		var _gaq = _gaq || [];
-		_gaq.push(['_setAccount', 'UA-35021317-1']);
-		_gaq.push(['_trackPageview']);
-
-		(function() {
-			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-		})();
-	</script>
-
-
-
-</body>
+    <footer>
+    <div class="pure-menu pure-menu-open pure-menu-horizontal">
+      <a href="#" class="pure-menu-heading">Link</a>
+      <ul>
+        <li><a href="https://twitter.com/f440">Twitter</a></li>
+        <li><a href="https://github.com/f440">Github</a></li>
+        <li><a href="https://pinboard.in/u:f440">Pinboard</a></li>
+      </ul>
+    </div>
+    </footer>
+  </body>
 </html>
+<script>
+;(function(document) {
+  var imgs = document.getElementsByTagName("img");
+    for (var i = 0, len = imgs.length; i < len; i++) {
+    var img = imgs[i];
+    var a = document.createElement("a");
+    a.setAttribute("href", img.src);
+    a.setAttribute("title", img.alt);
+    a.appendChild(img.cloneNode(true));
+    img.parentNode.replaceChild(a, img);
+  }
+})(document);
+</script>

@@ -1,100 +1,65 @@
-
-<!DOCTYPE HTML>
+<!doctype html>
 <html>
-<head>
-	<meta charset="utf-8">
-	<title>Trickleを使って帯域制限をする - apatheia.info</title>
-	<meta name="author" content="f440">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trickleを使って帯域制限をする - apatheia.info</title>
+    <link href="http://yui.yahooapis.com/pure/0.2.0/pure-min.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/screen.css" media="screen" rel="stylesheet" type="text/css" />
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-35021317-1']);
+  _gaq.push(['_trackPageview']);
 
-	
-	<meta name="description" content="ネットワーク経由で大量のデータをやりとりしたいが、メインのサービスには影響を与えたくないという場合がよくある。rsyncやscp など、大きなファイルの転送を考慮されたコマンドではネットワーク帯域を制限するオプションが用意されていることも多いが、 &hellip;">
-	
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
 
-	<link href="/atom.xml" rel="alternate" title="apatheia.info" type="application/atom+xml">
-	<link rel="canonical" href="">
-	<link href="/favicon.ico" rel="shortcut icon">
-	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-	
-</head>
+  </head>
+  <body class="blog blog_2013 blog_2013_01 blog_2013_01_01 blog_2013_01_01_network-restriction-using-trickle blog_2013_01_01_network-restriction-using-trickle_index">
+    <header>
+      <div id="site-title">
+        <h1><a href="/">apatheia.info</a></h1>
+      </div>
+      <nav class="pure-menu pure-menu-open pure-menu-horizontal">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/archives/">Archive</a></li>
+          <li>
+            <form action="http://google.com/search" method="get">
+              <input type="search" name="q" results="0" placeholder="search">
+              <input type="hidden" name="q" value="site:apatheia.info">
+            </form>
+          </li>
+        </ul>
+      </nav>
+    </header>
+      <article>
+    <h1>Trickleを使って帯域制限をする</h1>
+    <p id="article-info">
+      Published on 01 Jan 2013
+        <a class="pure-button" href="/blog/categories/unix/">unix</a>
+  <a class="pure-button" href="/blog/categories/linux/">linux</a>
+  <a class="pure-button" href="/blog/categories/network/">network</a>
 
+    </p>
+    <p>ネットワーク経由で大量のデータをやりとりしたいが、メインのサービスには影響を与えたくないという場合がよくある。<code>rsync</code>や<code>scp</code> など、大きなファイルの転送を考慮されたコマンドではネットワーク帯域を制限するオプションが用意されていることも多いが、自作のツールなどに帯域制限を実装するとなるとかなり面倒くさいことになる。</p>
 
-<body>
-	<header id="header" class="inner"><h1><a href="/">apatheia.info</a></h1>
-<nav id="main-nav"><ul class="main">
-	<li><a href="/">Blog</a></li>
-	<li><a href="/blog/archives">Archives</a></li>
-</ul>
-</nav>
-<nav id="mobile-nav">
-	<div class="alignleft menu">
-		<a class="button">Menu</a>
-		<div class="container"><ul class="main">
-	<li><a href="/">Blog</a></li>
-	<li><a href="/blog/archives">Archives</a></li>
-</ul>
-</div>
-	</div>
-	<div class="alignright search">
-		<a class="button"></a>
-		<div class="container">
-			<form action="http://google.com/search" method="get">
-				<input type="text" name="q" results="0">
-				<input type="hidden" name="q" value="site:apatheia.info">
-			</form>
-		</div>
-	</div>
-</nav>
-<nav id="sub-nav" class="alignright">
-	<div class="social">
-		
-		
-		
-		<a class="twitter" href="http://twitter.com/f440" title="Twitter">Twitter</a>
-		
-		
-		<a class="github" href="https://github.com/f440" title="GitHub">GitHub</a>
-		
-    
-    <a class="pinboard" href="https://pinboard.in/u:f440" title="Pinboard">Pinboard</a>
-    
-		
-		
-		
-		
-		
-		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
-		
-    
-	</div>
-	<form class="search" action="http://google.com/search" method="get">
-		<input class="alignright" type="text" name="q" results="0">
-		<input type="hidden" name="q" value="site:apatheia.info">
-	</form>
-</nav>
-
-</header>
-	
-		
-	
-	<div id="content" class="inner"><article class="post">
-	<h2 class="title">Trickleを使って帯域制限をする</h2>
-	<div class="entry-content"><p>ネットワーク経由で大量のデータをやりとりしたいが、メインのサービスには影響を与えたくないという場合がよくある。<code>rsync</code>や<code>scp</code> など、大きなファイルの転送を考慮されたコマンドではネットワーク帯域を制限するオプションが用意されていることも多いが、自作のツールなどに帯域制限を実装するとなるとかなり面倒くさいことになる。</p>
-
-<!-- more -->
 
 
 <p>Linux で帯域制限をしたい場合、tc や cgroup を使う方法がよく知られている。ただ、「あるコマンドにネットワークが占領されないように穏やかに実行したい」というニーズに対しては大げさで、またオプションが難解だったり管理権限が必要だったりといったことから二の足を踏む感じのものだった。もっと普段使いに適したツールがないものかと探していたところ、こういったシーンでは<a href="http://monkey.org/~marius/pages/?page=trickle" title="trickle公式">Tricle</a>がかなり有効だと言うことがわかった。</p>
 
-<h2>インストール</h2>
+<h2 id="section">インストール</h2>
 
 <p>Debian, Ubuntu なら公式からパッケージが提供されている。RHEL 系 OS であれば、EPEL にパッケージがあるのでそちらを利用。</p>
 
-<h2>使い方</h2>
+<h2 id="section-1">使い方</h2>
 
-<h3>trickle</h3>
+<h3 id="trickle">trickle</h3>
 
 <p>コマンドの前に <code>trickle</code> をつけるだけで、簡単に帯域制限が実現できる。とりあえず、「<code>-d n</code>で n KByte/sec にダウンロードが制限」、「<code>-u n</code>で n KByte/sec に制限」だけ覚えておけばいい。</p>
 
@@ -105,55 +70,24 @@ trickle -d 20 wget --verbose http://ftp.jaist.ac.jp/pub/Linux/ArchLinux/iso/2012
 
 <p>実行時、<code>trickled</code> が見つからないというメッセージが出るが、これは<code>-s</code>(standaloneモード)をつけることで抑制できる。</p>
 
-<h3>trickled</h3>
+<h3 id="trickled">trickled</h3>
 
 <p><code>trickled</code> というプログラムも利用できるようになって、<code>tricle</code>と同様にオプション<code>-d</code>, <code>-u</code>が設定可能。<code>trickled</code>を一度起動するとデーモンとなり、以降<code>trickle</code>を使って起動したコマンドの帯域は、<code>trickled</code>起動時のオプションで設定した値までに制限される。複数個のプログラムを <code>trickle</code> で起動した場合、使用している帯域の総和が <code>trickled</code>の設定値に従うことになる。</p>
 
-<h2>参考</h2>
+<h2 id="section-2">参考</h2>
 
 <ul>
-<li><a href="http://monkey.org/~marius/pages/?page=trickle" title="trickle公式">配布元</a></li>
-<li><a href="http://monkey.org/~marius/trickle/trickle.pdf">仕組み</a></li>
+  <li><a href="http://monkey.org/~marius/pages/?page=trickle" title="trickle公式">配布元</a></li>
+  <li><a href="http://monkey.org/~marius/trickle/trickle.pdf">仕組み</a></li>
 </ul>
 
-</div>
 
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-01-01T17:05:00+09:00" pubdate data-updated="true">2013-01-01</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/linux/'>linux</a>, <a class='category' href='/blog/categories/network/'>network</a>, <a class='category' href='/blog/categories/unix/'>unix</a>
-
-
-</div>
-	
-</div>
-</article>
-
-	
-<div class="share">
-	<div class="addthis_toolbox addthis_default_style ">
-	
-	
-	<a class="addthis_button_tweet"></a>
-	
-	
-	<a class="addthis_counter addthis_pill_style"></a>
-	</div>
+    
+    <aside>
+    <div class="share">
+  <div class="addthis_toolbox addthis_default_style ">
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
   <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4f8eed8875190f92"></script>
   <script type="text/javascript">
     var addthis_config = {
@@ -162,60 +96,44 @@ trickle -d 20 wget --verbose http://ftp.jaist.ac.jp/pub/Linux/ArchLinux/iso/2012
   </script>
 </div>
 
-
-
-
-<section id="comment">
-    <h2 class="title">Comments</h2>
-    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-</section>
-</div>
-	<footer id="footer" class="inner">Copyright &copy; 2013
-
-    f440
-
-</footer>
-	<script src="/javascripts/slash.js"></script>
-<script src="/javascripts/jquery.fancybox.pack.js"></script>
+    <div id="disqus_thread"></div>
 <script type="text/javascript">
-(function($){
-	$('.fancybox').fancybox();
-})(jQuery);
-</script> <!-- Delete or comment this line to disable Fancybox -->
-
-
-<script type="text/javascript">
-      var disqus_shortname = 'apatheiainfo';
-      
-        
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://apatheia.info/blog/2013/01/01/network-restriction-using-trickle/';
-        var disqus_url = 'http://apatheia.info/blog/2013/01/01/network-restriction-using-trickle/';
-        var disqus_script = 'embed.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
+  var disqus_shortname = 'apatheiainfo';
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
 </script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
+    </aside>
+    
+  </article>
 
-
-	<script type="text/javascript">
-		var _gaq = _gaq || [];
-		_gaq.push(['_setAccount', 'UA-35021317-1']);
-		_gaq.push(['_trackPageview']);
-
-		(function() {
-			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-		})();
-	</script>
-
-
-
-</body>
+    <footer>
+    <div class="pure-menu pure-menu-open pure-menu-horizontal">
+      <a href="#" class="pure-menu-heading">Link</a>
+      <ul>
+        <li><a href="https://twitter.com/f440">Twitter</a></li>
+        <li><a href="https://github.com/f440">Github</a></li>
+        <li><a href="https://pinboard.in/u:f440">Pinboard</a></li>
+      </ul>
+    </div>
+    </footer>
+  </body>
 </html>
+<script>
+;(function(document) {
+  var imgs = document.getElementsByTagName("img");
+    for (var i = 0, len = imgs.length; i < len; i++) {
+    var img = imgs[i];
+    var a = document.createElement("a");
+    a.setAttribute("href", img.src);
+    a.setAttribute("title", img.alt);
+    a.appendChild(img.cloneNode(true));
+    img.parentNode.replaceChild(a, img);
+  }
+})(document);
+</script>

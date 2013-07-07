@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>apatheia.info</title>
+    <link href="http://yui.yahooapis.com/pure/0.2.0/pure-min.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/screen.css" media="screen" rel="stylesheet" type="text/css" />
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-35021317-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+  </head>
+  <body class="page page_2 page_2_index">
+    <header>
+      <div id="site-title">
+        <h1><a href="/">apatheia.info</a></h1>
+      </div>
+      <nav class="pure-menu pure-menu-open pure-menu-horizontal">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/archives/">Archive</a></li>
+          <li>
+            <form action="http://google.com/search" method="get">
+              <input type="search" name="q" results="0" placeholder="search">
+              <input type="hidden" name="q" value="site:apatheia.info">
+            </form>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <article>
+  <section>
+    <h2><a href="/blog/2013/03/17/logging-with-splunk-storm/">イベント管理にSplunk Stormを使ってみる</a></h2>
+    <span>2013.03.17</span>   <a class="pure-button" href="/blog/categories/logging/">logging</a>
+  <a class="pure-button" href="/blog/categories/visualization/">visualization</a>
+  <a class="pure-button" href="/blog/categories/splunk/">splunk</a>
+
+    <p><a href="http://www.splunk.com/">Splunk</a> はおそらくイベント・ログ管理のツールとしてはおそらくもっとも有名で、日本でも販売展開しているので知っている人も多いかと思う。その splunk が <a href="https://www.splunkstorm.com/storm/">Splunk Storm</a> というサービスを始めている。試しに使ってみたのでその感想。</p>
+
+
+  </section>
+  <section>
+    <h2><a href="/blog/2013/03/17/fluentd-and-graphite/">FluentdのデータをGraphiteに出力するときのTips</a></h2>
+    <span>2013.03.17</span>   <a class="pure-button" href="/blog/categories/fluentd/">fluentd</a>
+  <a class="pure-button" href="/blog/categories/graphite/">graphite</a>
+  <a class="pure-button" href="/blog/categories/logging/">logging</a>
+  <a class="pure-button" href="/blog/categories/visualization/">visualization</a>
+
+    <p><a href="https://github.com/hotchpotch/fluent-plugin-graphite">fluent-plugin-graphite</a> 利用時のメモ。</p>
+
+<p>Ops界隈での可視化というと、ここ何年かは<a href="http://graphite.wikidot.com/">Graphite</a>でグラフを作ってそれを他のツールで表示する、みたいなのが多い。<a href="http://fluentd.org/">Fluentd</a>のデータを可視化したい場合は<a href="http://kazeburo.github.com/GrowthForecast/">GrowthForecast</a>が使われることが多いけど、<a href="http://graphite.wikidot.com/">Graphite</a>使ってみるといろんなツールと組み合わせられておもしろい。</p>
+
+
+  </section>
+  <section>
+    <h2><a href="/blog/2013/03/17/fluentd-and-stathat/">Fluentdの出力結果をStatHatで可視化する</a></h2>
+    <span>2013.03.17</span>   <a class="pure-button" href="/blog/categories/fluentd/">fluentd</a>
+  <a class="pure-button" href="/blog/categories/stathat/">stathat</a>
+  <a class="pure-button" href="/blog/categories/logging/">logging</a>
+  <a class="pure-button" href="/blog/categories/visualization/">visualization</a>
+
+    <p><a href="http://fluentd.org/">Fluentd</a>で取得した情報を可視化したいとき、<a href="https://github.com/tagomoris/fluent-plugin-growthforecast">fluent-plugin-growthforecast</a>を使って<a href="http://kazeburo.github.com/GrowthForecast/">GrowthForecast</a>にグラフを作る方法がよく知られている。<a href="http://kazeburo.github.com/GrowthForecast/">GrowthForecast</a>はインストール後すぐに使い始められるお手軽ツールなんだけど、それすら面倒くさい、自前で環境を作るのが面倒、というときには<a href="http://www.stathat.com/">StatHat</a>を使うと簡単に可視化を実現できるという話。</p>
+
+
+  </section>
+  <section>
+    <h2><a href="/blog/2013/02/08/create-chocolatey-package/">chocolatey で Haskell Platform 用のパッケージを作る</a></h2>
+    <span>2013.02.08</span>   <a class="pure-button" href="/blog/categories/windows/">windows</a>
+  <a class="pure-button" href="/blog/categories/chocolatey/">chocolatey</a>
+  <a class="pure-button" href="/blog/categories/haskell/">haskell</a>
+  <a class="pure-button" href="/blog/categories/chef/">chef</a>
+
+    <p><a href="http://chocolatey.org/">chocolatey</a> の仕組みに興味を持ったので、パッケージを作ってみる。</p>
+
+
+  </section>
+  <section>
+    <h2><a href="/blog/2013/02/03/installing-node-dot-js-on-windows-7/">Windows 上に node.js の開発環境を整える</a></h2>
+    <span>2013.02.03</span>   <a class="pure-button" href="/blog/categories/node-js/">node.js</a>
+  <a class="pure-button" href="/blog/categories/windows/">windows</a>
+
+    <p>一身上の都合で Windows 7 上に Node.js の開発環境を整えたんだけど、コマンドラインからの操作だけで開発環境がそろう時代になっていたことに驚いた。</p>
+
+<p>そのときの作業メモ。</p>
+
+
+  </section>
+
+<ul class="pure-paginator">
+  
+  <li><a class="pure-button prev" href="/">&#171;</a></li>
+  
+  
+  <li><a class="pure-button" href="/">1</a></li>
+  
+  <li><a class="pure-button pure-button-active" href="/page/2/">2</a></li>
+  
+  <li><a class="pure-button" href="/page/3/">3</a></li>
+  
+  <li><a class="pure-button" href="/page/4/">4</a></li>
+  
+  <li><a class="pure-button" href="/page/5/">5</a></li>
+  
+  
+  <li><a class="pure-button next" href="/page/3/">&#187;</a></li>
+  
+</ul>
+</article>
+
+    <footer>
+    <div class="pure-menu pure-menu-open pure-menu-horizontal">
+      <a href="#" class="pure-menu-heading">Link</a>
+      <ul>
+        <li><a href="https://twitter.com/f440">Twitter</a></li>
+        <li><a href="https://github.com/f440">Github</a></li>
+        <li><a href="https://pinboard.in/u:f440">Pinboard</a></li>
+      </ul>
+    </div>
+    </footer>
+  </body>
+</html>

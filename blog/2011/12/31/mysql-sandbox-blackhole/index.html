@@ -1,107 +1,68 @@
-
-<!DOCTYPE HTML>
+<!doctype html>
 <html>
-<head>
-	<meta charset="utf-8">
-	<title>MySQL::Sandboxで環境を作ってBLACKHOLEエンジンを試す - apatheia.info</title>
-	<meta name="author" content="f440">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MySQL::Sandboxで環境を作ってBLACKHOLEエンジンを試す - apatheia.info</title>
+    <link href="http://yui.yahooapis.com/pure/0.2.0/pure-min.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/screen.css" media="screen" rel="stylesheet" type="text/css" />
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-35021317-1']);
+  _gaq.push(['_trackPageview']);
 
-	
-	<meta name="description" content="ちょっとMySQLのBLACKHOLEエンジン使って調べたいことがあったんだけど、
-MySQL::Sandbox 使うとレプリケーション環境が簡単に構築できて便利。 以下は、MySQL::SandboxのセットアップからBLACKHOLEエンジン使うところまでの記録。 前提 確認した環境は &hellip;">
-	
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
 
-	<link href="/atom.xml" rel="alternate" title="apatheia.info" type="application/atom+xml">
-	<link rel="canonical" href="">
-	<link href="/favicon.ico" rel="shortcut icon">
-	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-	
-</head>
+  </head>
+  <body class="blog blog_2011 blog_2011_12 blog_2011_12_31 blog_2011_12_31_mysql-sandbox-blackhole blog_2011_12_31_mysql-sandbox-blackhole_index">
+    <header>
+      <div id="site-title">
+        <h1><a href="/">apatheia.info</a></h1>
+      </div>
+      <nav class="pure-menu pure-menu-open pure-menu-horizontal">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/archives/">Archive</a></li>
+          <li>
+            <form action="http://google.com/search" method="get">
+              <input type="search" name="q" results="0" placeholder="search">
+              <input type="hidden" name="q" value="site:apatheia.info">
+            </form>
+          </li>
+        </ul>
+      </nav>
+    </header>
+      <article>
+    <h1>MySQL::Sandboxで環境を作ってBLACKHOLEエンジンを試す</h1>
+    <p id="article-info">
+      Published on 31 Dec 2011
+        <a class="pure-button" href="/blog/categories/mysql/">mysql</a>
 
-
-<body>
-	<header id="header" class="inner"><h1><a href="/">apatheia.info</a></h1>
-<nav id="main-nav"><ul class="main">
-	<li><a href="/">Blog</a></li>
-	<li><a href="/blog/archives">Archives</a></li>
-</ul>
-</nav>
-<nav id="mobile-nav">
-	<div class="alignleft menu">
-		<a class="button">Menu</a>
-		<div class="container"><ul class="main">
-	<li><a href="/">Blog</a></li>
-	<li><a href="/blog/archives">Archives</a></li>
-</ul>
-</div>
-	</div>
-	<div class="alignright search">
-		<a class="button"></a>
-		<div class="container">
-			<form action="http://google.com/search" method="get">
-				<input type="text" name="q" results="0">
-				<input type="hidden" name="q" value="site:apatheia.info">
-			</form>
-		</div>
-	</div>
-</nav>
-<nav id="sub-nav" class="alignright">
-	<div class="social">
-		
-		
-		
-		<a class="twitter" href="http://twitter.com/f440" title="Twitter">Twitter</a>
-		
-		
-		<a class="github" href="https://github.com/f440" title="GitHub">GitHub</a>
-		
-    
-    <a class="pinboard" href="https://pinboard.in/u:f440" title="Pinboard">Pinboard</a>
-    
-		
-		
-		
-		
-		
-		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
-		
-    
-	</div>
-	<form class="search" action="http://google.com/search" method="get">
-		<input class="alignright" type="text" name="q" results="0">
-		<input type="hidden" name="q" value="site:apatheia.info">
-	</form>
-</nav>
-
-</header>
-	
-		
-	
-	<div id="content" class="inner"><article class="post">
-	<h2 class="title">MySQL::Sandboxで環境を作ってBLACKHOLEエンジンを試す</h2>
-	<div class="entry-content"><p>ちょっとMySQLのBLACKHOLEエンジン使って調べたいことがあったんだけど、
+    </p>
+    <p>ちょっとMySQLのBLACKHOLEエンジン使って調べたいことがあったんだけど、
 <a href="http://mysqlsandbox.net/">MySQL::Sandbox</a> 使うとレプリケーション環境が簡単に構築できて便利。</p>
 
-<!-- more -->
 
 
 <p>以下は、MySQL::SandboxのセットアップからBLACKHOLEエンジン使うところまでの記録。</p>
 
-<h3>前提</h3>
+<h3 id="section">前提</h3>
 
 <ul>
-<li>確認した環境は Debian 6.0.3, perl v5.12.3</li>
-<li>cpanm &amp; perlbrew インストール済み（<code>cpan</code>コマンドでも問題無いはず）</li>
-<li>MySQL 5.5 はサーバーを起動するためにlibaio1が必要なので、あらかじめパッケージをインストールしておく</li>
+  <li>確認した環境は Debian 6.0.3, perl v5.12.3</li>
+  <li>cpanm &amp; perlbrew インストール済み（<code>cpan</code>コマンドでも問題無いはず）</li>
+  <li>MySQL 5.5 はサーバーを起動するためにlibaio1が必要なので、あらかじめパッケージをインストールしておく</li>
 </ul>
 
+<h3 id="section-1">手順</h3>
 
-<h3>手順</h3>
-
-<h4>インストール</h4>
+<h4 id="section-2">インストール</h4>
 
 <p><code>cpanm</code> でMySQL::Sandbox をインストール。</p>
 
@@ -113,12 +74,11 @@ MySQL::Sandbox 使うとレプリケーション環境が簡単に構築でき�
 <p>データファイルは以下のようなファイル構成を取る</p>
 
 <ul>
-<li>$HOME/opt/mysql 以下のサブディレクトリにサーバーを設置 (環境変数 SANDBOX_BINARY で変更可能)</li>
-<li>$HOME/sandboxes 以下のサブディレクトリにMySQLのデータや起動スクリプトを設置 (環境変数 SANDBOX_HOME で変更可能)</li>
+  <li>$HOME/opt/mysql 以下のサブディレクトリにサーバーを設置 (環境変数 SANDBOX_BINARY で変更可能)</li>
+  <li>$HOME/sandboxes 以下のサブディレクトリにMySQLのデータや起動スクリプトを設置 (環境変数 SANDBOX_HOME で変更可能)</li>
 </ul>
 
-
-<h4>サーバーセットアップ</h4>
+<h4 id="section-3">サーバーセットアップ</h4>
 
 <p>サーバーを起動してみる。</p>
 
@@ -132,7 +92,7 @@ $ curl -L -o mysql-5.5.19-linux2.6-x86_64.tar.gz http://www-jp.mysql.com/get/Dow
 $ make_sandbox $SANDBOX_BINARY/mysql-5.5.19-linux2.6-x86_64.tar.gz
 </code></pre>
 
-<p>これで$SANDBOX_BINARY/5.5.19 にサーバーが、また $SANDBOX_HOME/msb_5_5_19 以下にインスタンスが作成される。</p>
+<p>これで$SANDBOX_BINARY/5.5.19 にサーバーが、また $SANDBOX_HOME/msb<em>5</em>5_19 以下にインスタンスが作成される。</p>
 
 <p>この時点で起動出来ているはずなので、接続してみる。以下で mysql クライアントが起動するはず。</p>
 
@@ -149,13 +109,14 @@ $ make_sandbox $SANDBOX_BINARY/mysql-5.5.19-linux2.6-x86_64.tar.gz
 <p>以上で、 master, node1, node2 というサーバーが起動する。node1, node2 は master
 を参照したレプリケーション構成となる。デフォルトでノードは2台だが、<code>--how_many_nodes</code> オプションで台数は変更可能。</p>
 
-<p>同様に<a href="http://dev.mysql.com/doc/refman/5.1/ja/replication-%0Atopology-circular.html">Circular recplication</a>(日本語訳だとなんになるんだろう)も簡単に作れる。マスター/マスターレプリケーションはCircular
+<p>同様に<a href="http://dev.mysql.com/doc/refman/5.1/ja/replication-
+topology-circular.html">Circular recplication</a>(日本語訳だとなんになるんだろう)も簡単に作れる。マスター/マスターレプリケーションはCircular
 replication が2台のみの構成だった場合に同じ。</p>
 
 <pre><code>$ make_replication_sandbox --circular=4 5.5.19
 </code></pre>
 
-<p>これで node1 &ndash;> node2, node2 &ndash;> nod3, node3 &ndash;> node4, node4 &ndash;> node1
+<p>これで node1 -&gt; node2, node2 -&gt; nod3, node3 -&gt; node4, node4 -&gt; node1
 という循環関係のレプリケーションが作れる。</p>
 
 <p>使い終わったら止めておこう。</p>
@@ -163,13 +124,14 @@ replication が2台のみの構成だった場合に同じ。</p>
 <pre><code>$ $SANDBOX_HOME/stop_all
 </code></pre>
 
-<h3>BLACKHOLEエンジンを試す</h3>
+<h3 id="blackhole">BLACKHOLEエンジンを試す</h3>
 
-<p>準備ができたので、<a href="http://dev.mysql.com/doc/refman/5.1/ja/blackhole-%0Astorage-engine.html">BLACKHOLEエンジン</a>を使ってみる。BLACKHOLEエンジンはバイナリログは記録するが、データは残さないストレージエンジンのこと。</p>
+<p>準備ができたので、<a href="http://dev.mysql.com/doc/refman/5.1/ja/blackhole-
+storage-engine.html">BLACKHOLEエンジン</a>を使ってみる。BLACKHOLEエンジンはバイナリログは記録するが、データは残さないストレージエンジンのこと。</p>
 
 <p>まずは、サンドボックス作成</p>
 
-<p>$ make_replication_sandbox &mdash;circular=3 5.5.19</p>
+<p>$ make_replication_sandbox –circular=3 5.5.19</p>
 
 <p>デフォルトストレージエンジンをnode1, node3はInnoDB、node2 はBLACKHOLEに変更</p>
 
@@ -179,7 +141,7 @@ $ echo default_storage_engine=InnoDB &gt;&gt; $SANDBOX_HOME/rcsandbox_5_5_19/nod
 $ $SANDBOX_HOME/rcsandbox_5_5_19/restart_all
 </code></pre>
 
-<p>node2, node3 のレプリケーションだけ再開して、node1 &ndash;> node2 &ndash;> node3 の2階層スレーブにする。</p>
+<p>node2, node3 のレプリケーションだけ再開して、node1 -&gt; node2 -&gt; node3 の2階層スレーブにする。</p>
 
 <pre><code>$ $SANDBOX_HOME/rcsandbox_5_5_19/node2/use -e start slave
 $ $SANDBOX_HOME/rcsandbox_5_5_19/node3/use -e start slave
@@ -187,7 +149,8 @@ $ $SANDBOX_HOME/rcsandbox_5_5_19/node3/use -e start slave
 
 <p>実験のための構成が完成した。ここで、node1 にデータを流し込んだとき、node2 にはデータが残らなくて、node3 にデータが出来たら成功。</p>
 
-<p>サンプルデータには、<a href="https://launchpad.net/test-%0Adb/">Sample database with test suite</a>を利用する。</p>
+<p>サンプルデータには、<a href="https://launchpad.net/test-
+db/">Sample database with test suite</a>を利用する。</p>
 
 <pre><code>$ curl -LO [http://launchpad.net/test-db/employees-db-1/1.0.6/+download/employees_db-full-1.0.6.tar.bz2](http://launchpad.net/test-db/employees-db-1/1.0.6/+download/employees_db-full-1.0.6.tar.bz2)
 $ tar xf employees_db-full-1.0.6.tar.bz2
@@ -232,51 +195,20 @@ drwx------ 2 f440 f440      4096 2011-12-31 17:11 test/
 
 <p>node2 のバイナリログ、リレーログはちゃんと出来ているので、BLACKHOLEエンジンの適用を確認できた。</p>
 
-<h3>メモ</h3>
+<h3 id="section-4">メモ</h3>
 
 <ul>
-<li><code>$SANDBOX_HOME/clear_all</code> でデータ消せるの便利。</li>
-<li>MySQL::Sandbox 3.0.19 からは、<a href="http://mysqlsandbox.net/news.html">Percona や Maria DB などの派生DBも扱える</a>みたい。いろいろなバージョンで試すことが多いのでうれしい。</li>
+  <li><code>$SANDBOX_HOME/clear_all</code> でデータ消せるの便利。</li>
+  <li>MySQL::Sandbox 3.0.19 からは、<a href="http://mysqlsandbox.net/news.html">Percona や Maria DB などの派生DBも扱える</a>みたい。いろいろなバージョンで試すことが多いのでうれしい。</li>
 </ul>
 
-</div>
 
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-12-31T00:00:00+09:00" pubdate data-updated="true">2011-12-31</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/mysql/'>mysql</a>
-
-
-</div>
-	
-</div>
-</article>
-
-	
-<div class="share">
-	<div class="addthis_toolbox addthis_default_style ">
-	
-	
-	<a class="addthis_button_tweet"></a>
-	
-	
-	<a class="addthis_counter addthis_pill_style"></a>
-	</div>
+    
+    <aside>
+    <div class="share">
+  <div class="addthis_toolbox addthis_default_style ">
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
   <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4f8eed8875190f92"></script>
   <script type="text/javascript">
     var addthis_config = {
@@ -285,60 +217,44 @@ drwx------ 2 f440 f440      4096 2011-12-31 17:11 test/
   </script>
 </div>
 
-
-
-
-<section id="comment">
-    <h2 class="title">Comments</h2>
-    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-</section>
-</div>
-	<footer id="footer" class="inner">Copyright &copy; 2013
-
-    f440
-
-</footer>
-	<script src="/javascripts/slash.js"></script>
-<script src="/javascripts/jquery.fancybox.pack.js"></script>
+    <div id="disqus_thread"></div>
 <script type="text/javascript">
-(function($){
-	$('.fancybox').fancybox();
-})(jQuery);
-</script> <!-- Delete or comment this line to disable Fancybox -->
-
-
-<script type="text/javascript">
-      var disqus_shortname = 'apatheiainfo';
-      
-        
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://apatheia.info/blog/2011/12/31/mysql-sandbox-blackhole/';
-        var disqus_url = 'http://apatheia.info/blog/2011/12/31/mysql-sandbox-blackhole/';
-        var disqus_script = 'embed.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
+  var disqus_shortname = 'apatheiainfo';
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
 </script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
+    </aside>
+    
+  </article>
 
-
-	<script type="text/javascript">
-		var _gaq = _gaq || [];
-		_gaq.push(['_setAccount', 'UA-35021317-1']);
-		_gaq.push(['_trackPageview']);
-
-		(function() {
-			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-		})();
-	</script>
-
-
-
-</body>
+    <footer>
+    <div class="pure-menu pure-menu-open pure-menu-horizontal">
+      <a href="#" class="pure-menu-heading">Link</a>
+      <ul>
+        <li><a href="https://twitter.com/f440">Twitter</a></li>
+        <li><a href="https://github.com/f440">Github</a></li>
+        <li><a href="https://pinboard.in/u:f440">Pinboard</a></li>
+      </ul>
+    </div>
+    </footer>
+  </body>
 </html>
+<script>
+;(function(document) {
+  var imgs = document.getElementsByTagName("img");
+    for (var i = 0, len = imgs.length; i < len; i++) {
+    var img = imgs[i];
+    var a = document.createElement("a");
+    a.setAttribute("href", img.src);
+    a.setAttribute("title", img.alt);
+    a.appendChild(img.cloneNode(true));
+    img.parentNode.replaceChild(a, img);
+  }
+})(document);
+</script>

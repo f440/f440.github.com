@@ -1,72 +1,67 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-
-  <title><![CDATA[apatheia.info]]></title>
-  <link href="http://apatheia.info/atom.xml" rel="self"/>
+  <title>apatheia.info</title>
   <link href="http://apatheia.info/"/>
-  <updated>2013-06-24T22:41:42+09:00</updated>
+  <link href="http://apatheia.info/atom.xml" rel="self"/>
+  <updated>2013-06-17T09:13:00Z</updated>
   <id>http://apatheia.info/</id>
   <author>
-    <name><![CDATA[f440]]></name>
-    
+    <name>f440</name>
   </author>
-  <generator uri="http://octopress.org/">Octopress</generator>
-
-  
   <entry>
-    <title type="html"><![CDATA[仮想環境構築に docker を使う]]></title>
-    <link href="http://apatheia.info/blog/2013/06/17/docker/"/>
-    <updated>2013-06-17T09:13:00+09:00</updated>
-    <id>http://apatheia.info/blog/2013/06/17/docker</id>
-    <content type="html"><![CDATA[<p>ちょっと前から <a href="http://www.docker.io/">Docker</a> を使っているので、その話。</p>
-
-<!-- more -->
-
-
-<h1>Dockr について</h1>
-
-<p><a href="http://www.docker.io/">Docker</a> は <a href="https://www.dotcloud.com/">dotcloud</a> がオープンソースで公開している、コンテナ技術による仮想化ソフトウェア。</p>
-
-<p>以下のテクノロジーベースにしている:</p>
-
-<ul>
-<li><a href="http://lxc.sourceforge.net/">LXC</a>
-
-<ul>
-<li><a href="http://apatheia.info/blog/2012/05/13/vps-lxc-xtradb-cluster/">前にも書いた</a>。Xen とか VirtualBOX みたいにホスト内に仮想マシンを立ち上げるんじゃなくて、ホスト内の隔離された環境で仮想マシンを動かす技術。物理マシンをシミュレーションしているんじゃないってことは、VPS とか EC2 とかの仮想マシン上でも問題なく動くし、マシンを起動するプロセスが不要となるので、一瞬で使い始められるというメリットにつながっている。</li>
-</ul>
-</li>
-<li><a href="http://aufs.sourceforge.net/">AUFS</a>
-
-<ul>
-<li>UnionFS(ディレクトリを重ね合わせることができる)の実装の一つ。元の仮想マシンイメージを書き換えないで、更新が発生した部分は別の場所に書き込んでいくようになっている。これにより、仮想マシンの立ち上げ時にイメージのコピーが発生しないので、すぐに使い始められる。</li>
-</ul>
-</li>
-</ul>
+    <title>仮想環境構築に docker を使う</title>
+    <link rel="alternate" href="http://apatheia.info/blog/2013/06/17/docker/"/>
+    <id>http://apatheia.info/blog/2013/06/17/docker/</id>
+    <published>2013-06-17T09:13:00Z</published>
+    <updated>2013-06-17T09:13:00Z</updated>
+    <author>
+      <name>f440</name>
+    </author>
+    <content type="html">&lt;p&gt;ちょっと前から &lt;a href="http://www.docker.io/"&gt;Docker&lt;/a&gt; を使っているので、その話。&lt;/p&gt;
 
 
-<p>Docker を使う前は LXC のラッパーとして取っつきにくさを緩和してくれる、とかそういうレベルだと思ったんだけど、予想はよい方向に裏切られた。</p>
 
-<p><a href="http://docs.docker.io/en/latest/commandline/command/images/">仮想マシンのイメージを可視化したもの</a>を見ると、まるで Git のコミットログみたいに見えると思う。実際、情報は差分で管理され、履歴を残したり分岐させたりといった操作が非常に軽量にできていて、Git を操作するかのように仮想マシンを操作できるようになっている。</p>
+&lt;h2 id="dockr-"&gt;Dockr について&lt;/h2&gt;
 
-<h1>動かし方</h1>
+&lt;p&gt;&lt;a href="http://www.docker.io/"&gt;Docker&lt;/a&gt; は &lt;a href="https://www.dotcloud.com/"&gt;dotcloud&lt;/a&gt; がオープンソースで公開している、コンテナ技術による仮想化ソフトウェア。&lt;/p&gt;
 
-<p>Arch Linux や Debian で動かしている人がいるみたいだけど、公式サポートは今のところ Ubuntu のみ。Ubuntu 12.04 LTS を使っているのであれば、<code>curl get.docker.io | sh -x</code> で動くようになる。</p>
+&lt;p&gt;以下のテクノロジーベースにしている:&lt;/p&gt;
 
-<p>ちゃんとしたやり方は <a href="http://docs.docker.io/en/latest/installation/">ドキュメント</a>を見れば、特にはまることもないと思う。できるだけ新しい Ubuntu を使っておけばいい。</p>
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href="http://lxc.sourceforge.net/"&gt;LXC&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href="/blog/2012/05/13/vps-lxc-xtradb-cluster/"&gt;前にも書いた&lt;/a&gt;。Xen とか VirtualBOX みたいにホスト内に仮想マシンを立ち上げるんじゃなくて、ホスト内の隔離された環境で仮想マシンを動かす技術。物理マシンをシミュレーションしているんじゃないってことは、VPS とか EC2 とかの仮想マシン上でも問題なく動くし、マシンを起動するプロセスが不要となるので、一瞬で使い始められるというメリットにつながっている。&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href="http://aufs.sourceforge.net/"&gt;AUFS&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;UnionFS(ディレクトリを重ね合わせることができる)の実装の一つ。元の仮想マシンイメージを書き換えないで、更新が発生した部分は別の場所に書き込んでいくようになっている。これにより、仮想マシンの立ち上げ時にイメージのコピーが発生しないので、すぐに使い始められる。&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
 
-<p>すぐに試してみたいんなら、Vagrant 経由で簡単に使い始められる。</p>
+&lt;p&gt;Docker を使う前は LXC のラッパーとして取っつきにくさを緩和してくれる、とかそういうレベルだと思ったんだけど、予想はよい方向に裏切られた。&lt;/p&gt;
 
-<pre><code>git clone https://github.com/dotcloud/docker.git
+&lt;p&gt;&lt;a href="http://docs.docker.io/en/latest/commandline/command/images/"&gt;仮想マシンのイメージを可視化したもの&lt;/a&gt;を見ると、まるで Git のコミットログみたいに見えると思う。実際、情報は差分で管理され、履歴を残したり分岐させたりといった操作が非常に軽量にできていて、Git を操作するかのように仮想マシンを操作できるようになっている。&lt;/p&gt;
+
+&lt;h2 id="section"&gt;動かし方&lt;/h2&gt;
+
+&lt;p&gt;Arch Linux や Debian で動かしている人がいるみたいだけど、公式サポートは今のところ Ubuntu のみ。Ubuntu 12.04 LTS を使っているのであれば、&lt;code&gt;curl get.docker.io | sh -x&lt;/code&gt; で動くようになる。&lt;/p&gt;
+
+&lt;p&gt;ちゃんとしたやり方は &lt;a href="http://docs.docker.io/en/latest/installation/"&gt;ドキュメント&lt;/a&gt;を見れば、特にはまることもないと思う。できるだけ新しい Ubuntu を使っておけばいい。&lt;/p&gt;
+
+&lt;p&gt;すぐに試してみたいんなら、Vagrant 経由で簡単に使い始められる。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git clone https://github.com/dotcloud/docker.git
 cd docker
 vagrant up --provider virtualbox # or vagrant up --provider aws
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<h1>基礎的な操作方法</h1>
+&lt;h2 id="section-1"&gt;基礎的な操作方法&lt;/h2&gt;
 
-<p>インストールがうまくいって Docker が起動しているものとして、早速使ってみる。</p>
+&lt;p&gt;インストールがうまくいって Docker が起動しているものとして、早速使ってみる。&lt;/p&gt;
 
-<pre><code>$ docker
+&lt;pre&gt;&lt;code&gt;$ docker
 Usage: docker [OPTIONS] COMMAND [arg...]
   -H="127.0.0.1:4243": Host:port to bind/connect to
 
@@ -77,11 +72,11 @@ Usage: docker [OPTIONS] COMMAND [arg...]
   build     Build a container from a Dockerfile
   commit    Create a new image from a container's changes
 (以下省略)
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>コマンドがずらっと表示されるかと思う。まずは単発のコマンドをコンテナ内で実行してみる。</p>
+&lt;p&gt;コマンドがずらっと表示されるかと思う。まずは単発のコマンドをコンテナ内で実行してみる。&lt;/p&gt;
 
-<pre><code>$ docker run base /bin/echo hi
+&lt;pre&gt;&lt;code&gt;$ docker run base /bin/echo hi
 Pulling repository base from https://index.docker.io/v1
 Pulling image b750fe79269d2ec9a3c593ef05b4332b1d1a02a62b4accb2c21d589ff2f5f2dc (latest) from base
 Pulling b750fe79269d2ec9a3c593ef05b4332b1d1a02a62b4accb2c21d589ff2f5f2dc metadata
@@ -92,40 +87,40 @@ Pulling 27cf784147099545 fs layer
 Downloading 94863360/? (n/a)
 Pulling image 27cf784147099545 () from base
 hi
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>「<code>docker</code> コマンドに run サブコマンドを指定して、<code>base</code> という仮想マシンで <code>/bin/echo hi</code> コマンドを実行する」という意味になる。仮想マシンがダウンロードされるが、これは初回実行時のみ。最後に表示された「hi」というのが今回の実行結果で、このコンテナの役割はこれで終わり。</p>
+&lt;p&gt;「&lt;code&gt;docker&lt;/code&gt; コマンドに run サブコマンドを指定して、&lt;code&gt;base&lt;/code&gt; という仮想マシンで &lt;code&gt;/bin/echo hi&lt;/code&gt; コマンドを実行する」という意味になる。仮想マシンがダウンロードされるが、これは初回実行時のみ。最後に表示された「hi」というのが今回の実行結果で、このコンテナの役割はこれで終わり。&lt;/p&gt;
 
-<p>今度は作ったマシンの中に入ってみるために、<code>-i</code> と <code>-t</code> オプションで入出力できるようにして <code>/bin/bash</code> を起動してみる。</p>
+&lt;p&gt;今度は作ったマシンの中に入ってみるために、&lt;code&gt;-i&lt;/code&gt; と &lt;code&gt;-t&lt;/code&gt; オプションで入出力できるようにして &lt;code&gt;/bin/bash&lt;/code&gt; を起動してみる。&lt;/p&gt;
 
-<pre><code>$ docker run -i -t base /bin/bash
+&lt;pre&gt;&lt;code&gt;$ docker run -i -t base /bin/bash
 root@bc43a290f0ce:/#
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>端末から抜けるとホスト側に制御が戻る。</p>
+&lt;p&gt;端末から抜けるとホスト側に制御が戻る。&lt;/p&gt;
 
-<pre><code>root@bc43a290f0ce:/# exit
+&lt;pre&gt;&lt;code&gt;root@bc43a290f0ce:/# exit
 exit
 $
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>今度は <code>-d</code> オプションでコマンドを実行しっぱなしにする。</p>
+&lt;p&gt;今度は &lt;code&gt;-d&lt;/code&gt; オプションでコマンドを実行しっぱなしにする。&lt;/p&gt;
 
-<pre><code>$ docker run -i -t -d base /bin/ping -i 5 www.aikatsu.net
+&lt;pre&gt;&lt;code&gt;$ docker run -i -t -d base /bin/ping -i 5 www.aikatsu.net
 79365b2985c4
 $
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>ID が返されて、すぐに端末が利用可能になる。稼働中のプロセスを確認してみる。</p>
+&lt;p&gt;ID が返されて、すぐに端末が利用可能になる。稼働中のプロセスを確認してみる。&lt;/p&gt;
 
-<pre><code>$ docker ps
+&lt;pre&gt;&lt;code&gt;$ docker ps
 ID                  IMAGE               COMMAND                CREATED             STATUS              PORTS
 79365b2985c4        base:latest         /bin/ping -i 5 www.a   22 seconds ago      Up 21 seconds
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>次に実行中の出力をのぞいてみよう。</p>
+&lt;p&gt;次に実行中の出力をのぞいてみよう。&lt;/p&gt;
 
-<pre><code>$ docker logs 79365b2985c4
+&lt;pre&gt;&lt;code&gt;$ docker logs 79365b2985c4
 PING www.aikatsu.net (60.32.7.37) 56(84) bytes of data.
 64 bytes from www3.sunrise-anime.jp (60.32.7.37): icmp_req=1 ttl=49 time=282 ms
 64 bytes from www3.sunrise-anime.jp (60.32.7.37): icmp_req=3 ttl=49 time=278 ms
@@ -136,58 +131,58 @@ PING www.aikatsu.net (60.32.7.37) 56(84) bytes of data.
 64 bytes from www3.sunrise-anime.jp (60.32.7.37): icmp_req=9 ttl=49 time=270 ms
 64 bytes from www3.sunrise-anime.jp (60.32.7.37): icmp_req=10 ttl=49 time=290 ms
 64 bytes from www3.sunrise-anime.jp (60.32.7.37): icmp_req=11 ttl=49 time=284 ms
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>順調に動き続けているようなので、このジョブにアタッチしてみる。</p>
+&lt;p&gt;順調に動き続けているようなので、このジョブにアタッチしてみる。&lt;/p&gt;
 
-<pre><code>$ docker attach 79365b2985c4
+&lt;pre&gt;&lt;code&gt;$ docker attach 79365b2985c4
 64 bytes from www3.sunrise-anime.jp (60.32.7.37): icmp_req=18 ttl=49 time=239 ms
 64 bytes from www3.sunrise-anime.jp (60.32.7.37): icmp_req=19 ttl=49 time=291 ms
 64 bytes from www3.sunrise-anime.jp (60.32.7.37): icmp_req=20 ttl=49 time=275 ms
 (出力が続く)
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>アタッチ中の端末は <code>Ctrl-p Ctrl-q</code> でデタッチできる。(このとき use of closed network connection っていうエラーが出る場合 Ctrl-c で抜けるしかないっぽい。バグレポートは上がっているので、じきに直ると思う。)</p>
+&lt;p&gt;アタッチ中の端末は &lt;code&gt;Ctrl-p Ctrl-q&lt;/code&gt; でデタッチできる。(このとき use of closed network connection っていうエラーが出る場合 Ctrl-c で抜けるしかないっぽい。バグレポートは上がっているので、じきに直ると思う。)&lt;/p&gt;
 
-<p>最後に<code>kill</code>でこのプロセスを消してみる。</p>
+&lt;p&gt;最後に&lt;code&gt;kill&lt;/code&gt;でこのプロセスを消してみる。&lt;/p&gt;
 
-<pre><code>$ docker kill 79365b2985c4
+&lt;pre&gt;&lt;code&gt;$ docker kill 79365b2985c4
 $ docker ps
 $
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p><code>ps</code>からプロセスが消えた。基礎的なコンテナの操作の説明は以上。</p>
+&lt;p&gt;&lt;code&gt;ps&lt;/code&gt;からプロセスが消えた。基礎的なコンテナの操作の説明は以上。&lt;/p&gt;
 
-<h1>詳細</h1>
+&lt;h2 id="section-2"&gt;詳細&lt;/h2&gt;
 
-<h3>コンテナ</h3>
+&lt;h3 id="section-3"&gt;コンテナ&lt;/h3&gt;
 
-<p>これまでコマンドを実行したり、<code>kill</code> されたコンテナはどうなっているのか。実は全部残っている。停止したコンテナを表示するために<code>-a</code>をつける。ついでに、情報を省略しないで表示するために<code>-notrunc</code> もつける。</p>
+&lt;p&gt;これまでコマンドを実行したり、&lt;code&gt;kill&lt;/code&gt; されたコンテナはどうなっているのか。実は全部残っている。停止したコンテナを表示するために&lt;code&gt;-a&lt;/code&gt;をつける。ついでに、情報を省略しないで表示するために&lt;code&gt;-notrunc&lt;/code&gt; もつける。&lt;/p&gt;
 
-<pre><code>$ docker ps -a -notrunc
+&lt;pre&gt;&lt;code&gt;$ docker ps -a -notrunc
 ID                                                                 IMAGE               COMMAND                          CREATED             STATUS              PORTS
 79365b2985c43a2a6977764f4dde2d375084020fbc04cc855508c417a36f88c2   base:latest         /bin/ping -i 5 www.aikatsu.net   14 minutes ago      Exit 0
 bc43a290f0ced4677ee7eb1a0d662cca496cc720d8db20e746dda45e4659f503   base:latest         /bin/bash                        16 minutes ago      Exit 0
 7a666192cca72cea81cade398b22700c982fbb9271a7eca23ff51c6c504d5971   base:latest         /bin/echo hi                     16 minutes ago      Exit 0
 8b0af4fc390d762c33dadc1b149516ba95bdb70d093e991ec2df563817f55ffb   base:latest         /bin/bash                        21 minutes ago      Exit 0
 4637bc6341706c25e066c5ccfe92e10c923bfe4955a9e8b3ce07237fda0fb34a   base:latest         /bin/echo hi                     21 minutes ago      Exit 0
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>正常終了しているので、すべて<code>Exit 0</code>になっている。また、ID は省略表記されていたこともわかる。コンテナの実体は <code>/var/lib/docker/containers/&lt;ID&gt;</code> 以下に格納されている。</p>
+&lt;p&gt;正常終了しているので、すべて&lt;code&gt;Exit 0&lt;/code&gt;になっている。また、ID は省略表記されていたこともわかる。コンテナの実体は &lt;code&gt;/var/lib/docker/containers/&amp;lt;ID&amp;gt;&lt;/code&gt; 以下に格納されている。&lt;/p&gt;
 
-<pre><code>$ sudo ls /var/lib/docker/containers/
+&lt;pre&gt;&lt;code&gt;$ sudo ls /var/lib/docker/containers/
 4637bc6341706c25e066c5ccfe92e10c923bfe4955a9e8b3ce07237fda0fb34a
 79365b2985c43a2a6977764f4dde2d375084020fbc04cc855508c417a36f88c2
 7a666192cca72cea81cade398b22700c982fbb9271a7eca23ff51c6c504d5971
 8b0af4fc390d762c33dadc1b149516ba95bdb70d093e991ec2df563817f55ffb
 bc43a290f0ced4677ee7eb1a0d662cca496cc720d8db20e746dda45e4659f503
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>どんどんたまっていくから心配かもしれないけど、各コンテナはベースイメージからの差分しかもたないので、問題にならない。もし、消したくなったら <code>docker rm &lt;コンテナのID&gt;</code> で消せる。</p>
+&lt;p&gt;どんどんたまっていくから心配かもしれないけど、各コンテナはベースイメージからの差分しかもたないので、問題にならない。もし、消したくなったら &lt;code&gt;docker rm &amp;lt;コンテナのID&amp;gt;&lt;/code&gt; で消せる。&lt;/p&gt;
 
-<p>作業領域であったコンテナを <code>commit</code> するとイメージとして使い回せるようになる。<code>ユーザー名/名称</code>にするのが作法っぽい。</p>
+&lt;p&gt;作業領域であったコンテナを &lt;code&gt;commit&lt;/code&gt; するとイメージとして使い回せるようになる。&lt;code&gt;ユーザー名/名称&lt;/code&gt;にするのが作法っぽい。&lt;/p&gt;
 
-<pre><code>$ docker commit -m "My first container" 4637bc634170 f440/first_container
+&lt;pre&gt;&lt;code&gt;$ docker commit -m "My first container" 4637bc634170 f440/first_container
 02036952e5dc
 $ docker images
 REPOSITORY             TAG                 ID                  CREATED
@@ -196,49 +191,49 @@ base                   ubuntu-quantl       b750fe79269d        12 weeks ago
 base                   ubuntu-quantal      b750fe79269d        12 weeks ago
 base                   ubuntu-12.10        b750fe79269d        12 weeks ago
 f440/first_container   latest              02036952e5dc        3 seconds ago
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>これで今後は <code>docker run f440/first_container</code> をベースにしたコンテナを作れるようになる。</p>
+&lt;p&gt;これで今後は &lt;code&gt;docker run f440/first_container&lt;/code&gt; をベースにしたコンテナを作れるようになる。&lt;/p&gt;
 
-<h3>イメージ</h3>
+&lt;h3 id="section-4"&gt;イメージ&lt;/h3&gt;
 
-<p>もう一回イメージの一覧を内容を確認してみよう。</p>
+&lt;p&gt;もう一回イメージの一覧を内容を確認してみよう。&lt;/p&gt;
 
-<pre><code>$ docker images
+&lt;pre&gt;&lt;code&gt;$ docker images
 REPOSITORY             TAG                 ID                  CREATED
 f440/first-container   latest              141fef9a2f57        14 seconds ago
 base                   latest              b750fe79269d        12 weeks ago
 base                   ubuntu-12.10        b750fe79269d        12 weeks ago
 base                   ubuntu-quantl       b750fe79269d        12 weeks ago
 base                   ubuntu-quantal      b750fe79269d        12 weeks ago
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>base イメージは latest, ubuntu-quantl, ubuntu-quantal, ubuntu-12.10 といった複数のタグがついていることがわかる。イメージは複数の名称をタグ付けできるようになっており、<code>base:latest</code>, <code>base:ubuntu-12.10</code> といった形で異なるイメージを呼び出せるようになっている。省略時は <code>base:latest</code> と同じ。</p>
+&lt;p&gt;base イメージは latest, ubuntu-quantl, ubuntu-quantal, ubuntu-12.10 といった複数のタグがついていることがわかる。イメージは複数の名称をタグ付けできるようになっており、&lt;code&gt;base:latest&lt;/code&gt;, &lt;code&gt;base:ubuntu-12.10&lt;/code&gt; といった形で異なるイメージを呼び出せるようになっている。省略時は &lt;code&gt;base:latest&lt;/code&gt; と同じ。&lt;/p&gt;
 
-<p>pull してくるイメージは <a href="https://index.docker.io/">https://index.docker.io/</a> から情報を持ってくる。コマンドラインで検索したい場合は <code>search</code> コマンドを利用する。</p>
+&lt;p&gt;pull してくるイメージは &lt;a href="https://index.docker.io/"&gt;https://index.docker.io/&lt;/a&gt; から情報を持ってくる。コマンドラインで検索したい場合は &lt;code&gt;search&lt;/code&gt; コマンドを利用する。&lt;/p&gt;
 
-<pre><code>$ docker search centos
+&lt;pre&gt;&lt;code&gt;$ docker search centos
 Found 4 results matching your query ("centos")
 NAME                          DESCRIPTION
 centos
 backjlack/centos-6.4-x86_64
 creack/centos
 mbkan/lamp                    centos with ssh, LAMP, PHPMyAdmin(root pas...
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>ローカルにキャッシュされたイメージを消すには <code>docker rmi &lt;イメージのID&gt;</code>でいい。</p>
+&lt;p&gt;ローカルにキャッシュされたイメージを消すには &lt;code&gt;docker rmi &amp;lt;イメージのID&amp;gt;&lt;/code&gt;でいい。&lt;/p&gt;
 
-<p>自前で作ったイメージを <a href="https://index.docker.io/">https://index.docker.io/</a>  に登録するには、あらかじめサイト上でアカウントを作っておき、 <code>docker login</code> した後に <code>docker push</code> する。イメージ名にアンダーバー使っていると <code>push</code> で失敗するのと、アップロードしたイメージを消す機能がまだなかったりするので注意。</p>
+&lt;p&gt;自前で作ったイメージを &lt;a href="https://index.docker.io/"&gt;https://index.docker.io/&lt;/a&gt;  に登録するには、あらかじめサイト上でアカウントを作っておき、 &lt;code&gt;docker login&lt;/code&gt; した後に &lt;code&gt;docker push&lt;/code&gt; する。イメージ名にアンダーバー使っていると &lt;code&gt;push&lt;/code&gt; で失敗するのと、アップロードしたイメージを消す機能がまだなかったりするので注意。&lt;/p&gt;
 
-<p>イメージの実体は <code>/var/lib/docker/graph/</code> にある。</p>
+&lt;p&gt;イメージの実体は &lt;code&gt;/var/lib/docker/graph/&lt;/code&gt; にある。&lt;/p&gt;
 
-<pre><code>$ docker images -a -notrunc
+&lt;pre&gt;&lt;code&gt;$ docker images -a -notrunc
 REPOSITORY          TAG                 ID                                                                 CREATED
 base                latest              b750fe79269d2ec9a3c593ef05b4332b1d1a02a62b4accb2c21d589ff2f5f2dc   12 weeks ago
 base                ubuntu-12.10        b750fe79269d2ec9a3c593ef05b4332b1d1a02a62b4accb2c21d589ff2f5f2dc   12 weeks ago
 base                ubuntu-quantl       b750fe79269d2ec9a3c593ef05b4332b1d1a02a62b4accb2c21d589ff2f5f2dc   12 weeks ago
 base                ubuntu-quantal      b750fe79269d2ec9a3c593ef05b4332b1d1a02a62b4accb2c21d589ff2f5f2dc   12 weeks ago
-&lt;none&gt;              &lt;none&gt;              27cf784147099545                                                   12 weeks ago
+&amp;lt;none&amp;gt;              &amp;lt;none&amp;gt;              27cf784147099545                                                   12 weeks ago
 
 $ sudo ls -1 /var/lib/docker/graph
 141fef9a2f57e86dd6d9aa58fe9318b0d9d71d91053079842051d9738bad6e45
@@ -246,11 +241,11 @@ $ sudo ls -1 /var/lib/docker/graph
 b750fe79269d2ec9a3c593ef05b4332b1d1a02a62b4accb2c21d589ff2f5f2dc
 checksums
 :tmp:
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>ここで images に ID: 27cf784147099545 というのが現れた。これは何か。<code>inspect</code> を使うとイメージの詳細を表示できる。</p>
+&lt;p&gt;ここで images に ID: 27cf784147099545 というのが現れた。これは何か。&lt;code&gt;inspect&lt;/code&gt; を使うとイメージの詳細を表示できる。&lt;/p&gt;
 
-<pre><code>$ docker inspect base
+&lt;pre&gt;&lt;code&gt;$ docker inspect base
 {
     "id": "b750fe79269d2ec9a3c593ef05b4332b1d1a02a62b4accb2c21d589ff2f5f2dc",
     "parent": "27cf784147099545",
@@ -279,17 +274,17 @@ checksums
         "VolumesFrom": ""
     }
 }
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>ID: 27cf784147099545 は base イメージの親イメージの ID であることがわかる。イメージは差分になっているので、親のイメージが必要ということで初回実行のタイミングで base と一緒に 27cf784147099545 もダウンロードされていたのだった。</p>
+&lt;p&gt;ID: 27cf784147099545 は base イメージの親イメージの ID であることがわかる。イメージは差分になっているので、親のイメージが必要ということで初回実行のタイミングで base と一緒に 27cf784147099545 もダウンロードされていたのだった。&lt;/p&gt;
 
-<h3>ネットワーク</h3>
+&lt;h3 id="section-5"&gt;ネットワーク&lt;/h3&gt;
 
-<p><code>docker run</code> 時に <code>-p</code> をつけることで、コンテナから外部にさらすポートを決められる。コンテナ側のポートはホスト側のポートに変換される際、ポート番号が変更される(49153以降になる)ので、<code>docker port &lt;ジョブのID&gt; &lt;ポート番号&gt;</code> あるいは <code>docker ps</code> でポートの対応状況を確認する必要がある。</p>
+&lt;p&gt;&lt;code&gt;docker run&lt;/code&gt; 時に &lt;code&gt;-p&lt;/code&gt; をつけることで、コンテナから外部にさらすポートを決められる。コンテナ側のポートはホスト側のポートに変換される際、ポート番号が変更される(49153以降になる)ので、&lt;code&gt;docker port &amp;lt;ジョブのID&amp;gt; &amp;lt;ポート番号&amp;gt;&lt;/code&gt; あるいは &lt;code&gt;docker ps &lt;/code&gt; でポートの対応状況を確認する必要がある。&lt;/p&gt;
 
-<p>ドキュメントの <a href="https://github.com/dotcloud/docker#expose-a-service-on-a-tcp-port">Expose a service on a TCP port</a> がわかりやすい。</p>
+&lt;p&gt;ドキュメントの &lt;a href="https://github.com/dotcloud/docker#expose-a-service-on-a-tcp-port"&gt;Expose a service on a TCP port&lt;/a&gt; がわかりやすい。&lt;/p&gt;
 
-<pre><code># 以下、コメントは書き換えてある
+&lt;pre&gt;&lt;code&gt;# 以下、コメントは書き換えてある
 # また、途中経過がわかりやすいように set -x しておく
 set -x
 
@@ -321,75 +316,74 @@ echo "Daemon received: $(docker logs $JOB)"
 ++ docker logs c86c892574f7
 + echo 'Daemon received: hello world'
 Daemon received: hello world
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<h3>Dockerfile</h3>
+&lt;h3 id="dockerfile"&gt;Dockerfile&lt;/h3&gt;
 
-<p>DSLで書かれた設定(通常ファイル名は<code>Dockerfile</code>とする)をあらかじめ用意することで、手順に従ってイメージを作ることができる。</p>
+&lt;p&gt;DSLで書かれた設定(通常ファイル名は&lt;code&gt;Dockerfile&lt;/code&gt;とする)をあらかじめ用意することで、手順に従ってイメージを作ることができる。&lt;/p&gt;
 
-<pre><code>読み込ませ方 (1)
-docker build &lt;Dockerfileのあるディレクトリ&gt;
+&lt;pre&gt;&lt;code&gt;読み込ませ方 (1)
+docker build &amp;lt;Dockerfileのあるディレクトリ&amp;gt;
 # ex. docker build .
 
 読み込ませ方 (2)
 docker build -
-# ex. docker build - &lt; /foo/bar/Dockerfile
-</code></pre>
+# ex. docker build - &amp;lt; /foo/bar/Dockerfile
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>Dockerfile の例</p>
+&lt;p&gt;Dockerfile の例&lt;/p&gt;
 
-<pre><code>FROM base
+&lt;pre&gt;&lt;code&gt;FROM base
 RUN /bin/echo hi
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>これで、<code>docker build</code> すれば <code>docker run base /bin/echo hi</code> と同じ効果が得られる。</p>
+&lt;p&gt;これで、&lt;code&gt;docker build&lt;/code&gt; すれば &lt;code&gt;docker run base /bin/echo hi&lt;/code&gt; と同じ効果が得られる。&lt;/p&gt;
 
-<p>指定できるはコマンドは以下の通り。大文字小文字は区別しないけど、引数と見分けやすいように大文字が使われる。</p>
+&lt;p&gt;指定できるはコマンドは以下の通り。大文字小文字は区別しないけど、引数と見分けやすいように大文字が使われる。&lt;/p&gt;
 
-<ul>
-<li><code>FROM &lt;image&gt;</code> ベースとなるイメージを指定</li>
-<li><code>MAINTAINER &lt;name&gt;</code> メンテナの名前を指定</li>
-<li><code>RUN &lt;command&gt;</code> ビルド中に実行したいコマンドを指定</li>
-<li><code>CMD &lt;command&gt;</code> 起動後のコンテナで実行したいコマンドを指定</li>
-<li><code>EXPOSE &lt;port&gt; [&lt;port&gt; ...]</code> 外部に晒すポートの指定</li>
-<li><code>ENV &lt;key&gt; &lt;value&gt;</code> 環境変数の設定</li>
-<li><code>INSERT &lt;file url&gt; &lt;path&gt;</code> deprecated なので ADD を利用すること</li>
-<li><code>ADD &lt;src&gt; &lt;dest&gt;</code> ファイルを配置</li>
-</ul>
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;FROM &amp;lt;image&amp;gt;&lt;/code&gt; ベースとなるイメージを指定&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;MAINTAINER &amp;lt;name&amp;gt;&lt;/code&gt; メンテナの名前を指定&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;RUN &amp;lt;command&amp;gt;&lt;/code&gt; ビルド中に実行したいコマンドを指定&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;CMD &amp;lt;command&amp;gt;&lt;/code&gt; 起動後のコンテナで実行したいコマンドを指定&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;EXPOSE &amp;lt;port&amp;gt; [&amp;lt;port&amp;gt; ...]&lt;/code&gt; 外部に晒すポートの指定&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;ENV &amp;lt;key&amp;gt; &amp;lt;value&amp;gt;&lt;/code&gt; 環境変数の設定&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;INSERT &amp;lt;file url&amp;gt; &amp;lt;path&amp;gt;&lt;/code&gt; deprecated なので ADD を利用すること&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;ADD &amp;lt;src&amp;gt; &amp;lt;dest&amp;gt;&lt;/code&gt; ファイルを配置&lt;/li&gt;
+&lt;/ul&gt;
 
+&lt;p&gt;&lt;code&gt;RUN&lt;/code&gt; と &lt;code&gt;CMD&lt;/code&gt; の違いがわかりにくいかもしれない。例を出す。&lt;/p&gt;
 
-<p><code>RUN</code> と <code>CMD</code> の違いがわかりにくいかもしれない。例を出す。</p>
-
-<pre><code># RUN, CMD で指定したコマンドが実行されたとき、
+&lt;pre&gt;&lt;code&gt;# RUN, CMD で指定したコマンドが実行されたとき、
 # 標準出力と /tmp/*.log に記録を残す
 
-$ cat &lt;&lt;SCRIPT &gt;Dockerfile
-&gt; FROM base
-&gt; RUN /bin/echo run | tee /tmp/run.log
-&gt; CMD /bin/echo cmd | tee /tmp/cmd.log
-&gt; SCRIPT
+$ cat &amp;lt;&amp;lt;SCRIPT &amp;gt;Dockerfile
+&amp;gt; FROM base
+&amp;gt; RUN /bin/echo run | tee /tmp/run.log
+&amp;gt; CMD /bin/echo cmd | tee /tmp/cmd.log
+&amp;gt; SCRIPT
 
 # ビルドの実行
 
 $ docker build .
 Caching Context 10240/? (n/a)
 FROM base ()
-===&gt; b750fe79269d2ec9a3c593ef05b4332b1d1a02a62b4accb2c21d589ff2f5f2dc
+===&amp;gt; b750fe79269d2ec9a3c593ef05b4332b1d1a02a62b4accb2c21d589ff2f5f2dc
 RUN /bin/echo run | tee /tmp/run.log (b750fe79269d2ec9a3c593ef05b4332b1d1a02a62b4accb2c21d589ff2f5f2dc)
-===&gt; d10b6bd1321d45b0228b5741c01d1f76fd0288052e56836609f9bdf217854f3d
+===&amp;gt; d10b6bd1321d45b0228b5741c01d1f76fd0288052e56836609f9bdf217854f3d
 CMD /bin/echo cmd | tee /tmp/cmd.log (d10b6bd1321d45b0228b5741c01d1f76fd0288052e56836609f9bdf217854f3d)
-===&gt; 60671e9969185841032fb02f623917672c4f871a6be68e5aa575e8fdf1f94229
+===&amp;gt; 60671e9969185841032fb02f623917672c4f871a6be68e5aa575e8fdf1f94229
 Build successful.
-===&gt; 60671e9969185841032fb02f623917672c4f871a6be68e5aa575e8fdf1f94229
+===&amp;gt; 60671e9969185841032fb02f623917672c4f871a6be68e5aa575e8fdf1f94229
 
 # run, cmd の実行結果を確認
-# =&gt; run だけが実行されている
+# =&amp;gt; run だけが実行されている
 
 $ docker run 60671e99691 /bin/ls /tmp/
 run.log
 
 # イメージを inspect する
-# =&gt; どうやらコンテナは記憶していることがわかる
+# =&amp;gt; どうやらコンテナは記憶していることがわかる
 
 $ docker inspect 60671e99691
 {
@@ -421,45 +415,47 @@ $ docker inspect 60671e99691
         "Volumes": null,
 
 # 引数でコマンドを指定せずに run を実行
-# =&gt; cmd で登録した内容が実行される
+# =&amp;gt; cmd で登録した内容が実行される
 
 $ docker run 60671e99691
 cmd
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>つまり、<code>RUN</code> は <code>Dockerfile</code> を元にビルドしているときに参照され、<code>CMD</code> はコンテナを実行する際に参照されるということがわかる。パッケージをインストールしたりといった用途では通常 <code>RUN</code> を使う。</p>
+&lt;p&gt;つまり、&lt;code&gt;RUN&lt;/code&gt; は &lt;code&gt;Dockerfile&lt;/code&gt; を元にビルドしているときに参照され、&lt;code&gt;CMD&lt;/code&gt; はコンテナを実行する際に参照されるということがわかる。パッケージをインストールしたりといった用途では通常 &lt;code&gt;RUN&lt;/code&gt; を使う。&lt;/p&gt;
 
-<h1>まとめ</h1>
+&lt;h2 id="section-6"&gt;まとめ&lt;/h2&gt;
 
-<p>仮想環境の発達でプログラマブルなインフラストラクチャーは実現できてきているけど、マシンを上げたり下げたりするのにどうしても時間がかかるし、それは仕方が無いものと我慢していた。<code>Docker</code> を使ってみると、今までのそういった不満から解放されることができそう。一応開発中というステータスなのでプロダクション環境では使いづらいけど、開発やテスト、とくに構成管理ツールを設定するときなどは、この俊敏性、柔軟性は有効になると思う。</p>
+&lt;p&gt;仮想環境の発達でプログラマブルなインフラストラクチャーは実現できてきているけど、マシンを上げたり下げたりするのにどうしても時間がかかるし、それは仕方が無いものと我慢していた。&lt;code&gt;Docker&lt;/code&gt; を使ってみると、今までのそういった不満から解放されることができそう。一応開発中というステータスなのでプロダクション環境では使いづらいけど、開発やテスト、とくに構成管理ツールを設定するときなどは、この俊敏性、柔軟性は有効になると思う。&lt;/p&gt;
 
-<h1>参考</h1>
+&lt;h2 id="section-7"&gt;参考&lt;/h2&gt;
 
-<ul>
-<li><a href="http://docs.docker.io/en/latest/">Documentation</a></li>
-</ul>
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href="http://docs.docker.io/en/latest/"&gt;Documentation&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 
-]]></content>
+</content>
   </entry>
-  
   <entry>
-    <title type="html"><![CDATA[yum のパッケージキャッシュについて]]></title>
-    <link href="http://apatheia.info/blog/2013/06/16/yum-cache/"/>
-    <updated>2013-06-16T01:26:00+09:00</updated>
-    <id>http://apatheia.info/blog/2013/06/16/yum-cache</id>
-    <content type="html"><![CDATA[<p><code>/etc/yum.conf</code>で<code>keepcache=1</code>にしておくと、インストールしたパッケージがキャッシュされるようになる。これが無効化された状態だと、パッケージアップグレード時に問題が起きても元に戻せなくなるので有効化しておいた方がいい。</p>
+    <title>yum のパッケージキャッシュについて</title>
+    <link rel="alternate" href="http://apatheia.info/blog/2013/06/16/yum-cache/"/>
+    <id>http://apatheia.info/blog/2013/06/16/yum-cache/</id>
+    <published>2013-06-16T01:26:00Z</published>
+    <updated>2013-06-16T01:26:00Z</updated>
+    <author>
+      <name>f440</name>
+    </author>
+    <content type="html">&lt;p&gt;&lt;code&gt;/etc/yum.conf&lt;/code&gt;で&lt;code&gt;keepcache=1&lt;/code&gt;にしておくと、インストールしたパッケージがキャッシュされるようになる。これが無効化された状態だと、パッケージアップグレード時に問題が起きても元に戻せなくなるので有効化しておいた方がいい。&lt;/p&gt;
 
-<!-- more -->
 
 
-<p>あるパッケージについて、どのバージョンが利用可能な状態かは以下で確認できる。</p>
+&lt;p&gt;あるパッケージについて、どのバージョンが利用可能な状態かは以下で確認できる。&lt;/p&gt;
 
-<pre><code>$ sudo yum --showduplicates list パッケージ名
-</code></pre>
+&lt;pre&gt;&lt;code&gt;$ sudo yum --showduplicates list パッケージ名
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>RHEL なら過去のバージョンまですべて手に入るけど、CentOS だとOSリリース時のバージョンと最新版しか手に入らない模様。リポジトリ上なりキャッシュなりで過去のバージョンが手に入るのであれば、<code>yum install</code> や <code>yum update</code> は以下の手順でロールバックが行える。</p>
+&lt;p&gt;RHEL なら過去のバージョンまですべて手に入るけど、CentOS だとOSリリース時のバージョンと最新版しか手に入らない模様。リポジトリ上なりキャッシュなりで過去のバージョンが手に入るのであれば、&lt;code&gt;yum install&lt;/code&gt; や &lt;code&gt;yum update&lt;/code&gt; は以下の手順でロールバックが行える。&lt;/p&gt;
 
-<pre><code># yum の利用履歴を確認
+&lt;pre&gt;&lt;code&gt;# yum の利用履歴を確認
 $ sudo yum history
 
 # 履歴から詳細を確認
@@ -468,65 +464,65 @@ $ sudo yum history info 4
 
 # 仮に ID 4 で問題のバージョンアップが行われたようだということが確認できたら、その ID を指定して操作をアンドゥ
 $ sudo yum history undo 4
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>アンドゥ(リドゥもある)では、対象パッケージおよび依存パッケージがまとめて一度に入れ替えられる。これはパッケージの操作がちゃんとトランザクションになっているため。</p>
+&lt;p&gt;アンドゥ(リドゥもある)では、対象パッケージおよび依存パッケージがまとめて一度に入れ替えられる。これはパッケージの操作がちゃんとトランザクションになっているため。&lt;/p&gt;
 
-<p>話がそれるけど、パッケージの操作にトランザクションがかかるというのはかなり重要だ。たとえば syslog-ng から rsyslog に入れ替えるとき、単純にアンインストール、インストールの順番でやろうとするとアンインストールのタイミングで大量の Syslog 依存なパッケージが道連れになるけど、以下のようにすればひとつのトランザクションでパッケージを入れ替えることができる。(情報源: <a href="http://wiki.rsyslog.com/index.php/Install_rsyslog_with_yum">Rsyslog Wiki</a>)</p>
+&lt;p&gt;話がそれるけど、パッケージの操作にトランザクションがかかるというのはかなり重要だ。たとえば syslog-ng から rsyslog に入れ替えるとき、単純にアンインストール、インストールの順番でやろうとするとアンインストールのタイミングで大量の Syslog 依存なパッケージが道連れになるけど、以下のようにすればひとつのトランザクションでパッケージを入れ替えることができる。(情報源: &lt;a href="http://wiki.rsyslog.com/index.php/Install_rsyslog_with_yum"&gt;Rsyslog Wiki&lt;/a&gt;)&lt;/p&gt;
 
-<pre><code>$ sudo yum shell
-&gt; remove syslog-ng
-&gt; install rsyslog
-&gt; run
-</code></pre>
+&lt;pre&gt;&lt;code&gt;$ sudo yum shell
+&amp;gt; remove syslog-ng
+&amp;gt; install rsyslog
+&amp;gt; run
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>話がそれたついでにふれておくと、vagrant を使っているのであれば <a href="https://github.com/fgrehm/vagrant-cachier">vagrant-cachier</a> を使うとパッケージのキャッシュ保存先を仮想マシン外の領域(ホストOSとの共有ディスク部分など)に変更してくれる。こうすることで、仮想マシンを破棄してもパッケージのキャッシュが永続化されるため、2回目以降はダウンロードがスキップされて高速化する。</p>
+&lt;p&gt;話がそれたついでにふれておくと、vagrant を使っているのであれば &lt;a href="https://github.com/fgrehm/vagrant-cachier"&gt;vagrant-cachier&lt;/a&gt; を使うとパッケージのキャッシュ保存先を仮想マシン外の領域(ホストOSとの共有ディスク部分など)に変更してくれる。こうすることで、仮想マシンを破棄してもパッケージのキャッシュが永続化されるため、2回目以降はダウンロードがスキップされて高速化する。&lt;/p&gt;
 
-<p>話を戻すと、世の中何が起きるかわからないので古いパッケージもとっておいたほうがいいかと。ディスク容量が気になりだしたら、<code>yum clean packages</code> を実行すればキャッシュは消せる。</p>
-]]></content>
+&lt;p&gt;話を戻すと、世の中何が起きるかわからないので古いパッケージもとっておいたほうがいいかと。ディスク容量が気になりだしたら、&lt;code&gt;yum clean packages&lt;/code&gt; を実行すればキャッシュは消せる。&lt;/p&gt;
+</content>
   </entry>
-  
   <entry>
-    <title type="html"><![CDATA[omnibus を使って オムニバスインストーラーを作成する]]></title>
-    <link href="http://apatheia.info/blog/2013/05/07/create-ominibus-installer/"/>
-    <updated>2013-05-07T01:41:00+09:00</updated>
-    <id>http://apatheia.info/blog/2013/05/07/create-ominibus-installer</id>
-    <content type="html"><![CDATA[<p>Chef のインストールは結構面倒くさかったんだけど、<a href="http://www.opscode.com/chef/install/">オムニバスインストーラー</a>が出たことで状況はがらっと変わって、簡単に導入できるようになった。このオムニバスインストーラーの仕組みは汎用的に作られているので、他のツールでも適用できるという話。</p>
-
-<!-- more -->
-
-
-<h2>オムニバスインストーラーについて</h2>
-
-<p>Chef のオムニバスインストーラーを実行すると以下のようなディレクトリ構成でファイルが置かれる:</p>
-
-<ul>
-<li>/opt/chef/bin/ &hellip; Chef 関連のスクリプト</li>
-<li>/opt/chef/embedded/ &hellip; ruby インタプリタ、Chef とその他依存パッケージ</li>
-<li>(/usr/bin/ &hellip; /opt/chef/bin/ 以下のものがシンボリックリンクが配置される)</li>
-</ul>
+    <title>omnibus を使って オムニバスインストーラーを作成する</title>
+    <link rel="alternate" href="http://apatheia.info/blog/2013/05/07/create-ominibus-installer/"/>
+    <id>http://apatheia.info/blog/2013/05/07/create-ominibus-installer/</id>
+    <published>2013-05-07T01:41:00Z</published>
+    <updated>2013-05-07T01:41:00Z</updated>
+    <author>
+      <name>f440</name>
+    </author>
+    <content type="html">&lt;p&gt;Chef のインストールは結構面倒くさかったんだけど、&lt;a href="http://www.opscode.com/chef/install/"&gt;オムニバスインストーラー&lt;/a&gt;が出たことで状況はがらっと変わって、簡単に導入できるようになった。このオムニバスインストーラーの仕組みは汎用的に作られているので、他のツールでも適用できるという話。&lt;/p&gt;
 
 
-<p>以上の通り、<code>/opt/chef</code> の中に動作に必要なものがごっそり置かれる。アプリケーションレベルでプログラミングの処理系を持っちゃうというのはこれに限らずよく見る光景で、理由としてはパッケージ提供されていない最新版が使いたかったり、バージョンアップやライブラリインストールの影響範囲を限定させたかったりだと思う。</p>
 
-<p>ここしばらくは手軽なパッケージ作成ツールとして<a href="https://github.com/jordansissel/fpm">fpm</a>がよく使われているけど、オムニバスインストーラーは<a href="https://github.com/opscode/omnibus-ruby">omnibus</a>という「ビルドツール」＋「fpm ラッパー」といった感じのもので作られている。以下は実際に <a href="https://github.com/opscode/omnibus-ruby">omnibus</a> を使ったインストーラー作成の手順についてまとめる。</p>
+&lt;h2 id="section"&gt;オムニバスインストーラーについて&lt;/h2&gt;
 
-<h2>パッケージ作成</h2>
+&lt;p&gt;Chef のオムニバスインストーラーを実行すると以下のようなディレクトリ構成でファイルが置かれる:&lt;/p&gt;
 
-<p><a href="https://github.com/etsy/statsd">statsd</a> および <a href="https://github.com/etsy/statsd">statsd</a> を動かすために必要な Node.js を /opt/statsd にインストールする RPM, Deb パッケージの作成を行ってみる。</p>
+&lt;ul&gt;
+  &lt;li&gt;/opt/chef/bin/ … Chef 関連のスクリプト&lt;/li&gt;
+  &lt;li&gt;/opt/chef/embedded/ … ruby インタプリタ、Chef とその他依存パッケージ&lt;/li&gt;
+  &lt;li&gt;(/usr/bin/ … /opt/chef/bin/ 以下のものがシンボリックリンクが配置される)&lt;/li&gt;
+&lt;/ul&gt;
 
-<h3>環境</h3>
+&lt;p&gt;以上の通り、&lt;code&gt;/opt/chef&lt;/code&gt; の中に動作に必要なものがごっそり置かれる。アプリケーションレベルでプログラミングの処理系を持っちゃうというのはこれに限らずよく見る光景で、理由としてはパッケージ提供されていない最新版が使いたかったり、バージョンアップやライブラリインストールの影響範囲を限定させたかったりだと思う。&lt;/p&gt;
 
-<ul>
-<li>Macbook Air Mountain Lion</li>
-<li>Ruby 2.0.0-p0</li>
-<li>Vagrant 1.2.2</li>
-</ul>
+&lt;p&gt;ここしばらくは手軽なパッケージ作成ツールとして&lt;a href="https://github.com/jordansissel/fpm"&gt;fpm&lt;/a&gt;がよく使われているけど、オムニバスインストーラーは&lt;a href="https://github.com/opscode/omnibus-ruby"&gt;omnibus&lt;/a&gt;という「ビルドツール」＋「fpm ラッパー」といった感じのもので作られている。以下は実際に &lt;a href="https://github.com/opscode/omnibus-ruby"&gt;omnibus&lt;/a&gt; を使ったインストーラー作成の手順についてまとめる。&lt;/p&gt;
 
+&lt;h2 id="section-1"&gt;パッケージ作成&lt;/h2&gt;
 
-<h3>手順</h3>
+&lt;p&gt;&lt;a href="https://github.com/etsy/statsd"&gt;statsd&lt;/a&gt; および &lt;a href="https://github.com/etsy/statsd"&gt;statsd&lt;/a&gt; を動かすために必要な Node.js を /opt/statsd にインストールする RPM, Deb パッケージの作成を行ってみる。&lt;/p&gt;
 
-<pre><code># omnibus のインストール
+&lt;h3 id="section-2"&gt;環境&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Macbook Air Mountain Lion&lt;/li&gt;
+  &lt;li&gt;Ruby 2.0.0-p0&lt;/li&gt;
+  &lt;li&gt;Vagrant 1.2.2&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id="section-3"&gt;手順&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;# omnibus のインストール
 gem install omnibus
 
 # 必要となる vagrant 用の plugin をインストール
@@ -551,13 +547,13 @@ cd omnibus-statsd
       後述
     package-scripts/statsd/*
       インストール時、アンインストール時などに実行したいスクリプトなど。
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>この中で、実際のビルドプロセスを定義するのは、config/projects/ 以下と config/software 以下になる。</p>
+&lt;p&gt;この中で、実際のビルドプロセスを定義するのは、config/projects/ 以下と config/software 以下になる。&lt;/p&gt;
 
-<p><code>config/projects/</code> はプロジェクトの設定を格納するディレクトリで、初期状態では statsd 用のプロジェクトファイル <code>config/projects/statsd.rb</code> が作られている。このファイルを修正していくことになる。</p>
+&lt;p&gt;&lt;code&gt;config/projects/&lt;/code&gt; はプロジェクトの設定を格納するディレクトリで、初期状態では statsd 用のプロジェクトファイル &lt;code&gt;config/projects/statsd.rb&lt;/code&gt; が作られている。このファイルを修正していくことになる。&lt;/p&gt;
 
-<pre><code>name "statsd"
+&lt;pre&gt;&lt;code&gt;name "statsd"
 maintainer "f440"
 homepage "https://github.com/f440/omnibus-statsd"
 
@@ -570,119 +566,119 @@ dependency "node"
 dependency "statsd"
 
 exclude "\.git*"
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>おおむね想像がつく名前だけど、dependency だけはよく分からないと思う。dependency で指定したものはプロジェクトを構成する software という扱いで、<code>config/software/</code> 以下でその設定を行っていく。</p>
+&lt;p&gt;おおむね想像がつく名前だけど、dependency だけはよく分からないと思う。dependency で指定したものはプロジェクトを構成する software という扱いで、&lt;code&gt;config/software/&lt;/code&gt; 以下でその設定を行っていく。&lt;/p&gt;
 
-<p>software の例を示す。典型的な例だと、指定した URL からダウンロードしてきたものを一時ディレクトリで展開して、<code>configure &amp;&amp; make &amp;&amp; make install</code> を実行、などだが今回の作業では Node.js のバイナリを展開して <code>/opt/embedded</code> 以下にコピーしているだけである。</p>
+&lt;p&gt;software の例を示す。典型的な例だと、指定した URL からダウンロードしてきたものを一時ディレクトリで展開して、&lt;code&gt;configure &amp;amp;&amp;amp; make &amp;amp;&amp;amp; make install&lt;/code&gt; を実行、などだが今回の作業では Node.js のバイナリを展開して &lt;code&gt;/opt/embedded&lt;/code&gt; 以下にコピーしているだけである。&lt;/p&gt;
 
-<pre><code>name "node"
+&lt;pre&gt;&lt;code&gt;name "node"
 version "0.10.5"
 
-source :url =&gt; "http://nodejs.org/dist/v0.10.5/node-v0.10.5-linux-x64.tar.gz",
-       :md5 =&gt; "fb65723d395c559393201dd41e0eb275"
+source :url =&amp;gt; "http://nodejs.org/dist/v0.10.5/node-v0.10.5-linux-x64.tar.gz",
+       :md5 =&amp;gt; "fb65723d395c559393201dd41e0eb275"
 
 relative_path "node-v0.10.5-linux-x64"
 
 build do
   command "rsync -av . #{install_dir}/embedded/"
 end
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>必要となる software の設定を全部そろえたらビルドを実行する。マシンの起動、Chef のインストール、omnibus の Cookbook 実行、ビルド環境構築、ビルド実行、パッケージ作成 といったことが行われることになるため、初回はかなり待つことになる。</p>
+&lt;p&gt;必要となる software の設定を全部そろえたらビルドを実行する。マシンの起動、Chef のインストール、omnibus の Cookbook 実行、ビルド環境構築、ビルド実行、パッケージ作成 といったことが行われることになるため、初回はかなり待つことになる。&lt;/p&gt;
 
-<pre><code>vagrant up
+&lt;pre&gt;&lt;code&gt;vagrant up
 (vagrant up centos-6 など、直接マシンを指定してもいい)
 (もし Linux 上で作業しているのであれば、omnibus build project statsd で直接パッケージ作成を開始出来る)
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>問題なければ、pkg/ 以下に statsd-0.6.0-1.el6.x86_64.rpm, statsd_0.6.0-1.ubuntu.12.04_amd64.deb といったファイルが出来る。</p>
+&lt;p&gt;問題なければ、pkg/ 以下に statsd-0.6.0-1.el6.x86&lt;em&gt;64.rpm, statsd&lt;/em&gt;0.6.0-1.ubuntu.12.04_amd64.deb といったファイルが出来る。&lt;/p&gt;
 
-<h2>まとめ</h2>
+&lt;h2 id="section-4"&gt;まとめ&lt;/h2&gt;
 
-<p>やっていることは <a href="https://github.com/jordansissel/fpm">fpm</a> でパッケージを作っているだけなんだけど、<a href="http://www.vagrantup.com/">Vagrant</a> x <a href="http://berkshelf.com/">Berkshelf</a> x <a href="http://www.opscode.com/chef/">Chef</a> のコンビネーションのおかげで、パッケージとそのパッケージを作るための環境が簡単に手に入るのはとてもいい。複数環境のパッケージを作る予定がなくっても、最初から<a href="https://github.com/opscode/omnibus-ruby">omnibus</a>上でパッケージを作れるようにしておくと運用が楽そう。</p>
+&lt;p&gt;やっていることは &lt;a href="https://github.com/jordansissel/fpm"&gt;fpm&lt;/a&gt; でパッケージを作っているだけなんだけど、&lt;a href="http://www.vagrantup.com/"&gt;Vagrant&lt;/a&gt; x &lt;a href="http://berkshelf.com/"&gt;Berkshelf&lt;/a&gt; x &lt;a href="http://www.opscode.com/chef/"&gt;Chef&lt;/a&gt; のコンビネーションのおかげで、パッケージとそのパッケージを作るための環境が簡単に手に入るのはとてもいい。複数環境のパッケージを作る予定がなくっても、最初から&lt;a href="https://github.com/opscode/omnibus-ruby"&gt;omnibus&lt;/a&gt;上でパッケージを作れるようにしておくと運用が楽そう。&lt;/p&gt;
 
-<h2>備考</h2>
+&lt;h2 id="section-5"&gt;備考&lt;/h2&gt;
 
-<p>似たようなツールとして、<a href="https://github.com/joemiller/bunchr">bunchr</a> が存在する。</p>
+&lt;p&gt;似たようなツールとして、&lt;a href="https://github.com/joemiller/bunchr"&gt;bunchr&lt;/a&gt; が存在する。&lt;/p&gt;
 
-<h2>参考</h2>
+&lt;h2 id="section-6"&gt;参考&lt;/h2&gt;
 
-<ul>
-<li><a href="https://github.com/etsy/statsd">Statsd</a></li>
-<li><a href="http://www.opscode.com/chef/install/">Install Chef</a></li>
-<li><a href="https://github.com/opscode/omnibus-ruby">omnibus</a></li>
-<li><a href="https://github.com/joemiller/bunchr">bunchr</a></li>
-<li><a href="https://github.com/jordansissel/fpm">fpm</a></li>
-<li><a href="http://www.vagrantup.com/">Vagrant</a></li>
-<li><a href="http://berkshelf.com/">Berkshelf</a></li>
-</ul>
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href="https://github.com/etsy/statsd"&gt;Statsd&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="http://www.opscode.com/chef/install/"&gt;Install Chef&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="https://github.com/opscode/omnibus-ruby"&gt;omnibus&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="https://github.com/joemiller/bunchr"&gt;bunchr&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="https://github.com/jordansissel/fpm"&gt;fpm&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="http://www.vagrantup.com/"&gt;Vagrant&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="http://berkshelf.com/"&gt;Berkshelf&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 
-]]></content>
+</content>
   </entry>
-  
   <entry>
-    <title type="html"><![CDATA[fpm で Mesos の RPM を作るまで]]></title>
-    <link href="http://apatheia.info/blog/2013/05/03/create-mesos-rpm-using-fpm/"/>
-    <updated>2013-05-03T17:24:00+09:00</updated>
-    <id>http://apatheia.info/blog/2013/05/03/create-mesos-rpm-using-fpm</id>
-    <content type="html"><![CDATA[<p><a href="http://incubator.apache.org/mesos/">Mesos</a> をインストールするとき各マシンでビルドはしんどいので、<a href="https://github.com/jordansissel/fpm">fpm</a> で Mesos の RPM を作ってインストールしている。ビルドからパッケージ作成までの作業ログを残しておく。</p>
-
-<!-- more -->
-
-
-<ul>
-<li><a href="https://github.com/jordansissel/fpm">fpm</a> は Ruby の gem や Node.js の npm などのプログラミング言語のライブラリ、あるいは直接ディレクトリから RPM やら Deb やらのパッケージを作成するソフトウェア。</li>
-<li><a href="http://incubator.apache.org/mesos/">Mesos</a> はクラスタ構成のリソースをよしなに管理するソフトウェア。
-
-<ul>
-<li>今回の話では具体的な使い方までは触れない</li>
-</ul>
-</li>
-</ul>
+    <title>fpm で Mesos の RPM を作るまで</title>
+    <link rel="alternate" href="http://apatheia.info/blog/2013/05/03/create-mesos-rpm-using-fpm/"/>
+    <id>http://apatheia.info/blog/2013/05/03/create-mesos-rpm-using-fpm/</id>
+    <published>2013-05-03T17:24:00Z</published>
+    <updated>2013-05-03T17:24:00Z</updated>
+    <author>
+      <name>f440</name>
+    </author>
+    <content type="html">&lt;p&gt;&lt;a href="http://incubator.apache.org/mesos/"&gt;Mesos&lt;/a&gt; をインストールするとき各マシンでビルドはしんどいので、&lt;a href="https://github.com/jordansissel/fpm"&gt;fpm&lt;/a&gt; で Mesos の RPM を作ってインストールしている。ビルドからパッケージ作成までの作業ログを残しておく。&lt;/p&gt;
 
 
-<h1>手順</h1>
 
-<p>作業環境は CentOS 6.4 x86_64。</p>
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href="https://github.com/jordansissel/fpm"&gt;fpm&lt;/a&gt; は Ruby の gem や Node.js の npm などのプログラミング言語のライブラリ、あるいは直接ディレクトリから RPM やら Deb やらのパッケージを作成するソフトウェア。&lt;/li&gt;
+  &lt;li&gt;&lt;a href="http://incubator.apache.org/mesos/"&gt;Mesos&lt;/a&gt; はクラスタ構成のリソースをよしなに管理するソフトウェア。
+    &lt;ul&gt;
+      &lt;li&gt;今回の話では具体的な使い方までは触れない&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
 
-<p> Ruby をインストール。</p>
+&lt;h2 id="section"&gt;手順&lt;/h2&gt;
 
-<pre><code>sudo yum install ruby.x86_64 rubygems ruby-devel.x86_64 rpm-build.x86_64
-</code></pre>
+&lt;p&gt;作業環境は CentOS 6.4 x86_64。&lt;/p&gt;
 
-<p>fpm をインストール。</p>
+&lt;p&gt;Ruby をインストール。&lt;/p&gt;
 
-<pre><code>sudo gem install fpm --no-rdoc --no-ri
-</code></pre>
+&lt;pre&gt;&lt;code&gt;sudo yum install ruby.x86_64 rubygems ruby-devel.x86_64 rpm-build.x86_64
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>Mesos のソースをダウンロード、展開。</p>
+&lt;p&gt;fpm をインストール。&lt;/p&gt;
 
-<pre><code>curl -LO http://ftp.meisei-u.ac.jp/mirror/apache/dist/incubator/mesos/mesos-0.10.0-incubating/mesos-0.10.0-incubating.tar.gz
+&lt;pre&gt;&lt;code&gt;sudo gem install fpm --no-rdoc --no-ri
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Mesos のソースをダウンロード、展開。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;curl -LO http://ftp.meisei-u.ac.jp/mirror/apache/dist/incubator/mesos/mesos-0.10.0-incubating/mesos-0.10.0-incubating.tar.gz
 tar xf mesos-0.10.0-incubating.tar.gz
 cd mesos-0.10.0
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>Mesos のビルドに必要なパッケージをインストール。</p>
+&lt;p&gt;Mesos のビルドに必要なパッケージをインストール。&lt;/p&gt;
 
-<pre><code>sudo yum install gcc-c++.x86_64 patch.x86_64 python-devel.x86_64 \
+&lt;pre&gt;&lt;code&gt;sudo yum install gcc-c++.x86_64 patch.x86_64 python-devel.x86_64 \
   cppunit-devel.x86_64 java-1.6.0-openjdk-devel.x86_64
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>ビルド。今回は、configure のオプションで Redhat っぽい配置を指定している。<code>/opt/mesos</code> とか <code>/usr/local/mesos</code> に全部まとめたければ &mdash;prefix を使うなど、このあたりはお好みで。
-<code>make install</code> 時には書き込み可能な場所を DESTDIR で指定。説明中では、<code>/tmp/mesos</code> を利用している。</p>
+&lt;p&gt;ビルド。今回は、configure のオプションで Redhat っぽい配置を指定している。&lt;code&gt;/opt/mesos&lt;/code&gt; とか &lt;code&gt;/usr/local/mesos&lt;/code&gt; に全部まとめたければ –prefix を使うなど、このあたりはお好みで。
+&lt;code&gt;make install&lt;/code&gt; 時には書き込み可能な場所を DESTDIR で指定。説明中では、&lt;code&gt;/tmp/mesos&lt;/code&gt; を利用している。&lt;/p&gt;
 
-<pre><code>JAVA_HOME=/etc/alternatives/java_sdk ./configure \
+&lt;pre&gt;&lt;code&gt;JAVA_HOME=/etc/alternatives/java_sdk ./configure \
   --bindir=/usr/bin --sbindir=/usr/sbin --libexecdir=/usr/libexec \
   --localstatedir=/var --libdir=/usr/lib64 --includedir=/usr/include \
   --datarootdir=/usr/share
 make
 make install DESTDIR=/tmp/mesos
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>fpm でパッケージを作成。詳細は fpm &mdash;help を参照。注意点としては、<code>--description</code> は RPM のメタ情報 <code>description</code>, <code>summary</code> で兼用されるので、あまり長い情報を入れると <code>yum search</code> とかがごちゃごちゃすることになる。適度に切り詰めた方がいい。</p>
+&lt;p&gt;fpm でパッケージを作成。詳細は fpm –help を参照。注意点としては、&lt;code&gt;--description&lt;/code&gt; は RPM のメタ情報 &lt;code&gt;description&lt;/code&gt;, &lt;code&gt;summary&lt;/code&gt; で兼用されるので、あまり長い情報を入れると &lt;code&gt;yum search&lt;/code&gt; とかがごちゃごちゃすることになる。適度に切り詰めた方がいい。&lt;/p&gt;
 
-<pre><code>fpm -s dir -t rpm \
+&lt;pre&gt;&lt;code&gt;fpm -s dir -t rpm \
   -v 0.10.0 \
   -n mesos \
   -C /tmp/mesos \
@@ -693,73 +689,76 @@ make install DESTDIR=/tmp/mesos
   -d python-devel \
   -d java-1.6.0-openjdk-devel \
   .
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>RPM ファイルのメタ情報やファイル一覧をチェック。</p>
+&lt;p&gt;RPM ファイルのメタ情報やファイル一覧をチェック。&lt;/p&gt;
 
-<pre><code>rpm -qpi mesos-0.10.0-1.x86_64.rpm
+&lt;pre&gt;&lt;code&gt;rpm -qpi mesos-0.10.0-1.x86_64.rpm
 rpm -qpl mesos-0.10.0-1.x86_64.rpm
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>あとは、できあがった RPM ファイルを他のマシンに持っていってインストール。</p>
+&lt;p&gt;あとは、できあがった RPM ファイルを他のマシンに持っていってインストール。&lt;/p&gt;
 
-<pre><code>sudo yum install ./mesos-0.10.0-1.x86_64.rpm
-</code></pre>
-]]></content>
+&lt;pre&gt;&lt;code&gt;sudo yum install ./mesos-0.10.0-1.x86_64.rpm
+&lt;/code&gt;&lt;/pre&gt;
+
+</content>
   </entry>
-  
   <entry>
-    <title type="html"><![CDATA[構成管理ツール Ansible について]]></title>
-    <link href="http://apatheia.info/blog/2013/04/06/about-ansible/"/>
-    <updated>2013-04-06T14:50:00+09:00</updated>
-    <id>http://apatheia.info/blog/2013/04/06/about-ansible</id>
-    <content type="html"><![CDATA[<p><a href="http://ansible.cc/">Ansible</a> というサーバーの設定を管理するツールの説明。いわゆる構成管理 (CM: Configuration Management) にカテゴライズされるもので、Puppet や Chef の親戚みたいなものと考えてもらえればだいたいあってる。</p>
-
-<!-- more -->
-
-
-<h1>概要</h1>
-
-<p>リード開発者は Michael DeHaan で、現職の AnsibleWorks の前は Redhat で <a href="http://cobbler.github.io/">Cobbler</a> や <a href="https://fedorahosted.org/func/">Func</a> に携わっていたり、Puppet labs でプロダクトマネージャーしたりしているという経歴の持ち主。</p>
-
-<p>Ansible は Python で書かれている。同じジャンルで Python 製というと <a href="http://saltstack.com/">Salt</a> が有名。Chef の場合、レシピを書くためには Ruby の知識が必要となってくるけど、Ansible はどんな言語でもモジュールが書けるようになっているので、運用にあたって Python の知識は必要無い。</p>
-
-<p>動作の点でも Puppet や Chef などのツールとまったく異なるアプローチをしている。Puppet や Chef は、サーバーとクライアントで構成され、クライアントとなるマシンはサーバーに設定を問い合わせながら、自分自身を「あるべき状態」に収束するよう変更を加えていく。Ansible の場合、サーバー側からクライアントとなるサーバー(群)に対して直接命令を送り込み結果を得る。これは <a href="https://fedorahosted.org/func/">Func</a>、<a href="http://capistranorb.com/">Capistrano</a>、<a href="http://fabfile.org/">Fabric</a> などに似ているが、これらのデプロイを目的としたツールにはない「何回やっても結果が同じ」(idempotence) という CM ツールらしさはちゃんと備えている。</p>
-
-<p>ドキュメントは12ページしかなく(ちなみに、さっき数えてみたらChefのドキュメントは2834ファイルあった) 非常に習得は簡単。サーバーを立てる必要もなく、クライアントマシンもエージェントレス、加えて短期間で学習できるので手軽感は非常に高いが、モジュール機構が強力なのできわめて実用的になっている。</p>
-
-<h1>基本的な概念</h1>
-
-<p>Ansible を理解する上で重要となる、モジュールとプレーブックについて説明する。</p>
-
-<h2>モジュール</h2>
-
-<p>クライアント内での動きはモジュールという形で定義する。</p>
-
-<p>パッケージのインストール、サービスの起動、ユーザーやグループの作成などの基本的なモジュールはあるが、実際には環境に合わせて不足分は自分でモジュールを作っていくことになる。</p>
-
-<p>モジュールは簡単に作れる。モジュールが役割を端的に言うと、以下を行うだけである。</p>
-
-<ul>
-<li>標準入力でオプションを受け取る</li>
-<li><p>標準出力で実行結果を返す</p>
-
-<ul>
-<li>出力形式は key=value を空白でつなげたものか JSON</li>
-</ul>
-</li>
-</ul>
+    <title>構成管理ツール Ansible について</title>
+    <link rel="alternate" href="http://apatheia.info/blog/2013/04/06/about-ansible/"/>
+    <id>http://apatheia.info/blog/2013/04/06/about-ansible/</id>
+    <published>2013-04-06T14:50:00Z</published>
+    <updated>2013-04-06T14:50:00Z</updated>
+    <author>
+      <name>f440</name>
+    </author>
+    <content type="html">&lt;p&gt;&lt;a href="http://ansible.cc/"&gt;Ansible&lt;/a&gt; というサーバーの設定を管理するツールの説明。いわゆる構成管理 (CM: Configuration Management) にカテゴライズされるもので、Puppet や Chef の親戚みたいなものと考えてもらえればだいたいあってる。&lt;/p&gt;
 
 
-<p>これができる言語であれば、シェルスクリプトでも Perl でも問題ない。</p>
 
-<h2>プレーブック</h2>
+&lt;h2 id="section"&gt;概要&lt;/h2&gt;
 
-<p>実際の処理では単発のモジュールでサーバーの設定が終わることはないので、モジュールの使い方をまとめたものが必要になる。Ansible では、YAML で処理をまとめたものを プレーブック (Playbook)と呼んでいる。</p>
+&lt;p&gt;リード開発者は Michael DeHaan で、現職の AnsibleWorks の前は Redhat で &lt;a href="http://cobbler.github.io/"&gt;Cobbler&lt;/a&gt; や &lt;a href="https://fedorahosted.org/func/"&gt;Func&lt;/a&gt; に携わっていたり、Puppet labs でプロダクトマネージャーしたりしているという経歴の持ち主。&lt;/p&gt;
 
-<p>例: Apache と PHP をインストールする (webapp.yml)</p>
+&lt;p&gt;Ansible は Python で書かれている。同じジャンルで Python 製というと &lt;a href="http://saltstack.com/"&gt;Salt&lt;/a&gt; が有名。Chef の場合、レシピを書くためには Ruby の知識が必要となってくるけど、Ansible はどんな言語でもモジュールが書けるようになっているので、運用にあたって Python の知識は必要無い。&lt;/p&gt;
 
-<pre><code>- hosts: webserver
+&lt;p&gt;動作の点でも Puppet や Chef などのツールとまったく異なるアプローチをしている。Puppet や Chef は、サーバーとクライアントで構成され、クライアントとなるマシンはサーバーに設定を問い合わせながら、自分自身を「あるべき状態」に収束するよう変更を加えていく。Ansible の場合、サーバー側からクライアントとなるサーバー(群)に対して直接命令を送り込み結果を得る。これは &lt;a href="https://fedorahosted.org/func/"&gt;Func&lt;/a&gt;、&lt;a href="http://capistranorb.com/"&gt;Capistrano&lt;/a&gt;、&lt;a href="http://fabfile.org/"&gt;Fabric&lt;/a&gt; などに似ているが、これらのデプロイを目的としたツールにはない「何回やっても結果が同じ」(idempotence) という CM ツールらしさはちゃんと備えている。&lt;/p&gt;
+
+&lt;p&gt;ドキュメントは12ページしかなく(ちなみに、さっき数えてみたらChefのドキュメントは2834ファイルあった) 非常に習得は簡単。サーバーを立てる必要もなく、クライアントマシンもエージェントレス、加えて短期間で学習できるので手軽感は非常に高いが、モジュール機構が強力なのできわめて実用的になっている。&lt;/p&gt;
+
+&lt;h2 id="section-1"&gt;基本的な概念&lt;/h2&gt;
+
+&lt;p&gt;Ansible を理解する上で重要となる、モジュールとプレーブックについて説明する。&lt;/p&gt;
+
+&lt;h3 id="section-2"&gt;モジュール&lt;/h3&gt;
+
+&lt;p&gt;クライアント内での動きはモジュールという形で定義する。&lt;/p&gt;
+
+&lt;p&gt;パッケージのインストール、サービスの起動、ユーザーやグループの作成などの基本的なモジュールはあるが、実際には環境に合わせて不足分は自分でモジュールを作っていくことになる。&lt;/p&gt;
+
+&lt;p&gt;モジュールは簡単に作れる。モジュールが役割を端的に言うと、以下を行うだけである。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;標準入力でオプションを受け取る&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;標準出力で実行結果を返す&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;出力形式は key=value を空白でつなげたものか JSON&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;これができる言語であれば、シェルスクリプトでも Perl でも問題ない。&lt;/p&gt;
+
+&lt;h3 id="section-3"&gt;プレーブック&lt;/h3&gt;
+
+&lt;p&gt;実際の処理では単発のモジュールでサーバーの設定が終わることはないので、モジュールの使い方をまとめたものが必要になる。Ansible では、YAML で処理をまとめたものを プレーブック (Playbook)と呼んでいる。&lt;/p&gt;
+
+&lt;p&gt;例: Apache と PHP をインストールする (webapp.yml)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- hosts: webserver
   user: vagrant
   sudo: yes
   tasks:
@@ -767,49 +766,48 @@ rpm -qpl mesos-0.10.0-1.x86_64.rpm
       action: yum pkg=httpd state=installed
     - name: install php
       action: yum pkg=php state=installed
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>例: 実行</p>
+&lt;p&gt;例: 実行&lt;/p&gt;
 
-<pre><code># ansible-playbook プレーブック名
+&lt;pre&gt;&lt;code&gt;# ansible-playbook プレーブック名
 $ ansible-playbook webapp.yml
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>以上は簡単な例だが、設定ファイルを配置したり、それに併せてサービスを再起動させたりといったことも記述可能。</p>
+&lt;p&gt;以上は簡単な例だが、設定ファイルを配置したり、それに併せてサービスを再起動させたりといったことも記述可能。&lt;/p&gt;
 
-<p>プレーブックには以下のような内容が含まれる:</p>
+&lt;p&gt;プレーブックには以下のような内容が含まれる:&lt;/p&gt;
 
-<ul>
-<li>hosts: 対象のホスト</li>
-<li>user: 実行ユーザー</li>
-<li>vars: 変数</li>
-<li>tasks: タスク</li>
-</ul>
+&lt;ul&gt;
+  &lt;li&gt;hosts: 対象のホスト&lt;/li&gt;
+  &lt;li&gt;user: 実行ユーザー&lt;/li&gt;
+  &lt;li&gt;vars: 変数&lt;/li&gt;
+  &lt;li&gt;tasks: タスク&lt;/li&gt;
+&lt;/ul&gt;
 
+&lt;p&gt;&lt;code&gt;vars&lt;/code&gt; の変数は、テンプレート内で展開される。設定ファイル配置時にパラメータを変更、といった場合に利用する。&lt;/p&gt;
 
-<p><code>vars</code> の変数は、テンプレート内で展開される。設定ファイル配置時にパラメータを変更、といった場合に利用する。</p>
+&lt;h3 id="section-4"&gt;インストール&lt;/h3&gt;
 
-<h1>インストール</h1>
+&lt;p&gt;以下では、インストールから簡単なコマンドの実行までの例を挙げる。サーバー、クライアント双方で CentOS 6.4 を利用した。&lt;/p&gt;
 
-<p>以下では、インストールから簡単なコマンドの実行までの例を挙げる。サーバー、クライアント双方で CentOS 6.4 を利用した。</p>
+&lt;p&gt;Ansible を動かすためには、Python 2.6 以上と Ansible のソースコードとごくわずかな Python パッケージだけあればよい。CentOS 6 であれば Python の条件は満たせているし、EPEL で Ansible のパッケージが提供されているので、&lt;code&gt;yum&lt;/code&gt; でインストール可能。&lt;/p&gt;
 
-<p>Ansible を動かすためには、Python 2.6 以上と Ansible のソースコードとごくわずかな Python パッケージだけあればよい。CentOS 6 であれば Python の条件は満たせているし、EPEL で Ansible のパッケージが提供されているので、<code>yum</code> でインストール可能。</p>
-
-<pre><code># EPEL 有効化
+&lt;pre&gt;&lt;code&gt;# EPEL 有効化
 $ sudo rpm -ivh http://ftp.riken.jp/Linux/fedora/epel/6/i386/epel-release-6-8.noarch.rpm
 
 # Ansible インストール
 $ sudo yum install ansible
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>他の Unix 系OSであれば、<code>pip install ansible</code> でいい。</p>
+&lt;p&gt;他の Unix 系OSであれば、&lt;code&gt;pip install ansible&lt;/code&gt; でいい。&lt;/p&gt;
 
-<pre><code>$ sudo pip install ansible
-</code></pre>
+&lt;pre&gt;&lt;code&gt;$ sudo pip install ansible
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>次に、サーバーからクライアントに SSH でログインできるように調整しておく。</p>
+&lt;p&gt;次に、サーバーからクライアントに SSH でログインできるように調整しておく。&lt;/p&gt;
 
-<pre><code># 以下のマシンを用意した。
+&lt;pre&gt;&lt;code&gt;# 以下のマシンを用意した。
 # それぞれホスト名でアクセスできる
 #    Ansible 実行側 ... server
 #    変更対象 ... client1, client2
@@ -827,23 +825,23 @@ $ ssh-copy-id client2
 # 入力を省略できるようにしておく。
 $ ssh client1
 $ ssh client2
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>今度は、対象のサーバーを設定してみよう。環境変数 <code>ANSIBLE_HOSTS</code> にあるファイルでサーバーの指定が可能。</p>
+&lt;p&gt;今度は、対象のサーバーを設定してみよう。環境変数 &lt;code&gt;ANSIBLE_HOSTS&lt;/code&gt; にあるファイルでサーバーの指定が可能。&lt;/p&gt;
 
-<pre><code>$ cat &lt;EOD &gt;~/target
-&gt; [webserver]
-&gt; client1
-&gt; 
-&gt; [dbserver]
-&gt; client2
-&gt; EOD
+&lt;pre&gt;&lt;code&gt;$ cat &amp;lt;EOD &amp;gt;~/target
+&amp;gt; [webserver]
+&amp;gt; client1
+&amp;gt; 
+&amp;gt; [dbserver]
+&amp;gt; client2
+&amp;gt; EOD
 $ export ANSIBLE_HOSTS=~/target
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>設定の中で、<code>[ ]</code> によりグループを作っている。つまり「webserver グループに client1、dbserver グループに client2 が所属している」ということを表している。グループはオプションなので、単純にホスト名を羅列するだけでもいい。試しに、対象のホストを調べてみよう。</p>
+&lt;p&gt;設定の中で、&lt;code&gt;[ ]&lt;/code&gt; によりグループを作っている。つまり「webserver グループに client1、dbserver グループに client2 が所属している」ということを表している。グループはオプションなので、単純にホスト名を羅列するだけでもいい。試しに、対象のホストを調べてみよう。&lt;/p&gt;
 
-<pre><code># ansible ホストパターン --list-hosts
+&lt;pre&gt;&lt;code&gt;# ansible ホストパターン --list-hosts
 
 # ホスト名を直接指定
 $ ansible client1 --list-hosts
@@ -859,40 +857,40 @@ client2
 $ ansible all --list-hosts
 client1
 client2
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>これだけで準備は完了。実行してみる。</p>
+&lt;p&gt;これだけで準備は完了。実行してみる。&lt;/p&gt;
 
-<pre><code># コマンドの書式
+&lt;pre&gt;&lt;code&gt;# コマンドの書式
 ansible 対象 -m モジュール名 -a オプション
 
 # 例 ping モジュール
 $ ansible all -m ping
-client2 | success &gt;&gt; {
+client2 | success &amp;gt;&amp;gt; {
     "changed": false,
     "ping": "pong"
 }
 
-client1 | success &gt;&gt; {
+client1 | success &amp;gt;&amp;gt; {
     "changed": false,
     "ping": "pong"
 }
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p><code>-m</code> をつけないで、直接コマンドを実行することも可能。</p>
+&lt;p&gt;&lt;code&gt;-m&lt;/code&gt; をつけないで、直接コマンドを実行することも可能。&lt;/p&gt;
 
-<pre><code># すべてのマシンでカーネルのバージョンを取得
+&lt;pre&gt;&lt;code&gt;# すべてのマシンでカーネルのバージョンを取得
 $ ansible all -a 'uname -r'
-client2 | success | rc=0 &gt;&gt;
+client2 | success | rc=0 &amp;gt;&amp;gt;
 2.6.32-358.el6.x86_64
 
-client1 | success | rc=0 &gt;&gt;
+client1 | success | rc=0 &amp;gt;&amp;gt;
 2.6.32-358.el6.x86_64
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>プレーブックを実行したときは以下のようになる。</p>
+&lt;p&gt;プレーブックを実行したときは以下のようになる。&lt;/p&gt;
 
-<pre><code># 対象は webserver というグループ(client1 が所属)に対して、
+&lt;pre&gt;&lt;code&gt;# 対象は webserver というグループ(client1 が所属)に対して、
 # Apache と PHP をインストールするプレーブック、webapp.yml を実行
 # Apache はすでにインストールされていたので、
 # PHP のみインストールされることとなった
@@ -912,1860 +910,73 @@ changed: [client1]
 
 PLAY RECAP *********************
 client1                        : ok=3    changed=1    unreachable=0    failed=0
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<h1>その他</h1>
+&lt;h2 id="section-5"&gt;その他&lt;/h2&gt;
 
-<ul>
-<li><a href="https://twitter.com/mitchellh/status/319914935910027264">Vagrant もバージョン 1.2 から Ansible でのプロビジョニングをサポート予定</a></li>
-<li>開発は活発</li>
-<li>リリース名がヴァンヘイレンの曲名 (1.0 は Eruptionだった)</li>
-<li>ロゴがださい (ML でも 90年代のデザインなんて言われている)</li>
-</ul>
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href="https://twitter.com/mitchellh/status/319914935910027264"&gt;Vagrant もバージョン 1.2 から Ansible でのプロビジョニングをサポート予定&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;開発は活発&lt;/li&gt;
+  &lt;li&gt;リリース名がヴァンヘイレンの曲名 (1.0 は Eruptionだった)&lt;/li&gt;
+  &lt;li&gt;ロゴがださい (ML でも 90年代のデザインなんて言われている)&lt;/li&gt;
+&lt;/ul&gt;
 
+&lt;h2 id="section-6"&gt;まとめ&lt;/h2&gt;
 
-<h1>まとめ</h1>
+&lt;p&gt;ロゴのセンスは悪いけど、アプリケーション自体の仕組みはすごくセンスがいい。&lt;/p&gt;
 
-<p>ロゴのセンスは悪いけど、アプリケーション自体の仕組みはすごくセンスがいい。</p>
+&lt;p&gt;他の構成管理ツールと比べると、DSL を覚えるといった「ツールを使うまでののコスト」、ツールのためのサーバー構築・運用といった「ツールを使ってからのコスト」が軽微なので、よりやりたいことに目が向けられるのもうれしい。&lt;/p&gt;
 
-<p>他の構成管理ツールと比べると、DSL を覚えるといった「ツールを使うまでののコスト」、ツールのためのサーバー構築・運用といった「ツールを使ってからのコスト」が軽微なので、よりやりたいことに目が向けられるのもうれしい。</p>
+&lt;p&gt;最近日本国内でも Chef の話題を聞くことが多いんだけど、Chef Server の運用とかオートスケールとのコンビネーションとかの情報はあまり聞かないので、たぶん割と小規模な環境でリモートサーバーの Chef-solo をキックみたいなケースが多いのかと思う。そういったところだと、Ansible のほうがふさわしいっていうことが多いんじゃないかな。&lt;/p&gt;
 
-<p>最近日本国内でも Chef の話題を聞くことが多いんだけど、Chef Server の運用とかオートスケールとのコンビネーションとかの情報はあまり聞かないので、たぶん割と小規模な環境でリモートサーバーの Chef-solo をキックみたいなケースが多いのかと思う。そういったところだと、Ansible のほうがふさわしいっていうことが多いんじゃないかな。</p>
-]]></content>
+</content>
   </entry>
-  
   <entry>
-    <title type="html"><![CDATA[イベント管理にSplunk Stormを使ってみる]]></title>
-    <link href="http://apatheia.info/blog/2013/03/17/logging-with-splunk-storm/"/>
-    <updated>2013-03-17T21:17:00+09:00</updated>
-    <id>http://apatheia.info/blog/2013/03/17/logging-with-splunk-storm</id>
-    <content type="html"><![CDATA[<p><a href="http://www.splunk.com/">Splunk</a> はおそらくイベント・ログ管理のツールとしてはおそらくもっとも有名で、日本でも販売展開しているので知っている人も多いかと思う。その splunk が <a href="https://www.splunkstorm.com/storm/">Splunk Storm</a> というサービスを始めている。試しに使ってみたのでその感想。</p>
-
-<!-- more -->
-
-
-<p>料金に応じて、格納可能なデータの容量が増える課金体系。無料でも1GBまで利用可能。</p>
-
-<p>データの取り込みは以下の方法が提供されている:</p>
-
-<ul>
-<li>Syslog, Rsyslog, Syslog-ng などから転送</li>
-<li>TCP/UDP を使って直接登録
-
-<ul>
-<li><code>cat some_file.log | nc endpoind_hostname port</code> で登録可能</li>
-</ul>
-</li>
-<li>HTTP API</li>
-<li>forwarder と呼ばれるクライアントプログラム
-
-<ul>
-<li>ログの読み取りなども可能</li>
-</ul>
-</li>
-<li>ファイルアップロード</li>
-</ul>
+    <title>イベント管理にSplunk Stormを使ってみる</title>
+    <link rel="alternate" href="http://apatheia.info/blog/2013/03/17/logging-with-splunk-storm/"/>
+    <id>http://apatheia.info/blog/2013/03/17/logging-with-splunk-storm/</id>
+    <published>2013-03-17T21:17:00Z</published>
+    <updated>2013-03-17T21:17:00Z</updated>
+    <author>
+      <name>f440</name>
+    </author>
+    <content type="html">&lt;p&gt;&lt;a href="http://www.splunk.com/"&gt;Splunk&lt;/a&gt; はおそらくイベント・ログ管理のツールとしてはおそらくもっとも有名で、日本でも販売展開しているので知っている人も多いかと思う。その splunk が &lt;a href="https://www.splunkstorm.com/storm/"&gt;Splunk Storm&lt;/a&gt; というサービスを始めている。試しに使ってみたのでその感想。&lt;/p&gt;
 
 
-<p>試しにアカウントをとってApacheのログ形式のデータをncでがんがん取り込んでみたところ、1GB を超えたところでもうこれ以上追加できないとのメールが届いた。結果、200万件以上のデータが登録できていた。</p>
 
-<p>複雑な検索式を使って特定の条件に合うレコードを弾き出したり、図示することができる。たとえば、ステータスコードでグルーピングしたグラフを表示するには、以下の検索式を指定する。</p>
+&lt;p&gt;料金に応じて、格納可能なデータの容量が増える課金体系。無料でも1GBまで利用可能。&lt;/p&gt;
 
-<pre><code>sourcetype="access_combined" status="*" | timechart count by status
-</code></pre>
+&lt;p&gt;データの取り込みは以下の方法が提供されている:&lt;/p&gt;
 
-<p>リアルタイムで計算しているらしく、新しい時間帯から古い時間帯へとどんどんグラフが追加されていく。</p>
+&lt;ul&gt;
+  &lt;li&gt;Syslog, Rsyslog, Syslog-ng などから転送&lt;/li&gt;
+  &lt;li&gt;TCP/UDP を使って直接登録
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code&gt;cat some_file.log | nc endpoind_hostname port&lt;/code&gt; で登録可能&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;HTTP API&lt;/li&gt;
+  &lt;li&gt;forwarder と呼ばれるクライアントプログラム
+    &lt;ul&gt;
+      &lt;li&gt;ログの読み取りなども可能&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;ファイルアップロード&lt;/li&gt;
+&lt;/ul&gt;
 
-<p><img src="http://apatheia.info/images/2013-03-17-logging-with-splunk-storm/httpstatus.png" alt="httpstatus" /></p>
+&lt;p&gt;試しにアカウントをとってApacheのログ形式のデータをncでがんがん取り込んでみたところ、1GB を超えたところでもうこれ以上追加できないとのメールが届いた。結果、200万件以上のデータが登録できていた。&lt;/p&gt;
 
-<p>さすがというか、よくできている。</p>
-]]></content>
+&lt;p&gt;複雑な検索式を使って特定の条件に合うレコードを弾き出したり、図示することができる。たとえば、ステータスコードでグルーピングしたグラフを表示するには、以下の検索式を指定する。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sourcetype="access_combined" status="*" | timechart count by status
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;リアルタイムで計算しているらしく、新しい時間帯から古い時間帯へとどんどんグラフが追加されていく。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/images/2013-03-17-logging-with-splunk-storm/httpstatus.png" alt="httpstatus" /&gt;&lt;/p&gt;
+
+&lt;p&gt;さすがというか、よくできている。&lt;/p&gt;
+
+</content>
   </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[FluentdのデータをGraphiteに出力するときのTips]]></title>
-    <link href="http://apatheia.info/blog/2013/03/17/fluentd-and-graphite/"/>
-    <updated>2013-03-17T15:50:00+09:00</updated>
-    <id>http://apatheia.info/blog/2013/03/17/fluentd-and-graphite</id>
-    <content type="html"><![CDATA[<p><a href="https://github.com/hotchpotch/fluent-plugin-graphite">fluent-plugin-graphite</a> 利用時のメモ。</p>
-
-<p>Ops界隈での可視化というと、ここ何年かは<a href="http://graphite.wikidot.com/">Graphite</a>でグラフを作ってそれを他のツールで表示する、みたいなのが多い。<a href="http://fluentd.org/">Fluentd</a>のデータを可視化したい場合は<a href="http://kazeburo.github.com/GrowthForecast/">GrowthForecast</a>が使われることが多いけど、<a href="http://graphite.wikidot.com/">Graphite</a>使ってみるといろんなツールと組み合わせられておもしろい。</p>
-
-<!-- more -->
-
-
-<p>Fluentd から Graphite へデータを送るのは <a href="https://github.com/hotchpotch/fluent-plugin-graphite">Fluent-plugin-graphite</a> を使えば簡単に実現できそうなんだけど、プラグイン側のインターフェース(<code>:key</code> や <code>:count</code> といったキーが必要)に合わせて入力のデータを整形する必要がある。</p>
-
-<p>こういった調整は、out_map を使うことで実現できる。</p>
-
-<pre><code>&lt;source&gt;
-  type tail
-  format apache
-  path /var/log/httpd/access_log
-  tag apache.access
-&lt;/source&gt;
-&lt;match apache.access&gt;
-  type map
-  map [["graphite." + tag, time, {"key" =&gt; "graphite.apache.accesslog.code." + record["code"], "count" =&gt; 1}]]
-  multi true
-&lt;/match&gt;
-&lt;match graphite.**&gt;
-  type graphite
-&lt;/match&gt;
-</code></pre>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Fluentdの出力結果をStatHatで可視化する]]></title>
-    <link href="http://apatheia.info/blog/2013/03/17/fluentd-and-stathat/"/>
-    <updated>2013-03-17T15:48:00+09:00</updated>
-    <id>http://apatheia.info/blog/2013/03/17/fluentd-and-stathat</id>
-    <content type="html"><![CDATA[<p><a href="http://fluentd.org/">Fluentd</a>で取得した情報を可視化したいとき、<a href="https://github.com/tagomoris/fluent-plugin-growthforecast">fluent-plugin-growthforecast</a>を使って<a href="http://kazeburo.github.com/GrowthForecast/">GrowthForecast</a>にグラフを作る方法がよく知られている。<a href="http://kazeburo.github.com/GrowthForecast/">GrowthForecast</a>はインストール後すぐに使い始められるお手軽ツールなんだけど、それすら面倒くさい、自前で環境を作るのが面倒、というときには<a href="http://www.stathat.com/">StatHat</a>を使うと簡単に可視化を実現できるという話。</p>
-
-<!-- more -->
-
-
-<p><a href="http://www.stathat.com/">StatHat</a>はシンプルなインターフェースで必要十分な機能があり、しかも無料で使えるというサービス。HTTPでデータを登録するだけできれいなグラフが簡単に生成できるので、幅広い用途で利用できる。</p>
-
-<p>以降、<a href="http://fluentd.org/">Fluentd</a>と<a href="http://www.stathat.com/">StatHat</a>を組み合わせて利用するための設定を説明する。</p>
-
-<h1>作業</h1>
-
-<h2>StatHat</h2>
-
-<p>Stathatの<a href="https://www.stathat.com/sign_up">Sign up</a>にアクセスしてメールアドレスを登録し、折り返し届くメール内のURLからパスワードを登録すればすぐ使い始められる。グラフを作るための下準備は不要。まずは、curl を使って直接 POST してみる。</p>
-
-<pre><code>curl -d "email=登録時のメールアドレス&amp;stat=body temperature&amp;value=36.8" http://api.stathat.com/ez
-</code></pre>
-
-<p>すると、メールアドレス宛にグラフの追加が通知され、画面から確認できるようになる。</p>
-
-<p>(メールアドレスに<code>+</code>みたいなURLエンコードが必要な文字を含んでる場合は、 &mdash;data-urlencode を使って一つずつパラメータを指定すればいい)</p>
-
-<p>APIを利用するために必要となるキーは、初期状態だと登録時のメールアドレスになっている。これは<a href="https://www.stathat.com/settings">設定画面</a>から変更可能。タイムゾーンも修正できるので住んでいる地域に変更しておいた方がいい。</p>
-
-<h2>Fluentd</h2>
-
-<p>Fluentd から StatHat を利用するために<a href="https://github.com/f440/fluent-plugin-stathat">プラギン</a>作ったので、これを利用する。</p>
-
-<pre><code>fluent-gem install fluent-plugin-stathat
-</code></pre>
-
-<p>たとえば、よくある「HTTP ステータスコードのカウント」の場合、以下のような設定をすればいい。</p>
-
-<pre><code>&lt;source&gt;
-  type tail
-  format apache
-  path /var/log/httpd/access_log
-  tag apache.access
-&lt;/source&gt;
-&lt;match apache.access&gt;
-  type datacounter
-  unit minute
-  tag stathut.httpstatus
-  count_key code
-  pattern1 2xx ^2\d\d$
-  pattern2 3xx ^3\d\d$
-  pattern3 4xx ^4\d\d$
-  pattern4 5xx ^5\d\d$
-&lt;/match&gt;
-&lt;match stathut.httpstatus&gt;
-  type copy
-  &lt;store&gt;
-    type  stathat
-    stat 2xx
-    ezkey your_email@example.com
-    count apache.access_200_count
-  &lt;/store&gt;
-  &lt;store&gt;
-    type  stathat
-    stat 3xx
-    ezkey your_email@example.com
-    count apache.access_3xx_count
-  &lt;/store&gt;
-  &lt;store&gt;
-    type  stathat
-    stat 4xx
-    ezkey your_email@example.com
-    count apache.access_4xx_count
-  &lt;/store&gt;
-  &lt;store&gt;
-    type  stathat
-    stat 5xx
-    ezkey your_email@example.com
-    count apache.access_5xx_count
-  &lt;/store&gt;
-&lt;/match&gt;
-</code></pre>
-
-<p>これで、こういったグラフが作れる。</p>
-
-<p><img src="http://apatheia.info/images/2013-03-17-fluentd-and-stathat/httpstatus.png" alt="httpstatus" />
-<img src="http://apatheia.info/images/2013-03-17-fluentd-and-stathat/4xx.png" alt="4xx" /></p>
-
-<h1>まとめ</h1>
-
-<p><a href="http://www.stathat.com/">StatHat</a> 便利。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[chocolatey で Haskell Platform 用のパッケージを作る]]></title>
-    <link href="http://apatheia.info/blog/2013/02/08/create-chocolatey-package/"/>
-    <updated>2013-02-08T22:49:00+09:00</updated>
-    <id>http://apatheia.info/blog/2013/02/08/create-chocolatey-package</id>
-    <content type="html"><![CDATA[<p><a href="http://chocolatey.org/">chocolatey</a> の仕組みに興味を持ったので、パッケージを作ってみる。</p>
-
-<!-- more -->
-
-
-<p>目標は「<a href="http://www.haskell.org/platform/windows.html">Haskell Platform for Windows</a> からインストーラをダウンロードしてきてサイレントインストール」ができるパッケージを作って、<a href="http://chocolatey.org/">chocolatey</a> のリポジトリにパッケージを登録してみる。</p>
-
-<h1>作業</h1>
-
-<h2>パッケージ作成</h2>
-
-<p><a href="https://github.com/chocolatey/chocolatey/wiki/CreatePackages">ドキュメント</a>では <a href="https://github.com/chucknorris/Warmup">warmup</a> (プロジェクトのひな形を作ったり、そこで生成されたファイル内の文字列を置換したりするプログラム) を使ったやり方が説明されているけど、うまく動かなかったのでガリガリ手作業でやっていく。</p>
-
-<p>前提として、chocolatey のインストール方法は済んでいるものとする。</p>
-
-<p>まずはテンプレートを手に入れる。github から直接ファイルをダウンロードでもいいけど、今回の手順では clone してみよう。</p>
-
-<pre><code># git 入れてなければ インストール
-cinst git
-# パスを通すため、コマンドプロンプトから抜けて新しく立ち上げ直す
-
-cd %ChocolateyInstall%
-git clone https://github.com/chocolatey/chocolateytemplates.git
-cd chocolateytemplates\_templates
-</code></pre>
-
-<p>どこでもいいので、作業用にフォルダを作ってそこにテンプレートをコピーする。</p>
-
-<pre><code>cd %USERPROFILE%
-mkdir my_templates
-cd my_templates
-xcopy %ChocolateyInstall%\chocolateytemplates\_templates\chocolatey HaskellPlatform /s /e /i
-</code></pre>
-
-<p>いよいよテンプレートの中身を作っていく。</p>
-
-<pre><code>cd HaskellPlatform
-ren __NAME__.nuspec HaskellPlatform.nuspec 
-# HaskellPlatform.nuspec と tools/chocolateyInstall.ps1 を開いてプレースホルダを変更
-notepad HaskellPlatform.nuspec
-notepad tools/chocolateyInstall.ps1
-# HaskellPlatform は NSIS 製なので、
-# http://nsis.sourceforge.net/Docs/Chapter3.html#3.2 より、
-# サイレントインストールのためのコマンドラインオプションが /S をつければいい
-</code></pre>
-
-<p>編集後のファイルは以下の通り</p>
-
-<ul>
-<li><a href="https://github.com/f440/chocolatey-HaskellPlatform/blob/master/HaskellPlatform.nuspec">HaskellPlatform.nuspec</a></li>
-<li><a href="https://github.com/f440/chocolatey-HaskellPlatform/blob/master/tools/chocolateyInstall.ps1">tools/chocolatey-HaskellPlatform.ps1</a></li>
-</ul>
-
-
-<p>パッケージングする。</p>
-
-<pre><code>cpack
-</code></pre>
-
-<p>HaskellPlatform.{バージョン番号}.nupkg ができるはず。インストールしてみよう。</p>
-
-<pre><code>cinst HaskellPlatform -source %cd%
-</code></pre>
-
-<p>うまくいけば、Haskell のサイレントインストールが始まる。</p>
-
-<h2>パッケージ登録</h2>
-
-<p><a href="http://chocolatey.org/">chocolatey</a> にパッケージを登録してみよう。パッケージの登録にはアカウントが必要。</p>
-
-<p>登録方法は 2 種類。</p>
-
-<ol>
-<li>アップロードフォームから *.nupkg をアップロード</li>
-<li>API キーを取得して、コマンドラインから push</li>
-</ol>
-
-
-<p>1 は簡単すぎるので、2 を試す。事前に <a href="http://chocolatey.org/">chocolatey</a> のアカウント画面から API キーを取得しておこう。</p>
-
-<pre><code>cinst nuget.commandline
-NuGet SetApiKey &lt;your key here&gt; -source http://chocolatey.org/
-cpush HaskellPlatform.{バージョン番号}.nupkg
-</code></pre>
-
-<p>登録が終われば、他のマシンから <code>cinst HaskellPlatform</code> でインストールできるようになる。</p>
-
-<h1>まとめ</h1>
-
-<p>アンインストールの設定が用意されていない、といっただいぶ手抜きなものだけど簡単にできた。</p>
-
-<p><a href="http://chocolatey.org/">chocolatey</a> 公式の github アカウントでは <a href="https://github.com/chocolatey/chocolatey-cookbook">Chef 用の cookbook</a> を配布している。chef を使って Windows マシンをセットアップするとなると、パッケージマネージャがなければ <a href="https://github.com/opscode-cookbooks/windows">chef-cookbooks/windows</a> (Windows向けのResource/Provider) を使ってインストール方法をちまちま指定していくことになるわけだけど、<a href="http://chocolatey.org/">chocolatey</a> 使えば処理が抽象化できてよさげ。</p>
-
-<h1>参考</h1>
-
-<ul>
-<li><a href="http://chocolatey.org/">chocolatey</a></li>
-<li><a href="http://www.haskell.org/platform/windows.html">Haskell Platform for Windows</a></li>
-<li><a href="https://github.com/chocolatey/">chocolateyのgithubアカウント</a></li>
-</ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Windows 上に node.js の開発環境を整える]]></title>
-    <link href="http://apatheia.info/blog/2013/02/03/installing-node-dot-js-on-windows-7/"/>
-    <updated>2013-02-03T21:11:00+09:00</updated>
-    <id>http://apatheia.info/blog/2013/02/03/installing-node-dot-js-on-windows-7</id>
-    <content type="html"><![CDATA[<p>一身上の都合で Windows 7 上に Node.js の開発環境を整えたんだけど、コマンドラインからの操作だけで開発環境がそろう時代になっていたことに驚いた。</p>
-
-<p>そのときの作業メモ。</p>
-
-<!-- more -->
-
-
-<p>コマンドプロンプト起動:</p>
-
-<pre><code># Chocolatey のインストール
-@powershell -NoProfile -ExecutionPolicy unrestricted -Command "iex ((new-object net.webclient).DownloadString('http://chocolatey.org/install.ps1'))" &amp;&amp; SET PATH=%PATH%;%systemdrive%\chocolatey\bin
-# システムドライブ直下にインストールするの微妙……
-# 追記: [システムディスクの直下にインストールする理由](https://github.com/chocolatey/chocolatey/wiki/DefaultChocolateyInstallReasoning)
-
-
-# パッケージのダウンロード&amp;インストール
-cinst nodejs.install
-# nodejs.install ではなく nodejs だけだとコマンドライン版プログラムだけ
-# インストールされる。別途 npm を用意する必要が出てくるので
-# パッケージを使った方が楽
-
-# Node.js にパスを通す
-set PATH=%PATH%;%ProgramFiles(x86)%\nodejs
-
-# ちゃんと動くかどうか、試しに grunt をインストールしてみる
-mkdir test
-cd test
-npm install grunt
-</code></pre>
-
-<p>あとは好みにあわせて開発ツールを <code>cinst</code> でインストールしていく</p>
-
-<ul>
-<li>バージョン管理 (git &hellip;)</li>
-<li>エディタ (sublimetext2, vim &hellip;)</li>
-<li>データストア (redis, mongodb &hellip;)</li>
-<li>ユーティリティ (Gow, &hellip;)</li>
-</ul>
-
-
-<h2>参考</h2>
-
-<ul>
-<li><a href="http://nodejs.org/">node.js</a></li>
-<li><a href="http://chocolatey.org/">chocolatey</a></li>
-</ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[logstalgia を使ってログを可視化]]></title>
-    <link href="http://apatheia.info/blog/2013/01/03/log-visualization-using-logstalgia/"/>
-    <updated>2013-01-03T18:50:00+09:00</updated>
-    <id>http://apatheia.info/blog/2013/01/03/log-visualization-using-logstalgia</id>
-    <content type="html"><![CDATA[<p>Webサーバーのログでピンポンゲームの映像を生成する<a href="https://code.google.com/p/logstalgia/" title="logstalgia">logstalgia</a>。</p>
-
-<!-- more -->
-
-
-<p>homebrew がインストール済みなら以下で動かせる。</p>
-
-<pre><code>gem install apache-loggen
-brew install logstalgia
-apache-loggen --rate 10 | logstalgia -
-</code></pre>
-
-<p><a href="http://mt.orz.at/archives/2012/11/apacherubygems.html" title="apache-loggen">apache-loggen</a> はApacheのダミーログを生成してくれるスクリプト。便利。</p>
-
-<p><img src="http://apatheia.info/images/2013-01-03-log-visualization-using-logstalgia/logstalgia.png" alt="logstalgia" /></p>
-
-<h2>参考</h2>
-
-<ul>
-<li><a href="https://code.google.com/p/logstalgia/" title="logstalgia">logstalgia</a></li>
-<li><a href="http://mt.orz.at/archives/2012/11/apacherubygems.html" title="apache-loggen">apache-loggen</a></li>
-</ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Trickleを使って帯域制限をする]]></title>
-    <link href="http://apatheia.info/blog/2013/01/01/network-restriction-using-trickle/"/>
-    <updated>2013-01-01T17:05:00+09:00</updated>
-    <id>http://apatheia.info/blog/2013/01/01/network-restriction-using-trickle</id>
-    <content type="html"><![CDATA[<p>ネットワーク経由で大量のデータをやりとりしたいが、メインのサービスには影響を与えたくないという場合がよくある。<code>rsync</code>や<code>scp</code> など、大きなファイルの転送を考慮されたコマンドではネットワーク帯域を制限するオプションが用意されていることも多いが、自作のツールなどに帯域制限を実装するとなるとかなり面倒くさいことになる。</p>
-
-<!-- more -->
-
-
-<p>Linux で帯域制限をしたい場合、tc や cgroup を使う方法がよく知られている。ただ、「あるコマンドにネットワークが占領されないように穏やかに実行したい」というニーズに対しては大げさで、またオプションが難解だったり管理権限が必要だったりといったことから二の足を踏む感じのものだった。もっと普段使いに適したツールがないものかと探していたところ、こういったシーンでは<a href="http://monkey.org/~marius/pages/?page=trickle" title="trickle公式">Tricle</a>がかなり有効だと言うことがわかった。</p>
-
-<h2>インストール</h2>
-
-<p>Debian, Ubuntu なら公式からパッケージが提供されている。RHEL 系 OS であれば、EPEL にパッケージがあるのでそちらを利用。</p>
-
-<h2>使い方</h2>
-
-<h3>trickle</h3>
-
-<p>コマンドの前に <code>trickle</code> をつけるだけで、簡単に帯域制限が実現できる。とりあえず、「<code>-d n</code>で n KByte/sec にダウンロードが制限」、「<code>-u n</code>で n KByte/sec に制限」だけ覚えておけばいい。</p>
-
-<pre><code># wget のダウンロード速度を 20 KBpsに制限する例
-#  (本当は wget も curl も --limit-rate オプションが元々あるので、こんなことしなくても大丈夫)
-trickle -d 20 wget --verbose http://ftp.jaist.ac.jp/pub/Linux/ArchLinux/iso/2012.12.01/archlinux-2012.12.01-dual.iso
-</code></pre>
-
-<p>実行時、<code>trickled</code> が見つからないというメッセージが出るが、これは<code>-s</code>(standaloneモード)をつけることで抑制できる。</p>
-
-<h3>trickled</h3>
-
-<p><code>trickled</code> というプログラムも利用できるようになって、<code>tricle</code>と同様にオプション<code>-d</code>, <code>-u</code>が設定可能。<code>trickled</code>を一度起動するとデーモンとなり、以降<code>trickle</code>を使って起動したコマンドの帯域は、<code>trickled</code>起動時のオプションで設定した値までに制限される。複数個のプログラムを <code>trickle</code> で起動した場合、使用している帯域の総和が <code>trickled</code>の設定値に従うことになる。</p>
-
-<h2>参考</h2>
-
-<ul>
-<li><a href="http://monkey.org/~marius/pages/?page=trickle" title="trickle公式">配布元</a></li>
-<li><a href="http://monkey.org/~marius/trickle/trickle.pdf">仕組み</a></li>
-</ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[サブコマンドを sub で処理する]]></title>
-    <link href="http://apatheia.info/blog/2012/10/07/sub-for-subcommands/"/>
-    <updated>2012-10-07T22:13:00+09:00</updated>
-    <id>http://apatheia.info/blog/2012/10/07/sub-for-subcommands</id>
-    <content type="html"><![CDATA[<p><a href="https://github.com/37signals/sub">sub</a> は <a href="http://37signals.com/">37signals</a> が公開しているスクリプト群。サブコマンド付きのコマンドを作りたいとき、補完やヘルプメッセージなどの便利な機能を提供してくれる。</p>
-
-<!-- more -->
-
-
-<h2>使い方</h2>
-
-<p>以下の簡単なコマンドを作って、動作を確認してみることにする。</p>
-
-<pre><code>ex. browse safari http://google.com/
-
-コマンド browse にサブコマンドでブラウザ(safari, chrome, opera, ...)を与え、
-最後の引数で渡された URL が開く。URL が渡されなければ、ブラウザの起動のみ行う。
-</code></pre>
-
-<p>なお、確認はすべて Mac OS X 10.8 上 の zsh で行っている。</p>
-
-<h3>初期化</h3>
-
-<pre><code>$ git clone git://github.com/37signals/sub.git browse
-$ cd browse
-$ ./prepare.sh browse
-# 以下のメッセージが表示される
-
-Preparing your 'browse' sub!
-Done! Enjoy your new sub! If you're happy with your sub, run:
-
-    rm -rf .git
-    git init
-    git add .
-    git commit -m 'Starting off browse'
-    ./bin/browse init
-
-Made a mistake? Want to make a different sub? Run:
-    git add .
-    git checkout -f
-Thanks for making a sub!
-</code></pre>
-
-<p>言われたとおり、コマンドを実行</p>
-
-<pre><code>$ rm -rf .git
-$ git init
-$ git add .
-$ git commit -m 'Starting off foo'
-$ ./bin/foo init
-# 以下のメッセージが表示される。パスは作業ディレクトリに応じて変わる。
-
-# Load browse automatically by adding
-# the following to ~/.zshenv:
-
-eval "$(/XXXXXXXX/browse/bin/browse init -)"
-</code></pre>
-
-<p>最後に表示されるコマンドを実行することにより、補完が有効になる(XXXXXXXX は作業ディレクトリに応じて変わる)。<code>browse he[tab]</code> を実行してみよう。</p>
-
-<pre><code>$ browse help
-Usage: browse &lt;command&gt; [&lt;args&gt;]
-Some useful browse commands are:
-   commands               List all browse commands
-
-See 'browse help &lt;command&gt;' for information on a specific command.
-</code></pre>
-
-<p>無事ヘルプが表示されたら、セットアップはうまくいっている。</p>
-
-<h3>サブコマンド作成</h3>
-
-<p>まずはディレクトリ構造を見てみよう。</p>
-
-<pre><code>$ gfind ! -path './.git/*'
-.
-./.git
-./bin
-./bin/browse
-./completions
-./completions/browse.bash
-./completions/browse.zsh
-./libexec
-./libexec/browse
-./libexec/browse-commands
-./libexec/browse-completions
-./libexec/browse-help
-./libexec/browse-init
-./libexec/browse-sh-shell
-./LICENSE
-./share
-./share/browse
-./share/browse/example
-</code></pre>
-
-<p>libexec/browse-SUBCOMMAND  形式でファイルを作れば、サブコマンドを追加できる。早速追加してみよう。</p>
-
-<pre><code>$ vim libexec/browse-safari
-
-    #!/usr/bin/env bash
-    set -e
-    open -a safari $1
-
-$ chomod a+x libexec/browse-safari
-</code></pre>
-
-<p>サブコマンドはシェル補完できるので、<code>browse saf[tab] http://google.com</code> といった入力が可能。問題が無ければブラウザが起動する。 ただ、これだけだと使い方がわかりづらいので、ヘルプを追加してみる。</p>
-
-<pre><code>$ vim libexec/browse-safari
-
-    #!/usr/bin/env bash
-    #
-    # Usage: browse safari [URL]
-    # Summary: safari で指定の URL を開く
-    # Help: safari を利用して、引数で渡された URL を開く
-    # 何も URL を指定しなければ、ブラウザの起動のみ
-
-    set -e
-
-    open -a safari $1
-</code></pre>
-
-<p>ヘルプに反映されていることを確認。</p>
-
-<pre><code>$ browse help safari
-Usage: browse safari [URL]
-
-safari を利用して、引数で渡された URL を開く
-何も URL を指定しなければ、ブラウザの起動のみ
-</code></pre>
-
-<p>引数なしの <code>help</code> もメッセージが変わっている。</p>
-
-<pre><code>$ browse help
-Usage: browse &lt;command&gt; [&lt;args&gt;]
-
-Some useful browse commands are:
-   commands               List all browse commands
-   safari                 safari で指定の URL を開く
-
-See 'browse help &lt;command&gt;' for information on a specific command.
-</code></pre>
-
-<p>あとは、libexec-chrome, libexec-opera, &hellip; とサブコマンドを追加していくことができる。</p>
-
-<h2>雑感</h2>
-
-<p>プログラムを書いてもシェルの補完設定までは手が回らないことが多いので、簡単にサポートしてくれる仕組みが提供されているのはかなりよかった。</p>
-
-<p>シェルスクリプトの書き方はかなりばらつきがあり、自分の周りでも割とフリーダムな状況になっていたので、邪魔にならない程度のフレームワークがあればいいな、と思っていた。そういう用途にも合っていると思う。</p>
-
-<h2>参考</h2>
-
-<ul>
-<li><a href="http://37signals.com/svn/posts/3264-automating-with-convention-introducing-sub">37signalsのブログでの紹介</a></li>
-<li><a href="https://github.com/37signals/sub">GitHubのリポジトリ</a></li>
-</ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[head と tail の行数指定方法]]></title>
-    <link href="http://apatheia.info/blog/2012/09/22/head-tail/"/>
-    <updated>2012-09-22T19:00:00+09:00</updated>
-    <id>http://apatheia.info/blog/2012/09/22/head-tail</id>
-    <content type="html"><![CDATA[<p>head と tail を使うとき、行数指定方法について。動作確認は GNU coreutils 8.19 で行っている。</p>
-
-<!-- more -->
-
-
-<p>head と tail のは<code>-n 数字</code>(あるいは<code>--line 数字</code>)で出力する行数を指定できる。</p>
-
-<pre><code># 先頭3行を表示
-$ seq 10 | head -n 3
-1
-2
-3
-
-# 末尾3行を表示
-$ seq 10 | tail -n 3
-8
-9
-10
-</code></pre>
-
-<p>オプションで与える数字には、プラスがつく場合、マイナスがつく場合、何もつかない場合が考えられるが、記号がついた場合に通常異なる挙動をとる場合が出てくる。</p>
-
-<p><code>head -n -数字</code>の場合は、「末尾から指定した行数を除いたもの」となる:</p>
-
-<pre><code>$ seq 10 | head -n -3
-1
-2
-3
-4
-5
-6
-7
-</code></pre>
-
-<p><code>tail -n +数字</code> の場合は、「先頭から数えて指定した行以降のもの」となる:</p>
-
-<pre><code>$ seq 10 | tail -n +3
-3
-4
-5
-6
-7
-8
-9
-10
-</code></pre>
-
-<p>まとめると以下の通り:</p>
-
-<table><thead><tr><th>コマンド</th> <th>-n -行数</th> <th>-n 行数</th> <th>-n
-+行数</th> </tr></thead><tr><td>head</td> <td>末尾から
-
-指定行数を除いて表示</td> <td>先頭から
-
-指定行数表示</td> <td>先頭から
-
-指定行数表示</td> </tr><tr><td>tail</td> <td>先頭から
-
-指定行数以降を表示</td> <td>末尾から
-
-指定行数表示</td> <td>先頭から
-
-数えて指定した行以降表示</td> </tr></table>
-
-
-<p><code>-n 数字</code> の代わりに <code>-数字</code> で指定することもできるけど、-n のオプションで負数を指定しているときと混同するのでやめた方がいい。</p>
-
-<p><code>-</code> や <code>+</code> オプションは境界値がどうなっているか忘れがちだし、これが必要となるような局面では <code>awk</code> を使った方が直感的に表現できる。</p>
-
-<pre><code># 3行目から5行目を表示
-$ seq 10 | awk 3&lt;=NR &amp;&amp; NR&lt;=5
-3
-4
-5
-</code></pre>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[イベント処理ツール riemannを使う]]></title>
-    <link href="http://apatheia.info/blog/2012/09/22/riemann/"/>
-    <updated>2012-09-22T18:00:00+09:00</updated>
-    <id>http://apatheia.info/blog/2012/09/22/riemann</id>
-    <content type="html"><![CDATA[<p>イベント処理ツール <a href="http://aphyr.github.com/riemann/">riemann</a>を使ってみたのでその感想。</p>
-
-<!-- more -->
-
-
-<ul>
-<li>サーバーは clojure で書かれている
-
-<ul>
-<li>設定ファイルは S 式</li>
-</ul>
-</li>
-<li>クライアントは各言語版がある <a href="http://aphyr.github.com/riemann/clients.html">http://aphyr.github.com/riemann/clients.html</a></li>
-<li>サーバーの状態は riemann-dash という sinatra でできた Web 画面から確認できる</li>
-<li>クライアントからのメッセージはイベントと呼んでる
-
-<ul>
-<li>host, service, state, time, description, tags, metric, ttl というパラメータを持っている</li>
-</ul>
-</li>
-<li>サーバー、クライアント間は Protocol Buffer で通信する</li>
-</ul>
-
-
-<p>公式サイトではサーバーの tar ball と deb パッケージを配布している。動かすためには、Java で実行するだけ。</p>
-
-<pre><code>$ wget [http://aphyr.com/riemann/riemann-0.1.2.tar.bz2](http://aphyr.com/riemann/riemann-0.1.2.tar.bz2)
-$ tar xf riemann-0.1.2.tar.bz2
-$ cd riemann-0.1.2
-$ bin/riemann etc/riemann.config
-</code></pre>
-
-<p>設定ファイルを S 式でがりがりかけるのはおもしろくって、riemann だとこんな感じに設定できる:</p>
-
-<pre><code># 公式サイトの設定例から引用 [http://aphyr.github.com/riemann/configuring.html](http://aphyr.github.com/riemann/configuring.html)
-
-; You can use any options for [https://github.com/drewr/postal.](https://github.com/drewr/postal.)
-;
-; (mailer {:from "riemann@trioptimum.com"
-;          :host "mx1.trioptimum.com"
-;          :user "foo"
-;          :pass "bar"})
-
-(streams
-  (where (and (service "web server")
-              (state "exception"))
-         (tagged "controller"
-                 (email "5551234567@txt.att.net"))
-         (tagged "view"
-                 (email "delacroix@trioptimum.com" "bronson@trioptimum.com"))
-         (tagged "model"
-                 (email "staff@vonbraun.mil"))))
-</code></pre>
-
-<p>「イベント x あるいは y が n 秒以内に m 回発生したらアラート」みたいなのも設定できるみたいなので、監視ツールと組み合わせてもおもしろそう。</p>
-
-<p>ソフトウェアの内容や使いかっては、 <a href="http://fluentd.org/">fluentd</a>
-ととても近いように感じた。それぞれ公式サイトに掲げられているメッセージを比較してみると、fluentd は「Fluentd is a lightweight
-and flexible log collector」で、riemann は「Riemann is an event stream
-processor」だった。fluentd はイベントを集計できる形式でログとして残すこと、riemann
-はイベントストリームから特定の状況をリアルタイムで見つけだすことが主眼ということかな。</p>
-
-<h2>参考</h2>
-
-<ul>
-<li><a href="http://aphyr.github.com/riemann/">公式サイト</a></li>
-<li><a href="http://vimeo.com/45807716">紹介ビデオ</a></li>
-<li><a href="http://blog.boundary.com/2012/03/12/boundary-tech-talks-march-6th-2012/">紹介ビデオ</a></li>
-<li><a href="https://twitter.com/aphyr">作者 Kyle Kingsbury</a></li>
-<li><a href="http://labs.amara.org/2012-07-16-metrics.html">利用事例</a></li>
-</ul>
-
-
-<h3>関連するサービス、同類のソフトウェア</h3>
-
-<ul>
-<li><a href="http://fluentd.org/">fluentd</a></li>
-<li><a href="http://boundary.com/">boundary</a></li>
-<li><a href="http://aws.amazon.com/en/cloudwatch/">amazon cloudwatch</a></li>
-<li><a href="http://www.loggly.com/">loggly</a></li>
-<li>その他多くの監視ツール</li>
-</ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[TumblerからOctopressへの移行]]></title>
-    <link href="http://apatheia.info/blog/2012/09/22/tumbler-to-octopress/"/>
-    <updated>2012-09-22T17:28:00+09:00</updated>
-    <id>http://apatheia.info/blog/2012/09/22/tumbler-to-octopress</id>
-    <content type="html"><![CDATA[<p>Tumblerでブログ書いていたけど、ローカルで記事書く => フォームに貼り付け =>
-プレビューのサイクルが結構面倒くさいな、と常々思っていたので、Octopressに移行した。</p>
-
-<p>ホスティングには <a href="http://pages.github.com/">Github Pages</a> を利用している。</p>
-
-<!-- more -->
-
-
-<h2>手順</h2>
-
-<h3>設定</h3>
-
-<pre><code>$ git clone git://github.com/imathis/octopress.git octopress
-
-# テーマ入れ替える    
-$ git clone git://github.com/tommy351/Octopress-Theme-Slash.git .themes/slash
-$ rake 'install[slash]' # zsh だとクォートなりエスケープするなりしないと、[, ] がメタ文字として解釈される
-# .themes/slash/{source,sass} がルートディレクトリにコピーされる
-</code></pre>
-
-<p>このままだと header の canonical が設定されないかったので、同梱テンプレート <code>.themes/classic/source/_includes/head.html</code> を参考に <code>./source/_includes/head.html</code> をちょっとといじった。</p>
-
-<h3>Tumbler の記事をインポート</h3>
-
-<p><a href="http://tsurayogoshi.tumblr.com/archive">ブログの過去記事</a>を全部インポートする
-( 参考: <a href="http://blog.assimov.net/blog/2012/03/24/tumblr-to-octopress-powered-by-jekyll-and-markdown/">Goodbye Tumblr. Hello, Octopress Powered by Jekyll and Markdown!</a> )</p>
-
-<pre><code>$ wget -O source/tumblr.rb https://raw.github.com/stephenmcd/jekyll/master/lib/jekyll/migrators/tumblr.rb
-$ vim source/tumblr.rb # format="md" =&gt; format="markdown" に書き換え
-$ ruby -rubygems -e 'require "./source/tumblr"; Jekyll::Tumblr.process("http://tsurayogoshi.tumblr.com", format="markdown", grab_images=true)'
-$ mv _posts/tumblr/* source/_posts/
-$ mv post source/
-</code></pre>
-
-<p>後は細かい調整</p>
-
-<ul>
-<li>画像のパスが tumblr を参照しているので、全部ダウンロードして <code>source/images</code>
-以下に保存</li>
-<li>記事のメタデータ部分
-
-<ul>
-<li><code>comments: true</code>を追加</li>
-<li><code>tags</code> を <code>categories</code> に書き換え。</li>
-</ul>
-</li>
-<li>各種外部サイト向けパーツの設定</li>
-</ul>
-
-
-<p><code>source/post</code> には、tumbler と同じURLでアクセスしたとき、移行後のコンテンツにア
-クセスするリダイレクト設定が入っている。tumbler の頃からカスタムドメインを使っ
-ていた場合は、後述のドメイン設定で前と同じドメインにすればいい。</p>
-
-<h3>ドメインの設定</h3>
-
-<p>独自ドメインを使う場合、source/ 以下に CNAME というファイルを作り、そこにドメイ
-ンを書いておく。その後、指定の IP アドレスに名前を向ける。</p>
-
-<p>何度かIPアドレスが変更になっているみたいで、別のIPアドレスを利用した説明がネッ
-トに残っているけど、古いものだとカスタムドメインが使えるけどusername.github.com
-からのカスタムドメインへのリダイレクトが有効にならなかったりするので、ちゃんと
-<a href="https://help.github.com/articles/setting-up-a-custom-domain-with-pages">公式の説明</a>のもの
-を参照すること。</p>
-
-<h3>Github Pages へデプロイ</h3>
-
-<p><a href="http://octopress.org/docs/deploying/github/">ドキュメント</a>を読めばわかるので詳
-細は割愛。</p>
-
-<p><code>source</code> ディレクトリの中身が <code>public</code> 以下に展開されて、ここがプレビュー領域と
-なる。<code>public</code> の中身が <code>_deploy</code> にコピーされて、ここが Github Pages に push
-される。</p>
-
-<p>git リポジトリのうち <code>master</code> ブランチがは公開用、<code>source</code> が編集用となる。ルー
-ディレクトリに <code>source</code> ブランチ、公開用の <code>_deploy</code> ディレクトリに <code>maste</code> ブ
-ランチという二つのリポジトリが配置されることになる。</p>
-
-<h2>感想</h2>
-
-<p>vim で書く => すぐに確認 => github にデプロイ => 公開の流れは気持ちいい。tumblr の頃と同じく、markdown で書けるのもとても具合がいい。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[roundsmanを使ってcapistranoからchef-soloを実行する]]></title>
-    <link href="http://apatheia.info/blog/2012/07/30/roundsman-capistrano-chef-solo/"/>
-    <updated>2012-07-30T00:00:00+09:00</updated>
-    <id>http://apatheia.info/blog/2012/07/30/roundsman-capistrano-chef-solo</id>
-    <content type="html"><![CDATA[<p>管理対象のサーバー台数が少ない場合など、<a href="http://www.opscode.com/chef/">chef</a>のサーバーを運用するコストとベネフィットを天
-秤にかけてみて、ああこれどう考えても労力ペイできないな、でも設定ファイルを手動で管理するのはやだな、といったときに<a href="https://g%0Aithub.com/iain/roundsman">roundsman</a>を使うといいという話。</p>
-
-<!-- more -->
-
-
-<p><a href="https://github.com/iain/roundsman">roundsman</a>は、chefのレシピを転送して<a href="http://wiki.opscode.com/display/chef/Chef+Solo">chef-solo</a>を実行する<a href="https://github.com%0A/capistrano/capistrano">capistrano</a>向けライブラリ。アプリケーションのリリースタイミングに併せてインフラ設定の変更が必要になることは往々にしてある
-ので、<a href="https://github.com/capistrano/capistrano">capistrano</a>を使ってデプロイとインフラ設定変更を一括適
-用できるのは便利だ。</p>
-
-<p>ここでは、Railsアプリを対象に<a href="https://github.com/iain/roundsman">roundsman</a>適用までの作業を簡単にまとめる
-。</p>
-
-<h2>手順</h2>
-
-<p>まずは適当なRailsプロジェクトを作るところから。</p>
-
-<pre><code>PROJECT="my_fantastic_project"
-rails new $PROJECT
-cd $PROJECT
-
-$EDITOR Gemfile
-  # 追加
-  gem roundsman, :require =&gt; false
-  gem capistrano, :require =&gt; false
-
-bundle install --path vendor/bundle
-
-# capistranoのCapfile、config/deploy.rbを生成
-bundle exec capify .
-</code></pre>
-
-<p>chefのcookbooksは<code>config/cookbooks</code>に配置する。場所は設定で変更可能。このディレクトリだけ別リポジトリにしておくと、ほかのプロ
-ジェクトでも転用できて便利なのでそうしてる。</p>
-
-<p>config/deploy.rbを調整する。サーバーの種別ごとにデプロイを切り替えたいので、マルチステージを有効化。</p>
-
-<pre><code>$EDITOR config/deploy.rb
-
-# 追加
-# require roundsman/capistrano
-# require capistrano/ext/multistage
-</code></pre>
-
-<p>サーバーグループの設定を<code>config/deploy/*.rb</code>に配置。これについては、<a href="https:%0A//github.com/capistrano/capistrano/wiki/2.x-Multistage-Extension">capistrano/ext/multistage</a>の説明を参照。</p>
-
-<p>あとは<code>config/deploy.rb</code>でrecipeを実行するタスクを追加し、<code>config/deploy/*.rb</code>の中でattributeを設定して
-いく。</p>
-
-<pre><code>config/deploy.rb:
-
-    namespace :chef do
-      set :care_about_ruby_version, false
-
-      # 一括して適用
-      task :default do
-        roundsman.run_list fetch(:run_list)
-      end
-
-      # 個別にレシピ適用 (ex. nginx)
-        namespace :nginx do
-          task :install do
-            roundsman.run_list "recipe[nginx]"
-          end
-        end
-
-      end
-</code></pre>
-
-<p><a href="https://github.com/iain/roundsman#configuration">githubにある設定方法の説明</a>だと、config/ス
-テージ名.rb に設定を書いている。</p>
-
-<pre><code>config/deploy/*.rb:
-
-    set :nginx, :user =&gt; "nginx", "worker_process" =&gt; 1, …
-    set :run_recipe, :user =&gt; "nginx", "worker_process" =&gt; 1, …
-</code></pre>
-
-<p>ただ、これだとattributesの管理がcapistranoの中にべったり書くことになってしまい、chef-
-soloを手で実行したいときとか面倒くさい。そのため、attributesの値はknifeやchef-
-soloで読めるようなjsonを作って、config/roles 以下で管理している。</p>
-
-<p>roles ディレクトリはアプリのアップデートと関係なく更新していくことになるので、別リポジトリで管理した方がいい。</p>
-
-<pre><code>ファイル構成(抜粋)
-
-  ├── Capify
-  ├── Gemfile
-  └── config
-        ├── cookbooks
-        ├── deploy
-        └── roles
-
-config/deploy.rb:
-
-  # jsonファイルを取り込む関数を追加
-  require active_support/core_ext/hash/deep_merge
-  def load_role(*roles)
-    json = {}                                                                    
-    roles.each do |role|
-      json_path = "#{File.dirname(__FILE__)}/roles/#{role}.json"
-      json.deep_merge! JSON.load(File.new(json_path))
-    end
-    json.each {|k,v| set (k.to_sym), v }                                         
- end
-
-config/deploy/*.rb:
-
-  # 読み込みたいjsonファイルを指定
-  load_role "web"
-
-config/roles/*.json:
-
- 例: config/roles/web.json
-  {
-     "nginx" : {
-      "user" : "nginx",
-      "worker_processes" : 1,
-    …
-     "run_list" : [ "recipe[nginx]", ... ]
-  }
-</code></pre>
-
-<p>以上で準備が整った。これで実行できるようになる。</p>
-
-<pre><code># 一括適用
-bundle exec cap ステージ名 chef
-
-# cookbook を指定して適用
-bundle exec cap ステージ名 chef:nginx
-</code></pre>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[分散ファイルシステム GlusterFS を使う]]></title>
-    <link href="http://apatheia.info/blog/2012/06/05/glusterfs/"/>
-    <updated>2012-06-05T00:00:00+09:00</updated>
-    <id>http://apatheia.info/blog/2012/06/05/glusterfs</id>
-    <content type="html"><![CDATA[<p>Webアプリケーションを構築する上で、運用中に発生したファイルをローカルのファイルシステム上に保管すると、スケールを阻害するため好ましくないことが多い。</p>
-
-<!-- more -->
-
-
-<p>そのため、アプリケーションの設計の段階からCDNの利用したり、ファイルの管理だけ別のサービスに切り出したりすることを考慮すべきだけど、いろいろなしがらみのた
-めにどうしてもファイルを複数台のサーバーで共有するようなシステム形態にせざるを得ないことが往々にしてある。</p>
-
-<p>サーバー間のファイル共有のための方法として、<a href="http://code.google.com/p/lsyncd/">lsyncd</a> や<a href="http://www.drbd.org/">DRBD</a>を使ったり、NASを介したりするなど様々な方法があるけど、<a href="http://www.gluster.or%0Ag/">GlusterFS</a> がとても便利。特別な機器を必要とせず、すでにある環境に対して導入でき、信頼性とスケーラビリティのあるクラスタリングファイルシステムを手早く構築するこ
-とができる。</p>
-
-<p>GlusterFS を簡単に説明すると、以下のような特徴がある:</p>
-
-<ul>
-<li>分散型ファイルシステム
-
-<ul>
-<li>SPOFになるような特殊ノードも必要ない</li>
-</ul>
-</li>
-<li>NFSやCIFSでマウント可能
-
-<ul>
-<li>先日発表された 3.3.0 で、HDFSとの互換性できてHadoopから処理できるようになったり、OpenStack Object Storage API互換の REST APIが提供されたりでいろいろ熱い感じになっている</li>
-</ul>
-</li>
-<li>ストライピングで性能を上げたり、レプリケーションで耐障害性をあげたりすることが可能</li>
-</ul>
-
-
-<p>今回は仮想マシンで動作を検証するまでの流れをまとめる。</p>
-
-<h2>環境構築</h2>
-
-<p>作業環境として、Mac OS X Lion上のVirtualBoxを利用し、仮想マシンとしてはCentOS 6.2
-x86_64を使う。Windowsでやる場合は<code>vagrant ssh</code>が動かないので、そのあたりを読み替えればできると思う。</p>
-
-<p>はじめにCentOS 6.2のマシンイメージを作る。</p>
-
-<pre><code>$ gem install vagrant veewee
-$ mkdir work
-$ cd work
-$ vagrant basebox define CentOS-6.2-x86_64-minimal CentOS-6.2-x86_64-minimal
-$ vagrant basebox build CentOS-6.2-x86_64-minimal # マシンイメージのビルド
-$ vagrant basebox validate CentOS-6.2-x86_64-minimal # チェック
-$ vagrant basebox export CentOS-6.2-x86_64-minimal
-$ vagrant box add CentOS-6.2-x86_64-minimal CentOS-6.2-x86_64-minimal.box
-$ cd ..
-$ rm -rf ./work
-</code></pre>
-
-<p>次にクラスタ構成の設定。</p>
-
-<pre><code>$ mkdir -p ~/Documents/vagrant/glusterfs/ # 作業用ディレクトリ作成
-$ cd ~/Documents/vagrant/glusterfs/
-$ vim Vagrantfile # 編集
-</code></pre>
-
-<p><a href="https://gist.github.com/2868494">https://gist.github.com/2868494</a></p>
-
-<pre><code>$ vagrant up # 3台の仮想マシン起動
-</code></pre>
-
-<p>必要となる仮想マシンがそろったので、glusterfsのセットアップを始める。</p>
-
-<pre><code>$ cd ~/Documents/vagrant/glusterfs # この中は 共有ディレクトリを通して、仮想マシンの/vagrantからも参照可能
-$ curl -LO [http://download.gluster.org/pub/gluster/glusterfs/LATEST/CentOS/glusterfs-3.3.0-1.el6.x86_64.rpm](http://download.gluster.org/pub/gluster/glusterfs/LATEST/CentOS/glusterfs-3.3.0-1.el6.x86_64.rpm)
-$ curl -LO [http://download.gluster.org/pub/gluster/glusterfs/LATEST/CentOS/glusterfs-fuse-3.3.0-1.el6.x86_64.rpm](http://download.gluster.org/pub/gluster/glusterfs/LATEST/CentOS/glusterfs-fuse-3.3.0-1.el6.x86_64.rpm)
-$ curl -LO [http://download.gluster.org/pub/gluster/glusterfs/LATEST/CentOS/glusterfs-server-3.3.0-1.el6.x86_64.rpm](http://download.gluster.org/pub/gluster/glusterfs/LATEST/CentOS/glusterfs-server-3.3.0-1.el6.x86_64.rpm)
-</code></pre>
-
-<p>仮想マシンに必要となるパッケージをインストールしておく。</p>
-
-<pre><code>$ brew install parallel # 一台ずつ設定するの面倒なので、gnu parallel 使う
-$ parallel vagrant ssh {} -c sh -c "sudo yum -y install wget fuse fuse-libs" ::: host1 host2 host3
-$ parallel vagrant ssh {} -c sh -c "sudo yum install -y /vagrant/glusterfs-*" ::: host1 host2 host3 # パッケージインストール
-$ parallel vagrant ssh {} -c sh -c "/usr/sbin/glusterfs -V" ::: host1 host2 host3 # 動作確認
-$ parallel vagrant ssh {} -c sh -c "sudo /sbin/service iptables stop" ::: host1 host2 host3 # iptables 停止
-$ parallel vagrant ssh {} -c sh -c "sudo /sbin/service glusterd start" ::: host1 host2 host3 # 起動
-</code></pre>
-
-<p>以降、<code>$</code> から始まるのはホストOS、<code>hostX$</code> から始まるのは仮想マシン上のターミナルの説明とする。</p>
-
-<h2>ストレージプール作成</h2>
-
-<p>ストレージプールと呼ばれる、サーバー間の信頼済みネットワークを作成する。</p>
-
-<pre><code>$ vagrant ssh host1
-
-host1$ sudo gluster peer probe 192.168.56.11 # host2 をプールに追加
-host1$ sudo gluster peer probe 192.168.56.12 # host3 をプールに追加
-# 自ホスト(host1)の追加は不要
-</code></pre>
-
-<h2>ボリューム作成</h2>
-
-<p>ストレージプールを構成したら、ボリュームを作成する。</p>
-
-<p>ボリュームは「分散するかどうか」「レプリケーションするかどうか」「ストライピングするかどうか」を選ぶことになる。組み合わせることも可能。ひとまず2台構成で分
-散、ストライピング、レプリケーションのそれぞれについて試してみる。</p>
-
-<h3>分散</h3>
-
-<p>ファイルをストレージ内のどこかしらに保存しておく形態。追加すればするほど大きなストレージとなるけど、冗長性などは確保されない。</p>
-
-<p>host1, host2 で分散ボリュームを作ってみる。</p>
-
-<pre><code>$ parallel vagrant ssh {} -c sh -c "sudo mkdir -p /export/vol" ::: host1 host2
-$ vagrant ssh host1
-
-host1$ sudo gluster volume create vol 192.168.56.10:/export/vol 192.168.56.11:/export/vol
-</code></pre>
-
-<h3>ストラインピング</h3>
-
-<p>性能向上を目的として、ファイルを複数に分割して保存しておく形態。RAID0みたいな感じ。</p>
-
-<p>host2, host3 でストライピングボリュームを作ってみる。</p>
-
-<pre><code>$ parallel vagrant ssh {} -c sh -c "sudo mkdir -p /export/vol-striping" ::: host2 host3  
-$ vagrant ssh host1
-
-host1 $ sudo gluster volume create vol-striping stripe 2 192.168.56.11:/export/vol-striping 192.168.56.12:/export/vol-striping
-</code></pre>
-
-<h3>レプリケーション</h3>
-
-<p>データの複製を作って、複数の場所に保管しておく形態。RAID1みたいな感じ。信頼性が高くなり、ファイルの読み込みも早くなる。</p>
-
-<p>host1, host3 でレプリケーションボリュームを作ってみる。</p>
-
-<pre><code>$ parallel vagrant ssh {} -c sh -c "sudo mkdir -p /export/vol-replica" ::: host1 host3
-$ vagrant ssh host1
-
-host1$ sudo gluster volume create vol-replica replica 2 192.168.56.10:/export/vol-replica 192.168.56.12:/export/vol-replica
-host1$ sudo gluster volume start vol-replica
-</code></pre>
-
-<h2>利用</h2>
-
-<h3>マウント</h3>
-
-<p>OSにマウントしてみる。マウント方法にはNFSやCIFSなども選べるけど、ここではネイティブのglusterfs形式を選んでみる。</p>
-
-<pre><code>$ vagrant ssh host1
-
-host1$ sudo mkdir -p /mnt/{vol,vol-striping,vol-replica}
-host1$ sudo mount -t glusterfs 192.168.56.10:/vol /mnt/vol # 分散
-host1$ sudo mount -t glusterfs 192.168.56.11:/vol-striping /mnt/vol-striping # ストライピング
-host1$ sudo mount -t glusterfs 192.168.56.12:/vol-replica /mnt/vol-replica # レプリケーション    
-</code></pre>
-
-<h3>動作確認</h3>
-
-<p>はじめに、マウントした結果を見てみる。</p>
-
-<pre><code>$ df -h /mnt/*
-Filesystem            Size  Used Avail Use% Mounted on
-192.168.56.10:vol      17G  1.9G   14G  12% /mnt/vol
-192.168.56.12:vol-replica
-                      8.4G  949M  7.0G  12% /mnt/vol-replica
-192.168.56.11:vol-striping
-                       17G  1.9G   14G  12% /mnt/vol-striping
-</code></pre>
-
-<p>分散、ストライピングは2台分を足し合わせた結果になっている。レプリケーションは2台に同じデータが分散されるので、ディスク効率は50%に下がる。</p>
-
-<h4>分散</h4>
-
-<p>適当にファイルを作ってみる。</p>
-
-<pre><code>host1$ sudo touch /mnt/vol/{1..9}
-
-# 保管先をチェック
-
-host1$ ls /export/vol/ # 1  5  7  8  9
-
-host2$ ls /export/vol/ # 2  3  4  6
-</code></pre>
-
-<p>ファイルがばらばらと格納されていることがわかる。</p>
-
-<h3>ストライピング</h3>
-
-<pre><code>host1$ sudo vi /mnt/vol-striping/sample.txt # 10M強データをテキストデータを書き込み
-
-host1$ du -s /mnt/vol-striping/sample.txt # 10256と表示された
-host1$ ls -l /mnt/vol-striping/sample.txt # サイズが 10484785 と表示された
-
-# 保管先をチェック
-host2$ du -s /export/vol-striping/sample.txt # 5128 と表示された
-host2$ ls -l /export/vol-striping/sample.txt # サイズが 10354688 と表示された
-
-host3$ du -s /export/vol-striping/sample.txt # 5128 と表示された
-host3$ ls -l /export/vol-striping/sample.txt # サイズが 10484785 と表示された
-</code></pre>
-
-<p>duの結果（ディスクのセクタ）はちょうど半分ずつに分割されるけど、ファイルの実際のサイズは元ファイルと同じ場合と異なる場合の2パターンが検出できた。これは、
-ファイルがスパースファイルなっているため、見かけ上のサイズと実際にディスク上で利用しているサイズが異なっていることが原因。</p>
-
-<h3>レプリケーション</h3>
-
-<p>適当なファイルを作ってみる。</p>
-
-<pre><code>host1$ sudo dd if=/dev/urandom of=/mnt/vol-replica/dummy bs=1M count=10
-host1$ sha1sum /mnt/vol-replica/dummy # 54b5c383e96d511249f9393de060c3219549e030 だった
-
-# 保管先をチェック
-host1$ sha1sum /export/vol-replica/dummy # 54b5c383e96d511249f9393de060c3219549e030 だった
-
-host2$ sha1sum /export/vol-replica/dummy # 54b5c383e96d511249f9393de060c3219549e030 だった
-</code></pre>
-
-<p>同じ内容のファイルが複数箇所に保存されることがわかった。</p>
-
-<h2>メモ</h2>
-
-<p>なんとなくでも使い始められちゃうくらい簡単に使えるけど、<a href="http://gluster.org/community/documentatio%0An/index.php/Main_Page">ドキュメント</a>の<a href="http://www.gluster.org/wp-%0Acontent/uploads/2012/05/Gluster_File_System-3.3.0-Administration_Guide-en-%0AUS.pdf">PDF</a> がわかりやすくコンパクトにまとまっていて、全体像を理解するのはここからここから始めるといいと思う。</p>
-
-<h2>参考</h2>
-
-<ul>
-<li><a href="http://www.gluster.org/community/documentation/index.php/Main_Page">Gluster Community のドキュメント</a></li>
-</ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[sphinxの更新をguard-livereloadで検知してブラウザを自動リロードする]]></title>
-    <link href="http://apatheia.info/blog/2012/06/03/sphinx-guard-livereload/"/>
-    <updated>2012-06-03T00:00:00+09:00</updated>
-    <id>http://apatheia.info/blog/2012/06/03/sphinx-guard-livereload</id>
-    <content type="html"><![CDATA[<p>sphinxでドキュメントを書く際に生じる「文章の記述 => ビルド =>
-ブラウザでの確認」という一連のサイクルを人力でやるのは効率が悪い。いろいろな省力化対策が考えられるが、ここでは guard-
-livereloadを使って、文章のビルドとブラウザのリロードを自動化する方法を説明する。</p>
-
-<!-- more -->
-
-
-<h2>作業環境</h2>
-
-<p>検証に使った環境は以下の通り。環境に依存する部分は少ないので、他のOSでも動くと思う。</p>
-
-<ul>
-<li>Mac OS X Lion</li>
-<li>ruby 1.9.3-p194</li>
-<li>sphinx 1.1.3</li>
-</ul>
-
-
-<h2>事前準備</h2>
-
-<h3>サーバー側準備</h3>
-
-<p>用意するのは3ファイル</p>
-
-<ul>
-<li>Gemfile … 必要なライブラリをまとめてインストールするための設定ファイル</li>
-<li>Gaurdfile … ファイルシステム監視の設定ファイル</li>
-<li>Procfile … Webサーバーとファイル監視を起動するための設定ファイル</li>
-</ul>
-
-
-<p><a href="https://gist.github.com/2862843">https://gist.github.com/2862843</a></p>
-
-<p>これら3ファイルをsphinxの作業ディレクトリ内に配置する。製生後のhtmlファイルは<code>buld/html</code>ディレクトリに格納されていることを期待した設定
-になっているので、必要であれば適宜修正する。</p>
-
-<p>ファイルの設置が終わったら、ライブラリをインストールする。</p>
-
-<pre><code>bundle install
-</code></pre>
-
-<h3>ブラウザ側準備</h3>
-
-<p>好きなブラウザにlivereloadのブラウザ拡張をインストールする。</p>
-
-<p><a href="http://help.livereload.com/kb/general-use/browser-extensions">http://help.livereload.com/kb/general-use/browser-
-extensions</a></p>
-
-<h2>利用方法</h2>
-
-<p>サーバー側でファイルの監視とlivereloadを開始する。</p>
-
-<pre><code>foreman start
-</code></pre>
-
-<p>ブラウザで <a href="http://localhost:3000/">http://localhost:3000/</a> (3000以外にしたい場合は Procfile 内で変更)
-にアクセスしてlivereloadのブラウザ拡張を有効化すれば、あとはファイルの更新に合わせて自動的にビルドとブラウザのリロードが行われる。</p>
-
-<h2>参考</h2>
-
-<ul>
-<li><a href="http://aligach.net/diary/20110925.html">LiveReloadが超気持ちいい2011</a> Livereloadの詳しい説明</li>
-<li><a href="https://addons.mozilla.org/en-US/firefox/addon/auto-reload/">Auto Reload</a> ローカルファイルの更新を検知してFirefoxをリロードしてくれるアドオン。試してみたけど、自分の環境ではリロードがうまく動かなかった。</li>
-</ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[さくらのVPSにLXCで仮想環境構築してXtraDB Cluster動かす]]></title>
-    <link href="http://apatheia.info/blog/2012/05/13/vps-lxc-xtradb-cluster/"/>
-    <updated>2012-05-13T00:00:00+09:00</updated>
-    <id>http://apatheia.info/blog/2012/05/13/vps-lxc-xtradb-cluster</id>
-    <content type="html"><![CDATA[<p>ほんの数年前までVPSといえばLinode、Slicehostなどの海外のサーバーしか選択肢がなかった。ls を実行しても一呼吸おくほどのレイテンシーがあるような環境で、128MBくらいのメモリを何とかやりくりしてRailsを動かしていたが、現在では月1000円程度で用途によっては手に余るようなスペックが手に入るようになっている。そんなVPSの余ったリソースを使って、仮想環境をたてようというのが今回の目的だ。</p>
-
-<!-- more -->
-
-
-<p><a href="http://lxc.sourceforge.net/">LXC</a>は、他の仮想化方式と比べてオーバーヘッドが少なくきびきび動くし、必要であればCPUやメモリの制限をつけることもできる。RPMやDebのパッケージ作成をしたり、Chefのcookbook作成などで独立した環境を手軽に構築したい人には特に有用に思う。また、簡単にネットワークが作れるので、複数台構成のソフトウェアを1台のマシンのなかで動かすことが出来る。今回は動作確認として <a href="http://www.percona.com/software/percona-xtradb-cluster/">PerconaXtraDB Cluster</a>を動かしてみることにする。</p>
-
-<h2>前提について</h2>
-
-<p>作業環境は以下を想定している。</p>
-
-<ul>
-<li>さくらのVPS(v3) 1G
-
-<ul>
-<li>CentOS 6.2 x86_64</li>
-</ul>
-</li>
-<li>LXC 0.7.5</li>
-</ul>
-
-
-<p>CentOSを使っているのはデフォルトのOSイメージだからというのが理由。</p>
-
-<p>今回の内容をEC2上で実行する場合、Amazon Linux でもほとんど同様の設定で作業を行えることを確認しているけど、もっ と新しいOS、たとえば Ubuntu 12.04 LTS を使えば後述する cgroupの設定、bridgeの設定が不要となるためより簡単に行える。CentOS 6で実施したときだけ遭遇するような問題に何度もぶつかったので、出来るだけ新しいOSを使った方がいい。</p>
-
-<p>仮想環境としては、lxcに同梱されているテンプレートを利用してUbuntuを、またOSイメージの作成からCentOSを構築する。</p>
-
-<h2>構築方法</h2>
-
-<p>以降の作業はすべて root で行うものとする。</p>
-
-<h3>ネットワークの設定</h3>
-
-<p>仮想環境とのやりとりで使うブリッジを作る。</p>
-
-<pre><code># yum install bridge-utils
-# vim /etc/sysconfig/network-scripts/ifcfg-lxcbr0
-
-    DEVICE=lxcbr0
-    TYPE=Bridge
-    BOOTPROTO=none
-    IPADDR=10.0.3.1
-    NETMASK=255.255.255.0
-    ONBOOT=yes
-
-# ifup lxcbr0 # 起動
-</code></pre>
-
-<h3>cgroup</h3>
-
-<pre><code># mount | grep cgroup # cgroup がないこと確認
-# mkdir -p /cgroup
-# printf "none          /cgroup     cgroup  defaults        0 0
-" &gt;&gt; /etc/fstab
-# mount -a
-# mount | grep cgroup # cgroup があること確認
-</code></pre>
-
-<h3>lxc セットアップ</h3>
-
-<pre><code># yum install libcap-devel docbook-utils
-# yum groupinstall "Development Tools"
-
-# wget [http://lxc.sourceforge.net/download/lxc/lxc-0.7.5.tar.gz](http://lxc.sourceforge.net/download/lxc/lxc-0.7.5.tar.gz)
-# tar xf lxc-0.7.5.tar.gz
-# cd lxc-0.7.5
-# ./configure
-# make rpm # この途中で /usr/lib64/lxc/{template,rootfs} がインストールされるのかなり狂ってる
-# rpm -ivh ~/rpmbuild/RPMS/x86_64/lxc-0.7.5-1.x86_64.rpm
-   (~/rpmbuild になければ、/usr/src/rpm から探す)
-# mkdir -p /var/lib/lxc
-</code></pre>
-
-<h3>dnsmasq (DHCP, DNS サーバー) セットアップ</h3>
-
-<p>環境を増やすごとに毎回NICの設定を編集するのは手間なので、ホスト側で dncp, dns の設定をする。</p>
-
-<pre><code># yum install dnsmasq
-# vim /etc/dnsmasq.conf
-
-    コメントを外して有効化する、編集するなどで以下の設定を行う
-    domain は自分の使いたい名前にすればいい
-
-    domain-needed
-    bogus-priv
-    interface = lxcbr0
-    listen-address = 127.0.0.1
-    listen-address = 10.0.3.1
-    expand-hosts
-    domain = lxc
-    dhcp-range = 10.0.3.50,10.0.3.200,1h
-
-# service dnsmasq reload
-</code></pre>
-
-<h3>ネットワークセットアップ</h3>
-
-<p>仮想環境から外部へのやりとりが出来るようにネットワークの設定を変更する。</p>
-
-<pre><code># sysctl -w net.ipv4.ip_forward=1
-# sed -i -re s/net.ipv4.ip_forward = 0/net.ipv4.ip_forward = 1/ /etc/sysctl.conf
-# iptables -A POSTROUTING -s 10.0.3.0/24 -t nat -j MASQUERADE
-# service iptables save # 設定を /etc/sysconfig/iptables に保存
-</code></pre>
-
-<h3>仮想環境構築 (1) 同梱のスクリプトを使った Ubuntu のインストール</h3>
-
-<p>lxcに同梱のスクリプト /usr/lib64/lxc/templates/lxc-ubuntu を使ってUbuntuをインストールする。</p>
-
-<p>基本的な設定ファイルを作る。</p>
-
-<pre><code># cd
-# vim lxc.conf
-
-    lxc.network.type=veth
-    lxc.network.link=lxcbr0
-    lxc.network.flags=up
-</code></pre>
-
-<p>今回は Ubuntu を導入するので、そのために必要なプログラムをインストールする。</p>
-
-<pre><code># yum install --enablerepo=epel debootstrap dpkg
-</code></pre>
-
-<p>これで準備が出来たので、実際に仮想環境を動かしてみる。</p>
-
-<pre><code># lxc-create -t ubuntu -f lxc.conf -n vm0
-   -t がテンプレートの名前。 -t ubuntu なら /usr/lib64/lxc/templates/lxc-ubuntu が読み込まれる
-      オプションでバージョンが指定可能だが、lxc 0.7.5 に同梱されているテンプレートのデフォルトだと Ubuntu 10.04 が選ばれる。
-   -f がさっき作った設定ファイルの場所
-   -n が環境の名前。今回は vm0 とした。 /var/lib/lxc/vm0 にファイルがおかれる
-# lxc-start -n vm0 -l debug -o debug.out -d
-   -l はデバッグレベル、-o はデバッグの場所を指定。安定して起動するようになったらつけなくていい
-# lxc-console -n vm0
-  一回エンター押した後、ユーザー root パスワード root でログイン
-  抜けるときは Ctrl-a q
-
-  lxc-console をしても何も表示されない状態になったら、以下を施して再起動
-
-# vim /var/lib/lxc/vm0/rootfs/etc/init/lxc.conf
-
-  telinit を差し込む
-
-    --- /var/lib/lxc/vm0/rootfs/etc/init/lxcguest.conf.orig 2012-02-07 10:28:25.000000000 +0900
-    +++ /var/lib/lxc/vm0/rootfs/etc/init/lxcguest.conf      2012-05-06 22:43:21.606098530 +0900
-    @@ -12,5 +12,6 @@
-        touch /var/run/utmp
-        chown root:utmp /var/run/utmp
-        initctl emit --no-wait net-device-added INTERFACE=lo || true
-    +   telinit 3
-        exit 0
-     end script
-</code></pre>
-
-<p>lxc-console だとCtrl-aが使えなくて不便なので、今後はsshでログインしたい。テンプレートが自動的にOpenSSHをインストールしてくれるが、ちゃんと起動しない。仕方が無いので、update-rc.d で起動するように設定</p>
-
-<pre><code>  仮想環境内で実行
-# update-rc.d ssh enable
-</code></pre>
-
-<p>固定IPアドレスを振りたい場合は、設定を変更する。</p>
-
-<pre><code>  ホスト側からの変更
-# vim /var/lib/lxc/vm0/config
-
-  lxc.network.ipv4 = 10.0.3.2/24
-
-  仮想環境の中で変更
-# vim /etc/network/interfaces
-
-    変更前
-    auto lo
-    iface lo inet loopback
-
-    auto eth0
-    iface eth0 inet dhcp
-
-    変更後
-    auto lo
-    iface lo inet loopback
-
-    iface eth0 inet static
-        address 10.0.3.2
-        netmask 255.255.255.0
-        gateway 10.0.3.1
-</code></pre>
-
-<p>仮想環境の破棄は lxc-destroy で行う</p>
-
-<pre><code># lxc-destroy -n vm0
-</code></pre>
-
-<h3>仮想環境構築 (2) 独自に構築した CentOS 6 のインストール</h3>
-
-<p>lxc-console の標準テンプレートでは CentOS が用意されていないので、自力でセットアップする。</p>
-
-<h4>イメージ作成</h4>
-
-<p>基本的に <a href="http://wiki.1tux.org/wiki/Centos6/Installation/Minimal_installation_using_yum">Centos6/Installation/Minimal installation using yum</a> の通り。ただし 64 bit 版をインストールする</p>
-
-<pre><code># mkdir /t
-# cd /t
-# wget [http://mirrors.kernel.org/centos/6/os/x86_64/Packages/centos-release-6-2.el6.centos.7.x86_64.rpm](http://mirrors.kernel.org/centos/6/os/x86_64/Packages/centos-release-6-2.el6.centos.7.x86_64.rpm)
-# rpm2cpio centos-release-6-2.el6.centos.7.x86_64.rpm  | cpio -idm
-# sed -i s/$releasever/6/g ./etc/yum.repos.d/*
-# yum --installroot=/t groupinstall base
-# yum --installroot=/t install dhclient
-# rm centos-release*.rpm
-# chroot /t
-
-  // ここから後はchroot内
-
-# passwd # パスワード変更
-
-# rm -f /dev/null
-# mknod -m 666 /dev/null c 1 3
-# mknod -m 666 /dev/zero c 1 5
-# mknod -m 666 /dev/urandom c 1 9
-# ln -s /dev/urandom /dev/random
-# mknod -m 600 /dev/console c 5 1
-# mknod -m 660 /dev/tty1 c 4 1
-# chown root:tty /dev/tty1
-
-# mkdir -p /dev/shm
-# chmod 1777 /dev/shm
-# mkdir -p /dev/pts
-# chmod 755 /dev/pts
-
-# cp -a /etc/skel/. /root/.
-
-# cat &gt; /etc/resolv.conf &lt;&lt; END
-# Google public DNS
-nameserver 8.8.8.8
-nameserver 8.8.4.4
-END
-
-# cat &gt; /etc/hosts &lt;&lt; END
-127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
-::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
-END
-
-# cat &gt; /etc/sysconfig/network &lt;&lt; END
-NETWORKING=yes
-HOSTNAME=localhost
-END
-
-# cat &gt; /etc/sysconfig/network-scripts/ifcfg-eth0  &lt;&lt; END
-DEVICE=eth0
-ONBOOT=yes
-BOOTPROTO=dhcp
-END
-
-# cat &gt; /etc/fstab &lt;&lt; END
-/dev/root               /                       rootfs   defaults        0 0
-none                    /dev/shm                tmpfs    nosuid,nodev    0 0
-END
-
-# cat &gt; /etc/init/lxc-sysinit.conf &lt;&lt; END
-start on startup
-env container
-
-pre-start script
-        if [ "x$container" != "xlxc" -a "x$container" != "xlibvirt" ]; then
-                stop;
-        fi
-        telinit 3
-        initctl start tty TTY=console
-        exit 0;
-end script
-END
-
-# exit
-
-// ここから後はchroot外
-
-# cd /t
-# tar cvfz /centos6-lxc-root.tgz .
-</code></pre>
-
-<h4>設定</h4>
-
-<pre><code># mkdir /var/lib/lxc/vm0
-# cd /var/lib/lxc/vm0
-# mkdir rootfs
-# cd rootfs
-# tar xfz /centos6-lxc-root.tgz --numeric-owner
-# cd /var/lib/lxc/vm0
-
-# cat &gt;/var/lib/lxc/vm0/config &lt;&lt; END
-lxc.network.type=veth
-lxc.network.link=lxcbr0
-lxc.network.flags=up
-lxc.network.veth.pair=veth-vm0
-lxc.utsname = vm0
-
-lxc.tty = 1
-lxc.pts = 1024
-lxc.rootfs = /var/lib/lxc/vm0/rootfs
-lxc.mount  = /var/lib/lxc/vm0/fstab
-lxc.arch = x86_64
-lxc.cap.drop = sys_module mac_admin
-
-lxc.cgroup.devices.deny = a
-# Allow any mknod (but not using the node)
-lxc.cgroup.devices.allow = c *:* m
-lxc.cgroup.devices.allow = b *:* m
-# /dev/null and zero
-lxc.cgroup.devices.allow = c 1:3 rwm
-lxc.cgroup.devices.allow = c 1:5 rwm
-# consoles
-lxc.cgroup.devices.allow = c 5:1 rwm
-lxc.cgroup.devices.allow = c 5:0 rwm
-# /dev/{,u}random
-lxc.cgroup.devices.allow = c 1:9 rwm
-lxc.cgroup.devices.allow = c 1:8 rwm
-lxc.cgroup.devices.allow = c 136:* rwm
-lxc.cgroup.devices.allow = c 5:2 rwm
-# rtc
-lxc.cgroup.devices.allow = c 254:0 rwm
-#fuse
-lxc.cgroup.devices.allow = c 10:229 rwm
-#tun
-lxc.cgroup.devices.allow = c 10:200 rwm
-#full
-lxc.cgroup.devices.allow = c 1:7 rwm
-#hpet
-lxc.cgroup.devices.allow = c 10:228 rwm
-#kvm
-lxc.cgroup.devices.allow = c 10:232 rwm
-END
-
-# cat &gt; fstab  &lt;&lt; END
-proc            /var/lib/lxc/vm0/rootfs/proc         proc    nodev,noexec,nosuid 0 0
-sysfs           /var/lib/lxc/vm0/rootfs/sys          sysfs defaults  0 0
-END
-</code></pre>
-
-<h4>起動</h4>
-
-<pre><code># lxc-start -n vm0 -l debug -o debug.out -d
-# lxc-console -n vm0
-
-OpenSSH がなければ入れておく
-# yum install openssh-server
-# service sshd start
-</code></pre>
-
-<h2>動作確認 (Percona XtraDB Cluster の稼働確認)</h2>
-
-<p>動作確認として Percona XtraDB Cluster を動かしてみる。</p>
-
-<p>すでにこれまでの作業を通して vm0 としてCentOS 6がインストール済みとする。</p>
-
-<h3>ホスト側設定</h3>
-
-<ul>
-<li>構成
-
-<ul>
-<li>ホスト, IPアドレス 10.0.3.1</li>
-<li>仮想0 vm0, IPアドレス 10.0.3.2</li>
-<li>仮想1 vm1, IPアドレス 10.0.3.3</li>
-<li>仮想2 vm2, IPアドレス 10.0.3.4</li>
-</ul>
-</li>
-</ul>
-
-
-<p>各仮想環境に簡単にアクセスできるように hosts を設定しておく。ホスト側に設定しておけば、dnsmasq のおかげで仮想側でも名前が引けるようになる。</p>
-
-<pre><code># vim /etc/hosts
-    以下を追記
-    10.0.3.2 vm0
-    10.0.3.3 vm1
-    10.0.3.4 vm2
-</code></pre>
-
-<h3>コピー元(vm0) 設定</h3>
-
-<pre><code># ssh vm0
-  ここからはvm0の中
-
-  固定IPアドレスを設定
-# vim /var/lib/lxc/vm1/rootfs/etc/sysconfig/network-scripts/ifcfg-eth0
-    DEVICE=eth0
-    ONBOOT=yes
-    BOOTPROTO=static
-    IPADDR=10.0.3.3
-    NETMASK=255.255.255.0
-    GATEWAY=10.0.3.1
-
-  XtraDB Cluster インストール
-# rpm -Uhv [http://repo.percona.com/testing/centos/6/os/noarch/percona-testing-0.0-1.noarch.rpm](http://repo.percona.com/testing/centos/6/os/noarch/percona-testing-0.0-1.noarch.rpm)
-# rpm -Uhv [http://www.percona.com/downloads/percona-release/percona-release-0.0-1.x86_64.rpm](http://www.percona.com/downloads/percona-release/percona-release-0.0-1.x86_64.rpm)
-# yum install Percona-XtraDB-Cluster-server Percona-XtraDB-Cluster-client
-# cat &gt; /etc/my.cnf &lt;&lt;END
-[mysqld]
-binlog_format=ROW
-wsrep_provider=/usr/lib64/libgalera_smm.so
-wsrep_cluster_address=gcomm://
-wsrep_slave_threads=2
-wsrep_cluster_name=lxccluster
-wsrep_sst_method=rsync
-wsrep_node_name=node0
-innodb_locks_unsafe_for_binlog=1
-innodb_autoinc_lock_mode=2
-END
-
-# poweroff
-</code></pre>
-
-<h3>コピー、起動</h3>
-
-<pre><code># lxc-clone -n vm1 -o vm0
-  -n はこれから作る仮想環境の名前
-  -o はコピー元の仮想環境の名前
-# lxc-clone -n vm1 -o vm0
-# vim /var/lib/lxc/vm1/config
-  vm0をvm1に置換 (vm2ではvm2に置換)
-  IPアドレスを10.0.3.2 -&gt; 10.0.3.3 に変更 (vm2では 10.0.3.4に変更)
-# vim /var/lib/lxc/vm1/rootfs/etc/my.cnf
-    wsrep_cluster_address=gcomm:// をwsrep_cluster_address=gcomm://10.0.3.2 に変更
-    wsrep_node_name=node0 を wsrep_node_name=node1 に変更 (vm2ではnode2に変更)
-
-  同様にvm0からvm2のコピーを実施
-</code></pre>
-
-<p>3つの環境が完成したら起動</p>
-
-<pre><code># lxc-start -n vm0 -l debug -o debug.0.out -d
-# lxc-start -n vm1 -l debug -o debug.1.out -d
-# lxc-start -n vm2 -l debug -o debug.2.out -d
-</code></pre>
-
-<h3>動作確認</h3>
-
-<p>vm0 にログインして実行</p>
-
-<pre><code># mysql -u root
-  データベース、テーブル作成
-mysql&gt; create database t;
-mysql&gt; use t;
-mysql&gt; create table sample (
-id int not null primary key auto_increment,
-value int
-);
-
-データ投入
-mysql&gt; insert into sample set value = 1;
-mysql&gt; insert into sample set value = 1;
-mysql&gt; insert into sample set value = 1;
-mysql&gt; select * from sample;
-+----+-------+
-| id | value |
-+----+-------+
-|  2 |     1 |
-|  5 |     1 |
-|  8 |     1 |
-+----+-------+
-</code></pre>
-
-<p>IDがスキップしながらインサートされることがわかる。引き続き、他の環境でもデータを入れてみる。</p>
-
-<p>vm1 にログインして実行</p>
-
-<pre><code>mysql&gt; use t;
-mysql&gt; select * from sample;
-+----+-------+
-| id | value |
-+----+-------+
-|  2 |     1 |
-|  5 |     1 |
-|  8 |     1 |
-+----+-------+
-mysql&gt; insert into sample set value =  1;
-mysql&gt; insert into sample set value =  1;
-mysql&gt; insert into sample set value =  1;
-mysql&gt; select * from sample;
-+----+-------+
-| id | value |
-+----+-------+
-|  2 |     1 |
-|  5 |     1 |
-|  8 |     1 |
-|  9 |     1 |
-| 12 |     1 |
-| 15 |     1 |
-+----+-------+
-</code></pre>
-
-<p>同様のことがvm2でも起きる。</p>
-
-<p>これにより、XtraDB Cluster の以下の動作が確認出来た。</p>
-
-<ul>
-<li>すべてのサーバーで書き込みと参照がおこなえること</li>
-<li>オートインクリメントがバッティングしないように、値が自動的にオフセットをつけて挿入されること</li>
-</ul>
-
-
-<h1>メモ</h1>
-
-<h2>外部から仮想環境へ直接アクセスしたい場合</h2>
-
-<p>たとえば、外部からポート10080でアクセスされたとき、仮想環境の 10.0.3.51 のポート 80 へ転送させたい場合は iptables
-で以下のような設定をする。</p>
-
-<pre><code># vim /etc/syscofig/iptables
-    -A POSTROUTING -s 10.0.3.0/24 -j MASQUERADE の下に以下を追加
-    -A PREROUTING -i eth0 -p tcp --dport 10080 -j DNAT --to-destination 10.0.3.51:80
-# service iptables condrestart
-# iptables -L -t nat # NATテーブルから設定追加を確認
-</code></pre>
-
-<h2>新しい Ubuntu を入れたい場合</h2>
-
-<p>元の手順だとlucid (10.04) がインストールされるが、たとえば oneiric (11.10) であれば以下でインストール可能。</p>
-
-<pre><code># cp -a /usr/share/debootstrap/scripts/lucid  /usr/share/debootstrap/scripts/oneiric
-    lucid は /usr/share/debootstrap/scripts/gutsy のシンボリックリンクで、他のリリースも同様。とにかくファ イル名が参照できるようにシンボリックリンクをコピーしておけばいい。
-# lxc-create -t ubuntu -f lxc.conf -n vm0 -- --trim -r oneiric
-    lxc-create ではなく -r はテンプレートへの引数
-</code></pre>
-
-<h2>他の OS もインストールしてみたい場合</h2>
-
-<p>/usr/lib64/lxc/templates/ には lxc-busybox,lxc-debian,lxc-fedora,lxc-lenny,lxc-
-opensuse,lxc-sshd,lxc-ubuntu の テンプレートがある。これ以外の環境が必要であれば、「lxc guset
-OS名」とかで検索してみる。</p>
-
-<h1>参考</h1>
-
-<ul>
-<li><a href="http://www.activestate.com/blog/2011/10/virtualization-ec2-cloud-using-lxc">http://www.activestate.com/blog/2011/10/virtualization-ec2-cloud-using-lxc</a></li>
-<li><a href="http://wiki.debian.org/LXC">http://wiki.debian.org/LXC</a></li>
-<li><a href="https://help.ubuntu.com/12.04/serverguide/lxc.html">https://help.ubuntu.com/12.04/serverguide/lxc.html</a></li>
-<li><a href="http://www.lacerta.be/d7/content/lxc-installation-ubuntu-server-1104">http://www.lacerta.be/d7/content/lxc-installation-ubuntu-server-1104</a></li>
-<li><a href="http://wiki.1tux.org/wiki/Lxc/Installation/Guest/Centos/6">http://wiki.1tux.org/wiki/Lxc/Installation/Guest/Centos/6</a></li>
-<li><a href="http://www.percona.com/doc/percona-xtradb-cluster/index.html">http://www.percona.com/doc/percona-xtradb-cluster/index.html</a></li>
-</ul>
-
-]]></content>
-  </entry>
-  
 </feed>
