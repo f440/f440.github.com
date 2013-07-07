@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= current_page.data.title ? current_page.data.title + " - " : "" %><%= data.site.title %></title>
+    <%= stylesheet_link_tag 'http://yui.yahooapis.com/pure/0.2.0/pure-min.css' %>
+    <%= stylesheet_link_tag 'style' %>
+    <%= partial "ga" %>
+  </head>
+  <body class="<%= page_classes %>">
+    <header>
+      <div id="site-title">
+        <h1><%= link_to data.site.title, '/' %></h1>
+      </div>
+      <nav class="pure-menu pure-menu-open pure-menu-horizontal">
+        <ul>
+          <li><%= link_to 'Home', '/' %></li>
+          <li><%= link_to 'Archive', '/archives/' %></li>
+          <li>
+            <form action="http://google.com/search" method="get">
+              <input type="search" name="q" results="0" placeholder="search">
+              <input type="hidden" name="q" value="site:<%= data.site.domain %>">
+            </form>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <%= yield %>
+    <footer>
+    <div class="pure-menu pure-menu-open pure-menu-horizontal">
+      <a href="#" class="pure-menu-heading">Link</a>
+      <ul>
+        <li><%= link_to "Twitter", URI.join("https://twitter.com/", data.site.twitter_id) %></li>
+        <li><%= link_to "Github", URI.join("https://github.com/", data.site.github_id) %></li>
+        <li><%= link_to "Pinboard", "https://pinboard.in/u:#{data.site.pinboard_id}" %></li>
+      </ul>
+    </div>
+    </footer>
+  </body>
+</html>

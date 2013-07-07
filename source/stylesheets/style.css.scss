@@ -1,0 +1,163 @@
+@mixin rounded-corners($radius) {
+  border-radius: $radius;
+  -moz-border-radius: $radius;
+  -webkit-border-radius: $radius;
+}
+
+$default-color: #404142;
+$default-background-color: #ecf0f1;
+$default-content-background-color: #fff;
+$default-link-color: #7f8c8d;
+$default-button-color: #000;
+$default-code-background-color: #fafafa;
+
+body {
+  color: $default-color;
+  background-color: $default-background-color;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: normal;
+  a, a:visited {
+    color: $default-color;
+    text-decoration: none;
+  }
+}
+
+a, a:visited {
+  color: $default-link-color;
+}
+
+header, article, footer {
+  margin: 0 auto;
+  width: 70%;
+  padding: 1em 4em;
+  margin-bottom: 1em;
+  background-color: $default-content-background-color;
+  @include rounded-corners(4px);
+}
+
+header {
+  margin-top:20px;
+  margin-bottom:0;
+}
+
+footer {
+  padding-top: 1%;
+  padding-bottom: 1%;
+  margin-bottom:20px;
+}
+
+#site-title {
+  min-height: 70px;
+  padding: 1em;
+  text-align: center;
+  h1 {
+    margin: 0;
+    font-size: 2.5em;
+    font-weight: 100;
+  }
+}
+
+.pure-button {
+  font-size: 75%;
+  padding: .2em 1.0em;
+}
+
+a.pure-button, a:visited.pure-button {
+  color: $default-button-color;
+}
+
+.pure-paginator {
+  margin-top: 1em;
+}
+
+pre, code {
+  font-family: Consolas, 'Liberation Mono', Courier, monospace;
+  color: $default-color;
+  padding: .2em;
+  @include rounded-corners(5px);
+}
+
+code {
+  background-color: $default-code-background-color;
+}
+
+pre code {
+  display: block;
+  font-size: 0.9em;
+  border: solid 1px $default-background-color;
+  padding: 1em;
+}
+
+.comments {
+  margin-top: 2em;
+}
+
+.share {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+input[type=search] {
+  width: 12em;
+}
+
+img {
+  display: block;
+  border: 0;
+  max-width: 100%;
+}
+
+.index, .page {
+  section {
+    border-bottom: 1px solid $default-background-color;
+  }
+}
+
+.archives {
+  section {
+    padding-top: 1em;
+    padding-bottom: 1em;
+    border-bottom: 1px solid $default-background-color;
+  }
+  .article-title {
+    margin: 0;
+    padding: 0;
+    font-size: 1.17em;
+    font-weight: normal;
+  }
+  .article-date {
+    vertical-align: middle;
+  }
+  .tags {
+    padding-left: 20%;
+  }
+}
+
+@media (max-width: 767px) {
+  header, article, footer {
+    width: 90%;
+    font-size: 90%;
+    margin-bottom:20px;
+    padding: 1em 1em;
+  }
+  header {
+    min-height: auto;
+    margin-bottom: 0;
+  }
+  h1 {
+    font-size: 1.8em;
+  }
+  input[type=search] {
+    width: 6em;
+  }
+  .archives {
+    .tags {
+      padding-left: 0%;
+    }
+  }
+  .article {
+    margin-bottom: 2em;
+  }
+}

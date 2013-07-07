@@ -1,0 +1,13 @@
+---
+title: Archives
+---
+<article>
+  <% blog.articles.each_with_index do |article, i| %>
+  <section>
+    <div class="pure-g-r">
+      <div class="pure-u-1-5 article-date"><%= article.date.strftime('%Y.%m.%d') %></div><h2 class="pure-u-4-5 article-title"><%= link_to article.title, article %></h2>
+    </div>
+    <div class="tags"><%= partial "tags", :locals => { :tags => article.tags }%></div>
+  </section>
+  <% end %>
+</article>

@@ -1,0 +1,29 @@
+<% wrap_layout :layout do %>
+  <article>
+    <h1><%= current_page.title %></h1>
+    <p id="article-info">
+      Published on <%= current_page.date.strftime('%d %b %Y') %>
+      <%= partial "tags", :locals => { :tags => current_page.tags } %>
+    </p>
+    <%= yield %>
+    <% if current_page.data.comments %>
+    <aside>
+    <%= partial "addthis" %>
+    <%= partial "disqus" %>
+    </aside>
+    <% end %>
+  </article>
+<% end %>
+<script>
+;(function(document) {
+  var imgs = document.getElementsByTagName("img");
+    for (var i = 0, len = imgs.length; i < len; i++) {
+    var img = imgs[i];
+    var a = document.createElement("a");
+    a.setAttribute("href", img.src);
+    a.setAttribute("title", img.alt);
+    a.appendChild(img.cloneNode(true));
+    img.parentNode.replaceChild(a, img);
+  }
+})(document);
+</script>
