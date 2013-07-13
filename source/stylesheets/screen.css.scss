@@ -4,10 +4,11 @@
   -webkit-border-radius: $radius;
 }
 
-$base-color: #404142;
-$base-background-color: #ecf0f1;
+$base-color: #333;
+$base-background-color: #fff;
 $base-content-background-color: #fff;
 $base-link-color: #7f8c8d;
+$base-link-hover-color: #f1c40f;
 $base-button-color: #000;
 $base-code-background-color: #fafafa;
 
@@ -25,7 +26,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 a, a:visited {
-  color: $base-link-color;
+  color: $base-color;
+  text-decoration: underline;
+}
+a:hover {
+  color: $base-link-hover-color;
 }
 
 header, article, footer {
@@ -60,7 +65,7 @@ footer {
 }
 
 .pure-button {
-  font-size: 75%;
+  font-size: 80%;
   padding: .2em 1.0em;
 }
 
