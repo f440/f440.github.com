@@ -190,9 +190,9 @@ cpush HaskellPlatform.{バージョン番号}.nupkg
   </body>
 </html>
 <script>
-;(function(document) {
+window.addEventListener("load", function() {
   var imgs = document.getElementsByTagName("img");
-    for (var i = 0, len = imgs.length; i < len; i++) {
+  for (var i = 0, len = imgs.length; i < len; i++) {
     var img = imgs[i];
     var a = document.createElement("a");
     a.setAttribute("href", img.src);
@@ -200,5 +200,5 @@ cpush HaskellPlatform.{バージョン番号}.nupkg
     a.appendChild(img.cloneNode(true));
     img.parentNode.replaceChild(a, img);
   }
-})(document);
+}, false);
 </script>

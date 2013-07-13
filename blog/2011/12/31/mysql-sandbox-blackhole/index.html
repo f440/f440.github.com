@@ -246,9 +246,9 @@ drwx------ 2 f440 f440      4096 2011-12-31 17:11 test/
   </body>
 </html>
 <script>
-;(function(document) {
+window.addEventListener("load", function() {
   var imgs = document.getElementsByTagName("img");
-    for (var i = 0, len = imgs.length; i < len; i++) {
+  for (var i = 0, len = imgs.length; i < len; i++) {
     var img = imgs[i];
     var a = document.createElement("a");
     a.setAttribute("href", img.src);
@@ -256,5 +256,5 @@ drwx------ 2 f440 f440      4096 2011-12-31 17:11 test/
     a.appendChild(img.cloneNode(true));
     img.parentNode.replaceChild(a, img);
   }
-})(document);
+}, false);
 </script>
