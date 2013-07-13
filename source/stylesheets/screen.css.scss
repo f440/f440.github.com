@@ -4,28 +4,28 @@
   -webkit-border-radius: $radius;
 }
 
-$default-color: #404142;
-$default-background-color: #ecf0f1;
-$default-content-background-color: #fff;
-$default-link-color: #7f8c8d;
-$default-button-color: #000;
-$default-code-background-color: #fafafa;
+$base-color: #404142;
+$base-background-color: #ecf0f1;
+$base-content-background-color: #fff;
+$base-link-color: #7f8c8d;
+$base-button-color: #000;
+$base-code-background-color: #fafafa;
 
 body {
-  color: $default-color;
-  background-color: $default-background-color;
+  color: $base-color;
+  background-color: $base-background-color;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-weight: normal;
   a, a:visited {
-    color: $default-color;
+    color: $base-color;
     text-decoration: none;
   }
 }
 
 a, a:visited {
-  color: $default-link-color;
+  color: $base-link-color;
 }
 
 header, article, footer {
@@ -33,7 +33,7 @@ header, article, footer {
   width: 70%;
   padding: 1em 4em;
   margin-bottom: 1em;
-  background-color: $default-content-background-color;
+  background-color: $base-content-background-color;
   @include rounded-corners(4px);
 }
 
@@ -65,7 +65,7 @@ footer {
 }
 
 a.pure-button, a:visited.pure-button {
-  color: $default-button-color;
+  color: $base-button-color;
 }
 
 .pure-paginator {
@@ -74,19 +74,19 @@ a.pure-button, a:visited.pure-button {
 
 pre, code {
   font-family: Consolas, 'Liberation Mono', Courier, monospace;
-  color: $default-color;
+  color: $base-color;
   padding: .2em;
   @include rounded-corners(5px);
 }
 
 code {
-  background-color: $default-code-background-color;
+  background-color: $base-code-background-color;
 }
 
 pre code {
   display: block;
   font-size: 0.9em;
-  border: solid 1px $default-background-color;
+  border: solid 1px $base-background-color;
   padding: 1em;
 }
 
@@ -111,7 +111,7 @@ img {
 
 .index, .page {
   section {
-    border-bottom: 1px solid $default-background-color;
+    border-bottom: 1px solid $base-background-color;
   }
 }
 
@@ -119,7 +119,7 @@ img {
   section {
     padding-top: 1em;
     padding-bottom: 1em;
-    border-bottom: 1px solid $default-background-color;
+    border-bottom: 1px solid $base-background-color;
   }
   .article-title {
     margin: 0;
