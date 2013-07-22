@@ -11,6 +11,7 @@ $base-link-color: #7f8c8d;
 $base-link-hover-color: #f1c40f;
 $base-button-color: #000;
 $base-code-background-color: #fafafa;
+$base-border-color: #ddd;
 
 body {
   color: $base-color;
@@ -91,7 +92,7 @@ code {
 pre code {
   display: block;
   font-size: 0.9em;
-  border: solid 1px $base-background-color;
+  border: solid 1px $base-border-color;
   padding: 1em;
 }
 
