@@ -57,7 +57,7 @@ Netflix のデプロイツール [asgard](https://github.com/Netflix/asgard) も
 
 - Packer は仮想マシンの作成手順や作成先を抽象化しようとしている
 - Docker は仮想マシンをまるで Github から clone するかのように共有する方法を提供している
-- AWS Market Place は個人間で仮想マシンの売り買いができる場を提供している
+- AWS MarketPlace は個人/企業に仮想マシンを売り買いできる仕組みを提供している
 
 最近のプロダクトやサービスを考えてみても、仮想マシン自体の取り扱いにだんだん関心がむかっているのは確かっぽい。Immutable Infrastracture もまた、仮想マシンを仮想マシンらしく扱った運用形態といえるんじゃないかな。
 
