@@ -13,16 +13,9 @@ per_page: 5
 <% end %>
 
 <% if paginate %>
-<ul class="pure-paginator">
-  <% if page_number != 1 %>
-  <li><%= link_to '&#171;', prev_page, :class => "pure-button prev" %></li>
-  <% end %>
-  <% (1..num_pages).each do |n| %>
-  <li><%= link_to n, (n == 1) ? "/" : "/page/#{n}/", :class => ("pure-button" + ((page_number == n) ? " pure-button-active" : "")) %></li>
-  <% end %>
-  <% if page_number != num_pages %>
-  <li><%= link_to '&#187;', next_page, :class => "pure-button next" %></li>
-  <% end %>
-</ul>
+<div class="page">
+  <% if page_number != 1 %><%= link_to '&#171;', prev_page %><% end %>
+  <% if page_number != num_pages %><%= link_to '&#187;', next_page %><% end %>
+</div>
 <% end %>
 </article>

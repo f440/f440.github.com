@@ -110,4 +110,4 @@ configure :build do
   # set :http_path, "/Content/images/"
 end
 
-activate :livereload
+activate :livereload, :grace_period => 1
