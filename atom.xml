@@ -3,17 +3,144 @@
   <title>apatheia.info</title>
   <link href="http://apatheia.info/"/>
   <link href="http://apatheia.info/atom.xml" rel="self"/>
-  <updated>2013-06-17T09:13:00Z</updated>
+  <updated>2013-08-10T12:00:00Z</updated>
   <id>http://apatheia.info/</id>
   <author>
     <name>f440</name>
   </author>
   <entry>
+    <title>Immutable Infrastracture について</title>
+    <link rel="alternate" href="http://apatheia.info/blog/2013/08/10/immutable-infrastructure/"/>
+    <id>http://apatheia.info/blog/2013/08/10/immutable-infrastructure/</id>
+    <published>2013-08-10T12:00:00Z</published>
+    <updated>2013-08-10T12:00:00Z</updated>
+    <author>
+      <name>f440</name>
+    </author>
+    <content type="html">&lt;p&gt;ここ最近話題に上がることが多い Immutable Infrastracture と、その他仮想環境周りについての雑感。&lt;/p&gt;
+
+
+
+&lt;p&gt;Immutable Server や Immutable Infrastracture っていう単語がいろんなところで目に入るようになった。とくに Chad Fowler が&lt;a href="http://chadfowler.com/blog/2013/06/23/immutable-deployments/"&gt;ブログで取り上げたり&lt;/a&gt;、&lt;a href="http://foodfightshow.org/2013/07/immutable-infrastructure.html"&gt;Food Fight に出たり&lt;/a&gt; して、世間でも関心が高まった感じがある。&lt;/p&gt;
+
+&lt;p&gt;プログラムを書く人にはご存じの通り、この Immutable っていうのは状態が変更出来ないことを指している。Immutable な Infrastracture っていうのは、ざっくり言うと「運用中のサーバーに変更を加えない」っていうアプローチでサーバーを管理しているスタイルのこと。&lt;/p&gt;
+
+&lt;p&gt;(ファイルシステムを読み取り専用にする、とかそういう話じゃなくて、あくまでそういう方針でやろうっていう話)&lt;/p&gt;
+
+&lt;p&gt;サーバーの設定を変更したくなったら、その変更を加えた新しいサーバーを用意する。アプリケーションをデプロイしたくなったら、新しくサーバーを立ち上げてそちらにデプロイを行う。稼働中のサーバーに SSH でログインして設定を変更するようなことはせず、なにかしらの変更のためにはつねにサーバーを追加していく。サービスを新サーバー群にで行うように DNS を切り替えたあと、参照されなくなったサーバーは破棄する(まるでガベージコレクションみたいだね)。&lt;/p&gt;
+
+&lt;h2 id="immutable-infrastracture-"&gt;どうやって Immutable Infrastracture を実現するのか&lt;/h2&gt;
+
+&lt;p&gt;Immutable Infrastracture には、いわゆる &lt;a href="http://martinfowler.com/bliki/BlueGreenDeployment.html"&gt;Blue Green Deployment&lt;/a&gt; で知られているテクニックを用いる。&lt;/p&gt;
+
+&lt;p&gt;現在、プラットフォームとして上手に Immutable Infrastracture を実現できているのは &lt;a href="http://aws.amazon.com/jp/elasticbeanstalk/"&gt;AWS Elastic Beanstalk&lt;/a&gt; だと思っているので、これを例に説明する。Elastic Beanstalk を「あー、AWS がやってる heroku 的なアレだろ」くらいの認識しかなければ、一度ちゃんと調べてみたほうがいい。&lt;/p&gt;
+
+&lt;p&gt;Elastic Beanstalk では、ロードバランサーとそこにぶら下がるサーバー群 (オートスケールするので、台数は伸び縮みする) が「環境(Envirnment)」というくくりで管理される。&lt;/p&gt;
+
+&lt;p&gt;サーバーには Amazon が用意したマシンイメージを使うこともできるし、カスタマイズしたイメージを利用することも可能になっている。アプリケーションのデプロイは git push だったり、Java の war ファイルアップロードでできるので、サーバーにログインする必要はない。&lt;/p&gt;
+
+&lt;p&gt;「環境」にはそれぞれ URL が割り振られるのだが、これは環境間ですげ替えることができる。つまり、検証環境でアプリをデプロイしたりミドルウェアの設定変更をして、確認がとれたら本番環境と入れ替えたり、問題が起きたらすぐに元に戻したりといったことがダウンタイムなく行える。&lt;/p&gt;
+
+&lt;p&gt;Netflix のデプロイツール &lt;a href="https://github.com/Netflix/asgard"&gt;asgard&lt;/a&gt; も同じようなことをしているし、Heroku の &lt;a href="https://devcenter.heroku.com/articles/labs-preboot/"&gt;preboot&lt;/a&gt; も内部では同じようなことやってるんじゃないかな。(追記: Heroku の Preboot だけど、説明ページへのリンクがなくなっている。今は &lt;a href="https://devcenter.heroku.com/articles/labs-pipelines"&gt;Pipelines&lt;/a&gt; 使えってことかも)&lt;/p&gt;
+
+&lt;p&gt;もちろん、オンプレミスに自前の環境でこういったことを行うことも可能だろうけど、アプリケーションの切り替えに DNS の設定変更なり浮動 IP アドレスの付け替えなりが必要となってくるので、かなり面倒くさい。すでにシステムとして提供されているものを利用できるのであれば、それを使うのが現実的だとは思う。&lt;/p&gt;
+
+&lt;h2 id="section"&gt;構成管理ツールの役割&lt;/h2&gt;
+
+&lt;p&gt;サーバーの設定を変更するために新しいサーバーを立てるなんて、なんでそんなことをするのだろうと Chef や Puppet などのツールを使って変更管理している人たちには不思議に思うかもしれない。発想を逆にしてみると、サーバーが状態を持っているから、冪等性だとか自己修復性のために、実行条件付けて処理を並べていく必要があった。サーバーと通信し、定期的に変更点をチェックする必要があった。もしもサーバーが不変だという前提にたてば、こういった処理が省けるようになるかもしれない。&lt;/p&gt;
+
+&lt;p&gt;とはいえ、Immutable Infrastracture を実践したとしても構成管理ツールは以下のような局面で今後も使われていくことになるだろうと思う。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;ベースとなる仮想マシンのセットアップのため&lt;/li&gt;
+  &lt;li&gt;初回起動後の仮想マシンに対して、(仮想マシンに組み込めない or 組み込みたくない) サーバーごとの変更を設定するため&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;個人的には、今の Chef や Puppet みたいなサーバー/クライアント構成は必要なくて、もっとライトウェイトなもので十分な気がしている。&lt;/p&gt;
+
+&lt;h2 id="section-1"&gt;仮想マシンの役割&lt;/h2&gt;
+
+&lt;p&gt;昨今の構成管理ツールブームで、サーバーセットアップの技術が成熟してきた。こういったツールをソフトウェアでいうところの autotools や ant といったビルドツールにたとえるなら、次の興味は apt や rpm といったパッケージにあたるもの、つまりセットアップ済み仮想マシンになるかと思う。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Packer は仮想マシンの作成手順や作成先を抽象化しようとしている&lt;/li&gt;
+  &lt;li&gt;Docker は仮想マシンをまるで Github から clone するかのように共有する方法を提供している&lt;/li&gt;
+  &lt;li&gt;AWS Market Place は個人間で仮想マシンの売り買いができる場を提供している&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;最近のプロダクトやサービスを考えてみても、仮想マシン自体の取り扱いにだんだん関心がむかっているのは確かなようだ。Immutable Infrastracture もまた、仮想マシンを仮想マシンらしく扱った運用形態といえるんじゃないかな。&lt;/p&gt;
+
+&lt;h2 id="section-2"&gt;参考&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href="http://martinfowler.com/bliki/ImmutableServer.html"&gt;ImmutableServer&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="http://www.thoughtworks-studios.com/blog/rethinking-building-cloud-part-4-immutable-servers"&gt;Rethinking building on the cloud: Part 4: Immutable Servers&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="http://chadfowler.com/blog/2013/06/23/immutable-deployments/"&gt;Trash Your Servers and Burn Your Code: Immutable Infrastructure and Disposable Components - Chad Fowler&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+  </entry>
+  <entry>
+    <title>ブログエンジンを Octopress から Middleman に変えた</title>
+    <link rel="alternate" href="http://apatheia.info/blog/2013/08/10/octopress-to-middleman/"/>
+    <id>http://apatheia.info/blog/2013/08/10/octopress-to-middleman/</id>
+    <published>2013-08-10T11:30:00Z</published>
+    <updated>2013-08-10T11:30:00Z</updated>
+    <author>
+      <name>f440</name>
+    </author>
+    <content type="html">&lt;p&gt;このサイトは今まで &lt;a href="http://octopress.org/"&gt;Octopress&lt;/a&gt; を使って生成していたんだけど、&lt;a href="http://middlemanapp.com/"&gt;Middleman&lt;/a&gt; に変えてみた。&lt;/p&gt;
+
+
+
+&lt;p&gt;元々 Octopress の設定ファイルの書き方とかがモヤモヤするものがあって(Rakefile に設定項目埋め込んであるところとか) Jekyll にしようかなと思ったんだけど、なんとなく Middleman にしてみた。その後の感想など。&lt;/p&gt;
+
+&lt;p&gt;(もう2ヶ月くらい前の話なので、移行当時の記憶はおぼろげ)&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;ビルド時間が短くなった
+    &lt;ul&gt;
+      &lt;li&gt;素の jekyll はビルド早いんだけど、Octopress は結構遅いんで気になっていた。middleman は Octopress よりかは早い&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;ブログの内容はほぼそのまま使い回せた
+    &lt;ul&gt;
+      &lt;li&gt;メタデータ部分を s/categories/tags/ で置換したくらいだったと思う&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;公開されているテンプレートが少ない
+    &lt;ul&gt;
+      &lt;li&gt;自分でちまちま書いてる&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;middleman-livereload が便利
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href="https://github.com/johnbintz/rack-livereload"&gt;rack-livereload&lt;/a&gt; を使っている。ブラウザに拡張を入れなくても、Web Socket でリロードしてくれる。&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href="https://github.com/rtomayko/tilt"&gt;tilt&lt;/a&gt; を使っているので、テンプレートエンジンは自由に選択できる
+    &lt;ul&gt;
+      &lt;li&gt;楽しくなって、&lt;a href="http://slim-lang.com/"&gt;Slim&lt;/a&gt; を使って &lt;a href="https://github.com/shower/shower"&gt;shower&lt;/a&gt; を &lt;a href="https://github.com/f440/miwer"&gt;移植してみたりした&lt;/a&gt;。&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;おおむね満足です。&lt;/p&gt;
+
+&lt;h2 id="section"&gt;参考&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href="http://octopress.org/"&gt;Octopress&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="http://middlemanapp.com/"&gt;Middleman&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="https://github.com/rtomayko/tilt"&gt;tilt&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+</content>
+  </entry>
+  <entry>
     <title>仮想環境構築に docker を使う</title>
     <link rel="alternate" href="http://apatheia.info/blog/2013/06/17/docker/"/>
     <id>http://apatheia.info/blog/2013/06/17/docker/</id>
-    <published>2013-06-17T09:13:00Z</published>
-    <updated>2013-06-17T09:13:00Z</updated>
+    <published>2013-06-17T00:13:00Z</published>
+    <updated>2013-06-17T00:13:00Z</updated>
     <author>
       <name>f440</name>
     </author>
@@ -439,8 +566,8 @@ cmd
     <title>yum のパッケージキャッシュについて</title>
     <link rel="alternate" href="http://apatheia.info/blog/2013/06/16/yum-cache/"/>
     <id>http://apatheia.info/blog/2013/06/16/yum-cache/</id>
-    <published>2013-06-16T01:26:00Z</published>
-    <updated>2013-06-16T01:26:00Z</updated>
+    <published>2013-06-15T16:26:00Z</published>
+    <updated>2013-06-15T16:26:00Z</updated>
     <author>
       <name>f440</name>
     </author>
@@ -485,8 +612,8 @@ $ sudo yum history undo 4
     <title>omnibus を使って オムニバスインストーラーを作成する</title>
     <link rel="alternate" href="http://apatheia.info/blog/2013/05/07/create-ominibus-installer/"/>
     <id>http://apatheia.info/blog/2013/05/07/create-ominibus-installer/</id>
-    <published>2013-05-07T01:41:00Z</published>
-    <updated>2013-05-07T01:41:00Z</updated>
+    <published>2013-05-06T16:41:00Z</published>
+    <updated>2013-05-06T16:41:00Z</updated>
     <author>
       <name>f440</name>
     </author>
@@ -620,8 +747,8 @@ end
     <title>fpm で Mesos の RPM を作るまで</title>
     <link rel="alternate" href="http://apatheia.info/blog/2013/05/03/create-mesos-rpm-using-fpm/"/>
     <id>http://apatheia.info/blog/2013/05/03/create-mesos-rpm-using-fpm/</id>
-    <published>2013-05-03T17:24:00Z</published>
-    <updated>2013-05-03T17:24:00Z</updated>
+    <published>2013-05-03T08:24:00Z</published>
+    <updated>2013-05-03T08:24:00Z</updated>
     <author>
       <name>f440</name>
     </author>
@@ -701,281 +828,6 @@ rpm -qpl mesos-0.10.0-1.x86_64.rpm
 
 &lt;pre&gt;&lt;code&gt;sudo yum install ./mesos-0.10.0-1.x86_64.rpm
 &lt;/code&gt;&lt;/pre&gt;
-
-</content>
-  </entry>
-  <entry>
-    <title>構成管理ツール Ansible について</title>
-    <link rel="alternate" href="http://apatheia.info/blog/2013/04/06/about-ansible/"/>
-    <id>http://apatheia.info/blog/2013/04/06/about-ansible/</id>
-    <published>2013-04-06T14:50:00Z</published>
-    <updated>2013-04-06T14:50:00Z</updated>
-    <author>
-      <name>f440</name>
-    </author>
-    <content type="html">&lt;p&gt;&lt;a href="http://ansible.cc/"&gt;Ansible&lt;/a&gt; というサーバーの設定を管理するツールの説明。いわゆる構成管理 (CM: Configuration Management) にカテゴライズされるもので、Puppet や Chef の親戚みたいなものと考えてもらえればだいたいあってる。&lt;/p&gt;
-
-
-
-&lt;h2 id="section"&gt;概要&lt;/h2&gt;
-
-&lt;p&gt;リード開発者は Michael DeHaan で、現職の AnsibleWorks の前は Redhat で &lt;a href="http://cobbler.github.io/"&gt;Cobbler&lt;/a&gt; や &lt;a href="https://fedorahosted.org/func/"&gt;Func&lt;/a&gt; に携わっていたり、Puppet labs でプロダクトマネージャーしたりしているという経歴の持ち主。&lt;/p&gt;
-
-&lt;p&gt;Ansible は Python で書かれている。同じジャンルで Python 製というと &lt;a href="http://saltstack.com/"&gt;Salt&lt;/a&gt; が有名。Chef の場合、レシピを書くためには Ruby の知識が必要となってくるけど、Ansible はどんな言語でもモジュールが書けるようになっているので、運用にあたって Python の知識は必要無い。&lt;/p&gt;
-
-&lt;p&gt;動作の点でも Puppet や Chef などのツールとまったく異なるアプローチをしている。Puppet や Chef は、サーバーとクライアントで構成され、クライアントとなるマシンはサーバーに設定を問い合わせながら、自分自身を「あるべき状態」に収束するよう変更を加えていく。Ansible の場合、サーバー側からクライアントとなるサーバー(群)に対して直接命令を送り込み結果を得る。これは &lt;a href="https://fedorahosted.org/func/"&gt;Func&lt;/a&gt;、&lt;a href="http://capistranorb.com/"&gt;Capistrano&lt;/a&gt;、&lt;a href="http://fabfile.org/"&gt;Fabric&lt;/a&gt; などに似ているが、これらのデプロイを目的としたツールにはない「何回やっても結果が同じ」(idempotence) という CM ツールらしさはちゃんと備えている。&lt;/p&gt;
-
-&lt;p&gt;ドキュメントは12ページしかなく(ちなみに、さっき数えてみたらChefのドキュメントは2834ファイルあった) 非常に習得は簡単。サーバーを立てる必要もなく、クライアントマシンもエージェントレス、加えて短期間で学習できるので手軽感は非常に高いが、モジュール機構が強力なのできわめて実用的になっている。&lt;/p&gt;
-
-&lt;h2 id="section-1"&gt;基本的な概念&lt;/h2&gt;
-
-&lt;p&gt;Ansible を理解する上で重要となる、モジュールとプレーブックについて説明する。&lt;/p&gt;
-
-&lt;h3 id="section-2"&gt;モジュール&lt;/h3&gt;
-
-&lt;p&gt;クライアント内での動きはモジュールという形で定義する。&lt;/p&gt;
-
-&lt;p&gt;パッケージのインストール、サービスの起動、ユーザーやグループの作成などの基本的なモジュールはあるが、実際には環境に合わせて不足分は自分でモジュールを作っていくことになる。&lt;/p&gt;
-
-&lt;p&gt;モジュールは簡単に作れる。モジュールが役割を端的に言うと、以下を行うだけである。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;標準入力でオプションを受け取る&lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;標準出力で実行結果を返す&lt;/p&gt;
-
-    &lt;ul&gt;
-      &lt;li&gt;出力形式は key=value を空白でつなげたものか JSON&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;これができる言語であれば、シェルスクリプトでも Perl でも問題ない。&lt;/p&gt;
-
-&lt;h3 id="section-3"&gt;プレーブック&lt;/h3&gt;
-
-&lt;p&gt;実際の処理では単発のモジュールでサーバーの設定が終わることはないので、モジュールの使い方をまとめたものが必要になる。Ansible では、YAML で処理をまとめたものを プレーブック (Playbook)と呼んでいる。&lt;/p&gt;
-
-&lt;p&gt;例: Apache と PHP をインストールする (webapp.yml)&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;- hosts: webserver
-  user: vagrant
-  sudo: yes
-  tasks:
-    - name: install apache
-      action: yum pkg=httpd state=installed
-    - name: install php
-      action: yum pkg=php state=installed
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;例: 実行&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;# ansible-playbook プレーブック名
-$ ansible-playbook webapp.yml
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;以上は簡単な例だが、設定ファイルを配置したり、それに併せてサービスを再起動させたりといったことも記述可能。&lt;/p&gt;
-
-&lt;p&gt;プレーブックには以下のような内容が含まれる:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;hosts: 対象のホスト&lt;/li&gt;
-  &lt;li&gt;user: 実行ユーザー&lt;/li&gt;
-  &lt;li&gt;vars: 変数&lt;/li&gt;
-  &lt;li&gt;tasks: タスク&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;code&gt;vars&lt;/code&gt; の変数は、テンプレート内で展開される。設定ファイル配置時にパラメータを変更、といった場合に利用する。&lt;/p&gt;
-
-&lt;h3 id="section-4"&gt;インストール&lt;/h3&gt;
-
-&lt;p&gt;以下では、インストールから簡単なコマンドの実行までの例を挙げる。サーバー、クライアント双方で CentOS 6.4 を利用した。&lt;/p&gt;
-
-&lt;p&gt;Ansible を動かすためには、Python 2.6 以上と Ansible のソースコードとごくわずかな Python パッケージだけあればよい。CentOS 6 であれば Python の条件は満たせているし、EPEL で Ansible のパッケージが提供されているので、&lt;code&gt;yum&lt;/code&gt; でインストール可能。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;# EPEL 有効化
-$ sudo rpm -ivh http://ftp.riken.jp/Linux/fedora/epel/6/i386/epel-release-6-8.noarch.rpm
-
-# Ansible インストール
-$ sudo yum install ansible
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;他の Unix 系OSであれば、&lt;code&gt;pip install ansible&lt;/code&gt; でいい。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ sudo pip install ansible
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;次に、サーバーからクライアントに SSH でログインできるように調整しておく。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;# 以下のマシンを用意した。
-# それぞれホスト名でアクセスできる
-#    Ansible 実行側 ... server
-#    変更対象 ... client1, client2
-
-# server側で公開鍵認証用の鍵を作成
-$ $ ssh-keygen -t rsa
-
-# client に公開鍵を配置する
-$ ssh-copy-id client1
-$ ssh-copy-id client2
-
-# 試しにログインしてみる
-# 頻繁に実行することになるので、公開鍵にパスフレーズを
-# 設定している場合は、ssh-agent を使ってパスフレーズの
-# 入力を省略できるようにしておく。
-$ ssh client1
-$ ssh client2
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;今度は、対象のサーバーを設定してみよう。環境変数 &lt;code&gt;ANSIBLE_HOSTS&lt;/code&gt; にあるファイルでサーバーの指定が可能。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ cat &amp;lt;EOD &amp;gt;~/target
-&amp;gt; [webserver]
-&amp;gt; client1
-&amp;gt; 
-&amp;gt; [dbserver]
-&amp;gt; client2
-&amp;gt; EOD
-$ export ANSIBLE_HOSTS=~/target
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;設定の中で、&lt;code&gt;[ ]&lt;/code&gt; によりグループを作っている。つまり「webserver グループに client1、dbserver グループに client2 が所属している」ということを表している。グループはオプションなので、単純にホスト名を羅列するだけでもいい。試しに、対象のホストを調べてみよう。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;# ansible ホストパターン --list-hosts
-
-# ホスト名を直接指定
-$ ansible client1 --list-hosts
-client1
-
-# グループ名を指定
-$ ansible webserver --list-hosts
-client1
-$ ansible dbserver --list-hosts
-client2
-
-# all を指定した場合、全サーバーを列挙
-$ ansible all --list-hosts
-client1
-client2
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;これだけで準備は完了。実行してみる。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;# コマンドの書式
-ansible 対象 -m モジュール名 -a オプション
-
-# 例 ping モジュール
-$ ansible all -m ping
-client2 | success &amp;gt;&amp;gt; {
-    "changed": false,
-    "ping": "pong"
-}
-
-client1 | success &amp;gt;&amp;gt; {
-    "changed": false,
-    "ping": "pong"
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;-m&lt;/code&gt; をつけないで、直接コマンドを実行することも可能。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;# すべてのマシンでカーネルのバージョンを取得
-$ ansible all -a 'uname -r'
-client2 | success | rc=0 &amp;gt;&amp;gt;
-2.6.32-358.el6.x86_64
-
-client1 | success | rc=0 &amp;gt;&amp;gt;
-2.6.32-358.el6.x86_64
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;プレーブックを実行したときは以下のようになる。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;# 対象は webserver というグループ(client1 が所属)に対して、
-# Apache と PHP をインストールするプレーブック、webapp.yml を実行
-# Apache はすでにインストールされていたので、
-# PHP のみインストールされることとなった
-
-$ ansible-playbook webapp.yml
-
-PLAY [webserver] *********************
-
-GATHERING FACTS *********************
-ok: [client1]
-
-TASK: [install apache] *********************
-ok: [client1]
-
-TASK: [install php] *********************
-changed: [client1]
-
-PLAY RECAP *********************
-client1                        : ok=3    changed=1    unreachable=0    failed=0
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id="section-5"&gt;その他&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href="https://twitter.com/mitchellh/status/319914935910027264"&gt;Vagrant もバージョン 1.2 から Ansible でのプロビジョニングをサポート予定&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;開発は活発&lt;/li&gt;
-  &lt;li&gt;リリース名がヴァンヘイレンの曲名 (1.0 は Eruptionだった)&lt;/li&gt;
-  &lt;li&gt;ロゴがださい (ML でも 90年代のデザインなんて言われている)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id="section-6"&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;ロゴのセンスは悪いけど、アプリケーション自体の仕組みはすごくセンスがいい。&lt;/p&gt;
-
-&lt;p&gt;他の構成管理ツールと比べると、DSL を覚えるといった「ツールを使うまでののコスト」、ツールのためのサーバー構築・運用といった「ツールを使ってからのコスト」が軽微なので、よりやりたいことに目が向けられるのもうれしい。&lt;/p&gt;
-
-&lt;p&gt;最近日本国内でも Chef の話題を聞くことが多いんだけど、Chef Server の運用とかオートスケールとのコンビネーションとかの情報はあまり聞かないので、たぶん割と小規模な環境でリモートサーバーの Chef-solo をキックみたいなケースが多いのかと思う。そういったところだと、Ansible のほうがふさわしいっていうことが多いんじゃないかな。&lt;/p&gt;
-
-</content>
-  </entry>
-  <entry>
-    <title>イベント管理にSplunk Stormを使ってみる</title>
-    <link rel="alternate" href="http://apatheia.info/blog/2013/03/17/logging-with-splunk-storm/"/>
-    <id>http://apatheia.info/blog/2013/03/17/logging-with-splunk-storm/</id>
-    <published>2013-03-17T21:17:00Z</published>
-    <updated>2013-03-17T21:17:00Z</updated>
-    <author>
-      <name>f440</name>
-    </author>
-    <content type="html">&lt;p&gt;&lt;a href="http://www.splunk.com/"&gt;Splunk&lt;/a&gt; はおそらくイベント・ログ管理のツールとしてはおそらくもっとも有名で、日本でも販売展開しているので知っている人も多いかと思う。その splunk が &lt;a href="https://www.splunkstorm.com/storm/"&gt;Splunk Storm&lt;/a&gt; というサービスを始めている。試しに使ってみたのでその感想。&lt;/p&gt;
-
-
-
-&lt;p&gt;料金に応じて、格納可能なデータの容量が増える課金体系。無料でも1GBまで利用可能。&lt;/p&gt;
-
-&lt;p&gt;データの取り込みは以下の方法が提供されている:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Syslog, Rsyslog, Syslog-ng などから転送&lt;/li&gt;
-  &lt;li&gt;TCP/UDP を使って直接登録
-    &lt;ul&gt;
-      &lt;li&gt;&lt;code&gt;cat some_file.log | nc endpoind_hostname port&lt;/code&gt; で登録可能&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;HTTP API&lt;/li&gt;
-  &lt;li&gt;forwarder と呼ばれるクライアントプログラム
-    &lt;ul&gt;
-      &lt;li&gt;ログの読み取りなども可能&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;ファイルアップロード&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;試しにアカウントをとってApacheのログ形式のデータをncでがんがん取り込んでみたところ、1GB を超えたところでもうこれ以上追加できないとのメールが届いた。結果、200万件以上のデータが登録できていた。&lt;/p&gt;
-
-&lt;p&gt;複雑な検索式を使って特定の条件に合うレコードを弾き出したり、図示することができる。たとえば、ステータスコードでグルーピングしたグラフを表示するには、以下の検索式を指定する。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;sourcetype="access_combined" status="*" | timechart count by status
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;リアルタイムで計算しているらしく、新しい時間帯から古い時間帯へとどんどんグラフが追加されていく。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src="/images/2013-03-17-logging-with-splunk-storm/httpstatus.png" alt="httpstatus" /&gt;&lt;/p&gt;
-
-&lt;p&gt;さすがというか、よくできている。&lt;/p&gt;
 
 </content>
   </entry>

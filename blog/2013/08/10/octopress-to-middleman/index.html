@@ -1,0 +1,149 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ブログエンジンを Octopress から Middleman に変えた - apatheia.info</title>
+    <link href="http://yui.yahooapis.com/pure/0.2.0/pure-min.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/screen.css" media="screen" rel="stylesheet" type="text/css" />
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-35021317-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+  </head>
+  <body class="blog blog_2013 blog_2013_08 blog_2013_08_10 blog_2013_08_10_octopress-to-middleman blog_2013_08_10_octopress-to-middleman_index">
+    <header>
+      <div id="site-title">
+        <h1><a href="/">apatheia.info</a></h1>
+      </div>
+      <nav class="pure-menu pure-menu-open pure-menu-horizontal">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/archives/">Archive</a></li>
+          <li>
+            <form action="http://google.com/search" method="get">
+              <input type="search" name="q" results="0" placeholder="search">
+              <input type="hidden" name="q" value="site:apatheia.info">
+            </form>
+          </li>
+        </ul>
+      </nav>
+    </header>
+      <article>
+    <h1>ブログエンジンを Octopress から Middleman に変えた</h1>
+    <p id="article-info">
+      Published on 10 Aug 2013
+        <a class="pure-button" href="/blog/categories/octopress/">octopress</a>
+  <a class="pure-button" href="/blog/categories/middleman/">middleman</a>
+
+    </p>
+    <p>このサイトは今まで <a href="http://octopress.org/">Octopress</a> を使って生成していたんだけど、<a href="http://middlemanapp.com/">Middleman</a> に変えてみた。</p>
+
+
+
+<p>元々 Octopress の設定ファイルの書き方とかがモヤモヤするものがあって(Rakefile に設定項目埋め込んであるところとか) Jekyll にしようかなと思ったんだけど、なんとなく Middleman にしてみた。その後の感想など。</p>
+
+<p>(もう2ヶ月くらい前の話なので、移行当時の記憶はおぼろげ)</p>
+
+<ul>
+  <li>ビルド時間が短くなった
+    <ul>
+      <li>素の jekyll はビルド早いんだけど、Octopress は結構遅いんで気になっていた。middleman は Octopress よりかは早い</li>
+    </ul>
+  </li>
+  <li>ブログの内容はほぼそのまま使い回せた
+    <ul>
+      <li>メタデータ部分を s/categories/tags/ で置換したくらいだったと思う</li>
+    </ul>
+  </li>
+  <li>公開されているテンプレートが少ない
+    <ul>
+      <li>自分でちまちま書いてる</li>
+    </ul>
+  </li>
+  <li>middleman-livereload が便利
+    <ul>
+      <li><a href="https://github.com/johnbintz/rack-livereload">rack-livereload</a> を使っている。ブラウザに拡張を入れなくても、Web Socket でリロードしてくれる。</li>
+    </ul>
+  </li>
+  <li><a href="https://github.com/rtomayko/tilt">tilt</a> を使っているので、テンプレートエンジンは自由に選択できる
+    <ul>
+      <li>楽しくなって、<a href="http://slim-lang.com/">Slim</a> を使って <a href="https://github.com/shower/shower">shower</a> を <a href="https://github.com/f440/miwer">移植してみたりした</a>。</li>
+    </ul>
+  </li>
+</ul>
+
+<p>おおむね満足です。</p>
+
+<h2 id="section">参考</h2>
+<ul>
+  <li><a href="http://octopress.org/">Octopress</a></li>
+  <li><a href="http://middlemanapp.com/">Middleman</a></li>
+  <li><a href="https://github.com/rtomayko/tilt">tilt</a></li>
+</ul>
+
+
+    
+    <aside>
+    <div class="share">
+  <div class="addthis_toolbox addthis_default_style ">
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4f8eed8875190f92"></script>
+  <script type="text/javascript">
+    var addthis_config = {
+      data_track_clickback: false
+    }
+  </script>
+</div>
+
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'apatheiainfo';
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    </aside>
+    
+  </article>
+
+    <footer>
+    <div class="pure-menu pure-menu-open pure-menu-horizontal">
+      <a href="#" class="pure-menu-heading">Link</a>
+      <ul>
+        <li><a href="https://twitter.com/f440">Twitter</a></li>
+        <li><a href="https://github.com/f440">Github</a></li>
+        <li><a href="https://pinboard.in/u:f440">Pinboard</a></li>
+      </ul>
+    </div>
+    </footer>
+  </body>
+</html>
+<script>
+window.addEventListener("load", function() {
+  var imgs = document.getElementsByTagName("img");
+  for (var i = 0, len = imgs.length; i < len; i++) {
+    var img = imgs[i];
+    var a = document.createElement("a");
+    a.setAttribute("href", img.src);
+    a.setAttribute("title", img.alt);
+    a.appendChild(img.cloneNode(true));
+    img.parentNode.replaceChild(a, img);
+  }
+}, false);
+</script>
