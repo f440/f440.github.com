@@ -25,7 +25,7 @@ tags:
 - middleman-livereload が便利
   - [rack-livereload](https://github.com/johnbintz/rack-livereload) を使っている。ブラウザに拡張を入れなくても、Web Socket でリロードしてくれる。
 - [tilt] を使っているので、テンプレートエンジンは自由に選択できる
-  - 楽しくなって、[Slim](http://slim-lang.com/) を使って [shower](https://github.com/shower/shower) を [移植してみたりした](https://github.com/f440/miwer)。
+  - 楽しくなって、[Slim](http://slim-lang.com/) を使って [shower](https://github.com/shower/shower) を [移植してみたりした](https://github.com/f440/middleman-miwer)。
 
 おおむね満足です。
 
