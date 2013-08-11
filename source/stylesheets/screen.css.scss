@@ -54,12 +54,6 @@ header {
   margin-bottom:0;
 }
 
-footer {
-  padding-top: 1%;
-  padding-bottom: 1%;
-  margin-bottom:20px;
-}
-
 #site-title {
   font-family: serif;
   min-height: 70px;
@@ -120,7 +114,8 @@ pre code {
 }
 
 input[type=search] {
-  width: 12em;
+  margin-left: 1em;
+  border: none;
 }
 
 img {
