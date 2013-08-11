@@ -8,6 +8,7 @@
     <%= stylesheet_link_tag 'http://yui.yahooapis.com/pure/0.2.0/pure-min.css' %>
     <%= stylesheet_link_tag 'screen' %>
     <%= partial "ga" %>
+    <%= feed_tag 'application/atom+xml', '/atom.xml', :title => data.site.title %>
   </head>
   <body class="<%= page_classes %>">
     <header>
