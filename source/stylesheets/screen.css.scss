@@ -68,13 +68,17 @@ header {
 
 nav, footer {
   font-family: serif;
-  a, a:visited {
+  a {
     color: $base-color;
     background-color: $base-background-color;
-  }
-  a:hover {
-    color: $base-color;
-    background-color: $base-background-color;
+    &:visited {
+      color: $base-color;
+      background-color: $base-background-color;
+    }
+    &:hover {
+      color: $base-color;
+      background-color: $base-background-color;
+    }
   }
 }
 
@@ -113,9 +117,32 @@ pre code {
   margin-bottom: 1em;
 }
 
-input[type=search] {
+input[type="search"] {
   margin-left: 1em;
   border: none;
+}
+
+@mixin search-placeholder {
+  padding-left: 0.1em;
+  font-size: 1em;
+  color: #333333;
+  font-family: serif;
+}
+
+input[type="search"]:-ms-input-placeholder {
+  @include search-placeholder;
+}
+input[type="search"]:-moz-input-placeholder {
+  @include search-placeholder;
+}
+input[type="search"]::-moz-input-placeholder {
+  @include search-placeholder;
+}
+input[type="search"]::-webkit-input-placeholder {
+  @include search-placeholder;
+}
+input[type="search"]::-webkit-search-results-decoration {
+  display: none;
 }
 
 img {
@@ -164,7 +191,7 @@ img {
   h1 {
     font-size: 1.8em;
   }
-  input[type=search] {
+  input[type="search"] {
     width: 6em;
   }
   .archives {
