@@ -132,10 +132,10 @@ input[type="search"] {
 input[type="search"]:-ms-input-placeholder {
   @include search-placeholder;
 }
-input[type="search"]:-moz-input-placeholder {
+input[type="search"]:-moz-placeholder {
   @include search-placeholder;
 }
-input[type="search"]::-moz-input-placeholder {
+input[type="search"]::-moz-placeholder {
   @include search-placeholder;
 }
 input[type="search"]::-webkit-input-placeholder {
