@@ -34,9 +34,9 @@
     <div class="pure-menu pure-menu-open pure-menu-horizontal">
       <a href="#" class="pure-menu-heading">Link</a>
       <ul>
-        <li><%= link_to "Twitter", URI.join("https://twitter.com/", data.site.twitter_id) %></li>
-        <li><%= link_to "Github", URI.join("https://github.com/", data.site.github_id) %></li>
-        <li><%= link_to "Pinboard", "https://pinboard.in/u:#{data.site.pinboard_id}" %></li>
+        <li><%= link_to "Twitter", URI.join("https://twitter.com/", data.site.twitter_id).to_s %></li>
+        <li><%= link_to "Github", URI.join("https://github.com/", data.site.github_id).to_s %></li>
+        <li><%= link_to "Pinboard", "https://pinboard.in/u:#{data.site.pinboard_id}".to_s %></li>
       </ul>
     </div>
     </footer>
