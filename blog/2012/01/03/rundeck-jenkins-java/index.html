@@ -108,7 +108,7 @@ $ rpm -ql rundeck-config
 
 <p>既定のポートは 4440 なので http://RUNDECK_HOST:4440/ にアクセスしてみる。</p>
 
-<p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx82ozkABF1qz5yk8.png" alt="ログイン画面" /></p>
+<p><img alt="ログイン画面" src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx82ozkABF1qz5yk8.png" /></p>
 
 <p>アクセスできなければ、ちゃんと起動出来てるかどうかとか、iptables が邪魔していないかとか確認。この時点ではまだログイン出来ない。</p>
 
@@ -139,7 +139,7 @@ f440: MD5:be6cb1069f01cd207e6484538367bd1d,admin,user
 
 <p>アクセス出来るようになったはず。ログインしてみる。</p>
 
-<p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx838slUR51qz5yk8.png" alt="ログイン直後" /></p>
+<p><img alt="ログイン直後" src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx838slUR51qz5yk8.png" /></p>
 
 <p>やりましたね。</p>
 
@@ -148,7 +148,7 @@ undeck.id_rsa</code>なので、ここにしておくと手間が少なくて済
 
 <p>この後説明するホストやジョブはプロジェクト単位で管理していくことになる。</p>
 
-<p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx840qzSI71qz5yk8.png" alt="Run" /></p>
+<p><img alt="Run" src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx840qzSI71qz5yk8.png" /></p>
 
 <p>左上のメニューに注目</p>
 
@@ -160,7 +160,7 @@ undeck.id_rsa</code>なので、ここにしておくと手間が少なくて済
 
 <p>最初は localhost だけがホストに登録されているから、Run を選択後、真ん中の入力フォームからコマンドを実行してみる。</p>
 
-<p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx84c0tw7g1qz5yk8.png" alt="exec_uname" /></p>
+<p><img alt="exec_uname" src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx84c0tw7g1qz5yk8.png" /></p>
 
 <p>実行できた。</p>
 
@@ -214,11 +214,11 @@ $ ssh -i ~/.ssh/rundeck.id_rsa deploy@192.168.10.10
 <p>これで再起動させればrundeck側からホストが操作できるようになっているはず。target1(192.168.115.60),
 target2(192.168.115.61)を追加して画面から確認してみる。</p>
 
-<p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx96zd197m1qz5yk8.png" alt="フィルタ変更" /></p>
+<p><img alt="フィルタ変更" src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx96zd197m1qz5yk8.png" /></p>
 
 <p>フィルタの変更でとりあえず全部外して、全台表示にする。</p>
 
-<p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx96zqf2uJ1qz5yk8.png" alt="フィルタ変更後" /></p>
+<p><img alt="フィルタ変更後" src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx96zqf2uJ1qz5yk8.png" /></p>
 
 <p>確認できた。ここでコマンドを打てば全台に適用される。</p>
 
@@ -257,7 +257,7 @@ target2(192.168.115.61)を追加して画面から確認してみる。</p>
 
 <p>サクサク作れるので、必要に応じてがしがし増やしていく。</p>
 
-<p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx99jg4sze1qz5yk8.png" alt="" /></p>
+<p><img alt="" src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx99jg4sze1qz5yk8.png" /></p>
 
 <h2 id="jenkins-">jenkins との連動</h2>
 
@@ -290,9 +290,9 @@ ci.org/display/JENKINS/RunDeck+Plugin#RunDeckPlugin-DeploymentPipeline">プラ�
 
 <p>やってみよう。ジョブの保存画面でオプションを選択。</p>
 
-<p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9bfrJrHn1qz5yk8.png" alt="オプション設定画面" /></p>
+<p><img alt="オプション設定画面" src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9bfrJrHn1qz5yk8.png" /></p>
 
-<p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9c296d8I1qz5yk8.png" alt="オプション設定画面2" /></p>
+<p><img alt="オプション設定画面2" src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9c296d8I1qz5yk8.png" /></p>
 
 <ul>
   <li>Option Name … 変数名として使われる値。artifact を指定</li>
@@ -307,16 +307,16 @@ ci.org/display/JENKINS/RunDeck+Plugin#RunDeckPlugin-DeploymentPipeline">プラ�
 
 <p>併せて、受け取った値を表示するだけのステップを作ってみる。</p>
 
-<p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9cj2ACEP1qz5yk8.png" alt="ステップ" /></p>
+<p><img alt="ステップ" src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9cj2ACEP1qz5yk8.png" /></p>
 
 <p>実行してみよう。最初にビルド番号を聞かれる。</p>
 
-<p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9cobBFg31qz5yk8.png" alt="成果物一覧" /></p>
+<p><img alt="成果物一覧" src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9cobBFg31qz5yk8.png" /></p>
 
 <p>適当に選んで「Run Job
 Now」すると、さっき作った変数を表示するだけのスクリプトが動いて、指定した成果物のURLが表示され、連携がうまくいっていたことが確認出来る。</p>
 
-<p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9dlhjwmr1qz5yk8.png" alt="実行結果" /></p>
+<p><img alt="実行結果" src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9dlhjwmr1qz5yk8.png" /></p>
 
 <p>詳細なデプロイ手順については、各環境ごとにあるだろうから、アレンジしてもらえればと思う。</p>
 
