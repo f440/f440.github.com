@@ -71,7 +71,7 @@ page "/sitemap.xml", :layout => false
 # activate :automatic_image_sizes
 
 # Reload the browser automatically whenever files change
-activate :livereload, :grace_period => 1
+activate :livereload
 
 # Methods defined in the helpers block are available in templates
 # helpers do
