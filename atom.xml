@@ -3,7 +3,7 @@
   <title>apatheia.info</title>
   <link href="http://apatheia.info/"/>
   <link href="http://apatheia.info/atom.xml" rel="self"/>
-  <updated>2013-11-11T00:20:00Z</updated>
+  <updated>2013-11-11T09:20:00+09:00</updated>
   <id>http://apatheia.info/</id>
   <author>
     <name>f440</name>
@@ -12,8 +12,8 @@
     <title>ISUCON3 の参加記録</title>
     <link rel="alternate" href="http://apatheia.info/blog/2013/11/11/isucon3/"/>
     <id>http://apatheia.info/blog/2013/11/11/isucon3/</id>
-    <published>2013-11-11T00:20:00Z</published>
-    <updated>2013-11-11T00:20:00Z</updated>
+    <published>2013-11-11T09:20:00+09:00</published>
+    <updated>2013-11-11T09:20:00+09:00</updated>
     <author>
       <name>f440</name>
     </author>
@@ -213,8 +213,8 @@ sub vcl_fetch {
     <title>Immutable Infrastracture について</title>
     <link rel="alternate" href="http://apatheia.info/blog/2013/08/10/immutable-infrastructure/"/>
     <id>http://apatheia.info/blog/2013/08/10/immutable-infrastructure/</id>
-    <published>2013-08-10T12:00:00Z</published>
-    <updated>2013-08-10T12:00:00Z</updated>
+    <published>2013-08-10T21:00:00+09:00</published>
+    <updated>2013-08-10T21:00:00+09:00</updated>
     <author>
       <name>f440</name>
     </author>
@@ -284,8 +284,8 @@ sub vcl_fetch {
     <title>ブログエンジンを Octopress から Middleman に変えた</title>
     <link rel="alternate" href="http://apatheia.info/blog/2013/08/10/octopress-to-middleman/"/>
     <id>http://apatheia.info/blog/2013/08/10/octopress-to-middleman/</id>
-    <published>2013-08-10T11:30:00Z</published>
-    <updated>2013-08-10T11:30:00Z</updated>
+    <published>2013-08-10T20:30:00+09:00</published>
+    <updated>2013-08-10T20:30:00+09:00</updated>
     <author>
       <name>f440</name>
     </author>
@@ -340,8 +340,8 @@ sub vcl_fetch {
     <title>仮想環境構築に docker を使う</title>
     <link rel="alternate" href="http://apatheia.info/blog/2013/06/17/docker/"/>
     <id>http://apatheia.info/blog/2013/06/17/docker/</id>
-    <published>2013-06-17T00:13:00Z</published>
-    <updated>2013-06-17T00:13:00Z</updated>
+    <published>2013-06-17T09:13:00+09:00</published>
+    <updated>2013-06-17T09:13:00+09:00</updated>
     <author>
       <name>f440</name>
     </author>
@@ -767,8 +767,8 @@ cmd
     <title>yum のパッケージキャッシュについて</title>
     <link rel="alternate" href="http://apatheia.info/blog/2013/06/16/yum-cache/"/>
     <id>http://apatheia.info/blog/2013/06/16/yum-cache/</id>
-    <published>2013-06-15T16:26:00Z</published>
-    <updated>2013-06-15T16:26:00Z</updated>
+    <published>2013-06-16T01:26:00+09:00</published>
+    <updated>2013-06-16T01:26:00+09:00</updated>
     <author>
       <name>f440</name>
     </author>
@@ -813,8 +813,8 @@ $ sudo yum history undo 4
     <title>omnibus を使って オムニバスインストーラーを作成する</title>
     <link rel="alternate" href="http://apatheia.info/blog/2013/05/07/create-ominibus-installer/"/>
     <id>http://apatheia.info/blog/2013/05/07/create-ominibus-installer/</id>
-    <published>2013-05-06T16:41:00Z</published>
-    <updated>2013-05-06T16:41:00Z</updated>
+    <published>2013-05-07T01:41:00+09:00</published>
+    <updated>2013-05-07T01:41:00+09:00</updated>
     <author>
       <name>f440</name>
     </author>
