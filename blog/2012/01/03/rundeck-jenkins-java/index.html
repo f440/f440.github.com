@@ -104,7 +104,7 @@ $ rpm -ql rundeck-config
 
 <ul>
   <li>設定系のファイル /etc/rundeck は本体と別の RPM (rundeck-config) に入っている</li>
-  <li>/var/lib/rundeck 以下にシステム関係のデータがおかれて、/var/rundeck 以下にユーザーが作成したデータをおくっぽい 
+  <li>/var/lib/rundeck 以下にシステム関係のデータがおかれて、/var/rundeck 以下にユーザーが作成したデータをおくっぽい
     <ul>
       <li>僕は試してないけど、保存先はDBも使えるみたい。http://rundeck.org/docs/RunDeck-Guide.html#relational-database</li>
     </ul>
@@ -240,7 +240,7 @@ target2(192.168.115.61)を追加して画面から確認してみる。</p>
 をクリックすればいい。全部画面に書いてあるけど、一応説明すると:</p>
 
 <ul>
-  <li>Saved this job? ジョブを保存するかどうか 
+  <li>Saved this job? ジョブを保存するかどうか
     <ul>
       <li>Job Name … 名前</li>
       <li>Group … グループ。スラッシュ区切りで入力しておくと、階層構造で表示してくれる</li>
@@ -249,13 +249,13 @@ target2(192.168.115.61)を追加して画面から確認してみる。</p>
     </ul>
   </li>
   <li>Project どのプロジェクトを対象とするか</li>
-  <li>Workflow 
+  <li>Workflow
     <ul>
       <li>Keepgoing エラーで止まるかそのまま進むか</li>
       <li>Strategy ノードが3台、ステップが2個あったとして、node1-step1, node1-step2, node1-step3, node2-step1 … とすすむのがNode-oriented、Node-oriented、node1-step1, node2-step1, node3-step1 と進んでいくのが Step-oriented</li>
     </ul>
   </li>
-  <li>Step 実行するステップを指定。各行の右端にマウスをあわせると（入れ替えたり編集、削除したりできる） 
+  <li>Step 実行するステップを指定。各行の右端にマウスをあわせると（入れ替えたり編集、削除したりできる）
     <ul>
       <li>Command … コマンドの実行（Runでやったのと同じ）</li>
       <li>Script … 複数行のスクリプトの実行</li>
