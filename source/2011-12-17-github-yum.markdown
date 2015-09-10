@@ -10,9 +10,7 @@ tags:
 comments: true
 published: true
 ---
-ubuntuには[PPA](https://launchpad.net/ubuntu/+ppas)という仕組みがあり、プロジェクトホスティングサービス
-[launchpad](https://launchpad.net/) と連携してパッケージを簡単に配布する仕組みが用意されている。今回は、githubを使
-ってリポジトリにpushしたら自動的にRPMパッケージを公開する方法をまとめる。
+ubuntuには[PPA](https://launchpad.net/ubuntu/+ppas)という仕組みがあり、プロジェクトホスティングサービス[launchpad](https://launchpad.net/) と連携してパッケージを簡単に配布する仕組みが用意されている。今回は、githubを使ってリポジトリにpushしたら自動的にRPMパッケージを公開する方法をまとめる。
 
 <!-- more -->
 

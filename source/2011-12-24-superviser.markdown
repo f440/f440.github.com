@@ -45,9 +45,7 @@ supervisorはプログラムの起動、停止を管理するツール。daemont
 
 プログラムはフォアグラウンドで起動する。memcached の例で言うと、-d オプション (run as a daemon) はつけない。
 
-設定ファイルを配置する。もともと /etc/supervisor/supervisord.conf 内で
-/etc/supervisor/conf.d/*.conf を Include
-するよう設定されていた読み込むように設定されていたので、以下のようなファイルを作った。
+設定ファイルを配置する。もともと /etc/supervisor/supervisord.conf 内で /etc/supervisor/conf.d/\*.conf を Include するよう設定されていた読み込むように設定されていたので、以下のようなファイルを作った。
 
     
     $ cat /etc/supervisor/conf.d/memcached.conf
@@ -56,8 +54,7 @@ supervisorはプログラムの起動、停止を管理するツール。daemont
     user=f440
     
 
-デフォルトだと設定したプログラムは自動起動する(autostart=true)なので、supervisor を再起動させれば memcached
-も起動する。memcached がいつまでも起動しなければ /var/log/supervisor 以下のログを確認する。
+デフォルトだと設定したプログラムは自動起動する(autostart=true)なので、supervisor を再起動させれば memcachedも起動する。memcached がいつまでも起動しなければ /var/log/supervisor 以下のログを確認する。
 
 何らかの原因で停止したとき、自動起動して欲しければ autorestart=true を指定しておく。
 

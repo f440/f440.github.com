@@ -59,27 +59,23 @@ published: true
     $ $SANDBOX_HOME/msb_5_5_19/use
     
 
-`use`以外には、`start`, `stop`, `status` などの名前から動作が推測できそうなコマンド群がある。$SANDBOX_HOME
-には複数のサンドボックスを操作するコマンド `use_all`, `start_all`, `stop_all` などがある。
+`use`以外には、`start`, `stop`, `status` などの名前から動作が推測できそうなコマンド群がある。$SANDBOX_HOMEには複数のサンドボックスを操作するコマンド `use_all`, `start_all`, `stop_all` などがある。
 
     
     $ make_replication_sandbox 5.5.19 
     # 第二引数はtar.gzまでのパスでもいいが、一度展開されたらバージョン番号指定でもいい。make_sandboxも同様
     
 
-以上で、 master, node1, node2 というサーバーが起動する。node1, node2 は master
-を参照したレプリケーション構成となる。デフォルトでノードは2台だが、`--how_many_nodes` オプションで台数は変更可能。
+以上で、 master, node1, node2 というサーバーが起動する。node1, node2 は masterを参照したレプリケーション構成となる。デフォルトでノードは2台だが、`--how_many_nodes` オプションで台数は変更可能。
 
 同様に[Circular recplication](http://dev.mysql.com/doc/refman/5.1/ja/replication-
-topology-circular.html)(日本語訳だとなんになるんだろう)も簡単に作れる。マスター/マスターレプリケーションはCircular
-replication が2台のみの構成だった場合に同じ。
+topology-circular.html)(日本語訳だとなんになるんだろう)も簡単に作れる。マスター/マスターレプリケーションはCircular replication が2台のみの構成だった場合に同じ。
 
     
     $ make_replication_sandbox --circular=4 5.5.19
     
 
-これで node1 -> node2, node2 -> nod3, node3 -> node4, node4 -> node1
-という循環関係のレプリケーションが作れる。
+これで node1 -> node2, node2 -> nod3, node3 -> node4, node4 -> node1 という循環関係のレプリケーションが作れる。
 
 使い終わったら止めておこう。
 
@@ -89,8 +85,7 @@ replication が2台のみの構成だった場合に同じ。
 
 ### BLACKHOLEエンジンを試す
 
-準備ができたので、[BLACKHOLEエンジン](http://dev.mysql.com/doc/refman/5.1/ja/blackhole-
-storage-engine.html)を使ってみる。BLACKHOLEエンジンはバイナリログは記録するが、データは残さないストレージエンジンのこと。
+準備ができたので、[BLACKHOLEエンジン](http://dev.mysql.com/doc/refman/5.1/ja/blackhole-storage-engine.html)を使ってみる。BLACKHOLEエンジンはバイナリログは記録するが、データは残さないストレージエンジンのこと。
 
 まずは、サンドボックス作成
 

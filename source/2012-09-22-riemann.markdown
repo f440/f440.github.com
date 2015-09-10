@@ -53,10 +53,7 @@ published: true
 「イベント x あるいは y が n 秒以内に m 回発生したらアラート」みたいなのも設定できるみたいなので、監視ツールと組み合わせてもおもしろそう。
 
 ソフトウェアの内容や使いかっては、 [fluentd](http://fluentd.org/)
-ととても近いように感じた。それぞれ公式サイトに掲げられているメッセージを比較してみると、fluentd は「Fluentd is a lightweight
-and flexible log collector」で、riemann は「Riemann is an event stream
-processor」だった。fluentd はイベントを集計できる形式でログとして残すこと、riemann
-はイベントストリームから特定の状況をリアルタイムで見つけだすことが主眼ということかな。
+ととても近いように感じた。それぞれ公式サイトに掲げられているメッセージを比較してみると、fluentd は「Fluentd is a lightweight and flexible log collector」で、riemann は「Riemann is an event stream processor」だった。fluentd はイベントを集計できる形式でログとして残すこと、riemannはイベントストリームから特定の状況をリアルタイムで見つけだすことが主眼ということかな。
 
 ## 参考
 
