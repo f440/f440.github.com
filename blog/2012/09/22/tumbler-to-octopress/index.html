@@ -58,8 +58,7 @@ var _prum = [['id', '534a4930abe53d551a2dfa1b'],
         <a class="pure-button" href="/blog/categories/octopress/">octopress</a>
 
     </p>
-    <p>Tumblerでブログ書いていたけど、ローカルで記事書く =&gt; フォームに貼り付け =&gt; 
-プレビューのサイクルが結構面倒くさいな、と常々思っていたので、Octopressに移行した。</p>
+    <p>Tumblerでブログ書いていたけど、ローカルで記事書く =&gt; フォームに貼り付け =&gt; プレビューのサイクルが結構面倒くさいな、と常々思っていたので、Octopressに移行した。</p>
 
 <p>ホスティングには <a href="http://pages.github.com/">Github Pages</a> を利用している。</p>
 
@@ -105,33 +104,23 @@ $ mv post source/
   <li>各種外部サイト向けパーツの設定</li>
 </ul>
 
-<p><code>source/post</code> には、tumbler と同じURLでアクセスしたとき、移行後のコンテンツにア
-クセスするリダイレクト設定が入っている。tumbler の頃からカスタムドメインを使っ
-ていた場合は、後述のドメイン設定で前と同じドメインにすればいい。</p>
+<p><code>source/post</code> には、tumbler と同じURLでアクセスしたとき、移行後のコンテンツにアクセスするリダイレクト設定が入っている。tumbler の頃からカスタムドメインを使っていた場合は、後述のドメイン設定で前と同じドメインにすればいい。</p>
 
 <h3 id="section-2">ドメインの設定</h3>
 
-<p>独自ドメインを使う場合、source/ 以下に CNAME というファイルを作り、そこにドメイ
-ンを書いておく。その後、指定の IP アドレスに名前を向ける。</p>
+<p>独自ドメインを使う場合、source/ 以下に CNAME というファイルを作り、そこにドメインを書いておく。その後、指定の IP アドレスに名前を向ける。</p>
 
-<p>何度かIPアドレスが変更になっているみたいで、別のIPアドレスを利用した説明がネッ
-トに残っているけど、古いものだとカスタムドメインが使えるけどusername.github.com
-からのカスタムドメインへのリダイレクトが有効にならなかったりするので、ちゃんと
+<p>何度かIPアドレスが変更になっているみたいで、別のIPアドレスを利用した説明がネットに残っているけど、古いものだとカスタムドメインが使えるけどusername.github.comからのカスタムドメインへのリダイレクトが有効にならなかったりするので、ちゃんと
 <a href="https://help.github.com/articles/setting-up-a-custom-domain-with-pages">公式の説明</a>のもの
 を参照すること。</p>
 
 <h3 id="github-pages-">Github Pages へデプロイ</h3>
 
-<p><a href="http://octopress.org/docs/deploying/github/">ドキュメント</a>を読めばわかるので詳
-細は割愛。</p>
+<p><a href="http://octopress.org/docs/deploying/github/">ドキュメント</a>を読めばわかるので詳細は割愛。</p>
 
-<p><code>source</code> ディレクトリの中身が <code>public</code> 以下に展開されて、ここがプレビュー領域と
-なる。<code>public</code> の中身が <code>_deploy</code> にコピーされて、ここが Github Pages に push
-される。</p>
+<p><code>source</code> ディレクトリの中身が <code>public</code> 以下に展開されて、ここがプレビュー領域となる。<code>public</code> の中身が <code>_deploy</code> にコピーされて、ここが Github Pages に pushされる。</p>
 
-<p>git リポジトリのうち <code>master</code> ブランチがは公開用、<code>source</code> が編集用となる。ルー
-ディレクトリに <code>source</code> ブランチ、公開用の <code>_deploy</code> ディレクトリに <code>maste</code> ブ
-ランチという二つのリポジトリが配置されることになる。</p>
+<p>git リポジトリのうち <code>master</code> ブランチがは公開用、<code>source</code> が編集用となる。ルーディレクトリに <code>source</code> ブランチ、公開用の <code>_deploy</code> ディレクトリに <code>maste</code> ブランチという二つのリポジトリが配置されることになる。</p>
 
 <h2 id="section-3">感想</h2>
 

@@ -57,19 +57,15 @@ var _prum = [['id', '534a4930abe53d551a2dfa1b'],
       Published on 30 Jul 2012
       
     </p>
-    <p>管理対象のサーバー台数が少ない場合など、<a href="http://www.opscode.com/chef/">chef</a>のサーバーを運用するコストとベネフィットを天
-秤にかけてみて、ああこれどう考えても労力ペイできないな、でも設定ファイルを手動で管理するのはやだな、といったときに<a href="https://g
+    <p>管理対象のサーバー台数が少ない場合など、<a href="http://www.opscode.com/chef/">chef</a>のサーバーを運用するコストとベネフィットを天秤にかけてみて、ああこれどう考えても労力ペイできないな、でも設定ファイルを手動で管理するのはやだな、といったときに<a href="https://g
 ithub.com/iain/roundsman">roundsman</a>を使うといいという話。</p>
 
 
 
-<p><a href="https://github.com/iain/roundsman">roundsman</a>は、chefのレシピを転送して<a href="http://wiki.opscode.com/display/chef/Chef+Solo">chef-solo</a>を実行する<a href="https://github.com
-/capistrano/capistrano">capistrano</a>向けライブラリ。アプリケーションのリリースタイミングに併せてインフラ設定の変更が必要になることは往々にしてある
-ので、<a href="https://github.com/capistrano/capistrano">capistrano</a>を使ってデプロイとインフラ設定変更を一括適
+<p><a href="https://github.com/iain/roundsman">roundsman</a>は、chefのレシピを転送して<a href="http://wiki.opscode.com/display/chef/Chef+Solo">chef-solo</a>を実行する<a href="https://github.com/capistrano/capistrano">capistrano</a>向けライブラリ。アプリケーションのリリースタイミングに併せてインフラ設定の変更が必要になることは往々にしてあるので、<a href="https://github.com/capistrano/capistrano">capistrano</a>を使ってデプロイとインフラ設定変更を一括適
 用できるのは便利だ。</p>
 
-<p>ここでは、Railsアプリを対象に<a href="https://github.com/iain/roundsman">roundsman</a>適用までの作業を簡単にまとめる
-。</p>
+<p>ここでは、Railsアプリを対象に<a href="https://github.com/iain/roundsman">roundsman</a>適用までの作業を簡単にまとめる。</p>
 
 <h2 id="section">手順</h2>
 
@@ -90,8 +86,7 @@ bundle install --path vendor/bundle
 bundle exec capify .
 </code></pre>
 
-<p>chefのcookbooksは<code>config/cookbooks</code>に配置する。場所は設定で変更可能。このディレクトリだけ別リポジトリにしておくと、ほかのプロ
-ジェクトでも転用できて便利なのでそうしてる。</p>
+<p>chefのcookbooksは<code>config/cookbooks</code>に配置する。場所は設定で変更可能。このディレクトリだけ別リポジトリにしておくと、ほかのプロジェクトでも転用できて便利なのでそうしてる。</p>
 
 <p>config/deploy.rbを調整する。サーバーの種別ごとにデプロイを切り替えたいので、マルチステージを有効化。</p>
 
@@ -105,8 +100,7 @@ bundle exec capify .
 <p>サーバーグループの設定を<code>config/deploy/*.rb</code>に配置。これについては、<a href="https:
 //github.com/capistrano/capistrano/wiki/2.x-Multistage-Extension">capistrano/ext/multistage</a>の説明を参照。</p>
 
-<p>あとは<code>config/deploy.rb</code>でrecipeを実行するタスクを追加し、<code>config/deploy/*.rb</code>の中でattributeを設定して
-いく。</p>
+<p>あとは<code>config/deploy.rb</code>でrecipeを実行するタスクを追加し、<code>config/deploy/*.rb</code>の中でattributeを設定していく。</p>
 
 <pre><code>config/deploy.rb:
 
@@ -128,8 +122,7 @@ bundle exec capify .
       end
 </code></pre>
 
-<p><a href="https://github.com/iain/roundsman#configuration">githubにある設定方法の説明</a>だと、config/ス
-テージ名.rb に設定を書いている。</p>
+<p><a href="https://github.com/iain/roundsman#configuration">githubにある設定方法の説明</a>だと、config/ステージ名.rb に設定を書いている。</p>
 
 <pre><code>config/deploy/*.rb:
 
@@ -137,8 +130,7 @@ bundle exec capify .
     set :run_recipe, :user =&gt; "nginx", "worker_process" =&gt; 1, …
 </code></pre>
 
-<p>ただ、これだとattributesの管理がcapistranoの中にべったり書くことになってしまい、chef-
-soloを手で実行したいときとか面倒くさい。そのため、attributesの値はknifeやchef-
+<p>ただ、これだとattributesの管理がcapistranoの中にべったり書くことになってしまい、chef-soloを手で実行したいときとか面倒くさい。そのため、attributesの値はknifeやchef-
 soloで読めるようなjsonを作って、config/roles 以下で管理している。</p>
 
 <p>roles ディレクトリはアプリのアップデートと関係なく更新していくことになるので、別リポジトリで管理した方がいい。</p>
@@ -157,12 +149,12 @@ config/deploy.rb:
   # jsonファイルを取り込む関数を追加
   require active_support/core_ext/hash/deep_merge
   def load_role(*roles)
-    json = {}                                                                    
+    json = {}
     roles.each do |role|
       json_path = "#{File.dirname(__FILE__)}/roles/#{role}.json"
       json.deep_merge! JSON.load(File.new(json_path))
     end
-    json.each {|k,v| set (k.to_sym), v }                                         
+    json.each {|k,v| set (k.to_sym), v }
  end
 
 config/deploy/*.rb:

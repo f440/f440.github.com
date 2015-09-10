@@ -112,25 +112,21 @@ $ make_sandbox $SANDBOX_BINARY/mysql-5.5.19-linux2.6-x86_64.tar.gz
 <pre><code>$ $SANDBOX_HOME/msb_5_5_19/use
 </code></pre>
 
-<p><code>use</code>以外には、<code>start</code>, <code>stop</code>, <code>status</code> などの名前から動作が推測できそうなコマンド群がある。$SANDBOX_HOME
-には複数のサンドボックスを操作するコマンド <code>use_all</code>, <code>start_all</code>, <code>stop_all</code> などがある。</p>
+<p><code>use</code>以外には、<code>start</code>, <code>stop</code>, <code>status</code> などの名前から動作が推測できそうなコマンド群がある。$SANDBOX_HOMEには複数のサンドボックスを操作するコマンド <code>use_all</code>, <code>start_all</code>, <code>stop_all</code> などがある。</p>
 
 <pre><code>$ make_replication_sandbox 5.5.19 
 # 第二引数はtar.gzまでのパスでもいいが、一度展開されたらバージョン番号指定でもいい。make_sandboxも同様
 </code></pre>
 
-<p>以上で、 master, node1, node2 というサーバーが起動する。node1, node2 は master
-を参照したレプリケーション構成となる。デフォルトでノードは2台だが、<code>--how_many_nodes</code> オプションで台数は変更可能。</p>
+<p>以上で、 master, node1, node2 というサーバーが起動する。node1, node2 は masterを参照したレプリケーション構成となる。デフォルトでノードは2台だが、<code>--how_many_nodes</code> オプションで台数は変更可能。</p>
 
 <p>同様に<a href="http://dev.mysql.com/doc/refman/5.1/ja/replication-
-topology-circular.html">Circular recplication</a>(日本語訳だとなんになるんだろう)も簡単に作れる。マスター/マスターレプリケーションはCircular
-replication が2台のみの構成だった場合に同じ。</p>
+topology-circular.html">Circular recplication</a>(日本語訳だとなんになるんだろう)も簡単に作れる。マスター/マスターレプリケーションはCircular replication が2台のみの構成だった場合に同じ。</p>
 
 <pre><code>$ make_replication_sandbox --circular=4 5.5.19
 </code></pre>
 
-<p>これで node1 -&gt; node2, node2 -&gt; nod3, node3 -&gt; node4, node4 -&gt; node1
-という循環関係のレプリケーションが作れる。</p>
+<p>これで node1 -&gt; node2, node2 -&gt; nod3, node3 -&gt; node4, node4 -&gt; node1 という循環関係のレプリケーションが作れる。</p>
 
 <p>使い終わったら止めておこう。</p>
 
@@ -139,8 +135,7 @@ replication が2台のみの構成だった場合に同じ。</p>
 
 <h3 id="blackhole">BLACKHOLEエンジンを試す</h3>
 
-<p>準備ができたので、<a href="http://dev.mysql.com/doc/refman/5.1/ja/blackhole-
-storage-engine.html">BLACKHOLEエンジン</a>を使ってみる。BLACKHOLEエンジンはバイナリログは記録するが、データは残さないストレージエンジンのこと。</p>
+<p>準備ができたので、<a href="http://dev.mysql.com/doc/refman/5.1/ja/blackhole-storage-engine.html">BLACKHOLEエンジン</a>を使ってみる。BLACKHOLEエンジンはバイナリログは記録するが、データは残さないストレージエンジンのこと。</p>
 
 <p>まずは、サンドボックス作成</p>
 

@@ -94,9 +94,7 @@ Starting supervisor: supervisord.
 
 <p>プログラムはフォアグラウンドで起動する。memcached の例で言うと、-d オプション (run as a daemon) はつけない。</p>
 
-<p>設定ファイルを配置する。もともと /etc/supervisor/supervisord.conf 内で
-/etc/supervisor/conf.d/*.conf を Include
-するよう設定されていた読み込むように設定されていたので、以下のようなファイルを作った。</p>
+<p>設定ファイルを配置する。もともと /etc/supervisor/supervisord.conf 内で /etc/supervisor/conf.d/*.conf を Include するよう設定されていた読み込むように設定されていたので、以下のようなファイルを作った。</p>
 
 <pre><code>$ cat /etc/supervisor/conf.d/memcached.conf
 [program:memcached]
@@ -104,8 +102,7 @@ command=/home/f440/opt/bin/memcached
 user=f440
 </code></pre>
 
-<p>デフォルトだと設定したプログラムは自動起動する(autostart=true)なので、supervisor を再起動させれば memcached
-も起動する。memcached がいつまでも起動しなければ /var/log/supervisor 以下のログを確認する。</p>
+<p>デフォルトだと設定したプログラムは自動起動する(autostart=true)なので、supervisor を再起動させれば memcachedも起動する。memcached がいつまでも起動しなければ /var/log/supervisor 以下のログを確認する。</p>
 
 <p>何らかの原因で停止したとき、自動起動して欲しければ autorestart=true を指定しておく。</p>
 

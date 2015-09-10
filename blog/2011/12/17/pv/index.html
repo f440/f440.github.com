@@ -65,8 +65,7 @@ var _prum = [['id', '534a4930abe53d551a2dfa1b'],
 
 <h2 id="section">インストール方法</h2>
 
-<p>自分の環境(debian 6.0.3)だと <code>apt</code>
-でインストール出来る。RHEL系なら<a href="http://pkgs.repoforge.org/pv/">ここ</a>かな。</p>
+<p>自分の環境(debian 6.0.3)だと <code>apt</code>でインストール出来る。RHEL系なら<a href="http://pkgs.repoforge.org/pv/">ここ</a>かな。</p>
 
 <h2 id="section-1">使い方</h2>
 
@@ -76,8 +75,7 @@ var _prum = [['id', '534a4930abe53d551a2dfa1b'],
  529MB 0:00:08 [67.2MB/s] [       &lt;=&gt;                                         ]
 </code></pre>
 
-<p>8秒で合計529MB、秒間67.2MBくらいで「y」の文字が <code>pv</code> を通り抜けてるのがわかる。 <code>-l</code>
-オプションをつけると行モードになり、転送量ではなく転送行数を調べられる。</p>
+<p>8秒で合計529MB、秒間67.2MBくらいで「y」の文字が <code>pv</code> を通り抜けてるのがわかる。 <code>-l</code>オプションをつけると行モードになり、転送量ではなく転送行数を調べられる。</p>
 
 <pre><code>f440@abhoth[10]:~$ yes | pv -l &gt;/dev/null
  435k 0:00:10 [45.9k/s] [          &lt;=&gt;                                        ]

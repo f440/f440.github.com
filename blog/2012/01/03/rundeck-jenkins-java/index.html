@@ -65,18 +65,12 @@ var _prum = [['id', '534a4930abe53d551a2dfa1b'],
 
 <p><a href="http://rundeck.org/">公式サイト</a></p>
 
-<p>ITオペレーションのコンサルやってる<a href="http://www.dtosolutions.com/">DTO Solution</a>（Depops関連の資料とかでよ
-く会社名は見かけますね）が作っているデプロイ用のツール。元々は<a href="http://doc36.controltier.org/wiki
-/Main_Page">ControlTier</a>っていう管理ツールがあって、そこから分家した。ControlTierはサーバー/クライアントモデルだけど、サーバー側しか用意しなくてい
-いRundeckのほうがお手軽度高い。</p>
+<p>ITオペレーションのコンサルやってる<a href="http://www.dtosolutions.com/">DTO Solution</a>（Depops関連の資料とかでよく会社名は見かけますね）が作っているデプロイ用のツール。元々は<a href="http://doc36.controltier.org/wiki/Main_Page">ControlTier</a>っていう管理ツールがあって、そこから分家した。ControlTierはサーバー/クライアントモデルだけど、サーバー側しか用意しなくていいRundeckのほうがお手軽度高い。</p>
 
-<p>複数のサーバーを対象に状態を変更するのが目的で、<a href="https://github.com/capistrano/capistrano">capistrano</a>
-とか <a href="http://docs.fabfile.org">fabric</a>
-とかと同じジャンル。GUIで操作するのが特徴なので、<a href="https://github.com/peritor/webistrano">webistrano</a>
+<p>複数のサーバーを対象に状態を変更するのが目的で、<a href="https://github.com/capistrano/capistrano">capistrano</a>とか<a href="http://docs.fabfile.org">fabric</a>とかと同じジャンル。GUIで操作するのが特徴なので、<a href="https://github.com/peritor/webistrano">webistrano</a>
 とかに近い。</p>
 
-<p>GUI（笑）みたいに思うかもしれないけど、画面上から履歴が確認できたり、ブラウザがあればどこからでもデプロイ出来るのって、運用の敷居下げるのに貢献してくれる
-と思う。</p>
+<p>GUI（笑）みたいに思うかもしれないけど、画面上から履歴が確認できたり、ブラウザがあればどこからでもデプロイ出来るのって、運用の敷居下げるのに貢献してくれると思う。</p>
 
 <h2 id="rundeck--1">rundeck 設定</h2>
 
@@ -84,10 +78,7 @@ var _prum = [['id', '534a4930abe53d551a2dfa1b'],
 
 <p>とりあえずインストールしてみる。以降の説明は、rundeck インストールサーバー、デプロイ対象サーバーともに CentOS 5 の場合。</p>
 
-<p><a href="http://rundeck.org/docs/RunDeck-Guide.html#installing-rundeck">http://rundeck.org/docs/RunDeck-Guide.html#installing-
-rundeck</a> , <a href="http://kb.dtosolutions.com/wik
-i/Rundeck_on_CentOS">htt
-p://kb.dtosolutions.com/wiki/Rundeck_on_CentOS</a> 参照。CentOSならyumで簡単にインストールできる。</p>
+<p><a href="http://rundeck.org/docs/RunDeck-Guide.html#installing-rundeck">http://rundeck.org/docs/RunDeck-Guide.html#installing-rundeck</a> , <a href="http://kb.dtosolutions.com/wiki/Rundeck_on_CentOS">http://kb.dtosolutions.com/wiki/Rundeck_on_CentOS</a> 参照。CentOSならyumで簡単にインストールできる。</p>
 
 <pre><code>$ sudo rpm -Uvh [http://repo.rundeck.org/latest.rpm](http://repo.rundeck.org/latest.rpm)
 $ sudo yum install rundeck
@@ -126,8 +117,7 @@ $ rpm -ql rundeck-config
 <p>ログインできるようにするために、ユーザーを作る。<a href="http://rundeck.org/docs/RunDeck-Guide.html
 #managing-logins">公式サイトの説明</a></p>
 
-<p>パスワードのハッシュ化はmd5sumコマンドとかでもいいけど、手順に沿って付属のライブラリ使ってみる。RPMでインストールすると、説明文中の$RUNDECK
-_BASE相当がないので、読み替えて以下のように実行</p>
+<p>パスワードのハッシュ化はmd5sumコマンドとかでもいいけど、手順に沿って付属のライブラリ使ってみる。RPMでインストールすると、説明文中の$RUNDECK_BASE相当がないので、読み替えて以下のように実行</p>
 
 <pre><code>$ cd /var/lib/rundeck/
 $ java -cp exp/webapp/WEB-INF/lib/jetty-6.1.21.jar:exp/webapp/WEB-INF/lib/jetty-util-6.1.21.jar org.mortbay.jetty.security.Password f440 secret_password
@@ -154,8 +144,7 @@ f440: MD5:be6cb1069f01cd207e6484538367bd1d,admin,user
 
 <p>やりましたね。</p>
 
-<p>プロジェクトの名前はお好きに。SSHのキーについては、RPMインストール時に作られるrundeckユーザーのキーが<code>/home/rundeck/.ssh/r
-undeck.id_rsa</code>なので、ここにしておくと手間が少なくて済む。他の値については、今回はデフォルトで。</p>
+<p>プロジェクトの名前はお好きに。SSHのキーについては、RPMインストール時に作られるrundeckユーザーのキーが<code>/home/rundeck/.ssh/rundeck.id_rsa</code>なので、ここにしておくと手間が少なくて済む。他の値については、今回はデフォルトで。</p>
 
 <p>この後説明するホストやジョブはプロジェクト単位で管理していくことになる。</p>
 
@@ -222,8 +211,7 @@ $ ssh -i ~/.ssh/rundeck.id_rsa deploy@192.168.10.10
 &lt;node name="target1" description="適当" tags="適当" hostname="192.168.10.10" osArch="適当" osFamily="適当" osName="適当" osVersion="適当" username="deploy" /&gt;
 </code></pre>
 
-<p>これで再起動させればrundeck側からホストが操作できるようになっているはず。target1(192.168.115.60),
-target2(192.168.115.61)を追加して画面から確認してみる。</p>
+<p>これで再起動させればrundeck側からホストが操作できるようになっているはず。target1(192.168.115.60), target2(192.168.115.61)を追加して画面から確認してみる。</p>
 
 <p><img alt="フィルタ変更" src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx96zd197m1qz5yk8.png" /></p>
 
@@ -235,8 +223,7 @@ target2(192.168.115.61)を追加して画面から確認してみる。</p>
 
 <h3 id="section-3">ジョブ追加</h3>
 
-<p>サーバーがセットアップ出来たので、ジョブを追加していく。メニューから<code>Jobs</code>を選択して、<code>New job</code>
-をクリックすればいい。全部画面に書いてあるけど、一応説明すると:</p>
+<p>サーバーがセットアップ出来たので、ジョブを追加していく。メニューから<code>Jobs</code>を選択して、<code>New job</code>をクリックすればいい。全部画面に書いてあるけど、一応説明すると:</p>
 
 <ul>
   <li>Saved this job? ジョブを保存するかどうか
@@ -279,11 +266,9 @@ target2(192.168.115.61)を追加して画面から確認してみる。</p>
 
 <h3 id="jenkins--rundeck-">jenkins から rundeck をキックする</h3>
 
-<p>jenkinsでビルド完了→rundeckでデプロイ→jenkinsで統合テスト実施、といった0-clickのデプロイパイプが作れるようになる。<a href="http://www.otsune.com/diary/2008/09/11/1.html#200809111">0-cli
-ckは革命</a> 。</p>
+<p>jenkinsでビルド完了→rundeckでデプロイ→jenkinsで統合テスト実施、といった0-clickのデプロイパイプが作れるようになる。<a href="http://www.otsune.com/diary/2008/09/11/1.html#200809111">0-clickは革命</a> 。</p>
 
-<p>jenkinsの設定方法は<a href="https://wiki.jenkins-
-ci.org/display/JENKINS/RunDeck+Plugin#RunDeckPlugin-DeploymentPipeline">プラグインの説明ページ</a>参照。</p>
+<p>jenkinsの設定方法は<a href="https://wiki.jenkins-ci.org/display/JENKINS/RunDeck+Plugin#RunDeckPlugin-DeploymentPipeline">プラグインの説明ページ</a>参照。</p>
 
 <h3 id="rundeck-jenkins">rundeck からjenkins上の成果物を選択できるようにする。</h3>
 
@@ -296,8 +281,7 @@ ci.org/display/JENKINS/RunDeck+Plugin#RunDeckPlugin-DeploymentPipeline">プラ�
   <li>特定のビルドを起点に、その最新成果物一覧を提供するAPI</li>
 </ul>
 
-<p>rundeck でジョブを実行するとき、ユーザー入力を受け付けることが出来るんだけど、この選択項目には外部から取得したJSONなども設定できる。この機能と先
-ほどのAPIを組み合わせることで実現出来る。</p>
+<p>rundeck でジョブを実行するとき、ユーザー入力を受け付けることが出来るんだけど、この選択項目には外部から取得したJSONなども設定できる。この機能と先ほどのAPIを組み合わせることで実現出来る。</p>
 
 <p>やってみよう。ジョブの保存画面でオプションを選択。</p>
 
@@ -324,12 +308,11 @@ ci.org/display/JENKINS/RunDeck+Plugin#RunDeckPlugin-DeploymentPipeline">プラ�
 
 <p><img alt="成果物一覧" src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9cobBFg31qz5yk8.png" /></p>
 
-<p>適当に選んで「Run Job
-Now」すると、さっき作った変数を表示するだけのスクリプトが動いて、指定した成果物のURLが表示され、連携がうまくいっていたことが確認出来る。</p>
+<p>適当に選んで「Run Job Now」すると、さっき作った変数を表示するだけのスクリプトが動いて、指定した成果物のURLが表示され、連携がうまくいっていたことが確認出来る。</p>
 
 <p><img alt="実行結果" src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9dlhjwmr1qz5yk8.png" /></p>
 
-<p>詳細なデプロイ手順については、各環境ごとにあるだろうから、アレンジしてもらえればと思う。</p>
+<p>詳細なデプロイ手順については、各環境ごとにあるだろうからアレンジしてもらえればと思う。</p>
 
 <h2 id="section-4">まとめ</h2>
 
