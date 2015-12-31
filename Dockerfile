@@ -19,4 +19,5 @@ RUN bundle install
 ADD . $APP
 RUN bundle install
 
-CMD middleman build
+ENTRYPOINT ["middleman"]
+CMD ["build"]
