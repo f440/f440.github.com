@@ -53,6 +53,19 @@ var _prum = [['id', '534a4930abe53d551a2dfa1b'],
     </header>
     <article>
   <section>
+    <h2><a href="/blog/2013/03/17/fluentd-and-graphite/">FluentdのデータをGraphiteに出力するときのTips</a></h2>
+    <span>2013.03.17</span>   <a class="pure-button" href="/blog/categories/fluentd/">fluentd</a>
+  <a class="pure-button" href="/blog/categories/graphite/">graphite</a>
+  <a class="pure-button" href="/blog/categories/logging/">logging</a>
+  <a class="pure-button" href="/blog/categories/visualization/">visualization</a>
+
+    <p><a href="https://github.com/hotchpotch/fluent-plugin-graphite">fluent-plugin-graphite</a> 利用時のメモ。</p>
+
+<p>Ops界隈での可視化というと、ここ何年かは<a href="http://graphite.wikidot.com/">Graphite</a>でグラフを作ってそれを他のツールで表示する、みたいなのが多い。<a href="http://fluentd.org/">Fluentd</a>のデータを可視化したい場合は<a href="http://kazeburo.github.com/GrowthForecast/">GrowthForecast</a>が使われることが多いけど、<a href="http://graphite.wikidot.com/">Graphite</a>使ってみるといろんなツールと組み合わせられておもしろい。</p>
+
+
+  </section>
+  <section>
     <h2><a href="/blog/2013/03/17/fluentd-and-stathat/">Fluentdの出力結果をStatHatで可視化する</a></h2>
     <span>2013.03.17</span>   <a class="pure-button" href="/blog/categories/fluentd/">fluentd</a>
   <a class="pure-button" href="/blog/categories/stathat/">stathat</a>
@@ -91,16 +104,6 @@ var _prum = [['id', '534a4930abe53d551a2dfa1b'],
   <a class="pure-button" href="/blog/categories/visualization/">visualization</a>
 
     <p>Webサーバーのログでピンポンゲームの映像を生成する<a title="logstalgia" href="https://code.google.com/p/logstalgia/">logstalgia</a>。</p>
-
-
-  </section>
-  <section>
-    <h2><a href="/blog/2013/01/01/network-restriction-using-trickle/">Trickleを使って帯域制限をする</a></h2>
-    <span>2013.01.01</span>   <a class="pure-button" href="/blog/categories/unix/">unix</a>
-  <a class="pure-button" href="/blog/categories/linux/">linux</a>
-  <a class="pure-button" href="/blog/categories/network/">network</a>
-
-    <p>ネットワーク経由で大量のデータをやりとりしたいが、メインのサービスには影響を与えたくないという場合がよくある。<code>rsync</code>や<code>scp</code> など、大きなファイルの転送を考慮されたコマンドではネットワーク帯域を制限するオプションが用意されていることも多いが、自作のツールなどに帯域制限を実装するとなるとかなり面倒くさいことになる。</p>
 
 
   </section>

@@ -53,6 +53,14 @@ var _prum = [['id', '534a4930abe53d551a2dfa1b'],
     </header>
     <article>
   <section>
+    <h2><a href="/blog/2013/06/16/yum-cache/">yum のパッケージキャッシュについて</a></h2>
+    <span>2013.06.16</span>   <a class="pure-button" href="/blog/categories/yum/">yum</a>
+
+    <p><code>/etc/yum.conf</code>で<code>keepcache=1</code>にしておくと、インストールしたパッケージがキャッシュされるようになる。これが無効化された状態だと、パッケージアップグレード時に問題が起きても元に戻せなくなるので有効化しておいた方がいい。</p>
+
+
+  </section>
+  <section>
     <h2><a href="/blog/2013/05/07/create-ominibus-installer/">omnibus を使って オムニバスインストーラーを作成する</a></h2>
     <span>2013.05.07</span>   <a class="pure-button" href="/blog/categories/packaging/">packaging</a>
 
@@ -84,19 +92,6 @@ var _prum = [['id', '534a4930abe53d551a2dfa1b'],
   <a class="pure-button" href="/blog/categories/splunk/">splunk</a>
 
     <p><a href="http://www.splunk.com/">Splunk</a> はおそらくイベント・ログ管理のツールとしてはおそらくもっとも有名で、日本でも販売展開しているので知っている人も多いかと思う。その splunk が <a href="https://www.splunkstorm.com/storm/">Splunk Storm</a> というサービスを始めている。試しに使ってみたのでその感想。</p>
-
-
-  </section>
-  <section>
-    <h2><a href="/blog/2013/03/17/fluentd-and-graphite/">FluentdのデータをGraphiteに出力するときのTips</a></h2>
-    <span>2013.03.17</span>   <a class="pure-button" href="/blog/categories/fluentd/">fluentd</a>
-  <a class="pure-button" href="/blog/categories/graphite/">graphite</a>
-  <a class="pure-button" href="/blog/categories/logging/">logging</a>
-  <a class="pure-button" href="/blog/categories/visualization/">visualization</a>
-
-    <p><a href="https://github.com/hotchpotch/fluent-plugin-graphite">fluent-plugin-graphite</a> 利用時のメモ。</p>
-
-<p>Ops界隈での可視化というと、ここ何年かは<a href="http://graphite.wikidot.com/">Graphite</a>でグラフを作ってそれを他のツールで表示する、みたいなのが多い。<a href="http://fluentd.org/">Fluentd</a>のデータを可視化したい場合は<a href="http://kazeburo.github.com/GrowthForecast/">GrowthForecast</a>が使われることが多いけど、<a href="http://graphite.wikidot.com/">Graphite</a>使ってみるといろんなツールと組み合わせられておもしろい。</p>
 
 
   </section>

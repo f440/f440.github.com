@@ -1,0 +1,176 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DLiteでOS X上にDockerの環境を構築する - apatheia.info</title>
+    <link href="/stylesheets/screen.css" rel="stylesheet" />
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-35021317-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+    <script>
+var _prum = [['id', '534a4930abe53d551a2dfa1b'],
+             ['mark', 'firstbyte', (new Date()).getTime()]];
+(function() {
+  var s = document.getElementsByTagName('script')[0]
+    , p = document.createElement('script');
+  p.async = 'async';
+  p.src = '//rum-static.pingdom.net/prum.min.js';
+  s.parentNode.insertBefore(p, s);
+})();
+</script>
+
+    <link rel="alternate" type="application/rss+xml" title="apatheia.info" href="/atom.xml" />
+  </head>
+  <body class="blog blog_2016 blog_2016_02 blog_2016_02_22 blog_2016_02_22_install-dlite blog_2016_02_22_install-dlite_index">
+    <header>
+      <div id="site-title">
+        <h1><a href="/">apatheia.info</a></h1>
+      </div>
+      <nav class="pure-menu pure-menu-open pure-menu-horizontal">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/archives/">Archive</a></li>
+          <li><a href="/atom.xml">RSS</a></li>
+          <li>
+            <form action="https://google.com/search" method="get">
+              <input type="search" name="q" results="0" placeholder="Search">
+              <input type="hidden" name="q" value="site:apatheia.info">
+            </form>
+          </li>
+        </ul>
+      </nav>
+    </header>
+      <article>
+    <h1>DLiteでOS X上にDockerの環境を構築する</h1>
+    <p id="article-info">
+      Published on 22 Feb 2016
+        <a class="pure-button" href="/blog/categories/docker/">docker</a>
+
+    </p>
+    <p><a href="https://github.com/nlf/dlite">DLite</a> をインストールしたので、そのときのメモ。</p>
+
+
+
+<h2 id="dlite">DLiteとは</h2>
+
+<p>OS XでDockerを使えるようにやつ。内部では<a href="https://github.com/mist64/xhyve">xhyve</a>を使っていて非常にコンパクト。</p>
+
+<h2 id="section">作業環境</h2>
+
+<ul>
+  <li>DLite 1.1.3</li>
+  <li>OS X El capitan 10.11.3</li>
+</ul>
+
+<h2 id="section-1">インストール手順</h2>
+
+<pre><code>brew install dlite
+sudo dlite install # CPUやディスクサイズなどのオプションは`-h`で確認可能
+</code></pre>
+
+<p>おしまい。</p>
+
+<p>内部では以下が行われる:</p>
+
+<ul>
+  <li><code>/etc/sudoers</code>に<code>dlite,nfs</code>コマンドをパスワードなしで<code>sudo</code>できるようにする設定を追加</li>
+  <li><code>~/Library/LaunchAgents/local.dlite.plist</code>に起動設定を配置</li>
+  <li><code>~/.dlite</code>に起動イメージをダウンロード</li>
+</ul>
+
+<h2 id="section-2">起動</h2>
+
+<p>Tmux内で起動しようとするとエラーになるので、必ずTmux外でやること。</p>
+
+<pre><code>dlite start
+</code></pre>
+
+<p>問題がなければ以下が加えられる:</p>
+
+<ul>
+  <li><code>/var/run/docker.sock</code> にソケットファイルを作成</li>
+  <li><code>/etc/hosts</code> にdliteへの参照を追加 (デフォルトは <code>local.docker</code>。インストール時のオプションで変更可能)</li>
+  <li><code>/etc/exports</code> にDLite側のホストへのNFSマウントする設定を追加</li>
+  <li><code>~/Library/LaunchAgents/local.dlite.plist</code> をロードし、自動起動するように設定</li>
+</ul>
+
+<p>うまくいっていれば、<code>docker -H unix://var/run/docker.sock</code>(<code>export DOCKER_HOST=unix:///var/run/docker.sock</code>で指定も可)でdockerが使えるようになる。</p>
+
+<p>もしうまくいかないようなら、<code>sudo dlite daemon</code>でコマンドラインから実行して原因を突き止める。とくに、NFS周りのコンフリクトが起きていないかを確認。</p>
+
+<h2 id="section-3">まとめ</h2>
+
+<p>ホストと仮想環境の間がシームレスにつながってcoLinuxっぽさがある。こういうすっきりしたツールは楽しい。</p>
+
+<h2 id="section-4">参考</h2>
+
+<ul>
+  <li><a href="https://github.com/nlf/dlite">GitHub - nlf/dlite: The simplest way to use Docker on OS X</a></li>
+  <li><a href="https://blog.andyet.com/2016/01/25/easy-docker-on-osx/">Simplifying Docker on OS X</a></li>
+</ul>
+
+
+    <aside>
+    <div class="share">
+  <div class="addthis_toolbox addthis_default_style ">
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4f8eed8875190f92"></script>
+  <script type="text/javascript">
+    var addthis_config = {
+      data_track_clickback: false
+    }
+  </script>
+</div>
+
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'apatheiainfo';
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    </aside>
+  </article>
+
+    <footer>
+    <div class="pure-menu pure-menu-open pure-menu-horizontal">
+      <a href="#" class="pure-menu-heading">Link</a>
+      <ul>
+        <li><a href="https://twitter.com/f440">Twitter</a></li>
+        <li><a href="https://github.com/f440">Github</a></li>
+        <li><a href="https://pinboard.in/u:f440">Pinboard</a></li>
+      </ul>
+    </div>
+    </footer>
+  </body>
+</html>
+<script>
+window.addEventListener("load", function() {
+  var imgs = document.getElementsByTagName("img");
+  for (var i = 0, len = imgs.length; i < len; i++) {
+    var img = imgs[i];
+    var a = document.createElement("a");
+    a.setAttribute("href", img.src);
+    a.setAttribute("title", img.alt);
+    a.appendChild(img.cloneNode(true));
+    img.parentNode.replaceChild(a, img);
+  }
+}, false);
+</script>
