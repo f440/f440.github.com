@@ -9,7 +9,11 @@ compile '/**/*.markdown' do
   layout '/default.*'
 end
 
-route '/**/*.{html,md,markdown}' do
+route %r[/([0-9]+)\-([0-9]+)\-([0-9]+)\-([^\/]+)\..*] do |y, m, d, slug|
+  "/#{y}/#{m}/#{d}/#{slug}/index.html"
+end
+
+route '/**/*.html' do
   if item.identifier =~ '/index.*'
     '/index.html'
   else
