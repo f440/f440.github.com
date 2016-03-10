@@ -14,7 +14,7 @@ compile '/**/*.scss' do
 end
 
 route %r[/([0-9]+)\-([0-9]+)\-([0-9]+)\-([^\/]+)\..*] do |y, m, d, slug|
-  "/#{y}/#{m}/#{d}/#{slug}/index.html"
+  "/blog/#{y}/#{m}/#{d}/#{slug}/index.html"
 end
 
 route '/**/*.scss' do
