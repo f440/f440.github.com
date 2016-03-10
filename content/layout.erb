@@ -5,6 +5,7 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= current_page.data.title ? current_page.data.title + " - " : "" %><%= data.site.title %></title>
+    <%= stylesheet_link_tag 'pure-min' %>
     <%= stylesheet_link_tag 'screen' %>
     <%= partial "ga" %>
     <%= partial "pingdom" %>
