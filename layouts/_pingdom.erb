@@ -1,5 +1,5 @@
 <script>
-var _prum = [['id', '<%= data.site.pingdom %>'],
+var _prum = [['id', '<%= @config[:pingdom] %>'],
              ['mark', 'firstbyte', (new Date()).getTime()]];
 (function() {
   var s = document.getElementsByTagName('script')[0]

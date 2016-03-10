@@ -1,15 +1,15 @@
-<% wrap_layout :layout do %>
+<% render "/default.*" do %>
   <article>
-    <h1><%= current_page.title %></h1>
+    <h1><%= @item[:title] %></h1>
     <p id="article-info">
-      Published on <%= current_page.date.strftime('%d %b %Y') %>
-      <%= partial "tags", :locals => { :tags => current_page.tags } %>
+      Published on <%= d = @item[:date] ?  @item[:date] : @item[:filename].sub(%r{^.*/(\d\d\d\d)-(\d\d)-(\d\d).*}, "\\1-\\2-\\3"); DateTime.parse(d).strftime("%d %b %Y") %>
+      <%#= partial "tags", :locals => { :tags => current_page.tags } %>
     </p>
     <%= yield %>
-    <% if current_page.data.comments %>
+    <% if @item[:comments] %>
     <aside>
-    <%= partial "addthis" %>
-    <%= partial "disqus" %>
+    <%= render "/_disqus.*" %>
+    <%= render "/_addthis.*" %>
     </aside>
     <% end %>
   </article>
