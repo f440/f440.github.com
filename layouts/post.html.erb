@@ -8,8 +8,8 @@
     <%= yield %>
     <% if @item[:comments] %>
     <aside>
-    <%= render "/_disqus.*" %>
     <%= render "/_addthis.*" %>
+    <%= render "/_disqus.*" %>
     </aside>
     <% end %>
   </article>
