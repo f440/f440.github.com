@@ -4,11 +4,6 @@ compile '/**/*.html' do
   layout '/default.*'
 end
 
-compile '/404.html.erb' do
-  filter :kramdown
-  layout '/default.*'
-end
-
 compile %r[/([0-9]+)\-([0-9]+)\-([0-9]+)\-([^\/]+)\..*] do |y, m, d, slug|
   filter :kramdown
   layout '/post.*'
@@ -23,10 +18,6 @@ compile '/**/*.scss' do
   filter :sass, syntax: :scss
 end
 
-route '/404.html.erb' do
-  item.identifier.without_ext
-end
-
 route %r[/([0-9]+)\-([0-9]+)\-([0-9]+)\-([^\/]+)\..*] do |y, m, d, slug|
   "/blog/#{y}/#{m}/#{d}/#{slug}/index.html"
 end
@@ -38,6 +29,8 @@ end
 route '/**/*.html' do
   if item.identifier =~ '/index.*'
     '/index.html'
+  elsif item.identifier == '/404.html'
+    '/404.html'
   else
     item.identifier.without_ext + '/index.html'
   end
