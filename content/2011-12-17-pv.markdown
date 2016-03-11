@@ -1,6 +1,8 @@
 ---
 layout: post
 title: プログレスバーを簡単に表示できるコマンド pv
+created_at: 2011-12-17
+kind: article
 tags:
   - unix
   - pv

@@ -1,6 +1,8 @@
 ---
 layout: post
 title: プロセス管理にsuperviserを使う
+created_at: 2011-12-24
+kind: article
 tags:
 comments: true
 published: true

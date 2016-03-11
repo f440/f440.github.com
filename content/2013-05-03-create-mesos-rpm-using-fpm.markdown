@@ -1,7 +1,8 @@
 ---
 layout: post
 title: "fpm で Mesos の RPM を作るまで"
-date: 2013-05-03 17:24
+created_at: 2013-05-03 17:24
+kind: article
 comments: true
 tags:
   - packaging

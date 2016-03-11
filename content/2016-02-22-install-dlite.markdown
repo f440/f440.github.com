@@ -1,7 +1,8 @@
 ---
 layout: post
 title: "DLiteでOS X上にDockerの環境を構築する"
-date: 2016-02-22 20:54
+created_at: 2016-02-22 20:54
+kind: article
 comments: true
 tags:
   - docker

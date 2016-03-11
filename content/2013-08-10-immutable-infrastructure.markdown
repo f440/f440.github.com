@@ -1,7 +1,8 @@
 ---
 layout: post
 title: "Immutable Infrastracture について"
-date: 2013-08-10 21:00
+created_at: 2013-08-10 21:00
+kind: article
 comments: true
 tags:
   - infrastructure

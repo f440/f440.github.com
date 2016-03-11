@@ -1,7 +1,8 @@
 ---
 layout: post
 title: "chocolatey で Haskell Platform 用のパッケージを作る"
-date: 2013-02-08 22:49
+created_at: 2013-02-08 22:49
+kind: article
 comments: true
 tags:
   - windows

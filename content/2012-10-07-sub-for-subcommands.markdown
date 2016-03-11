@@ -1,7 +1,8 @@
 ---
 layout: post
 title: "サブコマンドを sub で処理する"
-date: 2012-10-07 22:13
+created_at: 2012-10-07 22:13
+kind: article
 comments: true
 tags:
   - cli

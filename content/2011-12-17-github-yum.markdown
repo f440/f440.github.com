@@ -1,6 +1,8 @@
 ---
 layout: post
 title: githubを使ってyumリポジトリを公開する
+created_at: 2011-12-17
+kind: article
 tags:
   - git
   - github

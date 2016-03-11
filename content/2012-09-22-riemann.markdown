@@ -1,7 +1,8 @@
 ---
 layout: post
 title: イベント処理ツール riemannを使う
-date: 2012-09-22 18:00
+created_at: 2012-09-22 18:00
+kind: article
 tags:
 comments: true
 published: true

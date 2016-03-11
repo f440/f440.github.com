@@ -1,7 +1,8 @@
 ---
 layout: post
 title: "FluentdのデータをGraphiteに出力するときのTips"
-date: 2013-03-17 15:50
+created_at: 2013-03-17 15:50
+kind: article
 comments: true
 tags:
   - fluentd

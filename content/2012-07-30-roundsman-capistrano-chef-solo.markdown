@@ -1,6 +1,8 @@
 ---
 layout: post
 title: roundsmanを使ってcapistranoからchef-soloを実行する
+created_at: 2012-07-30
+kind: article
 tags:
 comments: true
 published: true

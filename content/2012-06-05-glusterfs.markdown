@@ -1,6 +1,8 @@
 ---
 layout: post
 title: 分散ファイルシステム GlusterFS を使う
+created_at: 2012-06-05
+kind: article
 tags:
 comments: true
 published: true

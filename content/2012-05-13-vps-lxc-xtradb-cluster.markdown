@@ -1,6 +1,8 @@
 ---
 layout: post
 title: さくらのVPSにLXCで仮想環境構築してXtraDB Cluster動かす
+created_at: 2012-05-13
+kind: article
 tags:
   - mysql
   - lxc

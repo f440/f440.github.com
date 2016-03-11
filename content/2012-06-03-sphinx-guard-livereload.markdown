@@ -1,6 +1,8 @@
 ---
 layout: post
 title: sphinxの更新をguard-livereloadで検知してブラウザを自動リロードする
+created_at: 2012-06-03
+kind: article
 tags:
 comments: true
 published: true

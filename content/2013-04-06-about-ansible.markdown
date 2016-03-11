@@ -1,7 +1,8 @@
 ---
 layout: post
 title: "構成管理ツール Ansible について"
-date: 2013-04-06 14:50
+created_at: 2013-04-06 14:50
+kind: article
 comments: true
 tags:
   - cm
