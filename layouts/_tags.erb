@@ -1,0 +1,3 @@
+<% (@item[:tags] || []).each do |tag| %>
+  <a class="pure-button" href="<%= h '/blog/categories/' + tag + '/' %>"><%= tag %></a>
+<% end %>

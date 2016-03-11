@@ -3,7 +3,7 @@
     <h1><%= @item[:title] %></h1>
     <p id="article-info">
       Published on <%= Time.parse(@item[:created_at].to_s).strftime("%d %b %Y") %>
-      <%#= partial "tags", :locals => { :tags => current_page.tags } %>
+      <%= render "/_tags.*", item: @item %>
     </p>
     <%= yield %>
     <% if @item[:comments] %>
