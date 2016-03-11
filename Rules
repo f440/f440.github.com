@@ -1,5 +1,9 @@
 #!/usr/bin/env ruby
 
+preprocess do
+  create_tag_pages(@items)
+end
+
 compile '/**/*.html' do
   layout '/default.*'
 end
