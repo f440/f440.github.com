@@ -1,8 +1,10 @@
+<% render "/default.*" do %>
 <article>
-  <h1>Articles tagged '<%#= tagname %>'</h1>
+  <h1>Articles tagged '<%= @item[:tag] %>'</h1>
   <ul>
-    <%# page_articles.each_with_index do |article, i| %>
-    <li><span><%#= article.date.strftime('%Y.%m.%d') %></span> <%#= link_to article.title, article %></li>
-    <%# end %>
+    <% items_with_tag(@item[:tag]).reverse.each_with_index do |article, i| %>
+    <li><span><%= Time.parse(article[:created_at].to_s).strftime('%Y.%m.%d') %></span> <%= link_to article[:title], article.path %></li>
+    <% end %>
   </ul>
 </article>
+<% end %>

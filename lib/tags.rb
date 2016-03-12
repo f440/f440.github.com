@@ -6,8 +6,9 @@ def create_tag_pages(items)
   tags(items).each do |tag|
     items.create(
       "",
-      { title: tag },
-      "/blog/categories/#{tag}.html"
+      { tag: tag },
+      "/blog/categories/#{tag}.erb",
+      binary: false
     )
   end
 end

@@ -1,7 +1,12 @@
 #!/usr/bin/env ruby
 
 preprocess do
-  create_tag_pages(@items)
+  create_tag_pages(items)
+end
+
+compile '/blog/categories/**/*.erb' do
+  filter :erb
+  layout '/tag.*'
 end
 
 compile '/**/*.html' do
@@ -37,6 +42,10 @@ end
 
 route '/**/*.scss' do
   item.identifier.without_ext
+end
+
+route '/blog/categories/**/*.erb' do
+  item.identifier.without_ext + '/index.html'
 end
 
 route '/**/*.html' do
