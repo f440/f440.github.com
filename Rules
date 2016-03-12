@@ -9,6 +9,9 @@ compile '/blog/categories/**/*.erb' do
   layout '/tag.*'
 end
 
+compile '/post/**/*' do
+end
+
 compile '/**/*.html' do
   layout '/default.*'
 end
@@ -38,6 +41,10 @@ end
 
 route '/archives.html.erb' do
   '/archives/index.html'
+end
+
+route '/post/**/*' do
+  item.identifier.to_s
 end
 
 route '/**/*.scss' do
