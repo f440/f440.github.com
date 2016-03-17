@@ -11,7 +11,7 @@
     <%= render "/_pingdom.*" %>
     <link rel="alternate" type="application/rss+xml" title="<%= @config[:title] %>" href="/atom.xml" />
   </head>
-  <body>
+  <body class="<%= File.basename(@item[:filename]).gsub(/\..*$/, '') %>">
     <header>
       <div id="site-title">
         <h1><%= link_to @config[:title], '/' %></h1>
