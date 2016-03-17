@@ -1,21 +1,13 @@
 ---
-pageable: true
-per_page: 5
+kind: top
 ---
 
 <article>
-<% page_articles.each_with_index do |article, i| %>
+  <% sorted_articles.first(5).each_with_index do |article, i| %>
   <section>
-    <h2><%= link_to article.title, article %></h2>
-    <span><%= article.date.strftime('%Y.%m.%d') %></span> <%= partial "tags", :locals => { :tags => article.tags } %>
-    <%= article.summary %>
+    <h2><%= link_to article[:title], article.path %></h2>
+    <span><%= Time.parse(article[:created_at].to_s).strftime('%Y.%m.%d') %></span> <%= render "/_tags.*", item: article %>
+    <%= article.compiled_content.gsub(/<!-- more -->.*/m, '') %>
   </section>
-<% end %>
-
-<% if paginate %>
-<div class="page">
-  <% if page_number != 1 %><%= link_to '&#171;', prev_page %><% end %>
-  <% if page_number != num_pages %><%= link_to '&#187;', next_page %><% end %>
-</div>
-<% end %>
+  <% end %>
 </article>

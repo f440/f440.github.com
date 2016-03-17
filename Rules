@@ -16,7 +16,7 @@ compile '/**/*.html' do
   layout '/default.*'
 end
 
-compile '/archives.html.erb' do
+compile '/{index,archives}.html.erb' do
   filter :erb
   layout '/default.*'
 end
@@ -41,6 +41,10 @@ end
 
 route %r[/([0-9]+)\-([0-9]+)\-([0-9]+)\-([^\/]+)\..*] do |y, m, d, slug|
   "/blog/#{y}/#{m}/#{d}/#{slug}/index.html"
+end
+
+route '/index.html.erb' do
+  "/index.html"
 end
 
 route '/archives.html.erb' do
