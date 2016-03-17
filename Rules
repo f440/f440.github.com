@@ -21,7 +21,7 @@ compile '/archives.html.erb' do
   layout '/default.*'
 end
 
-compile '/atom.xml.erb' do
+compile '/{atom,sitemap}.xml.erb' do
   filter :erb
 end
 
@@ -55,7 +55,7 @@ route '/**/*.scss' do
   item.identifier.without_ext
 end
 
-route '/atom.xml.erb' do
+route '/{atom,sitemap}.xml.erb' do
   item.identifier.without_ext
 end
 
