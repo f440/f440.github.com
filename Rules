@@ -55,6 +55,10 @@ route '/post/**/*' do
   item.identifier.to_s
 end
 
+route '/**/_*.scss' do
+  # skip
+end
+
 route '/**/*.scss' do
   item.identifier.without_ext
 end
