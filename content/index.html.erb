@@ -10,4 +10,8 @@ kind: top
     <%= article.compiled_content.gsub(/<!-- more -->.*/m, '') %>
   </section>
   <% end %>
+
+  <div class="page">
+    <% if next_page(1) %><%= link_to '&#187;', "/page/#{next_page(1)}/" %><% end %>
+  </div>
 </article>

@@ -2,6 +2,7 @@
 
 preprocess do
   create_tag_pages(items)
+  create_paging(items)
 end
 
 compile '/blog/categories/**/*.erb' do
@@ -19,6 +20,11 @@ end
 compile '/{index,archives}.html.erb' do
   filter :erb
   layout '/default.*'
+end
+
+compile '/page/*.erb' do
+  filter :erb
+  layout '/paging.*'
 end
 
 compile '/{atom,sitemap}.xml.erb' do
@@ -49,6 +55,10 @@ end
 
 route '/archives.html.erb' do
   '/archives/index.html'
+end
+
+route '/page/*.erb' do
+  item.identifier.without_ext + '/index.html'
 end
 
 route '/post/**/*' do
