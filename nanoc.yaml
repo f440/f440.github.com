@@ -92,8 +92,9 @@ checks:
 # Site specific data
 title: apatheia.info
 domain: apatheia.info
-url: http://apatheia.info/
-author: f440
+base_url: http://apatheia.info/
+author_uri: http://apatheia.info/
+author_name: f440
 twitter_id: f440
 github_id: f440
 pinboard_id: f440
@@ -102,7 +103,3 @@ disqus_shortname: apatheiainfo
 ga: UA-35021317-1
 addthis_id: ra-4f8eed8875190f92
 pingdom: 534a4930abe53d551a2dfa1b
-
-base_url: http://apatheia.info
-author_name: f440
-author_uri: http://apatheia.info/
