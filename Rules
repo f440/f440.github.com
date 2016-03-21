@@ -36,11 +36,6 @@ compile %r[/([0-9]+)\-([0-9]+)\-([0-9]+)\-([^\/]+)\..*] do |y, m, d, slug|
   layout '/post.*'
 end
 
-compile '/**/*.markdown' do
-  filter :kramdown
-  layout '/default.*'
-end
-
 compile '/**/*.scss' do
   filter :sass, syntax: :scss
 end
