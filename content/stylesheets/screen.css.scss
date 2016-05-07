@@ -6,8 +6,6 @@
 $base-color: #333;
 $base-background-color: #fff;
 $base-content-background-color: #fff;
-$base-link-color: #7f8c8d;
-$base-link-hover-color: #f1c40f;
 $base-button-color: #000;
 $base-code-background-color: #fafafa;
 $base-border-color: #ddd;
@@ -20,7 +18,6 @@ body {
 h1, h2, h3, h4, h5, h6 {
   font-weight: normal;
   a, a:visited {
-    color: $base-color;
     text-decoration: none;
   }
 }
@@ -28,9 +25,6 @@ h1, h2, h3, h4, h5, h6 {
 a, a:visited {
   color: $base-color;
   text-decoration: underline;
-}
-a:hover {
-  color: $base-link-hover-color;
 }
 
 header, article, footer {
@@ -63,10 +57,11 @@ nav, footer {
     background-color: $base-background-color;
     &:visited {
       color: $base-color;
-      background-color: $base-background-color;
+    background-color: $base-background-color;
     }
     &:hover {
       color: $base-color;
+      text-decoration: underline;
       background-color: $base-background-color;
     }
   }
@@ -103,7 +98,7 @@ pre code {
 }
 
 .share {
-  margin-top: 1em;
+  margin-top: 2em;
   margin-bottom: 1em;
 }
 
