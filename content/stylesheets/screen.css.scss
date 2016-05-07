@@ -38,30 +38,17 @@ header, article, footer {
   width: 70%;
   max-width: 780px;
   font-family: "Inconsolata", 'Hiragino Kaku Gothic ProN', 'メイリオ', sans-serif;
-  padding: 1em 4em;
-  margin-bottom: 1em;
   background-color: $base-content-background-color;
 }
 
 .blog article {
-  h2 {
-    margin-top: 1.5em;
-  }
   #article-info {
     font-size: 80%;
-    margin-top: 1.5em;
-    margin-bottom: 2em;
   }
-}
-
-header {
-  margin-top:20px;
-  margin-bottom:0;
 }
 
 #site-title {
   min-height: 70px;
-  padding: 1em;
   text-align: center;
   h1 {
     margin: 0;
@@ -162,7 +149,6 @@ img {
 
 .archives {
   section {
-    padding-top: 1em;
     padding-bottom: 1em;
     border-bottom: 1px solid $base-background-color;
     min-height: 3em;
