@@ -1,4 +1,4 @@
-.PHONY: setup
+.PHONY: all
 all: build
 
 output:
