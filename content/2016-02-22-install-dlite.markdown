@@ -2,6 +2,7 @@
 layout: post
 title: "DLiteでOS X上にDockerの環境を構築する"
 created_at: 2016-02-22 20:54:00 +9:00
+updated_at: 2016-05-08 19:12:00 +9:00
 kind: article
 comments: true
 tags:
@@ -54,6 +55,10 @@ Tmux内で起動しようとするとエラーになるので、必ずTmux外で
 ## まとめ
 
 ホストと仮想環境の間がシームレスにつながってcoLinuxっぽさがある。こういうすっきりしたツールは楽しい。
+
+## 追記
+
+2016-05-08: 現在はDocker for Macを利用している。osxfsでファイルシステムのイベントが連携できて便利。
 
 ## 参考
 
