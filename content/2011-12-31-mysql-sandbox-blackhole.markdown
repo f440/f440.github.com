@@ -1,7 +1,7 @@
 ---
 layout: post
 title: MySQL::Sandboxで環境を作ってBLACKHOLEエンジンを試す
-created_at: 2011-12-31
+created_at: 2011-12-31 00:00:00 +09:00
 kind: article
 tags:
   - mysql

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: rundeckをセットアップして、jenkins上のjava成果物をデプロイする
-created_at: 2012-01-03
+created_at: 2012-01-03 00:00:00 +09:00
 kind: article
 tags:
 comments: true
