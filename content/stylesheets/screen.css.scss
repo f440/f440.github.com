@@ -42,7 +42,6 @@ header, article, footer {
 
 #site-title {
   min-height: 3rem;
-  text-align: left;
 
   h1 {
     margin: 0;
@@ -148,7 +147,7 @@ nav::after, footer::after {
   header, article, footer {
     width: 90%;
     font-size: 90%;
-    margin-bottom:20px;
+    margin-bottom: 1em;
     padding: 1em 1em;
   }
   article {
@@ -170,6 +169,7 @@ nav::after, footer::after {
     }
     article {
       margin-bottom: 0;
+      padding: 0;
     }
   }
   .article {
