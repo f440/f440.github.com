@@ -32,36 +32,33 @@ var _prum = [['id', '534a4930abe53d551a2dfa1b'],
 
     <link rel="alternate" type="application/rss+xml" title="apatheia.info" href="/atom.xml" />
   </head>
-  <body class="blog blog_2013 blog_2013_05 blog_2013_05_03 blog_2013_05_03_create-mesos-rpm-using-fpm blog_2013_05_03_create-mesos-rpm-using-fpm_index">
+  <body class="2013-05-03-create-mesos-rpm-using-fpm">
     <header>
       <div id="site-title">
         <h1><a href="/">apatheia.info</a></h1>
       </div>
-      <nav class="pure-menu pure-menu-open pure-menu-horizontal">
+      <nav>
         <ul>
           <li><a href="/">Home</a></li>
           <li><a href="/archives/">Archive</a></li>
           <li><a href="/atom.xml">RSS</a></li>
-          <li>
-            <form action="https://google.com/search" method="get">
-              <input type="search" name="q" results="0" placeholder="Search">
-              <input type="hidden" name="q" value="site:apatheia.info">
-            </form>
-          </li>
         </ul>
       </nav>
     </header>
-      <article>
+    
+  <article>
     <h1>fpm で Mesos の RPM を作るまで</h1>
     <p id="article-info">
       Published on 03 May 2013
-        <a class="pure-button" href="/blog/categories/packaging/">packaging</a>
-  <a class="pure-button" href="/blog/categories/mesos/">mesos</a>
+      
+  Tags: <a href="/blog/categories/packaging/">packaging</a> <a href="/blog/categories/mesos/">mesos</a> 
+
 
     </p>
-    <p><a href="http://incubator.apache.org/mesos/">Mesos</a> をインストールするとき各マシンでビルドはしんどいので、<a href="https://github.com/jordansissel/fpm">fpm</a> で Mesos の RPM を作ってインストールしている。ビルドからパッケージ作成までの作業ログを残しておく。</p>
+    
+<p><a href="http://incubator.apache.org/mesos/">Mesos</a> をインストールするとき各マシンでビルドはしんどいので、<a href="https://github.com/jordansissel/fpm">fpm</a> で Mesos の RPM を作ってインストールしている。ビルドからパッケージ作成までの作業ログを残しておく。</p>
 
-
+<!-- more -->
 
 <ul>
   <li><a href="https://github.com/jordansissel/fpm">fpm</a> は Ruby の gem や Node.js の npm などのプログラミング言語のライブラリ、あるいは直接ディレクトリから RPM やら Deb やらのパッケージを作成するソフトウェア。</li>
@@ -137,6 +134,7 @@ rpm -qpl mesos-0.10.0-1.x86_64.rpm
 </code></pre>
 
 
+    
     <aside>
     <div class="share">
   <div class="addthis_toolbox addthis_default_style ">
@@ -150,7 +148,8 @@ rpm -qpl mesos-0.10.0-1.x86_64.rpm
   </script>
 </div>
 
-    <div id="disqus_thread"></div>
+    
+<div id="disqus_thread"></div>
 <script type="text/javascript">
   var disqus_shortname = 'apatheiainfo';
 (function() {
@@ -162,13 +161,15 @@ rpm -qpl mesos-0.10.0-1.x86_64.rpm
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
+
     </aside>
+    
   </article>
 
     <footer>
-    <div class="pure-menu pure-menu-open pure-menu-horizontal">
-      <a href="#" class="pure-menu-heading">Link</a>
+    <div>
       <ul>
+        <li>Link:</li>
         <li><a href="https://twitter.com/f440">Twitter</a></li>
         <li><a href="https://github.com/f440">Github</a></li>
         <li><a href="https://pinboard.in/u:f440">Pinboard</a></li>
@@ -177,6 +178,7 @@ rpm -qpl mesos-0.10.0-1.x86_64.rpm
     </footer>
   </body>
 </html>
+
 <script>
 window.addEventListener("load", function() {
   var imgs = document.getElementsByTagName("img");

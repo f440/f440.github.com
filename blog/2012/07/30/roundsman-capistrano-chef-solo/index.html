@@ -32,35 +32,31 @@ var _prum = [['id', '534a4930abe53d551a2dfa1b'],
 
     <link rel="alternate" type="application/rss+xml" title="apatheia.info" href="/atom.xml" />
   </head>
-  <body class="blog blog_2012 blog_2012_07 blog_2012_07_30 blog_2012_07_30_roundsman-capistrano-chef-solo blog_2012_07_30_roundsman-capistrano-chef-solo_index">
+  <body class="2012-07-30-roundsman-capistrano-chef-solo">
     <header>
       <div id="site-title">
         <h1><a href="/">apatheia.info</a></h1>
       </div>
-      <nav class="pure-menu pure-menu-open pure-menu-horizontal">
+      <nav>
         <ul>
           <li><a href="/">Home</a></li>
           <li><a href="/archives/">Archive</a></li>
           <li><a href="/atom.xml">RSS</a></li>
-          <li>
-            <form action="https://google.com/search" method="get">
-              <input type="search" name="q" results="0" placeholder="Search">
-              <input type="hidden" name="q" value="site:apatheia.info">
-            </form>
-          </li>
         </ul>
       </nav>
     </header>
-      <article>
+    
+  <article>
     <h1>roundsmanを使ってcapistranoからchef-soloを実行する</h1>
     <p id="article-info">
       Published on 30 Jul 2012
       
+
     </p>
     <p>管理対象のサーバー台数が少ない場合など、<a href="http://www.opscode.com/chef/">chef</a>のサーバーを運用するコストとベネフィットを天秤にかけてみて、ああこれどう考えても労力ペイできないな、でも設定ファイルを手動で管理するのはやだな、といったときに<a href="https://g
 ithub.com/iain/roundsman">roundsman</a>を使うといいという話。</p>
 
-
+<!-- more -->
 
 <p><a href="https://github.com/iain/roundsman">roundsman</a>は、chefのレシピを転送して<a href="http://wiki.opscode.com/display/chef/Chef+Solo">chef-solo</a>を実行する<a href="https://github.com/capistrano/capistrano">capistrano</a>向けライブラリ。アプリケーションのリリースタイミングに併せてインフラ設定の変更が必要になることは往々にしてあるので、<a href="https://github.com/capistrano/capistrano">capistrano</a>を使ってデプロイとインフラ設定変更を一括適
 用できるのは便利だ。</p>
@@ -184,6 +180,7 @@ bundle exec cap ステージ名 chef:nginx
 </code></pre>
 
 
+    
     <aside>
     <div class="share">
   <div class="addthis_toolbox addthis_default_style ">
@@ -197,7 +194,8 @@ bundle exec cap ステージ名 chef:nginx
   </script>
 </div>
 
-    <div id="disqus_thread"></div>
+    
+<div id="disqus_thread"></div>
 <script type="text/javascript">
   var disqus_shortname = 'apatheiainfo';
 (function() {
@@ -209,13 +207,15 @@ bundle exec cap ステージ名 chef:nginx
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
+
     </aside>
+    
   </article>
 
     <footer>
-    <div class="pure-menu pure-menu-open pure-menu-horizontal">
-      <a href="#" class="pure-menu-heading">Link</a>
+    <div>
       <ul>
+        <li>Link:</li>
         <li><a href="https://twitter.com/f440">Twitter</a></li>
         <li><a href="https://github.com/f440">Github</a></li>
         <li><a href="https://pinboard.in/u:f440">Pinboard</a></li>
@@ -224,6 +224,7 @@ bundle exec cap ステージ名 chef:nginx
     </footer>
   </body>
 </html>
+
 <script>
 window.addEventListener("load", function() {
   var imgs = document.getElementsByTagName("img");

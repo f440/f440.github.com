@@ -32,40 +32,35 @@ var _prum = [['id', '534a4930abe53d551a2dfa1b'],
 
     <link rel="alternate" type="application/rss+xml" title="apatheia.info" href="/atom.xml" />
   </head>
-  <body class="blog blog_2013 blog_2013_03 blog_2013_03_17 blog_2013_03_17_fluentd-and-graphite blog_2013_03_17_fluentd-and-graphite_index">
+  <body class="2013-03-17-fluentd-and-graphite">
     <header>
       <div id="site-title">
         <h1><a href="/">apatheia.info</a></h1>
       </div>
-      <nav class="pure-menu pure-menu-open pure-menu-horizontal">
+      <nav>
         <ul>
           <li><a href="/">Home</a></li>
           <li><a href="/archives/">Archive</a></li>
           <li><a href="/atom.xml">RSS</a></li>
-          <li>
-            <form action="https://google.com/search" method="get">
-              <input type="search" name="q" results="0" placeholder="Search">
-              <input type="hidden" name="q" value="site:apatheia.info">
-            </form>
-          </li>
         </ul>
       </nav>
     </header>
-      <article>
+    
+  <article>
     <h1>FluentdのデータをGraphiteに出力するときのTips</h1>
     <p id="article-info">
       Published on 17 Mar 2013
-        <a class="pure-button" href="/blog/categories/fluentd/">fluentd</a>
-  <a class="pure-button" href="/blog/categories/graphite/">graphite</a>
-  <a class="pure-button" href="/blog/categories/logging/">logging</a>
-  <a class="pure-button" href="/blog/categories/visualization/">visualization</a>
+      
+  Tags: <a href="/blog/categories/fluentd/">fluentd</a> <a href="/blog/categories/graphite/">graphite</a> <a href="/blog/categories/logging/">logging</a> <a href="/blog/categories/visualization/">visualization</a> 
+
 
     </p>
-    <p><a href="https://github.com/hotchpotch/fluent-plugin-graphite">fluent-plugin-graphite</a> 利用時のメモ。</p>
+    
+<p><a href="https://github.com/hotchpotch/fluent-plugin-graphite">fluent-plugin-graphite</a> 利用時のメモ。</p>
 
 <p>Ops界隈での可視化というと、ここ何年かは<a href="http://graphite.wikidot.com/">Graphite</a>でグラフを作ってそれを他のツールで表示する、みたいなのが多い。<a href="http://fluentd.org/">Fluentd</a>のデータを可視化したい場合は<a href="http://kazeburo.github.com/GrowthForecast/">GrowthForecast</a>が使われることが多いけど、<a href="http://graphite.wikidot.com/">Graphite</a>使ってみるといろんなツールと組み合わせられておもしろい。</p>
 
-
+<!-- more -->
 
 <p>Fluentd から Graphite へデータを送るのは <a href="https://github.com/hotchpotch/fluent-plugin-graphite">Fluent-plugin-graphite</a> を使えば簡単に実現できそうなんだけど、プラグイン側のインターフェース(<code>:key</code> や <code>:count</code> といったキーが必要)に合わせて入力のデータを整形する必要がある。</p>
 
@@ -88,6 +83,7 @@ var _prum = [['id', '534a4930abe53d551a2dfa1b'],
 </code></pre>
 
 
+    
     <aside>
     <div class="share">
   <div class="addthis_toolbox addthis_default_style ">
@@ -101,7 +97,8 @@ var _prum = [['id', '534a4930abe53d551a2dfa1b'],
   </script>
 </div>
 
-    <div id="disqus_thread"></div>
+    
+<div id="disqus_thread"></div>
 <script type="text/javascript">
   var disqus_shortname = 'apatheiainfo';
 (function() {
@@ -113,13 +110,15 @@ var _prum = [['id', '534a4930abe53d551a2dfa1b'],
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
+
     </aside>
+    
   </article>
 
     <footer>
-    <div class="pure-menu pure-menu-open pure-menu-horizontal">
-      <a href="#" class="pure-menu-heading">Link</a>
+    <div>
       <ul>
+        <li>Link:</li>
         <li><a href="https://twitter.com/f440">Twitter</a></li>
         <li><a href="https://github.com/f440">Github</a></li>
         <li><a href="https://pinboard.in/u:f440">Pinboard</a></li>
@@ -128,6 +127,7 @@ var _prum = [['id', '534a4930abe53d551a2dfa1b'],
     </footer>
   </body>
 </html>
+
 <script>
 window.addEventListener("load", function() {
   var imgs = document.getElementsByTagName("img");

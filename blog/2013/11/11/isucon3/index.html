@@ -32,36 +32,33 @@ var _prum = [['id', '534a4930abe53d551a2dfa1b'],
 
     <link rel="alternate" type="application/rss+xml" title="apatheia.info" href="/atom.xml" />
   </head>
-  <body class="blog blog_2013 blog_2013_11 blog_2013_11_11 blog_2013_11_11_isucon3 blog_2013_11_11_isucon3_index">
+  <body class="2013-11-11-isucon3">
     <header>
       <div id="site-title">
         <h1><a href="/">apatheia.info</a></h1>
       </div>
-      <nav class="pure-menu pure-menu-open pure-menu-horizontal">
+      <nav>
         <ul>
           <li><a href="/">Home</a></li>
           <li><a href="/archives/">Archive</a></li>
           <li><a href="/atom.xml">RSS</a></li>
-          <li>
-            <form action="https://google.com/search" method="get">
-              <input type="search" name="q" results="0" placeholder="Search">
-              <input type="hidden" name="q" value="site:apatheia.info">
-            </form>
-          </li>
         </ul>
       </nav>
     </header>
-      <article>
+    
+  <article>
     <h1>ISUCON3 の参加記録</h1>
     <p id="article-info">
       Published on 11 Nov 2013
-        <a class="pure-button" href="/blog/categories/isucon/">isucon</a>
-  <a class="pure-button" href="/blog/categories/performance/">performance</a>
+      
+  Tags: <a href="/blog/categories/isucon/">isucon</a> <a href="/blog/categories/performance/">performance</a> 
+
 
     </p>
-    <p>Web アプリケーションのパフォーマンスコンテスト <a href="http://isucon.net/">ISUCON 3</a> に参加し、2 位の成績となった。どのような状態で当日を迎え、どのような作業を行ったのかをまとめる。</p>
+    
+<p>Web アプリケーションのパフォーマンスコンテスト <a href="http://isucon.net/">ISUCON 3</a> に参加し、2 位の成績となった。どのような状態で当日を迎え、どのような作業を行ったのかをまとめる。</p>
 
-
+<!-- more -->
 
 <p>私自身はこれで三度目の ISUCON 参加となるが、今回チームを組むメンバーはみんな初めての参加ということもあり、事前の打ち合わせでは以下のようなことを話していた:</p>
 
@@ -186,7 +183,7 @@ sub vcl_fetch {
 
 <p>予選開始直後、Sinatra のアクション単位でリクエスト回数、平均実行時間、ワーストケースの実行時間などの情報がそろえ、いざ Varnish のチューニングを行いはじめたところ、どんなにキャッシュの TTL を伸ばしてもベンチマークが通ってしまうことに気づき思わず吹き出してしまった。</p>
 
-<p>キャッシュで簡単にスコアが伸ばせることに気づいたのがたしかお昼前で、このあと夕方くらいまで 1 位だったと思う。その後トップは手放すこととなったが、最終的に<a title="ISUCON 本戦出場者決定のお知らせ : ISUCON公式Blog" href="http://isucon.net/archives/32951235.html">予選5位</a>で決勝進出を決めることができた。</p>
+<p>キャッシュで簡単にスコアが伸ばせることに気づいたのがたしかお昼前で、このあと夕方くらいまで 1 位だったと思う。その後トップは手放すこととなったが、最終的に<a href="http://isucon.net/archives/32951235.html" title="ISUCON 本戦出場者決定のお知らせ : ISUCON公式Blog">予選5位</a>で決勝進出を決めることができた。</p>
 
 <h3 id="section-1">予選後</h3>
 
@@ -250,6 +247,7 @@ sub vcl_fetch {
 
 <p>毎回このような場を用意していただいている LINE 社、データホテル社の方々には感謝の限りです。お弁当おいしゅうございました。出題のカヤックの皆さんもすばらしい問題をありがとうございました。</p>
 
+    
     <aside>
     <div class="share">
   <div class="addthis_toolbox addthis_default_style ">
@@ -263,7 +261,8 @@ sub vcl_fetch {
   </script>
 </div>
 
-    <div id="disqus_thread"></div>
+    
+<div id="disqus_thread"></div>
 <script type="text/javascript">
   var disqus_shortname = 'apatheiainfo';
 (function() {
@@ -275,13 +274,15 @@ sub vcl_fetch {
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
+
     </aside>
+    
   </article>
 
     <footer>
-    <div class="pure-menu pure-menu-open pure-menu-horizontal">
-      <a href="#" class="pure-menu-heading">Link</a>
+    <div>
       <ul>
+        <li>Link:</li>
         <li><a href="https://twitter.com/f440">Twitter</a></li>
         <li><a href="https://github.com/f440">Github</a></li>
         <li><a href="https://pinboard.in/u:f440">Pinboard</a></li>
@@ -290,6 +291,7 @@ sub vcl_fetch {
     </footer>
   </body>
 </html>
+
 <script>
 window.addEventListener("load", function() {
   var imgs = document.getElementsByTagName("img");

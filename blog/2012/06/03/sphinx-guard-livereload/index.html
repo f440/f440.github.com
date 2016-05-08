@@ -32,35 +32,31 @@ var _prum = [['id', '534a4930abe53d551a2dfa1b'],
 
     <link rel="alternate" type="application/rss+xml" title="apatheia.info" href="/atom.xml" />
   </head>
-  <body class="blog blog_2012 blog_2012_06 blog_2012_06_03 blog_2012_06_03_sphinx-guard-livereload blog_2012_06_03_sphinx-guard-livereload_index">
+  <body class="2012-06-03-sphinx-guard-livereload">
     <header>
       <div id="site-title">
         <h1><a href="/">apatheia.info</a></h1>
       </div>
-      <nav class="pure-menu pure-menu-open pure-menu-horizontal">
+      <nav>
         <ul>
           <li><a href="/">Home</a></li>
           <li><a href="/archives/">Archive</a></li>
           <li><a href="/atom.xml">RSS</a></li>
-          <li>
-            <form action="https://google.com/search" method="get">
-              <input type="search" name="q" results="0" placeholder="Search">
-              <input type="hidden" name="q" value="site:apatheia.info">
-            </form>
-          </li>
         </ul>
       </nav>
     </header>
-      <article>
+    
+  <article>
     <h1>sphinxの更新をguard-livereloadで検知してブラウザを自動リロードする</h1>
     <p id="article-info">
       Published on 03 Jun 2012
       
+
     </p>
     <p>sphinxでドキュメントを書く際に生じる「文章の記述 =&gt; ビルド =&gt;
 ブラウザでの確認」という一連のサイクルを人力でやるのは効率が悪い。いろいろな省力化対策が考えられるが、ここでは guard-livereloadを使って、文章のビルドとブラウザのリロードを自動化する方法を説明する。</p>
 
-
+<!-- more -->
 
 <h2 id="section">作業環境</h2>
 
@@ -117,6 +113,7 @@ extensions</a></p>
 </ul>
 
 
+    
     <aside>
     <div class="share">
   <div class="addthis_toolbox addthis_default_style ">
@@ -130,7 +127,8 @@ extensions</a></p>
   </script>
 </div>
 
-    <div id="disqus_thread"></div>
+    
+<div id="disqus_thread"></div>
 <script type="text/javascript">
   var disqus_shortname = 'apatheiainfo';
 (function() {
@@ -142,13 +140,15 @@ extensions</a></p>
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
+
     </aside>
+    
   </article>
 
     <footer>
-    <div class="pure-menu pure-menu-open pure-menu-horizontal">
-      <a href="#" class="pure-menu-heading">Link</a>
+    <div>
       <ul>
+        <li>Link:</li>
         <li><a href="https://twitter.com/f440">Twitter</a></li>
         <li><a href="https://github.com/f440">Github</a></li>
         <li><a href="https://pinboard.in/u:f440">Pinboard</a></li>
@@ -157,6 +157,7 @@ extensions</a></p>
     </footer>
   </body>
 </html>
+
 <script>
 window.addEventListener("load", function() {
   var imgs = document.getElementsByTagName("img");

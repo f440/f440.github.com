@@ -32,36 +32,33 @@ var _prum = [['id', '534a4930abe53d551a2dfa1b'],
 
     <link rel="alternate" type="application/rss+xml" title="apatheia.info" href="/atom.xml" />
   </head>
-  <body class="blog blog_2013 blog_2013_01 blog_2013_01_03 blog_2013_01_03_log-visualization-using-logstalgia blog_2013_01_03_log-visualization-using-logstalgia_index">
+  <body class="2013-01-03-log-visualization-using-logstalgia">
     <header>
       <div id="site-title">
         <h1><a href="/">apatheia.info</a></h1>
       </div>
-      <nav class="pure-menu pure-menu-open pure-menu-horizontal">
+      <nav>
         <ul>
           <li><a href="/">Home</a></li>
           <li><a href="/archives/">Archive</a></li>
           <li><a href="/atom.xml">RSS</a></li>
-          <li>
-            <form action="https://google.com/search" method="get">
-              <input type="search" name="q" results="0" placeholder="Search">
-              <input type="hidden" name="q" value="site:apatheia.info">
-            </form>
-          </li>
         </ul>
       </nav>
     </header>
-      <article>
+    
+  <article>
     <h1>logstalgia を使ってログを可視化</h1>
     <p id="article-info">
       Published on 03 Jan 2013
-        <a class="pure-button" href="/blog/categories/logging/">logging</a>
-  <a class="pure-button" href="/blog/categories/visualization/">visualization</a>
+      
+  Tags: <a href="/blog/categories/logging/">logging</a> <a href="/blog/categories/visualization/">visualization</a> 
+
 
     </p>
-    <p>Webサーバーのログでピンポンゲームの映像を生成する<a title="logstalgia" href="https://code.google.com/p/logstalgia/">logstalgia</a>。</p>
+    
+<p>Webサーバーのログでピンポンゲームの映像を生成する<a href="https://code.google.com/p/logstalgia/" title="logstalgia">logstalgia</a>。</p>
 
-
+<!-- more -->
 
 <p>homebrew がインストール済みなら以下で動かせる。</p>
 
@@ -70,18 +67,19 @@ brew install logstalgia
 apache-loggen --rate 10 | logstalgia -
 </code></pre>
 
-<p><a title="apache-loggen" href="http://mt.orz.at/archives/2012/11/apacherubygems.html">apache-loggen</a> はApacheのダミーログを生成してくれるスクリプト。便利。</p>
+<p><a href="http://mt.orz.at/archives/2012/11/apacherubygems.html" title="apache-loggen">apache-loggen</a> はApacheのダミーログを生成してくれるスクリプト。便利。</p>
 
-<p><img alt="logstalgia" src="/images/2013-01-03-log-visualization-using-logstalgia/logstalgia.png" /></p>
+<p><img src="/images/2013-01-03-log-visualization-using-logstalgia/logstalgia.png" alt="logstalgia" /></p>
 
 <h2 id="section">参考</h2>
 
 <ul>
-  <li><a title="logstalgia" href="https://code.google.com/p/logstalgia/">logstalgia</a></li>
-  <li><a title="apache-loggen" href="http://mt.orz.at/archives/2012/11/apacherubygems.html">apache-loggen</a></li>
+  <li><a href="https://code.google.com/p/logstalgia/" title="logstalgia">logstalgia</a></li>
+  <li><a href="http://mt.orz.at/archives/2012/11/apacherubygems.html" title="apache-loggen">apache-loggen</a></li>
 </ul>
 
 
+    
     <aside>
     <div class="share">
   <div class="addthis_toolbox addthis_default_style ">
@@ -95,7 +93,8 @@ apache-loggen --rate 10 | logstalgia -
   </script>
 </div>
 
-    <div id="disqus_thread"></div>
+    
+<div id="disqus_thread"></div>
 <script type="text/javascript">
   var disqus_shortname = 'apatheiainfo';
 (function() {
@@ -107,13 +106,15 @@ apache-loggen --rate 10 | logstalgia -
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
+
     </aside>
+    
   </article>
 
     <footer>
-    <div class="pure-menu pure-menu-open pure-menu-horizontal">
-      <a href="#" class="pure-menu-heading">Link</a>
+    <div>
       <ul>
+        <li>Link:</li>
         <li><a href="https://twitter.com/f440">Twitter</a></li>
         <li><a href="https://github.com/f440">Github</a></li>
         <li><a href="https://pinboard.in/u:f440">Pinboard</a></li>
@@ -122,6 +123,7 @@ apache-loggen --rate 10 | logstalgia -
     </footer>
   </body>
 </html>
+
 <script>
 window.addEventListener("load", function() {
   var imgs = document.getElementsByTagName("img");

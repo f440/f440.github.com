@@ -32,35 +32,33 @@ var _prum = [['id', '534a4930abe53d551a2dfa1b'],
 
     <link rel="alternate" type="application/rss+xml" title="apatheia.info" href="/atom.xml" />
   </head>
-  <body class="blog blog_2013 blog_2013_04 blog_2013_04_06 blog_2013_04_06_about-ansible blog_2013_04_06_about-ansible_index">
+  <body class="2013-04-06-about-ansible">
     <header>
       <div id="site-title">
         <h1><a href="/">apatheia.info</a></h1>
       </div>
-      <nav class="pure-menu pure-menu-open pure-menu-horizontal">
+      <nav>
         <ul>
           <li><a href="/">Home</a></li>
           <li><a href="/archives/">Archive</a></li>
           <li><a href="/atom.xml">RSS</a></li>
-          <li>
-            <form action="https://google.com/search" method="get">
-              <input type="search" name="q" results="0" placeholder="Search">
-              <input type="hidden" name="q" value="site:apatheia.info">
-            </form>
-          </li>
         </ul>
       </nav>
     </header>
-      <article>
+    
+  <article>
     <h1>構成管理ツール Ansible について</h1>
     <p id="article-info">
       Published on 06 Apr 2013
-        <a class="pure-button" href="/blog/categories/cm/">cm</a>
+      
+  Tags: <a href="/blog/categories/cm/">cm</a> 
+
 
     </p>
-    <p><a href="http://ansible.cc/">Ansible</a> というサーバーの設定を管理するツールの説明。いわゆる構成管理 (CM: Configuration Management) にカテゴライズされるもので、Puppet や Chef の親戚みたいなものと考えてもらえればだいたいあってる。</p>
+    
+<p><a href="http://ansible.cc/">Ansible</a> というサーバーの設定を管理するツールの説明。いわゆる構成管理 (CM: Configuration Management) にカテゴライズされるもので、Puppet や Chef の親戚みたいなものと考えてもらえればだいたいあってる。</p>
 
-
+<!-- more -->
 
 <h2 id="section">概要</h2>
 
@@ -275,6 +273,7 @@ client1                        : ok=3    changed=1    unreachable=0    failed=0
 <p>最近日本国内でも Chef の話題を聞くことが多いんだけど、Chef Server の運用とかオートスケールとのコンビネーションとかの情報はあまり聞かないので、たぶん割と小規模な環境でリモートサーバーの Chef-solo をキックみたいなケースが多いのかと思う。そういったところだと、Ansible のほうがふさわしいっていうことが多いんじゃないかな。</p>
 
 
+    
     <aside>
     <div class="share">
   <div class="addthis_toolbox addthis_default_style ">
@@ -288,7 +287,8 @@ client1                        : ok=3    changed=1    unreachable=0    failed=0
   </script>
 </div>
 
-    <div id="disqus_thread"></div>
+    
+<div id="disqus_thread"></div>
 <script type="text/javascript">
   var disqus_shortname = 'apatheiainfo';
 (function() {
@@ -300,13 +300,15 @@ client1                        : ok=3    changed=1    unreachable=0    failed=0
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
+
     </aside>
+    
   </article>
 
     <footer>
-    <div class="pure-menu pure-menu-open pure-menu-horizontal">
-      <a href="#" class="pure-menu-heading">Link</a>
+    <div>
       <ul>
+        <li>Link:</li>
         <li><a href="https://twitter.com/f440">Twitter</a></li>
         <li><a href="https://github.com/f440">Github</a></li>
         <li><a href="https://pinboard.in/u:f440">Pinboard</a></li>
@@ -315,6 +317,7 @@ client1                        : ok=3    changed=1    unreachable=0    failed=0
     </footer>
   </body>
 </html>
+
 <script>
 window.addEventListener("load", function() {
   var imgs = document.getElementsByTagName("img");

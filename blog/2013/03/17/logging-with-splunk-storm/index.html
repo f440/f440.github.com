@@ -32,37 +32,33 @@ var _prum = [['id', '534a4930abe53d551a2dfa1b'],
 
     <link rel="alternate" type="application/rss+xml" title="apatheia.info" href="/atom.xml" />
   </head>
-  <body class="blog blog_2013 blog_2013_03 blog_2013_03_17 blog_2013_03_17_logging-with-splunk-storm blog_2013_03_17_logging-with-splunk-storm_index">
+  <body class="2013-03-17-logging-with-splunk-storm">
     <header>
       <div id="site-title">
         <h1><a href="/">apatheia.info</a></h1>
       </div>
-      <nav class="pure-menu pure-menu-open pure-menu-horizontal">
+      <nav>
         <ul>
           <li><a href="/">Home</a></li>
           <li><a href="/archives/">Archive</a></li>
           <li><a href="/atom.xml">RSS</a></li>
-          <li>
-            <form action="https://google.com/search" method="get">
-              <input type="search" name="q" results="0" placeholder="Search">
-              <input type="hidden" name="q" value="site:apatheia.info">
-            </form>
-          </li>
         </ul>
       </nav>
     </header>
-      <article>
+    
+  <article>
     <h1>イベント管理にSplunk Stormを使ってみる</h1>
     <p id="article-info">
       Published on 17 Mar 2013
-        <a class="pure-button" href="/blog/categories/logging/">logging</a>
-  <a class="pure-button" href="/blog/categories/visualization/">visualization</a>
-  <a class="pure-button" href="/blog/categories/splunk/">splunk</a>
+      
+  Tags: <a href="/blog/categories/logging/">logging</a> <a href="/blog/categories/visualization/">visualization</a> <a href="/blog/categories/splunk/">splunk</a> 
+
 
     </p>
-    <p><a href="http://www.splunk.com/">Splunk</a> はおそらくイベント・ログ管理のツールとしてはおそらくもっとも有名で、日本でも販売展開しているので知っている人も多いかと思う。その splunk が <a href="https://www.splunkstorm.com/storm/">Splunk Storm</a> というサービスを始めている。試しに使ってみたのでその感想。</p>
+    
+<p><a href="http://www.splunk.com/">Splunk</a> はおそらくイベント・ログ管理のツールとしてはおそらくもっとも有名で、日本でも販売展開しているので知っている人も多いかと思う。その splunk が <a href="https://www.splunkstorm.com/storm/">Splunk Storm</a> というサービスを始めている。試しに使ってみたのでその感想。</p>
 
-
+<!-- more -->
 
 <p>料金に応じて、格納可能なデータの容量が増える課金体系。無料でも1GBまで利用可能。</p>
 
@@ -93,11 +89,12 @@ var _prum = [['id', '534a4930abe53d551a2dfa1b'],
 
 <p>リアルタイムで計算しているらしく、新しい時間帯から古い時間帯へとどんどんグラフが追加されていく。</p>
 
-<p><img alt="httpstatus" src="/images/2013-03-17-logging-with-splunk-storm/httpstatus.png" /></p>
+<p><img src="/images/2013-03-17-logging-with-splunk-storm/httpstatus.png" alt="httpstatus" /></p>
 
 <p>さすがというか、よくできている。</p>
 
 
+    
     <aside>
     <div class="share">
   <div class="addthis_toolbox addthis_default_style ">
@@ -111,7 +108,8 @@ var _prum = [['id', '534a4930abe53d551a2dfa1b'],
   </script>
 </div>
 
-    <div id="disqus_thread"></div>
+    
+<div id="disqus_thread"></div>
 <script type="text/javascript">
   var disqus_shortname = 'apatheiainfo';
 (function() {
@@ -123,13 +121,15 @@ var _prum = [['id', '534a4930abe53d551a2dfa1b'],
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
+
     </aside>
+    
   </article>
 
     <footer>
-    <div class="pure-menu pure-menu-open pure-menu-horizontal">
-      <a href="#" class="pure-menu-heading">Link</a>
+    <div>
       <ul>
+        <li>Link:</li>
         <li><a href="https://twitter.com/f440">Twitter</a></li>
         <li><a href="https://github.com/f440">Github</a></li>
         <li><a href="https://pinboard.in/u:f440">Pinboard</a></li>
@@ -138,6 +138,7 @@ var _prum = [['id', '534a4930abe53d551a2dfa1b'],
     </footer>
   </body>
 </html>
+
 <script>
 window.addEventListener("load", function() {
   var imgs = document.getElementsByTagName("img");

@@ -32,39 +32,35 @@ var _prum = [['id', '534a4930abe53d551a2dfa1b'],
 
     <link rel="alternate" type="application/rss+xml" title="apatheia.info" href="/atom.xml" />
   </head>
-  <body class="blog blog_2013 blog_2013_01 blog_2013_01_01 blog_2013_01_01_network-restriction-using-trickle blog_2013_01_01_network-restriction-using-trickle_index">
+  <body class="2013-01-01-network-restriction-using-trickle">
     <header>
       <div id="site-title">
         <h1><a href="/">apatheia.info</a></h1>
       </div>
-      <nav class="pure-menu pure-menu-open pure-menu-horizontal">
+      <nav>
         <ul>
           <li><a href="/">Home</a></li>
           <li><a href="/archives/">Archive</a></li>
           <li><a href="/atom.xml">RSS</a></li>
-          <li>
-            <form action="https://google.com/search" method="get">
-              <input type="search" name="q" results="0" placeholder="Search">
-              <input type="hidden" name="q" value="site:apatheia.info">
-            </form>
-          </li>
         </ul>
       </nav>
     </header>
-      <article>
+    
+  <article>
     <h1>Trickleを使って帯域制限をする</h1>
     <p id="article-info">
       Published on 01 Jan 2013
-        <a class="pure-button" href="/blog/categories/unix/">unix</a>
-  <a class="pure-button" href="/blog/categories/linux/">linux</a>
-  <a class="pure-button" href="/blog/categories/network/">network</a>
+      
+  Tags: <a href="/blog/categories/unix/">unix</a> <a href="/blog/categories/linux/">linux</a> <a href="/blog/categories/network/">network</a> 
+
 
     </p>
-    <p>ネットワーク経由で大量のデータをやりとりしたいが、メインのサービスには影響を与えたくないという場合がよくある。<code>rsync</code>や<code>scp</code> など、大きなファイルの転送を考慮されたコマンドではネットワーク帯域を制限するオプションが用意されていることも多いが、自作のツールなどに帯域制限を実装するとなるとかなり面倒くさいことになる。</p>
+    
+<p>ネットワーク経由で大量のデータをやりとりしたいが、メインのサービスには影響を与えたくないという場合がよくある。<code>rsync</code>や<code>scp</code> など、大きなファイルの転送を考慮されたコマンドではネットワーク帯域を制限するオプションが用意されていることも多いが、自作のツールなどに帯域制限を実装するとなるとかなり面倒くさいことになる。</p>
 
+<!-- more -->
 
-
-<p>Linux で帯域制限をしたい場合、tc や cgroup を使う方法がよく知られている。ただ、「あるコマンドにネットワークが占領されないように穏やかに実行したい」というニーズに対しては大げさで、またオプションが難解だったり管理権限が必要だったりといったことから二の足を踏む感じのものだった。もっと普段使いに適したツールがないものかと探していたところ、こういったシーンでは<a title="trickle公式" href="http://monkey.org/~marius/pages/?page=trickle">Tricle</a>がかなり有効だと言うことがわかった。</p>
+<p>Linux で帯域制限をしたい場合、tc や cgroup を使う方法がよく知られている。ただ、「あるコマンドにネットワークが占領されないように穏やかに実行したい」というニーズに対しては大げさで、またオプションが難解だったり管理権限が必要だったりといったことから二の足を踏む感じのものだった。もっと普段使いに適したツールがないものかと探していたところ、こういったシーンでは<a href="http://monkey.org/~marius/pages/?page=trickle" title="trickle公式">Tricle</a>がかなり有効だと言うことがわかった。</p>
 
 <h2 id="section">インストール</h2>
 
@@ -90,11 +86,12 @@ trickle -d 20 wget --verbose http://ftp.jaist.ac.jp/pub/Linux/ArchLinux/iso/2012
 <h2 id="section-2">参考</h2>
 
 <ul>
-  <li><a title="trickle公式" href="http://monkey.org/~marius/pages/?page=trickle">配布元</a></li>
+  <li><a href="http://monkey.org/~marius/pages/?page=trickle" title="trickle公式">配布元</a></li>
   <li><a href="http://monkey.org/~marius/trickle/trickle.pdf">仕組み</a></li>
 </ul>
 
 
+    
     <aside>
     <div class="share">
   <div class="addthis_toolbox addthis_default_style ">
@@ -108,7 +105,8 @@ trickle -d 20 wget --verbose http://ftp.jaist.ac.jp/pub/Linux/ArchLinux/iso/2012
   </script>
 </div>
 
-    <div id="disqus_thread"></div>
+    
+<div id="disqus_thread"></div>
 <script type="text/javascript">
   var disqus_shortname = 'apatheiainfo';
 (function() {
@@ -120,13 +118,15 @@ trickle -d 20 wget --verbose http://ftp.jaist.ac.jp/pub/Linux/ArchLinux/iso/2012
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
+
     </aside>
+    
   </article>
 
     <footer>
-    <div class="pure-menu pure-menu-open pure-menu-horizontal">
-      <a href="#" class="pure-menu-heading">Link</a>
+    <div>
       <ul>
+        <li>Link:</li>
         <li><a href="https://twitter.com/f440">Twitter</a></li>
         <li><a href="https://github.com/f440">Github</a></li>
         <li><a href="https://pinboard.in/u:f440">Pinboard</a></li>
@@ -135,6 +135,7 @@ trickle -d 20 wget --verbose http://ftp.jaist.ac.jp/pub/Linux/ArchLinux/iso/2012
     </footer>
   </body>
 </html>
+
 <script>
 window.addEventListener("load", function() {
   var imgs = document.getElementsByTagName("img");

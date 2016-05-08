@@ -32,37 +32,35 @@ var _prum = [['id', '534a4930abe53d551a2dfa1b'],
 
     <link rel="alternate" type="application/rss+xml" title="apatheia.info" href="/atom.xml" />
   </head>
-  <body class="blog blog_2012 blog_2012_09 blog_2012_09_22 blog_2012_09_22_tumbler-to-octopress blog_2012_09_22_tumbler-to-octopress_index">
+  <body class="2012-09-22-tumbler-to-octopress">
     <header>
       <div id="site-title">
         <h1><a href="/">apatheia.info</a></h1>
       </div>
-      <nav class="pure-menu pure-menu-open pure-menu-horizontal">
+      <nav>
         <ul>
           <li><a href="/">Home</a></li>
           <li><a href="/archives/">Archive</a></li>
           <li><a href="/atom.xml">RSS</a></li>
-          <li>
-            <form action="https://google.com/search" method="get">
-              <input type="search" name="q" results="0" placeholder="Search">
-              <input type="hidden" name="q" value="site:apatheia.info">
-            </form>
-          </li>
         </ul>
       </nav>
     </header>
-      <article>
+    
+  <article>
     <h1>TumblerからOctopressへの移行</h1>
     <p id="article-info">
       Published on 22 Sep 2012
-        <a class="pure-button" href="/blog/categories/octopress/">octopress</a>
+      
+  Tags: <a href="/blog/categories/octopress/">octopress</a> 
+
 
     </p>
-    <p>Tumblerでブログ書いていたけど、ローカルで記事書く =&gt; フォームに貼り付け =&gt; プレビューのサイクルが結構面倒くさいな、と常々思っていたので、Octopressに移行した。</p>
+    
+<p>Tumblerでブログ書いていたけど、ローカルで記事書く =&gt; フォームに貼り付け =&gt; プレビューのサイクルが結構面倒くさいな、と常々思っていたので、Octopressに移行した。</p>
 
 <p>ホスティングには <a href="http://pages.github.com/">Github Pages</a> を利用している。</p>
 
-
+<!-- more -->
 
 <h2 id="section">手順</h2>
 
@@ -127,6 +125,7 @@ $ mv post source/
 <p>vim で書く =&gt; すぐに確認 =&gt; github にデプロイ =&gt; 公開の流れは気持ちいい。tumblr の頃と同じく、markdown で書けるのもとても具合がいい。</p>
 
 
+    
     <aside>
     <div class="share">
   <div class="addthis_toolbox addthis_default_style ">
@@ -140,7 +139,8 @@ $ mv post source/
   </script>
 </div>
 
-    <div id="disqus_thread"></div>
+    
+<div id="disqus_thread"></div>
 <script type="text/javascript">
   var disqus_shortname = 'apatheiainfo';
 (function() {
@@ -152,13 +152,15 @@ $ mv post source/
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
+
     </aside>
+    
   </article>
 
     <footer>
-    <div class="pure-menu pure-menu-open pure-menu-horizontal">
-      <a href="#" class="pure-menu-heading">Link</a>
+    <div>
       <ul>
+        <li>Link:</li>
         <li><a href="https://twitter.com/f440">Twitter</a></li>
         <li><a href="https://github.com/f440">Github</a></li>
         <li><a href="https://pinboard.in/u:f440">Pinboard</a></li>
@@ -167,6 +169,7 @@ $ mv post source/
     </footer>
   </body>
 </html>
+
 <script>
 window.addEventListener("load", function() {
   var imgs = document.getElementsByTagName("img");

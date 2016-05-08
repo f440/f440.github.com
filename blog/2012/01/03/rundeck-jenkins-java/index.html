@@ -32,34 +32,30 @@ var _prum = [['id', '534a4930abe53d551a2dfa1b'],
 
     <link rel="alternate" type="application/rss+xml" title="apatheia.info" href="/atom.xml" />
   </head>
-  <body class="blog blog_2012 blog_2012_01 blog_2012_01_03 blog_2012_01_03_rundeck-jenkins-java blog_2012_01_03_rundeck-jenkins-java_index">
+  <body class="2012-01-03-rundeck-jenkins-java">
     <header>
       <div id="site-title">
         <h1><a href="/">apatheia.info</a></h1>
       </div>
-      <nav class="pure-menu pure-menu-open pure-menu-horizontal">
+      <nav>
         <ul>
           <li><a href="/">Home</a></li>
           <li><a href="/archives/">Archive</a></li>
           <li><a href="/atom.xml">RSS</a></li>
-          <li>
-            <form action="https://google.com/search" method="get">
-              <input type="search" name="q" results="0" placeholder="Search">
-              <input type="hidden" name="q" value="site:apatheia.info">
-            </form>
-          </li>
         </ul>
       </nav>
     </header>
-      <article>
+    
+  <article>
     <h1>rundeckをセットアップして、jenkins上のjava成果物をデプロイする</h1>
     <p id="article-info">
       Published on 03 Jan 2012
       
+
     </p>
     <p>rundeck でjenkins上の成果物をデプロイしよう、という話。</p>
 
-
+<!-- more -->
 
 <h2 id="rundeck-">rundeck について</h2>
 
@@ -110,7 +106,7 @@ $ rpm -ql rundeck-config
 
 <p>既定のポートは 4440 なので http://RUNDECK_HOST:4440/ にアクセスしてみる。</p>
 
-<p><img alt="ログイン画面" src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx82ozkABF1qz5yk8.png" /></p>
+<p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx82ozkABF1qz5yk8.png" alt="ログイン画面" /></p>
 
 <p>アクセスできなければ、ちゃんと起動出来てるかどうかとか、iptables が邪魔していないかとか確認。この時点ではまだログイン出来ない。</p>
 
@@ -140,7 +136,7 @@ f440: MD5:be6cb1069f01cd207e6484538367bd1d,admin,user
 
 <p>アクセス出来るようになったはず。ログインしてみる。</p>
 
-<p><img alt="ログイン直後" src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx838slUR51qz5yk8.png" /></p>
+<p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx838slUR51qz5yk8.png" alt="ログイン直後" /></p>
 
 <p>やりましたね。</p>
 
@@ -148,7 +144,7 @@ f440: MD5:be6cb1069f01cd207e6484538367bd1d,admin,user
 
 <p>この後説明するホストやジョブはプロジェクト単位で管理していくことになる。</p>
 
-<p><img alt="Run" src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx840qzSI71qz5yk8.png" /></p>
+<p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx840qzSI71qz5yk8.png" alt="Run" /></p>
 
 <p>左上のメニューに注目</p>
 
@@ -160,7 +156,7 @@ f440: MD5:be6cb1069f01cd207e6484538367bd1d,admin,user
 
 <p>最初は localhost だけがホストに登録されているから、Run を選択後、真ん中の入力フォームからコマンドを実行してみる。</p>
 
-<p><img alt="exec_uname" src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx84c0tw7g1qz5yk8.png" /></p>
+<p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx84c0tw7g1qz5yk8.png" alt="exec_uname" /></p>
 
 <p>実行できた。</p>
 
@@ -213,11 +209,11 @@ $ ssh -i ~/.ssh/rundeck.id_rsa deploy@192.168.10.10
 
 <p>これで再起動させればrundeck側からホストが操作できるようになっているはず。target1(192.168.115.60), target2(192.168.115.61)を追加して画面から確認してみる。</p>
 
-<p><img alt="フィルタ変更" src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx96zd197m1qz5yk8.png" /></p>
+<p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx96zd197m1qz5yk8.png" alt="フィルタ変更" /></p>
 
 <p>フィルタの変更でとりあえず全部外して、全台表示にする。</p>
 
-<p><img alt="フィルタ変更後" src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx96zqf2uJ1qz5yk8.png" /></p>
+<p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx96zqf2uJ1qz5yk8.png" alt="フィルタ変更後" /></p>
 
 <p>確認できた。ここでコマンドを打てば全台に適用される。</p>
 
@@ -255,7 +251,7 @@ $ ssh -i ~/.ssh/rundeck.id_rsa deploy@192.168.10.10
 
 <p>サクサク作れるので、必要に応じてがしがし増やしていく。</p>
 
-<p><img alt="" src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx99jg4sze1qz5yk8.png" /></p>
+<p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx99jg4sze1qz5yk8.png" alt="" /></p>
 
 <h2 id="jenkins-">jenkins との連動</h2>
 
@@ -285,9 +281,9 @@ $ ssh -i ~/.ssh/rundeck.id_rsa deploy@192.168.10.10
 
 <p>やってみよう。ジョブの保存画面でオプションを選択。</p>
 
-<p><img alt="オプション設定画面" src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9bfrJrHn1qz5yk8.png" /></p>
+<p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9bfrJrHn1qz5yk8.png" alt="オプション設定画面" /></p>
 
-<p><img alt="オプション設定画面2" src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9c296d8I1qz5yk8.png" /></p>
+<p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9c296d8I1qz5yk8.png" alt="オプション設定画面2" /></p>
 
 <ul>
   <li>Option Name … 変数名として使われる値。artifact を指定</li>
@@ -302,15 +298,15 @@ $ ssh -i ~/.ssh/rundeck.id_rsa deploy@192.168.10.10
 
 <p>併せて、受け取った値を表示するだけのステップを作ってみる。</p>
 
-<p><img alt="ステップ" src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9cj2ACEP1qz5yk8.png" /></p>
+<p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9cj2ACEP1qz5yk8.png" alt="ステップ" /></p>
 
 <p>実行してみよう。最初にビルド番号を聞かれる。</p>
 
-<p><img alt="成果物一覧" src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9cobBFg31qz5yk8.png" /></p>
+<p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9cobBFg31qz5yk8.png" alt="成果物一覧" /></p>
 
 <p>適当に選んで「Run Job Now」すると、さっき作った変数を表示するだけのスクリプトが動いて、指定した成果物のURLが表示され、連携がうまくいっていたことが確認出来る。</p>
 
-<p><img alt="実行結果" src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9dlhjwmr1qz5yk8.png" /></p>
+<p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9dlhjwmr1qz5yk8.png" alt="実行結果" /></p>
 
 <p>詳細なデプロイ手順については、各環境ごとにあるだろうからアレンジしてもらえればと思う。</p>
 
@@ -320,6 +316,7 @@ $ ssh -i ~/.ssh/rundeck.id_rsa deploy@192.168.10.10
 、気軽に試してみるといいと思う。</p>
 
 
+    
     <aside>
     <div class="share">
   <div class="addthis_toolbox addthis_default_style ">
@@ -333,7 +330,8 @@ $ ssh -i ~/.ssh/rundeck.id_rsa deploy@192.168.10.10
   </script>
 </div>
 
-    <div id="disqus_thread"></div>
+    
+<div id="disqus_thread"></div>
 <script type="text/javascript">
   var disqus_shortname = 'apatheiainfo';
 (function() {
@@ -345,13 +343,15 @@ $ ssh -i ~/.ssh/rundeck.id_rsa deploy@192.168.10.10
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
+
     </aside>
+    
   </article>
 
     <footer>
-    <div class="pure-menu pure-menu-open pure-menu-horizontal">
-      <a href="#" class="pure-menu-heading">Link</a>
+    <div>
       <ul>
+        <li>Link:</li>
         <li><a href="https://twitter.com/f440">Twitter</a></li>
         <li><a href="https://github.com/f440">Github</a></li>
         <li><a href="https://pinboard.in/u:f440">Pinboard</a></li>
@@ -360,6 +360,7 @@ $ ssh -i ~/.ssh/rundeck.id_rsa deploy@192.168.10.10
     </footer>
   </body>
 </html>
+
 <script>
 window.addEventListener("load", function() {
   var imgs = document.getElementsByTagName("img");

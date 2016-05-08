@@ -32,37 +32,32 @@ var _prum = [['id', '534a4930abe53d551a2dfa1b'],
 
     <link rel="alternate" type="application/rss+xml" title="apatheia.info" href="/atom.xml" />
   </head>
-  <body class="blog blog_2012 blog_2012_05 blog_2012_05_13 blog_2012_05_13_vps-lxc-xtradb-cluster blog_2012_05_13_vps-lxc-xtradb-cluster_index">
+  <body class="2012-05-13-vps-lxc-xtradb-cluster">
     <header>
       <div id="site-title">
         <h1><a href="/">apatheia.info</a></h1>
       </div>
-      <nav class="pure-menu pure-menu-open pure-menu-horizontal">
+      <nav>
         <ul>
           <li><a href="/">Home</a></li>
           <li><a href="/archives/">Archive</a></li>
           <li><a href="/atom.xml">RSS</a></li>
-          <li>
-            <form action="https://google.com/search" method="get">
-              <input type="search" name="q" results="0" placeholder="Search">
-              <input type="hidden" name="q" value="site:apatheia.info">
-            </form>
-          </li>
         </ul>
       </nav>
     </header>
-      <article>
+    
+  <article>
     <h1>さくらのVPSにLXCで仮想環境構築してXtraDB Cluster動かす</h1>
     <p id="article-info">
       Published on 13 May 2012
-        <a class="pure-button" href="/blog/categories/mysql/">mysql</a>
-  <a class="pure-button" href="/blog/categories/lxc/">lxc</a>
-  <a class="pure-button" href="/blog/categories/linux/">linux</a>
+      
+  Tags: <a href="/blog/categories/mysql/">mysql</a> <a href="/blog/categories/lxc/">lxc</a> <a href="/blog/categories/linux/">linux</a> 
+
 
     </p>
     <p>ほんの数年前までVPSといえばLinode、Slicehostなどの海外のサーバーしか選択肢がなかった。ls を実行しても一呼吸おくほどのレイテンシーがあるような環境で、128MBくらいのメモリを何とかやりくりしてRailsを動かしていたが、現在では月1000円程度で用途によっては手に余るようなスペックが手に入るようになっている。そんなVPSの余ったリソースを使って、仮想環境をたてようというのが今回の目的だ。</p>
 
-
+<!-- more -->
 
 <p><a href="http://lxc.sourceforge.net/">LXC</a>は、他の仮想化方式と比べてオーバーヘッドが少なくきびきび動くし、必要であればCPUやメモリの制限をつけることもできる。RPMやDebのパッケージ作成をしたり、Chefのcookbook作成などで独立した環境を手軽に構築したい人には特に有用に思う。また、簡単にネットワークが作れるので、複数台構成のソフトウェアを1台のマシンのなかで動かすことが出来る。今回は動作確認として <a href="http://www.percona.com/software/percona-xtradb-cluster/">PerconaXtraDB Cluster</a>を動かしてみることにする。</p>
 
@@ -597,6 +592,7 @@ OS名」とかで検索してみる。</p>
 </ul>
 
 
+    
     <aside>
     <div class="share">
   <div class="addthis_toolbox addthis_default_style ">
@@ -610,7 +606,8 @@ OS名」とかで検索してみる。</p>
   </script>
 </div>
 
-    <div id="disqus_thread"></div>
+    
+<div id="disqus_thread"></div>
 <script type="text/javascript">
   var disqus_shortname = 'apatheiainfo';
 (function() {
@@ -622,13 +619,15 @@ OS名」とかで検索してみる。</p>
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
+
     </aside>
+    
   </article>
 
     <footer>
-    <div class="pure-menu pure-menu-open pure-menu-horizontal">
-      <a href="#" class="pure-menu-heading">Link</a>
+    <div>
       <ul>
+        <li>Link:</li>
         <li><a href="https://twitter.com/f440">Twitter</a></li>
         <li><a href="https://github.com/f440">Github</a></li>
         <li><a href="https://pinboard.in/u:f440">Pinboard</a></li>
@@ -637,6 +636,7 @@ OS名」とかで検索してみる。</p>
     </footer>
   </body>
 </html>
+
 <script>
 window.addEventListener("load", function() {
   var imgs = document.getElementsByTagName("img");

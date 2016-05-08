@@ -32,36 +32,33 @@ var _prum = [['id', '534a4930abe53d551a2dfa1b'],
 
     <link rel="alternate" type="application/rss+xml" title="apatheia.info" href="/atom.xml" />
   </head>
-  <body class="blog blog_2011 blog_2011_12 blog_2011_12_31 blog_2011_12_31_mysql-sandbox-blackhole blog_2011_12_31_mysql-sandbox-blackhole_index">
+  <body class="2011-12-31-mysql-sandbox-blackhole">
     <header>
       <div id="site-title">
         <h1><a href="/">apatheia.info</a></h1>
       </div>
-      <nav class="pure-menu pure-menu-open pure-menu-horizontal">
+      <nav>
         <ul>
           <li><a href="/">Home</a></li>
           <li><a href="/archives/">Archive</a></li>
           <li><a href="/atom.xml">RSS</a></li>
-          <li>
-            <form action="https://google.com/search" method="get">
-              <input type="search" name="q" results="0" placeholder="Search">
-              <input type="hidden" name="q" value="site:apatheia.info">
-            </form>
-          </li>
         </ul>
       </nav>
     </header>
-      <article>
+    
+  <article>
     <h1>MySQL::Sandboxで環境を作ってBLACKHOLEエンジンを試す</h1>
     <p id="article-info">
       Published on 31 Dec 2011
-        <a class="pure-button" href="/blog/categories/mysql/">mysql</a>
+      
+  Tags: <a href="/blog/categories/mysql/">mysql</a> 
+
 
     </p>
     <p>ちょっとMySQLのBLACKHOLEエンジン使って調べたいことがあったんだけど、
 <a href="http://mysqlsandbox.net/">MySQL::Sandbox</a> 使うとレプリケーション環境が簡単に構築できて便利。</p>
 
-
+<!-- more -->
 
 <p>以下は、MySQL::SandboxのセットアップからBLACKHOLEエンジン使うところまでの記録。</p>
 
@@ -211,6 +208,7 @@ drwx------ 2 f440 f440      4096 2011-12-31 17:11 test/
 </ul>
 
 
+    
     <aside>
     <div class="share">
   <div class="addthis_toolbox addthis_default_style ">
@@ -224,7 +222,8 @@ drwx------ 2 f440 f440      4096 2011-12-31 17:11 test/
   </script>
 </div>
 
-    <div id="disqus_thread"></div>
+    
+<div id="disqus_thread"></div>
 <script type="text/javascript">
   var disqus_shortname = 'apatheiainfo';
 (function() {
@@ -236,13 +235,15 @@ drwx------ 2 f440 f440      4096 2011-12-31 17:11 test/
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
+
     </aside>
+    
   </article>
 
     <footer>
-    <div class="pure-menu pure-menu-open pure-menu-horizontal">
-      <a href="#" class="pure-menu-heading">Link</a>
+    <div>
       <ul>
+        <li>Link:</li>
         <li><a href="https://twitter.com/f440">Twitter</a></li>
         <li><a href="https://github.com/f440">Github</a></li>
         <li><a href="https://pinboard.in/u:f440">Pinboard</a></li>
@@ -251,6 +252,7 @@ drwx------ 2 f440 f440      4096 2011-12-31 17:11 test/
     </footer>
   </body>
 </html>
+
 <script>
 window.addEventListener("load", function() {
   var imgs = document.getElementsByTagName("img");
