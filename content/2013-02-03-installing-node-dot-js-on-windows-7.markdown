@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Windows 上に node.js の開発環境を整える"
-created_at: 2013-02-03 21:11
+created_at: 2013-02-03 21:11:00 +9:00
 kind: article
 comments: true
 tags:

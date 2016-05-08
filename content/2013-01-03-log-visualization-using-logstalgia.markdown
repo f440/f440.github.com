@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "logstalgia を使ってログを可視化"
-created_at: 2013-01-03 18:50
+created_at: 2013-01-03 18:50:00 +9:00
 kind: article
 comments: true
 tags:

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Trickleを使って帯域制限をする
-created_at: 2013-01-01 17:05
+created_at: 2013-01-01 17:05:00 +9:00
 kind: article
 comments: true
 tags:

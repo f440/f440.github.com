@@ -1,7 +1,7 @@
 ---
 layout: post
 title: head と tail の行数指定方法
-created_at: 2012-09-22 19:00
+created_at: 2012-09-22 19:00:00 +9:00
 kind: article
 tags:
 comments: true

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Fluentdの出力結果をStatHatで可視化する"
-created_at: 2013-03-17 15:48
+created_at: 2013-03-17 15:48:00 +9:00
 kind: article
 comments: true
 tags:

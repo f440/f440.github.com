@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "ブログエンジンを Octopress から Middleman に変えた"
-created_at: 2013-08-10 20:30
+created_at: 2013-08-10 20:30:00 +9:00
 kind: article
 comments: true
 tags:

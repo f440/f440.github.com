@@ -83,7 +83,14 @@ module Nanoc::Helpers
           reps.sort_by { |r| r.name.to_s }.each do |rep|
             xml.url do
               xml.loc @config[:base_url] + rep.path
-              xml.lastmod item[:mtime].__nanoc_to_iso8601_time unless item[:mtime].nil?
+              case
+              when item[:updated_at]
+                xml.lastmod item[:updated_at].strftime('%Y-%m-%dT%H:%M:%SZ')
+              when item[:created_at]
+                xml.lastmod item[:created_at].strftime('%Y-%m-%dT%H:%M:%SZ')
+              when item[:mtime]
+                xml.lastmod item[:mtime].__nanoc_to_iso8601_time
+              end
               xml.changefreq item[:changefreq] unless item[:changefreq].nil?
               xml.priority item[:priority] unless item[:priority].nil?
             end

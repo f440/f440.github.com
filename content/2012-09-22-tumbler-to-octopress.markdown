@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "TumblerからOctopressへの移行"
-created_at: 2012-09-22 17:28
+created_at: 2012-09-22 17:28:00 +9:00
 kind: article
 comments: true
 tags:

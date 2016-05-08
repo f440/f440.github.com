@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "omnibus を使って オムニバスインストーラーを作成する"
-created_at: 2013-05-07 01:41
+created_at: 2013-05-07 01:41:00 +9:00
 kind: article
 comments: true
 tags:

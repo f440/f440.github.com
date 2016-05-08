@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "サブコマンドを sub で処理する"
-created_at: 2012-10-07 22:13
+created_at: 2012-10-07 22:13:00 +9:00
 kind: article
 comments: true
 tags:
