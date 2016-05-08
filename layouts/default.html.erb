@@ -15,7 +15,7 @@
       <div id="site-title">
         <h1><%= link_to @config[:title], '/' %></h1>
       </div>
-      <nav class="pure-menu pure-menu-open pure-menu-horizontal">
+      <nav>
         <ul>
           <li><%= link_to 'Home', '/' %></li>
           <li><%= link_to 'Archive', '/archives/' %></li>
@@ -25,9 +25,9 @@
     </header>
     <%= yield %>
     <footer>
-    <div class="pure-menu pure-menu-open pure-menu-horizontal">
-      <a href="#" class="pure-menu-heading">Link</a>
+    <div>
       <ul>
+        <li>Link:</li>
         <li><%= link_to "Twitter", URI.join("https://twitter.com/", @config[:twitter_id]).to_s %></li>
         <li><%= link_to "Github", URI.join("https://github.com/", @config[:github_id]).to_s %></li>
         <li><%= link_to "Pinboard", "https://pinboard.in/u:#{@config[:pinboard_id]}".to_s %></li>

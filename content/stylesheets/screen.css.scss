@@ -41,8 +41,9 @@ header, article, footer {
 }
 
 #site-title {
-  min-height: 70px;
-  text-align: center;
+  min-height: 3rem;
+  text-align: left;
+
   h1 {
     margin: 0;
     font-size: 2.5em;
@@ -54,10 +55,12 @@ nav, footer {
   a {
     color: $base-color;
     background-color: $base-background-color;
+
     &:visited {
       color: $base-color;
-    background-color: $base-background-color;
+      background-color: $base-background-color;
     }
+
     &:hover {
       color: $base-color;
       text-decoration: underline;
@@ -127,12 +130,35 @@ img {
   }
 }
 
+nav ul, footer ul {
+  list-style: none;
+  padding: 0;
+
+  li {
+    float: left;
+    margin: 0;
+    padding-right: 1em;
+  }
+}
+
+nav::after, footer::after {
+  clear: both;
+  content: '';
+  display: table;
+}
+
 @media (max-width: 767px) {
   header, article, footer {
     width: 90%;
     font-size: 90%;
     margin-bottom:20px;
     padding: 1em 1em;
+  }
+  article {
+    padding-top: 0;
+    h2 {
+      margin: 0;
+    }
   }
   header {
     min-height: auto;
@@ -145,8 +171,14 @@ img {
     .tags {
       padding-left: 0%;
     }
+    article {
+      margin-bottom: 0;
+    }
   }
   .article {
     margin-bottom: 2em;
+  }
+  .index p {
+    margin: 0.5em;
   }
 }
