@@ -13,6 +13,7 @@ $base-border-color: #ddd;
 body {
   color: $base-color;
   background-color: $base-background-color;
+  font-family: "Inconsolata", 'Hiragino Kaku Gothic ProN', 'メイリオ', sans-serif;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -31,7 +32,6 @@ header, article, footer {
   margin: 0 auto;
   width: 70%;
   max-width: 780px;
-  font-family: "Inconsolata", 'Hiragino Kaku Gothic ProN', 'メイリオ', sans-serif;
   background-color: $base-content-background-color;
 }
 
