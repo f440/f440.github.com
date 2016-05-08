@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>apatheia.info</title>
-  <link href="http://apatheia.info/"/>
-  <link href="http://apatheia.info/atom.xml" rel="self"/>
-  <updated>2016-02-22T20:54:00+09:00</updated>
   <id>http://apatheia.info/</id>
+  <title>apatheia.info</title>
+  <updated>2016-02-22T11:54:00Z</updated>
+  <link rel="alternate" href="http://apatheia.info/"/>
+  <link rel="self" href="http://apatheia.info/atom.xml"/>
   <author>
     <name>f440</name>
+    <uri>http://apatheia.info/</uri>
   </author>
   <entry>
-    <title>DLiteでOS X上にDockerの環境を構築する</title>
+    <id>tag:apatheia.info,2016-02-22:/blog/2016/02/22/install-dlite/</id>
+    <title type="html">DLiteでOS X上にDockerの環境を構築する</title>
+    <published>2016-02-22T11:54:00Z</published>
+    <updated>2016-05-08T10:12:00Z</updated>
     <link rel="alternate" href="http://apatheia.info/blog/2016/02/22/install-dlite/"/>
-    <id>http://apatheia.info/blog/2016/02/22/install-dlite/</id>
-    <published>2016-02-22T20:54:00+09:00</published>
-    <updated>2016-02-22T20:54:00+09:00</updated>
-    <author>
-      <name>f440</name>
-    </author>
-    <content type="html">&lt;p&gt;&lt;a href="https://github.com/nlf/dlite"&gt;DLite&lt;/a&gt; をインストールしたので、そのときのメモ。&lt;/p&gt;
+    <content type="html">
+&lt;p&gt;&lt;a href="https://github.com/nlf/dlite"&gt;DLite&lt;/a&gt; をインストールしたので、そのときのメモ。&lt;/p&gt;
 
-
+&lt;!-- more --&gt;
 
 &lt;h2 id="dlite"&gt;DLiteとは&lt;/h2&gt;
 
@@ -72,7 +71,11 @@ sudo dlite install # CPUやディスクサイズなどのオプションは`-h`�
 
 &lt;p&gt;ホストと仮想環境の間がシームレスにつながってcoLinuxっぽさがある。こういうすっきりしたツールは楽しい。&lt;/p&gt;
 
-&lt;h2 id="section-4"&gt;参考&lt;/h2&gt;
+&lt;h2 id="section-4"&gt;追記&lt;/h2&gt;
+
+&lt;p&gt;2016-05-08: 現在はDocker for Macを利用している。osxfsでファイルシステムのイベントが連携できて便利。&lt;/p&gt;
+
+&lt;h2 id="section-5"&gt;参考&lt;/h2&gt;
 
 &lt;ul&gt;
   &lt;li&gt;&lt;a href="https://github.com/nlf/dlite"&gt;GitHub - nlf/dlite: The simplest way to use Docker on OS X&lt;/a&gt;&lt;/li&gt;
@@ -82,17 +85,15 @@ sudo dlite install # CPUやディスクサイズなどのオプションは`-h`�
 </content>
   </entry>
   <entry>
-    <title>ISUCON3 の参加記録</title>
+    <id>tag:apatheia.info,2013-11-11:/blog/2013/11/11/isucon3/</id>
+    <title type="html">ISUCON3 の参加記録</title>
+    <published>2013-11-11T00:20:00Z</published>
+    <updated>2013-11-11T00:20:00Z</updated>
     <link rel="alternate" href="http://apatheia.info/blog/2013/11/11/isucon3/"/>
-    <id>http://apatheia.info/blog/2013/11/11/isucon3/</id>
-    <published>2013-11-11T09:20:00+09:00</published>
-    <updated>2013-11-11T09:20:00+09:00</updated>
-    <author>
-      <name>f440</name>
-    </author>
-    <content type="html">&lt;p&gt;Web アプリケーションのパフォーマンスコンテスト &lt;a href="http://isucon.net/"&gt;ISUCON 3&lt;/a&gt; に参加し、2 位の成績となった。どのような状態で当日を迎え、どのような作業を行ったのかをまとめる。&lt;/p&gt;
+    <content type="html">
+&lt;p&gt;Web アプリケーションのパフォーマンスコンテスト &lt;a href="http://isucon.net/"&gt;ISUCON 3&lt;/a&gt; に参加し、2 位の成績となった。どのような状態で当日を迎え、どのような作業を行ったのかをまとめる。&lt;/p&gt;
 
-
+&lt;!-- more --&gt;
 
 &lt;p&gt;私自身はこれで三度目の ISUCON 参加となるが、今回チームを組むメンバーはみんな初めての参加ということもあり、事前の打ち合わせでは以下のようなことを話していた:&lt;/p&gt;
 
@@ -217,7 +218,7 @@ sub vcl_fetch {
 
 &lt;p&gt;予選開始直後、Sinatra のアクション単位でリクエスト回数、平均実行時間、ワーストケースの実行時間などの情報がそろえ、いざ Varnish のチューニングを行いはじめたところ、どんなにキャッシュの TTL を伸ばしてもベンチマークが通ってしまうことに気づき思わず吹き出してしまった。&lt;/p&gt;
 
-&lt;p&gt;キャッシュで簡単にスコアが伸ばせることに気づいたのがたしかお昼前で、このあと夕方くらいまで 1 位だったと思う。その後トップは手放すこととなったが、最終的に&lt;a title="ISUCON 本戦出場者決定のお知らせ : ISUCON公式Blog" href="http://isucon.net/archives/32951235.html"&gt;予選5位&lt;/a&gt;で決勝進出を決めることができた。&lt;/p&gt;
+&lt;p&gt;キャッシュで簡単にスコアが伸ばせることに気づいたのがたしかお昼前で、このあと夕方くらいまで 1 位だったと思う。その後トップは手放すこととなったが、最終的に&lt;a href="http://isucon.net/archives/32951235.html" title="ISUCON 本戦出場者決定のお知らせ : ISUCON公式Blog"&gt;予選5位&lt;/a&gt;で決勝進出を決めることができた。&lt;/p&gt;
 
 &lt;h3 id="section-1"&gt;予選後&lt;/h3&gt;
 
@@ -283,17 +284,15 @@ sub vcl_fetch {
 </content>
   </entry>
   <entry>
-    <title>Immutable Infrastracture について</title>
+    <id>tag:apatheia.info,2013-08-10:/blog/2013/08/10/immutable-infrastructure/</id>
+    <title type="html">Immutable Infrastracture について</title>
+    <published>2013-08-10T12:00:00Z</published>
+    <updated>2013-08-10T12:00:00Z</updated>
     <link rel="alternate" href="http://apatheia.info/blog/2013/08/10/immutable-infrastructure/"/>
-    <id>http://apatheia.info/blog/2013/08/10/immutable-infrastructure/</id>
-    <published>2013-08-10T21:00:00+09:00</published>
-    <updated>2013-08-10T21:00:00+09:00</updated>
-    <author>
-      <name>f440</name>
-    </author>
-    <content type="html">&lt;p&gt;ここ最近話題に上がることが多い Immutable Infrastracture と、その他仮想環境周りについての雑感。&lt;/p&gt;
+    <content type="html">
+&lt;p&gt;ここ最近話題に上がることが多い Immutable Infrastracture と、その他仮想環境周りについての雑感。&lt;/p&gt;
 
-
+&lt;!-- more --&gt;
 
 &lt;p&gt;Immutable Server や Immutable Infrastracture っていう単語がいろんなところで目に入るようになった。とくに Chad Fowler が&lt;a href="http://chadfowler.com/blog/2013/06/23/immutable-deployments/"&gt;ブログで取り上げたり&lt;/a&gt;、&lt;a href="http://foodfightshow.org/2013/07/immutable-infrastructure.html"&gt;Food Fight に出たり&lt;/a&gt; して、世間でも関心が高まった感じがある。&lt;/p&gt;
 
@@ -354,17 +353,15 @@ sub vcl_fetch {
 </content>
   </entry>
   <entry>
-    <title>ブログエンジンを Octopress から Middleman に変えた</title>
+    <id>tag:apatheia.info,2013-08-10:/blog/2013/08/10/octopress-to-middleman/</id>
+    <title type="html">ブログエンジンを Octopress から Middleman に変えた</title>
+    <published>2013-08-10T11:30:00Z</published>
+    <updated>2013-08-10T11:30:00Z</updated>
     <link rel="alternate" href="http://apatheia.info/blog/2013/08/10/octopress-to-middleman/"/>
-    <id>http://apatheia.info/blog/2013/08/10/octopress-to-middleman/</id>
-    <published>2013-08-10T20:30:00+09:00</published>
-    <updated>2013-08-10T20:30:00+09:00</updated>
-    <author>
-      <name>f440</name>
-    </author>
-    <content type="html">&lt;p&gt;このサイトは今まで &lt;a href="http://octopress.org/"&gt;Octopress&lt;/a&gt; を使って生成していたんだけど、&lt;a href="http://middlemanapp.com/"&gt;Middleman&lt;/a&gt; に変えてみた。&lt;/p&gt;
+    <content type="html">
+&lt;p&gt;このサイトは今まで &lt;a href="http://octopress.org/"&gt;Octopress&lt;/a&gt; を使って生成していたんだけど、&lt;a href="http://middlemanapp.com/"&gt;Middleman&lt;/a&gt; に変えてみた。&lt;/p&gt;
 
-
+&lt;!-- more --&gt;
 
 &lt;p&gt;元々 Octopress の設定ファイルの書き方とかがモヤモヤするものがあって(Rakefile に設定項目埋め込んであるところとか) Jekyll にしようかなと思ったんだけど、なんとなく Middleman にしてみた。その後の感想など。&lt;/p&gt;
 
@@ -410,17 +407,15 @@ sub vcl_fetch {
 </content>
   </entry>
   <entry>
-    <title>仮想環境構築に docker を使う</title>
+    <id>tag:apatheia.info,2013-06-17:/blog/2013/06/17/docker/</id>
+    <title type="html">仮想環境構築に docker を使う</title>
+    <published>2013-06-17T00:13:00Z</published>
+    <updated>2013-06-17T00:13:00Z</updated>
     <link rel="alternate" href="http://apatheia.info/blog/2013/06/17/docker/"/>
-    <id>http://apatheia.info/blog/2013/06/17/docker/</id>
-    <published>2013-06-17T09:13:00+09:00</published>
-    <updated>2013-06-17T09:13:00+09:00</updated>
-    <author>
-      <name>f440</name>
-    </author>
-    <content type="html">&lt;p&gt;ちょっと前から &lt;a href="http://www.docker.io/"&gt;Docker&lt;/a&gt; を使っているので、その話。&lt;/p&gt;
+    <content type="html">
+&lt;p&gt;ちょっと前から &lt;a href="http://www.docker.io/"&gt;Docker&lt;/a&gt; を使っているので、その話。&lt;/p&gt;
 
-
+&lt;!-- more --&gt;
 
 &lt;h2 id="dockr-"&gt;Dockr について&lt;/h2&gt;
 
@@ -837,17 +832,15 @@ cmd
 </content>
   </entry>
   <entry>
-    <title>yum のパッケージキャッシュについて</title>
+    <id>tag:apatheia.info,2013-06-16:/blog/2013/06/16/yum-cache/</id>
+    <title type="html">yum のパッケージキャッシュについて</title>
+    <published>2013-06-15T16:26:00Z</published>
+    <updated>2013-06-15T16:26:00Z</updated>
     <link rel="alternate" href="http://apatheia.info/blog/2013/06/16/yum-cache/"/>
-    <id>http://apatheia.info/blog/2013/06/16/yum-cache/</id>
-    <published>2013-06-16T01:26:00+09:00</published>
-    <updated>2013-06-16T01:26:00+09:00</updated>
-    <author>
-      <name>f440</name>
-    </author>
-    <content type="html">&lt;p&gt;&lt;code&gt;/etc/yum.conf&lt;/code&gt;で&lt;code&gt;keepcache=1&lt;/code&gt;にしておくと、インストールしたパッケージがキャッシュされるようになる。これが無効化された状態だと、パッケージアップグレード時に問題が起きても元に戻せなくなるので有効化しておいた方がいい。&lt;/p&gt;
+    <content type="html">
+&lt;p&gt;&lt;code&gt;/etc/yum.conf&lt;/code&gt;で&lt;code&gt;keepcache=1&lt;/code&gt;にしておくと、インストールしたパッケージがキャッシュされるようになる。これが無効化された状態だと、パッケージアップグレード時に問題が起きても元に戻せなくなるので有効化しておいた方がいい。&lt;/p&gt;
 
-
+&lt;!-- more --&gt;
 
 &lt;p&gt;あるパッケージについて、どのバージョンが利用可能な状態かは以下で確認できる。&lt;/p&gt;
 
@@ -883,3 +876,4 @@ $ sudo yum history undo 4
 </content>
   </entry>
 </feed>
+
