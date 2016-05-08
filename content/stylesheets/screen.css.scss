@@ -6,7 +6,6 @@
 $base-color: #333;
 $base-background-color: #fff;
 $base-content-background-color: #fff;
-$base-button-color: #000;
 $base-code-background-color: #fafafa;
 $base-border-color: #ddd;
 
@@ -65,15 +64,6 @@ nav, footer {
       background-color: $base-background-color;
     }
   }
-}
-
-.pure-button {
-  font-size: 0.8rem;
-  padding: .2em 1.0em;
-}
-
-a.pure-button, a:visited.pure-button {
-  color: $base-button-color;
 }
 
 pre, code {
