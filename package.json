@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "browser-sync": "2.12.5"
+  },
+  "scripts": {
+    "start": "browser-sync start --server output --files='output/**/*'"
+  }
+}

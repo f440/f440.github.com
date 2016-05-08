@@ -7,6 +7,7 @@ output:
 .PHONY: setup
 setup: output
 	bundle install
+	npm install
 
 .PHONY: build
 build:
@@ -20,3 +21,7 @@ watch:
 clean:
 	rm -rf output crash.log tmp .sass-cache
 	git worktree prune
+
+.PHONY: serve
+serve:
+	npm start
