@@ -1,17 +1,14 @@
-.PHONY: all
-all: build
+.PHONY: build
+build:
+	bundle exec nanoc
 
 output:
 	git worktree add -f output master
 
 .PHONY: setup
-setup: output
+setup:
 	bundle install
 	npm install
-
-.PHONY: build
-build:
-	bundle exec nanoc
 
 .PHONY: watch
 watch:
@@ -25,3 +22,6 @@ clean:
 .PHONY: serve
 serve:
 	npm start
+
+.PHONY: all
+all: clean setup build
