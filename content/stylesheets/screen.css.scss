@@ -1,7 +1,7 @@
-@import "pure-min";
+@import 'pure-min';
 @import url(https://fonts.googleapis.com/css?family=Inconsolata);
 
-/*! apatheia.info css */
+// apatheia.info css
 
 $base-color: #333;
 $base-background-color: #fff;
@@ -10,13 +10,14 @@ $base-code-background-color: #fafafa;
 $base-border-color: #ddd;
 
 body {
-  color: $base-color;
   background-color: $base-background-color;
+  color: $base-color;
   font-family: "Inconsolata", 'Hiragino Kaku Gothic ProN', 'メイリオ', sans-serif;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-weight: normal;
+
   a, a:visited {
     text-decoration: none;
   }
@@ -24,14 +25,12 @@ h1, h2, h3, h4, h5, h6 {
 
 a, a:visited {
   color: $base-color;
-  text-decoration: underline;
 }
 
 header, article, footer {
   margin: 0 auto;
-  width: 70%;
   max-width: 780px;
-  background-color: $base-content-background-color;
+  width: 70%;
 }
 
 .blog article {
@@ -44,33 +43,32 @@ header, article, footer {
   min-height: 3rem;
 
   h1 {
-    margin: 0;
     font-size: 2.5em;
     font-weight: 100;
+    margin: 0;
   }
 }
 
 nav, footer {
+  margin-bottom: 1em;
+
   a {
     color: $base-color;
-    background-color: $base-background-color;
 
     &:visited {
       color: $base-color;
-      background-color: $base-background-color;
     }
 
     &:hover {
       color: $base-color;
       text-decoration: underline;
-      background-color: $base-background-color;
     }
   }
 }
 
 pre, code {
-  font-family: Consolas, 'Liberation Mono', Courier, monospace;
   color: $base-color;
+  font-family: Consolas, 'Liberation Mono', Courier, monospace;
   padding: .2em;
 }
 
@@ -79,9 +77,9 @@ code {
 }
 
 pre code {
-  display: block;
-  font-size: 0.9em;
   border: solid 1px $base-border-color;
+  display: block;
+  font-size: .9em;
   padding: 1em;
 }
 
@@ -90,13 +88,13 @@ pre code {
 }
 
 .share {
-  margin-top: 2em;
   margin-bottom: 1em;
+  margin-top: 2em;
 }
 
 img {
-  display: block;
   border: 0;
+  display: block;
   max-width: 100%;
 }
 
@@ -110,17 +108,20 @@ img {
   article {
     padding-top: 1em;
   }
+
   section {
-    padding-bottom: 1em;
     border-bottom: 1px solid $base-background-color;
     min-height: 3em;
+    padding-bottom: 1em;
   }
+
   .article-title {
-    margin: 0;
-    padding: 0;
     font-size: 1.17em;
     font-weight: normal;
+    margin: 0;
+    padding: 0;
   }
+
   .article-date {
     vertical-align: middle;
   }
@@ -145,37 +146,49 @@ nav::after, footer::after {
 
 @media (max-width: 767px) {
   header, article, footer {
-    width: 90%;
     font-size: 90%;
     margin-bottom: 1em;
-    padding: 1em 1em;
+    width: 90%;
   }
+
   article {
     padding-top: 0;
+
     h2 {
       margin: 0;
     }
   }
+
   header {
-    min-height: auto;
+    margin-top: 1em;
     margin-bottom: 0;
+    min-height: auto;
   }
+
   h1 {
     font-size: 1.8em;
   }
+
   .archives {
     .tags {
       padding-left: 0%;
     }
+
     article {
       margin-bottom: 0;
       padding: 0;
     }
   }
+
+  #site-title {
+    min-height: 2rem;
+  }
+
   .article {
     margin-bottom: 2em;
   }
+
   .index p {
-    margin: 0.5em;
+    margin: .5em 0;
   }
 }
