@@ -909,10 +909,9 @@ table {
 .pure-table-horizontal tbody > tr:last-child td {
   border-bottom-width: 0; }
 
-/*! apatheia.info css */
 body {
-  color: #333;
   background-color: #fff;
+  color: #333;
   font-family: "Inconsolata", 'Hiragino Kaku Gothic ProN', 'メイリオ', sans-serif; }
 
 h1, h2, h3, h4, h5, h6 {
@@ -921,14 +920,12 @@ h1, h2, h3, h4, h5, h6 {
     text-decoration: none; }
 
 a, a:visited {
-  color: #333;
-  text-decoration: underline; }
+  color: #333; }
 
 header, article, footer {
   margin: 0 auto;
-  width: 70%;
   max-width: 780px;
-  background-color: #fff; }
+  width: 70%; }
 
 .blog article #article-info {
   font-size: 80%; }
@@ -936,45 +933,44 @@ header, article, footer {
 #site-title {
   min-height: 3rem; }
   #site-title h1 {
-    margin: 0;
     font-size: 2.5em;
-    font-weight: 100; }
+    font-weight: 100;
+    margin: 0; }
 
-nav a, footer a {
-  color: #333;
-  background-color: #fff; }
-  nav a:visited, footer a:visited {
-    color: #333;
-    background-color: #fff; }
-  nav a:hover, footer a:hover {
-    color: #333;
-    text-decoration: underline;
-    background-color: #fff; }
+nav, footer {
+  margin-bottom: 1em; }
+  nav a, footer a {
+    color: #333; }
+    nav a:visited, footer a:visited {
+      color: #333; }
+    nav a:hover, footer a:hover {
+      color: #333;
+      text-decoration: underline; }
 
 pre, code {
-  font-family: Consolas, 'Liberation Mono', Courier, monospace;
   color: #333;
+  font-family: Consolas, 'Liberation Mono', Courier, monospace;
   padding: .2em; }
 
 code {
   background-color: #fafafa; }
 
 pre code {
-  display: block;
-  font-size: 0.9em;
   border: solid 1px #ddd;
+  display: block;
+  font-size: .9em;
   padding: 1em; }
 
 .comments {
   margin-top: 2em; }
 
 .share {
-  margin-top: 2em;
-  margin-bottom: 1em; }
+  margin-bottom: 1em;
+  margin-top: 2em; }
 
 img {
-  display: block;
   border: 0;
+  display: block;
   max-width: 100%; }
 
 .index section, .page section {
@@ -983,14 +979,14 @@ img {
 .archives article {
   padding-top: 1em; }
 .archives section {
-  padding-bottom: 1em;
   border-bottom: 1px solid #fff;
-  min-height: 3em; }
+  min-height: 3em;
+  padding-bottom: 1em; }
 .archives .article-title {
-  margin: 0;
-  padding: 0;
   font-size: 1.17em;
-  font-weight: normal; }
+  font-weight: normal;
+  margin: 0;
+  padding: 0; }
 .archives .article-date {
   vertical-align: middle; }
 
@@ -1009,10 +1005,9 @@ nav::after, footer::after {
 
 @media (max-width: 767px) {
   header, article, footer {
-    width: 90%;
     font-size: 90%;
     margin-bottom: 1em;
-    padding: 1em 1em; }
+    width: 90%; }
 
   article {
     padding-top: 0; }
@@ -1020,8 +1015,9 @@ nav::after, footer::after {
       margin: 0; }
 
   header {
-    min-height: auto;
-    margin-bottom: 0; }
+    margin-top: 1em;
+    margin-bottom: 0;
+    min-height: auto; }
 
   h1 {
     font-size: 1.8em; }
@@ -1032,8 +1028,11 @@ nav::after, footer::after {
     margin-bottom: 0;
     padding: 0; }
 
+  #site-title {
+    min-height: 2rem; }
+
   .article {
     margin-bottom: 2em; }
 
   .index p {
-    margin: 0.5em; } }
+    margin: .5em 0; } }
