@@ -9,7 +9,7 @@
   <% end %>
 
   <div class="page">
-    <% if prev_page(item[:page]) %><%= link_to '&#171;', "/page/#{prev_page(item[:page])}/" %><% end %>
+    <% if prev_page(item[:page]) %><%= link_to '&#171;', prev_page(item[:page]) == 1 ? "/" : "/page/#{prev_page(item[:page])}/" %><% end %>
     <% if next_page(item[:page]) %><%= link_to '&#187;', "/page/#{next_page(item[:page])}/" %><% end %>
   </div>
 </article>
