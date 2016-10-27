@@ -1,8 +1,7 @@
 .PHONY: build
-build:
+build: output
 	bundle exec nanoc
 
-.PHONY: output
 output:
 	git worktree add -f output master
 
