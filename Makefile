@@ -33,5 +33,9 @@ commit:
 		git add -A && \
 		git commit -m "Site updated at $(shell LC_ALL=C date -u --rfc-3339=seconds)"
 
+.PHONY: publish
+publish:
+	cd output && git push origin master
+
 .PHONY: all
 all: clean setup build
