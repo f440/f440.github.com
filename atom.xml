@@ -2,13 +2,54 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://apatheia.info/</id>
   <title>apatheia.info</title>
-  <updated>2016-02-22T11:54:00Z</updated>
+  <updated>2016-10-29T15:51:00Z</updated>
   <link rel="alternate" href="http://apatheia.info/"/>
   <link rel="self" href="http://apatheia.info/atom.xml"/>
   <author>
     <name>f440</name>
     <uri>http://apatheia.info/</uri>
   </author>
+  <entry>
+    <id>tag:apatheia.info,2016-10-29:/blog/2016/10/30/isucon6/</id>
+    <title type="html">ISUCON 6</title>
+    <published>2016-10-29T15:51:00Z</published>
+    <updated>2016-10-29T15:51:00Z</updated>
+    <link rel="alternate" href="http://apatheia.info/blog/2016/10/30/isucon6/"/>
+    <content type="html">
+&lt;p&gt;今年も&lt;a href="http://isucon.net/"&gt;ISUCON&lt;/a&gt;に参加した。&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+&lt;p&gt;例年に比べて十分な予習・復習をすることができず、メンバー内の得手・不得手を十分に理解できない状態だったので、不安を残したままコンテストを迎えることとなった。&lt;/p&gt;
+
+&lt;h2 id="section"&gt;予選&lt;/h2&gt;
+
+&lt;p&gt;最初にAzure Resource Managerテンプレートで環境を作るのだが、プロビジョニングに失敗したり、作業ミス（AppArmorを削除したら一緒にMySQLが消された）などで、結局3回くらい環境の構築をしなおしてだいぶ焦ったりした。&lt;/p&gt;
+
+&lt;p&gt;問題の内容としてはいわばはてなキーワードで、記事の投稿により別の記事内のリンクが増えるといったものだった。&lt;/p&gt;
+
+&lt;p&gt;参考実装ではオンデマンドにリンクを計算してページをレンダリングするのだが、これでは遅いので事前に計算結果をキャッシュする方針とした。ただ、ページが投稿されるごとに過去の記事も再生成する必要があり、これについては影響を受けるページだけを絞り込んでキャッシュを破棄することで対応しようとした。&lt;/p&gt;
+
+&lt;p&gt;方針が決まり、試しに雑なキャッシュをアプリに組み込んで見るとベンチマークを流すと毎回同じ箇所でベンチマークが失敗判定される。どうやらベンチマークは特定のページでリンクを確認しており、それ以外については問題があっても完走できる模様である。このことに気づいてからはベンチマークの挙動に合わせてキャッシュの再生成箇所を絞り込むなどを行った。&lt;/p&gt;
+
+&lt;p&gt;これだけでかなりスコアは伸びるようになったのだが、あとは地道にDBからRedisへの切り替えなどをしていった。&lt;/p&gt;
+
+&lt;p&gt;運営側と多少の行き違いがあり、スコアが計算されない事態が発生して肝を冷やしたが、最終的には対応してもらいなんとか本戦にたどり着くことができた。&lt;/p&gt;
+
+&lt;h2 id="section-1"&gt;本戦&lt;/h2&gt;
+
+&lt;p&gt;問題としてはリアルタイム性のあるお絵かきアプリという非常にこったものであった。利用されている技術としては Docker / React / SSE (Server-sent events) といったところで、慣れていないこともあり初動が遅くなってしまった。&lt;/p&gt;
+
+&lt;p&gt;画像の表示部分で詰まっているような状態だったので、このあたりをなんとかしようという話ができはじめたのが昼から夕方にかけてで、いろいろ手を出しては失敗しを繰り返しているうちにタイムアップになってしまった。&lt;/p&gt;
+
+&lt;h2 id="section-2"&gt;コンテストを終えて&lt;/h2&gt;
+
+&lt;p&gt;今年も非常に楽しく行えた。やり応えのある問題、快適な会場の提供、その他もろもろ運営の方々には頭が下がるばかりである。&lt;/p&gt;
+
+&lt;p&gt;本戦の結果についてはとにかく悔しい。この記事を書いている時点で一週間が経ったが、未だに後悔が残るばかりである。ただ、自分の未熟さを痛感させてくれるという意味でとても有意義であったと思う。今後も参加したいので、末永く続いてくれることを願う。&lt;/p&gt;
+
+</content>
+  </entry>
   <entry>
     <id>tag:apatheia.info,2016-02-22:/blog/2016/02/22/install-dlite/</id>
     <title type="html">DLiteでOS X上にDockerの環境を構築する</title>
@@ -829,50 +870,6 @@ cmd
   &lt;li&gt;&lt;a href="http://docs.docker.io/en/latest/"&gt;Documentation&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-</content>
-  </entry>
-  <entry>
-    <id>tag:apatheia.info,2013-06-16:/blog/2013/06/16/yum-cache/</id>
-    <title type="html">yum のパッケージキャッシュについて</title>
-    <published>2013-06-15T16:26:00Z</published>
-    <updated>2013-06-15T16:26:00Z</updated>
-    <link rel="alternate" href="http://apatheia.info/blog/2013/06/16/yum-cache/"/>
-    <content type="html">
-&lt;p&gt;&lt;code&gt;/etc/yum.conf&lt;/code&gt;で&lt;code&gt;keepcache=1&lt;/code&gt;にしておくと、インストールしたパッケージがキャッシュされるようになる。これが無効化された状態だと、パッケージアップグレード時に問題が起きても元に戻せなくなるので有効化しておいた方がいい。&lt;/p&gt;
-
-&lt;!-- more --&gt;
-
-&lt;p&gt;あるパッケージについて、どのバージョンが利用可能な状態かは以下で確認できる。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ sudo yum --showduplicates list パッケージ名
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;RHEL なら過去のバージョンまですべて手に入るけど、CentOS だとOSリリース時のバージョンと最新版しか手に入らない模様。リポジトリ上なりキャッシュなりで過去のバージョンが手に入るのであれば、&lt;code&gt;yum install&lt;/code&gt; や &lt;code&gt;yum update&lt;/code&gt; は以下の手順でロールバックが行える。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;# yum の利用履歴を確認
-$ sudo yum history
-
-# 履歴から詳細を確認
-# 未引数なら直近、引数ありなら該当する ID を表示
-$ sudo yum history info 4
-
-# 仮に ID 4 で問題のバージョンアップが行われたようだということが確認できたら、その ID を指定して操作をアンドゥ
-$ sudo yum history undo 4
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;アンドゥ(リドゥもある)では、対象パッケージおよび依存パッケージがまとめて一度に入れ替えられる。これはパッケージの操作がちゃんとトランザクションになっているため。&lt;/p&gt;
-
-&lt;p&gt;話がそれるけど、パッケージの操作にトランザクションがかかるというのはかなり重要だ。たとえば syslog-ng から rsyslog に入れ替えるとき、単純にアンインストール、インストールの順番でやろうとするとアンインストールのタイミングで大量の Syslog 依存なパッケージが道連れになるけど、以下のようにすればひとつのトランザクションでパッケージを入れ替えることができる。(情報源: &lt;a href="http://wiki.rsyslog.com/index.php/Install_rsyslog_with_yum"&gt;Rsyslog Wiki&lt;/a&gt;)&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ sudo yum shell
-&amp;gt; remove syslog-ng
-&amp;gt; install rsyslog
-&amp;gt; run
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;話がそれたついでにふれておくと、vagrant を使っているのであれば &lt;a href="https://github.com/fgrehm/vagrant-cachier"&gt;vagrant-cachier&lt;/a&gt; を使うとパッケージのキャッシュ保存先を仮想マシン外の領域(ホストOSとの共有ディスク部分など)に変更してくれる。こうすることで、仮想マシンを破棄してもパッケージのキャッシュが永続化されるため、2回目以降はダウンロードがスキップされて高速化する。&lt;/p&gt;
-
-&lt;p&gt;話を戻すと、世の中何が起きるかわからないので古いパッケージもとっておいたほうがいいかと。ディスク容量が気になりだしたら、&lt;code&gt;yum clean packages&lt;/code&gt; を実行すればキャッシュは消せる。&lt;/p&gt;
 </content>
   </entry>
 </feed>
