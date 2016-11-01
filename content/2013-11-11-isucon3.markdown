@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "ISUCON3 の参加記録"
+title: "ISUCON 3 の参加記録"
 created_at: 2013-11-11 09:20:00 +9:00
 kind: article
 comments: true
