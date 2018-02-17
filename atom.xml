@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
+<feed xmlns="http://www.w3.org/2005/Atom" xml:base="https://apatheia.info/">
   <id>https://apatheia.info/</id>
   <title>apatheia.info</title>
   <updated>2016-10-29T15:51:00Z</updated>
