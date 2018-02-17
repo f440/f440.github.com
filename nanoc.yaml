@@ -92,8 +92,8 @@ checks:
 # Site specific data
 title: apatheia.info
 domain: apatheia.info
-base_url: http://apatheia.info
-author_uri: http://apatheia.info/
+base_url: https://apatheia.info
+author_uri: https://apatheia.info/
 author_name: f440
 twitter_id: f440
 github_id: f440
