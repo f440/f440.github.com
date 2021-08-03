@@ -1,11 +1,10 @@
 import Head from "next/head";
+import Layout from "../components/layout";
 
 export default function Index() {
   return (
-    <>
-      <Head>
-        <title>Hi</title>
-      </Head>
-    </>
+    <Layout title="index">
+      <>index</>
+    </Layout>
   );
 }
