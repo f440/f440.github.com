@@ -1,3 +1,11 @@
+import Head from "next/head";
+
 export default function Index() {
-  return <div>Hi</div>;
+  return (
+    <>
+      <Head>
+        <title>Hi</title>
+      </Head>
+    </>
+  );
 }
