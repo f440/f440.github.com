@@ -13,10 +13,11 @@ import {
 
 const Blog = ({ post }: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
-    <Layout title={post.title}>
+    <Layout>
       <article>
+        <h1>{post.title}</h1>
         <p id="article-info">
-          published on {format(new Date(post.createdAt), "yyyy.MM.dd")}
+          Published on {format(new Date(post.createdAt), "yyyy.MM.dd")}
         </p>
 
         <div dangerouslySetInnerHTML={{ __html: post.content }} />
