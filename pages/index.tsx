@@ -5,6 +5,7 @@ import Layout from "../components/layout";
 import { generateSitemap } from "../lib/sitemap";
 import { generateFeed } from "../lib/feed";
 import { PostType, getPosts } from "../lib/utils";
+import { Tags } from "../components/tags";
 
 type Props = {
   posts: PostType[];
@@ -22,7 +23,8 @@ const Index: React.VFC<Props> = ({ posts }) => {
                   <a>{post.title}</a>
                 </Link>
               </h2>
-              <span>{format(new Date(post.createdAt), "yyyy.MM.dd")}</span>
+              <span>{format(new Date(post.createdAt), "yyyy.MM.dd")}</span>{" "}
+              <Tags tags={post.tags} />
             </section>
           );
         })}

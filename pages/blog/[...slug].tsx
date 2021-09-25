@@ -10,6 +10,7 @@ import {
   PostsDirectory,
   markdownToHtml,
 } from "../../lib/utils";
+import { Tags } from "../../components/tags";
 
 const Blog = ({ post }: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
@@ -17,7 +18,8 @@ const Blog = ({ post }: InferGetStaticPropsType<typeof getStaticProps>) => {
       <article>
         <h1>{post.title}</h1>
         <p id="article-info">
-          Published on {format(new Date(post.createdAt), "yyyy.MM.dd")}
+          Published on {format(new Date(post.createdAt), "yyyy.MM.dd")}{" "}
+          <Tags tags={post.tags} />
         </p>
 
         <div dangerouslySetInnerHTML={{ __html: post.content }} />
