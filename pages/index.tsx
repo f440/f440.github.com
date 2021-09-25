@@ -2,6 +2,7 @@ import { format } from "date-fns";
 import Link from "next/link";
 import React from "react";
 import Layout from "../components/layout";
+import { generateSitemap } from "../lib/sitemap";
 import { generateFeed } from "../lib/feed";
 import { PostType, getPosts } from "../lib/utils";
 
@@ -35,6 +36,7 @@ export default Index;
 export const getStaticProps = async (): Promise<{ props: Props }> => {
   const posts: PostType[] = getPosts();
 
+  await generateSitemap(posts);
   await generateFeed(posts);
 
   return {

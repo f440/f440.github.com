@@ -1,6 +1,6 @@
 import { markdownToHtml, PostType } from "./utils";
 import { format } from "date-fns";
-import { existsSync, fstat, mkdir, mkdirSync, writeFile } from "fs";
+import { writeFile } from "fs";
 import { join } from "path";
 
 const feedEntry = async (post: PostType): Promise<string> => {

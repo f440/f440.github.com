@@ -35,3 +35,4 @@ yarn-error.log*
 
 # rss
 public/atom.xml
+public/sitemap.xml
