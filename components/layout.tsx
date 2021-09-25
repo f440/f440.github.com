@@ -16,7 +16,7 @@ export default function Layout({ title, children }: Props) {
       <header>
         <div id="site-title">
           <h1>
-            <Link href="/">aptheia.info</Link>
+            <Link href="/">apatheia.info</Link>
           </h1>
         </div>
         <nav>
@@ -24,8 +24,8 @@ export default function Layout({ title, children }: Props) {
             <li>
               <Link href="/">Home</Link>
             </li>
-            {/* <li><a href="/archives">Archive</a></li> */}
-            {/* <li><a href="/atom.xml">RSS</a></li> */}
+            {/* <li><a href="/archives">Archive</a></li>
+            <li><a href="/atom.xml">RSS</a></li> */}
           </ul>
         </nav>
         {title && (

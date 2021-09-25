@@ -10,21 +10,20 @@ type Props = {
 const Index: React.VFC<Props> = ({ posts }) => {
   return (
     <Layout>
-      <ul>
+      <article>
         {posts.map((post) => {
-          if (post.title) {
-            return (
-              <li key={post.path}>
+          return (
+            <section key={post.path}>
+              <h2>
                 <Link href={`/${post.path}`}>
-                  <a>
-                    {post.title} (created_at: {formatDate(post.createdAt)})
-                  </a>
+                  <a>{post.title}</a>
                 </Link>
-              </li>
-            );
-          }
+              </h2>
+              <span>{post.createdAt}</span>
+            </section>
+          );
         })}
-      </ul>
+      </article>
     </Layout>
   );
 };
@@ -37,10 +36,4 @@ export const getStaticProps = async (): Promise<{ props: Props }> => {
   return {
     props: { posts: posts },
   };
-};
-
-const formatDate = (dateString: string): string => {
-  const date = new Date(dateString);
-
-  return date.toLocaleDateString();
 };

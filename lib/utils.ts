@@ -48,8 +48,11 @@ export const getPosts = (): PostType[] => {
       return {
         localPath: f,
         path: f
-          .replace(PostsDirectory + "/", "blog/")
-          .replace(/(\d{4})-(\d{2})-(\d{2})-(.*)\.markdown$/, "$1/$2/$3/$4"),
+          .replace(PostsDirectory + "/", "")
+          .replace(
+            /(\d{4})-(\d{2})-(\d{2})-(.*)\.markdown$/,
+            "blog/$1/$2/$3/$4"
+          ),
         layout: data.layout,
         title: data.title,
         createdAt: data.created_at,
