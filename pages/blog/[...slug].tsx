@@ -2,13 +2,13 @@ import { readFileSync } from "fs";
 import matter from "gray-matter";
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
 import { join } from "path";
-import Layout from "../components/layout";
+import Layout from "../../components/layout";
 import {
   PostType,
   getPosts,
   PostsDirectory,
   markdownToHtml,
-} from "../lib/utils";
+} from "../../lib/utils";
 
 const Blog = ({ post }: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
@@ -32,7 +32,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   return {
     paths: posts.map((post) => {
       return {
-        params: { slug: post.path.split("/") },
+        params: { slug: post.path.replace("blog/", "").split("/") },
       };
     }),
     fallback: false,
@@ -56,15 +56,15 @@ const getPostBySlug = async (
     return undefined;
   }
 
-  const path = join(
+  const localPath = join(
     PostsDirectory,
     slug.join("-").replace("/", "") + ".markdown"
   );
-  const fileContents = readFileSync(path, "utf-8");
+  const fileContents = readFileSync(localPath, "utf-8");
   const { data, content } = matter(fileContents);
 
   const post: PostType = {
-    localPath: path,
+    localPath: localPath,
     path: slug.join("/"),
     layout: data.layout,
     title: data.title,
