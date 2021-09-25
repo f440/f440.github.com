@@ -1,6 +1,8 @@
 import { lstatSync, readdirSync, readFileSync } from "fs";
 import matter from "gray-matter";
 import { join } from "path";
+import html from "remark-html";
+import remark from "remark";
 
 export type PostType = {
   localPath: string;
@@ -12,7 +14,7 @@ export type PostType = {
   kind?: string;
   comments?: boolean;
   tags?: string[];
-  content?: string,
+  content?: string;
 };
 
 export const PostsDirectory = join(process.cwd(), "content");
@@ -66,4 +68,9 @@ export const getPosts = (): PostType[] => {
     });
 
   return posts;
+};
+
+export const markdownToHtml = async (markdown: string) => {
+  const result = await remark().use(html).process(markdown);
+  return result.toString();
 };

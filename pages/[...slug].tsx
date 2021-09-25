@@ -3,7 +3,12 @@ import matter from "gray-matter";
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
 import { join } from "path";
 import Layout from "../components/layout";
-import { PostType, getPosts, PostsDirectory } from "../lib/utils";
+import {
+  PostType,
+  getPosts,
+  PostsDirectory,
+  markdownToHtml,
+} from "../lib/utils";
 
 const Blog = ({ post }: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
@@ -13,7 +18,7 @@ const Blog = ({ post }: InferGetStaticPropsType<typeof getStaticProps>) => {
           published on {new Date(post.createdAt).toLocaleDateString()}
         </p>
 
-        <pre>{post.content}</pre>
+        <div dangerouslySetInnerHTML={{ __html: post.content }} />
       </article>
     </Layout>
   );
@@ -34,17 +39,19 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-export const getStaticProps: GetStaticProps = (context) => {
+export const getStaticProps: GetStaticProps = async (context) => {
   return {
     props: {
       post: Array.isArray(context.params?.slug)
-        ? getPostBySlug(context.params?.slug)
+        ? await getPostBySlug(context.params?.slug)
         : undefined,
     },
   };
 };
 
-const getPostBySlug = (slug: string[] | undefined): PostType | undefined => {
+const getPostBySlug = async (
+  slug: string[] | undefined
+): Promise<PostType | undefined> => {
   if (slug === undefined) {
     return undefined;
   }
@@ -66,7 +73,7 @@ const getPostBySlug = (slug: string[] | undefined): PostType | undefined => {
     kind: data.kind,
     comments: data.comments,
     tags: data.tags,
-    content: content,
+    content: await markdownToHtml(content),
   };
 
   return JSON.parse(JSON.stringify(post));
