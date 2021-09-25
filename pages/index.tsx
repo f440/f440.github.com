@@ -1,3 +1,5 @@
+import Link from "next/link";
+import React from "react";
 import Layout from "../components/layout";
 import { PostType, getPosts } from "../lib/utils";
 
@@ -13,7 +15,11 @@ const Index: React.VFC<Props> = ({ posts }) => {
           if (post.title) {
             return (
               <li key={post.path}>
-                {post.title} {post.path} {post.createdAt}
+                <Link href={`/${post.path}`}>
+                  <a>
+                    {post.title} (created_at: {formatDate(post.createdAt)})
+                  </a>
+                </Link>
               </li>
             );
           }
@@ -31,4 +37,10 @@ export const getStaticProps = async (): Promise<{ props: Props }> => {
   return {
     props: { posts: posts },
   };
+};
+
+const formatDate = (dateString: string): string => {
+  const date = new Date(dateString);
+
+  return date.toLocaleDateString();
 };

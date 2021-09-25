@@ -12,6 +12,7 @@ export type PostType = {
   kind?: string;
   comments?: boolean;
   tags?: string[];
+  content?: string,
 };
 
 export const PostsDirectory = join(process.cwd(), "content");
@@ -54,6 +55,7 @@ export const getPosts = (): PostType[] => {
         kind: data.kind,
         comments: data.comments,
         tags: data.tags,
+        content: data.content,
       };
     })
     .sort((a, b) => {
