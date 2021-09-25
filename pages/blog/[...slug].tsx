@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import { readFileSync } from "fs";
 import matter from "gray-matter";
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
@@ -15,7 +16,7 @@ const Blog = ({ post }: InferGetStaticPropsType<typeof getStaticProps>) => {
     <Layout title={post.title}>
       <article>
         <p id="article-info">
-          published on {new Date(post.createdAt).toLocaleDateString()}
+          published on {format(new Date(post.createdAt), "yyyy.MM.dd")}
         </p>
 
         <div dangerouslySetInnerHTML={{ __html: post.content }} />

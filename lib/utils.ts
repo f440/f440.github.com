@@ -60,11 +60,11 @@ export const getPosts = (): PostType[] => {
         kind: data.kind,
         comments: data.comments,
         tags: data.tags,
-        content: data.content,
+        content: content,
       };
     })
     .sort((a, b) => {
-      return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     })
     .map((f) => {
       return JSON.parse(JSON.stringify(f));
@@ -73,7 +73,8 @@ export const getPosts = (): PostType[] => {
   return posts;
 };
 
-export const markdownToHtml = async (markdown: string) => {
+export const markdownToHtml = async (markdown: string): Promise<string> => {
   const result = await remark().use(html).process(markdown);
+
   return result.toString();
 };

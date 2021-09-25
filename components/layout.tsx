@@ -11,6 +11,12 @@ export default function Layout({ title, children }: Props) {
     <>
       <Head>
         <title>{(title ? `${title} - ` : "") + "aptheia.info"}</title>
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title="apatheia.info"
+          href="/atom.xml"
+        />
       </Head>
 
       <header>
@@ -24,8 +30,9 @@ export default function Layout({ title, children }: Props) {
             <li>
               <Link href="/">Home</Link>
             </li>
-            {/* <li><a href="/archives">Archive</a></li>
-            <li><a href="/atom.xml">RSS</a></li> */}
+            <li>
+              <a href="/atom.xml">RSS</a>
+            </li>
           </ul>
         </nav>
         {title && (
