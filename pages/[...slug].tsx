@@ -8,10 +8,13 @@ import { PostType, getPosts, PostsDirectory } from "../lib/utils";
 const Blog = ({ post }: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
     <Layout title={post.title}>
-      <>
-        <div>{post.title}</div>
+      <article>
+        <p id="article-info">
+          published on {new Date(post.createdAt).toLocaleDateString()}
+        </p>
+
         <pre>{post.content}</pre>
-      </>
+      </article>
     </Layout>
   );
 };

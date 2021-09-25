@@ -9,7 +9,7 @@ type Props = {
 
 const Index: React.VFC<Props> = ({ posts }) => {
   return (
-    <Layout title="index">
+    <Layout>
       <ul>
         {posts.map((post) => {
           if (post.title) {

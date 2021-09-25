@@ -10,11 +10,15 @@ export default function Layout({ title, children }: Props) {
   return (
     <>
       <Head>
-        <title>{title ? title : "aptheia.info"}</title>
+        <title>{(title ? `${title} - ` : "") + "aptheia.info"}</title>
       </Head>
 
       <header>
-        <div id="site-title">{title && <h1>{title}</h1>}</div>
+        <div id="site-title">
+          <h1>
+            <Link href="/">aptheia.info</Link>
+          </h1>
+        </div>
         <nav>
           <ul>
             <li>
@@ -24,6 +28,11 @@ export default function Layout({ title, children }: Props) {
             {/* <li><a href="/atom.xml">RSS</a></li> */}
           </ul>
         </nav>
+        {title && (
+          <div id="site-title">
+            <h1>{title}</h1>
+          </div>
+        )}
       </header>
 
       <main>{children}</main>
