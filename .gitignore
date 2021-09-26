@@ -35,4 +35,9 @@ yarn-error.log*
 
 # rss
 public/atom.xml
+
+# sitemap
 public/sitemap.xml
+
+# git worktree
+output

@@ -1,27 +1,27 @@
-.PHONY: build
-build: output
-	bundle exec nanoc
+.PHONY: all
+all: clean setup build copy # diff, commit and publish
+
+.PHONY: clean
+clean:
+	rm -rf output
+	git worktree prune
+
+.PHONY: setup
+setup:
+	npm ci
 
 output:
 	git worktree add -f output master
 
-.PHONY: setup
-setup:
-	bundle install
-	npm install
+.PHONY: build
+build: output
+	npm run export
 
-.PHONY: watch
-watch:
-	bundle exec guard
-
-.PHONY: clean
-clean:
-	rm -rf output crash.log tmp .sass-cache
-	git worktree prune
-
-.PHONY: serve
-serve:
-	npm start
+.PHONY: copy
+copy: output
+	cd output && git ls-files | xargs rm -f
+	find output -type d -mindepth 1 -delete
+	rsync -a out/ output/
 
 .PHONY: diff
 diff:
@@ -36,6 +36,3 @@ commit:
 .PHONY: publish
 publish:
 	cd output && git push origin master
-
-.PHONY: all
-all: clean setup build
