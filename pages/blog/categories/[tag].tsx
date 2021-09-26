@@ -1,10 +1,8 @@
-import { format } from "date-fns";
-import Link from "next/link";
 import React from "react";
 import Layout from "../../../components/layout";
 import { PostType, getPosts } from "../../../lib/utils";
 import { GetStaticPaths } from "next";
-import { Tags } from "../../../components/tags";
+import { Posts } from "../../../components/posts";
 
 type Props = {
   tag: string;
@@ -16,19 +14,7 @@ const Tag: React.VFC<Props> = ({ tag, posts }) => {
     <Layout title={`tagged ${tag}`}>
       <article>
         <h1>Articles tagged '{tag}'</h1>
-        {posts.map((post) => {
-          return (
-            <section key={post.path} style={{ marginBottom: "1em" }}>
-              <h2>
-                <Link href={`/${post.path}`}>
-                  <a>{post.title}</a>
-                </Link>
-              </h2>
-              <span>{format(new Date(post.createdAt), "yyyy.MM.dd")}</span>{" "}
-              <Tags tags={post.tags} />
-            </section>
-          );
-        })}
+        <Posts posts={posts} />
       </article>
     </Layout>
   );
