@@ -1,3 +1,0 @@
-<% if @item[:tags] && @item[:tags].count > 0 %>
-  Tags: <% @item[:tags].each { |tag| %><a href="<%= h '/blog/categories/' + tag + '/' %>"><%= tag %></a> <% } %>
-<% end %>
