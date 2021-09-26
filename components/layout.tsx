@@ -28,7 +28,9 @@ export default function Layout({ title, children }: Props) {
         <nav>
           <ul>
             <li>
-              <Link href="/">Home</Link>
+              <Link href="/">
+                <a>Home</a>
+              </Link>
             </li>
             <li>
               <a href="/atom.xml">RSS</a>
