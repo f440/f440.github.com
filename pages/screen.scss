@@ -1,7 +1,4 @@
 @import 'pure-min';
-@import url(https://fonts.googleapis.com/css?family=Inconsolata);
-
-// apatheia.info css
 
 $base-color: #333;
 $base-background-color: #fff;
@@ -12,7 +9,7 @@ $base-border-color: #ddd;
 body {
   background-color: $base-background-color;
   color: $base-color;
-  font-family: "Inconsolata", 'Hiragino Kaku Gothic ProN', 'メイリオ', sans-serif;
+  font-family: system-ui, sans-serif;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -20,6 +17,10 @@ h1, h2, h3, h4, h5, h6 {
 
   a, a:visited {
     text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
   }
 }
 
@@ -44,8 +45,11 @@ header, article, footer {
 
   h1 {
     font-size: 2.5em;
-    font-weight: 100;
     margin: 0;
+
+    a {
+      text-decoration: none;
+    }
   }
 }
 
