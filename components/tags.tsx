@@ -9,7 +9,7 @@ export const Tags: React.VFC<{ tags: string[] | undefined }> = ({ tags }) => {
         {tags.map((tag: string) => {
           return (
             <span key={tag}>
-              <Link href={`/blog/categories/${tag}`}>
+              <Link href={`/blog/categories/${encodeURIComponent(tag)}`}>
                 <a>{tag}</a>
               </Link>{" "}
             </span>
