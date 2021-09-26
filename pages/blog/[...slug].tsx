@@ -14,7 +14,7 @@ import { Tags } from "../../components/tags";
 
 const Blog = ({ post }: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
-    <Layout>
+    <Layout title={post.title}>
       <article>
         <h1>{post.title}</h1>
         <p id="article-info">

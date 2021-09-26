@@ -7,13 +7,15 @@ import { GetStaticPaths } from "next";
 import { Tags } from "../../../components/tags";
 
 type Props = {
+  tag: string;
   posts: PostType[];
 };
 
-const Tag: React.VFC<Props> = ({ posts }) => {
+const Tag: React.VFC<Props> = ({ tag, posts }) => {
   return (
-    <Layout>
+    <Layout title={`tagged ${tag}`}>
       <article>
+        <h1>Articles tagged '{tag}'</h1>
         {posts.map((post) => {
           return (
             <section key={post.path}>
@@ -41,6 +43,7 @@ export const getStaticProps = async (context: {
 
   return {
     props: {
+      tag: context.params.tag,
       posts: posts.filter((post) => {
         return post.tags?.includes(context.params.tag);
       }),

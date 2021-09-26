@@ -35,11 +35,6 @@ export default function Layout({ title, children }: Props) {
             </li>
           </ul>
         </nav>
-        {title && (
-          <div id="site-title">
-            <h1>{title}</h1>
-          </div>
-        )}
       </header>
 
       <main>{children}</main>
