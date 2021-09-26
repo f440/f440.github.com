@@ -1,76 +1,13 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>プロセス管理にsuperviserを使う - apatheia.info</title>
-    <link href="/stylesheets/screen.css" rel="stylesheet" />
-    <script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-35021317-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-</script>
-
-    <script>
-var _prum = [['id', '534a4930abe53d551a2dfa1b'],
-             ['mark', 'firstbyte', (new Date()).getTime()]];
-(function() {
-  var s = document.getElementsByTagName('script')[0]
-    , p = document.createElement('script');
-  p.async = 'async';
-  p.src = '//rum-static.pingdom.net/prum.min.js';
-  s.parentNode.insertBefore(p, s);
-})();
-</script>
-
-    <link rel="alternate" type="application/rss+xml" title="apatheia.info" href="/atom.xml" />
-  </head>
-  <body class="2011-12-24-superviser">
-    <header>
-      <div id="site-title">
-        <h1><a href="/">apatheia.info</a></h1>
-      </div>
-      <nav>
-        <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="/archives/">Archive</a></li>
-          <li><a href="/atom.xml">RSS</a></li>
-        </ul>
-      </nav>
-    </header>
-    
-  <article>
-    <h1>プロセス管理にsuperviserを使う</h1>
-    <p id="article-info">
-      Published on 24 Dec 2011
-      
-
-    </p>
-    <p>ちょっと前にsupervisorを使ったのでやり方をまとめておく。</p>
-
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width"/><meta charSet="utf-8"/><title>プロセス管理にsuperviserを使う - aptheia.info</title><link rel="alternate" type="application/rss+xml" title="apatheia.info" href="/atom.xml"/><meta name="next-head-count" content="4"/><link rel="preload" href="/_next/static/css/3c128f59c2ecef969dbc.css" as="style"/><link rel="stylesheet" href="/_next/static/css/3c128f59c2ecef969dbc.css" data-n-g=""/><noscript data-n-css=""></noscript><script defer="" nomodule="" src="/_next/static/chunks/polyfills-a40ef1678bae11e696dba45124eadd70.js"></script><script src="/_next/static/chunks/webpack-1a8a258926ecde76681b.js" defer=""></script><script src="/_next/static/chunks/framework-895f067827ebe11ffe45.js" defer=""></script><script src="/_next/static/chunks/main-a9acf05574b3448968f1.js" defer=""></script><script src="/_next/static/chunks/pages/_app-d96712b144c157b4cbfa.js" defer=""></script><script src="/_next/static/chunks/915-c287d7adb8a31cf4da35.js" defer=""></script><script src="/_next/static/chunks/pages/blog/%5B...slug%5D-c134caf83809c687960e.js" defer=""></script><script src="/_next/static/PHKJ2Dzu0oDEBCrRGxDFE/_buildManifest.js" defer=""></script><script src="/_next/static/PHKJ2Dzu0oDEBCrRGxDFE/_ssgManifest.js" defer=""></script></head><body><div id="__next"><header><div id="site-title"><h1><a href="/">apatheia.info</a></h1></div><nav><ul><li><a href="/">Home</a></li><li><a href="/atom.xml">RSS</a></li></ul></nav></header><main><article><h1>プロセス管理にsuperviserを使う</h1><p id="article-info">Published on <!-- -->2011.12.24<!-- --> </p><div><p>ちょっと前にsupervisorを使ったのでやり方をまとめておく。</p>
 <!-- more -->
-
 <p>公式サイト: <a href="http://supervisord.org/">supervisor</a></p>
-
 <p>supervisorはプログラムの起動、停止を管理するツール。daemontools
 がわかるなら、あんな感じのソフトだと思ってもらえれば早い。daemontoolsよりも標準的なディレクトリ構成で使えるぶん、導入障壁は低いと思う。</p>
-
 <p>最近のLinuxなら、パッケージですぐインストール出来る。以降の説明は debian (6.0.3)、superviser 3 系によるもの。</p>
-
-<h2 id="section">インストール</h2>
-
+<h2>インストール</h2>
 <pre><code>$ sudo apt-get install superviser
 </code></pre>
-
-<h3 id="section-1">確認</h3>
-
+<h3>確認</h3>
 <pre><code>$ sudo service supervisor status # 起動確認（名前表示されない……）
  is running
 $ sudo service supervisor stop # 停止
@@ -78,48 +15,32 @@ Stopping supervisor: supervisord.
 $ sudo service supervisor start # 起動
 Starting supervisor: supervisord.
 </code></pre>
-
-<h2 id="section-2">例</h2>
-
+<h2>例</h2>
 <p>例のために、自分のホームにインストールしてあったmemcachedを起動してみる。</p>
-
 <p>まずは、コマンドラインから問題無く起動出来ることを確認</p>
-
 <pre><code>$ /home/f440/opt/bin/memcached # 起動
 </code></pre>
-
 <p>プログラムはフォアグラウンドで起動する。memcached の例で言うと、-d オプション (run as a daemon) はつけない。</p>
-
 <p>設定ファイルを配置する。もともと /etc/supervisor/supervisord.conf 内で /etc/supervisor/conf.d/*.conf を Include するよう設定されていた読み込むように設定されていたので、以下のようなファイルを作った。</p>
-
 <pre><code>$ cat /etc/supervisor/conf.d/memcached.conf
 [program:memcached]
 command=/home/f440/opt/bin/memcached
 user=f440
 </code></pre>
-
 <p>デフォルトだと設定したプログラムは自動起動する(autostart=true)なので、supervisor を再起動させれば memcachedも起動する。memcached がいつまでも起動しなければ /var/log/supervisor 以下のログを確認する。</p>
-
 <p>何らかの原因で停止したとき、自動起動して欲しければ autorestart=true を指定しておく。</p>
-
-<h2 id="section-3">コマンドで操作</h2>
-
+<h2>コマンドで操作</h2>
 <p>起動中は supervisorctl 経由で操作ができるようになる。</p>
-
 <pre><code>$ sudo supervisor 
 memcached                        RUNNING    pid 24928, uptime 0:08:21
-supervisor&gt; # help でヘルプを表示
-supervisor&gt; exit
+supervisor> # help でヘルプを表示
+supervisor> exit
 $ sudo supervisor status # 直接引数を渡すこともできる
 memcached                        RUNNING    pid 24928, uptime 0:08:21
 </code></pre>
-
-<h2 id="web">Webで操作</h2>
-
+<h2>Webで操作</h2>
 <p>設定を追加するとWebから操作できるようになる。外部から好き放題できるので、安全な場所以外では適切な権限設定必須。</p>
-
 <p>ポート9001で、どこからでもアクセスできるよう設定</p>
-
 <pre><code>diff --git a/supervisor/supervisord.conf b/supervisor/supervisord.conf
 index 61b3020..86e04f2 100644
 --- a/supervisor/supervisord.conf
@@ -135,74 +56,10 @@ index 61b3020..86e04f2 100644
  logfile=/var/log/supervisor/supervisord.log ; (main log file;default $CWD/supervisord.log)
  pidfile=/var/run/supervisord.pid ; (supervisord pidfile;default supervisord.pid)
 </code></pre>
-
 <p>設定ファイル再読込</p>
-
 <pre><code> $ sudo supervisor reload
 </code></pre>
-
 <p>アクセス出来るようになる</p>
-
-<p><img src="/images/2011-12-24-superviser/tumblr_lx9eq9SHXa1qz5yk8.jpg" alt="Web管理画面" /></p>
-
+<p><img src="/images/2011-12-24-superviser/tumblr_lx9eq9SHXa1qz5yk8.jpg" alt="Web管理画面"></p>
 <p>終わり。</p>
-
-
-    
-    <aside>
-    <div class="share">
-  <div class="addthis_toolbox addthis_default_style ">
-    <a class="addthis_counter addthis_pill_style"></a>
-  </div>
-  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4f8eed8875190f92"></script>
-  <script type="text/javascript">
-    var addthis_config = {
-      data_track_clickback: false
-    }
-  </script>
-</div>
-
-    
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-  var disqus_shortname = 'apatheiainfo';
-(function() {
-  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-})();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-
-
-    </aside>
-    
-  </article>
-
-    <footer>
-    <div>
-      <ul>
-        <li>Link:</li>
-        <li><a href="https://twitter.com/f440">Twitter</a></li>
-        <li><a href="https://github.com/f440">Github</a></li>
-        <li><a href="https://pinboard.in/u:f440">Pinboard</a></li>
-      </ul>
-    </div>
-    </footer>
-  </body>
-</html>
-
-<script>
-window.addEventListener("load", function() {
-  var imgs = document.getElementsByTagName("img");
-  for (var i = 0, len = imgs.length; i < len; i++) {
-    var img = imgs[i];
-    var a = document.createElement("a");
-    a.setAttribute("href", img.src);
-    a.setAttribute("title", img.alt);
-    a.appendChild(img.cloneNode(true));
-    img.parentNode.replaceChild(a, img);
-  }
-}, false);
-</script>
+</div></article></main><footer><ul><li>Link:</li><li><a href="https://twitter.com/f440">Twitter</a></li><li><a href="https://github.com/f440">Github</a></li><li><a href="https://pinbaord.in/u:f440">Pinbaord</a></li></ul></footer></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"post":{"localPath":"/home/f440/go/src/github.com/f440/f440.github.com/content/2011-12-24-superviser.markdown","path":"2011/12/24/superviser","layout":"post","title":"プロセス管理にsuperviserを使う","createdAt":"2011-12-23T15:00:00.000Z","kind":"article","comments":true,"tags":null,"content":"\u003cp\u003eちょっと前にsupervisorを使ったのでやり方をまとめておく。\u003c/p\u003e\n\u003c!-- more --\u003e\n\u003cp\u003e公式サイト: \u003ca href=\"http://supervisord.org/\"\u003esupervisor\u003c/a\u003e\u003c/p\u003e\n\u003cp\u003esupervisorはプログラムの起動、停止を管理するツール。daemontools\nがわかるなら、あんな感じのソフトだと思ってもらえれば早い。daemontoolsよりも標準的なディレクトリ構成で使えるぶん、導入障壁は低いと思う。\u003c/p\u003e\n\u003cp\u003e最近のLinuxなら、パッケージですぐインストール出来る。以降の説明は debian (6.0.3)、superviser 3 系によるもの。\u003c/p\u003e\n\u003ch2\u003eインストール\u003c/h2\u003e\n\u003cpre\u003e\u003ccode\u003e$ sudo apt-get install superviser\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch3\u003e確認\u003c/h3\u003e\n\u003cpre\u003e\u003ccode\u003e$ sudo service supervisor status # 起動確認（名前表示されない……）\n is running\n$ sudo service supervisor stop # 停止\nStopping supervisor: supervisord.\n$ sudo service supervisor start # 起動\nStarting supervisor: supervisord.\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003e例\u003c/h2\u003e\n\u003cp\u003e例のために、自分のホームにインストールしてあったmemcachedを起動してみる。\u003c/p\u003e\n\u003cp\u003eまずは、コマンドラインから問題無く起動出来ることを確認\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e$ /home/f440/opt/bin/memcached # 起動\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eプログラムはフォアグラウンドで起動する。memcached の例で言うと、-d オプション (run as a daemon) はつけない。\u003c/p\u003e\n\u003cp\u003e設定ファイルを配置する。もともと /etc/supervisor/supervisord.conf 内で /etc/supervisor/conf.d/*.conf を Include するよう設定されていた読み込むように設定されていたので、以下のようなファイルを作った。\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e$ cat /etc/supervisor/conf.d/memcached.conf\n[program:memcached]\ncommand=/home/f440/opt/bin/memcached\nuser=f440\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eデフォルトだと設定したプログラムは自動起動する(autostart=true)なので、supervisor を再起動させれば memcachedも起動する。memcached がいつまでも起動しなければ /var/log/supervisor 以下のログを確認する。\u003c/p\u003e\n\u003cp\u003e何らかの原因で停止したとき、自動起動して欲しければ autorestart=true を指定しておく。\u003c/p\u003e\n\u003ch2\u003eコマンドで操作\u003c/h2\u003e\n\u003cp\u003e起動中は supervisorctl 経由で操作ができるようになる。\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e$ sudo supervisor \nmemcached                        RUNNING    pid 24928, uptime 0:08:21\nsupervisor\u003e # help でヘルプを表示\nsupervisor\u003e exit\n$ sudo supervisor status # 直接引数を渡すこともできる\nmemcached                        RUNNING    pid 24928, uptime 0:08:21\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eWebで操作\u003c/h2\u003e\n\u003cp\u003e設定を追加するとWebから操作できるようになる。外部から好き放題できるので、安全な場所以外では適切な権限設定必須。\u003c/p\u003e\n\u003cp\u003eポート9001で、どこからでもアクセスできるよう設定\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003ediff --git a/supervisor/supervisord.conf b/supervisor/supervisord.conf\nindex 61b3020..86e04f2 100644\n--- a/supervisor/supervisord.conf\n+++ b/supervisor/supervisord.conf\n@@ -4,6 +4,9 @@\n file=/var/run//supervisor.sock   ; (the path to the socket file)\n chmod=0700                       ; sockef file mode (default 0700)\n\n+[inet_http_server]\n+port=*:9001\n+\n [supervisord]\n logfile=/var/log/supervisor/supervisord.log ; (main log file;default $CWD/supervisord.log)\n pidfile=/var/run/supervisord.pid ; (supervisord pidfile;default supervisord.pid)\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e設定ファイル再読込\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e $ sudo supervisor reload\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eアクセス出来るようになる\u003c/p\u003e\n\u003cp\u003e\u003cimg src=\"/images/2011-12-24-superviser/tumblr_lx9eq9SHXa1qz5yk8.jpg\" alt=\"Web管理画面\"\u003e\u003c/p\u003e\n\u003cp\u003e終わり。\u003c/p\u003e\n"}},"__N_SSG":true},"page":"/blog/[...slug]","query":{"slug":["2011","12","24","superviser"]},"buildId":"PHKJ2Dzu0oDEBCrRGxDFE","isFallback":false,"gsp":true,"scriptLoader":[]}</script></body></html>

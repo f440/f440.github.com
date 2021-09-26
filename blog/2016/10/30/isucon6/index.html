@@ -1,149 +1,17 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ISUCON 6 - apatheia.info</title>
-    <link href="/stylesheets/screen.css" rel="stylesheet" />
-    <script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-35021317-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-</script>
-
-    <script>
-var _prum = [['id', '534a4930abe53d551a2dfa1b'],
-             ['mark', 'firstbyte', (new Date()).getTime()]];
-(function() {
-  var s = document.getElementsByTagName('script')[0]
-    , p = document.createElement('script');
-  p.async = 'async';
-  p.src = '//rum-static.pingdom.net/prum.min.js';
-  s.parentNode.insertBefore(p, s);
-})();
-</script>
-
-    <link rel="alternate" type="application/rss+xml" title="apatheia.info" href="/atom.xml" />
-  </head>
-  <body class="2016-10-30-isucon6">
-    <header>
-      <div id="site-title">
-        <h1><a href="/">apatheia.info</a></h1>
-      </div>
-      <nav>
-        <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="/archives/">Archive</a></li>
-          <li><a href="/atom.xml">RSS</a></li>
-        </ul>
-      </nav>
-    </header>
-    
-  <article>
-    <h1>ISUCON 6</h1>
-    <p id="article-info">
-      Published on 30 Oct 2016
-      
-  Tags: <a href="/blog/categories/isucon/">isucon</a> <a href="/blog/categories/performance/">performance</a> 
-
-
-    </p>
-    
-<p>今年も<a href="http://isucon.net/">ISUCON</a>に参加した。</p>
-
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width"/><meta charSet="utf-8"/><title>ISUCON 6 - aptheia.info</title><link rel="alternate" type="application/rss+xml" title="apatheia.info" href="/atom.xml"/><meta name="next-head-count" content="4"/><link rel="preload" href="/_next/static/css/3c128f59c2ecef969dbc.css" as="style"/><link rel="stylesheet" href="/_next/static/css/3c128f59c2ecef969dbc.css" data-n-g=""/><noscript data-n-css=""></noscript><script defer="" nomodule="" src="/_next/static/chunks/polyfills-a40ef1678bae11e696dba45124eadd70.js"></script><script src="/_next/static/chunks/webpack-1a8a258926ecde76681b.js" defer=""></script><script src="/_next/static/chunks/framework-895f067827ebe11ffe45.js" defer=""></script><script src="/_next/static/chunks/main-a9acf05574b3448968f1.js" defer=""></script><script src="/_next/static/chunks/pages/_app-d96712b144c157b4cbfa.js" defer=""></script><script src="/_next/static/chunks/915-c287d7adb8a31cf4da35.js" defer=""></script><script src="/_next/static/chunks/pages/blog/%5B...slug%5D-c134caf83809c687960e.js" defer=""></script><script src="/_next/static/PHKJ2Dzu0oDEBCrRGxDFE/_buildManifest.js" defer=""></script><script src="/_next/static/PHKJ2Dzu0oDEBCrRGxDFE/_ssgManifest.js" defer=""></script></head><body><div id="__next"><header><div id="site-title"><h1><a href="/">apatheia.info</a></h1></div><nav><ul><li><a href="/">Home</a></li><li><a href="/atom.xml">RSS</a></li></ul></nav></header><main><article><h1>ISUCON 6</h1><p id="article-info">Published on <!-- -->2016.10.30<!-- --> <span><a href="/blog/categories/isucon/">isucon</a> </span><span><a href="/blog/categories/performance/">performance</a> </span></p><div><p>今年も<a href="http://isucon.net/">ISUCON</a>に参加した。</p>
 <!-- more -->
-
 <p>例年に比べて十分な予習・復習をすることができず、メンバー内の得手・不得手を十分に理解できない状態だったので、不安を残したままコンテストを迎えることとなった。</p>
-
-<h2 id="section">予選</h2>
-
+<h2>予選</h2>
 <p>最初にAzure Resource Managerテンプレートで環境を作るのだが、プロビジョニングに失敗したり、作業ミス（AppArmorを削除したら一緒にMySQLが消された）などで、結局3回くらい環境の構築をしなおしてだいぶ焦ったりした。</p>
-
 <p>問題の内容としてはいわばはてなキーワードで、記事の投稿により別の記事内のリンクが増えるといったものだった。</p>
-
 <p>参考実装ではオンデマンドにリンクを計算してページをレンダリングするのだが、これでは遅いので事前に計算結果をキャッシュする方針とした。ただ、ページが投稿されるごとに過去の記事も再生成する必要があり、これについては影響を受けるページだけを絞り込んでキャッシュを破棄することで対応しようとした。</p>
-
 <p>方針が決まり、試しに雑なキャッシュをアプリに組み込んで見るとベンチマークを流すと毎回同じ箇所でベンチマークが失敗判定される。どうやらベンチマークは特定のページでリンクを確認しており、それ以外については問題があっても完走できる模様である。このことに気づいてからはベンチマークの挙動に合わせてキャッシュの再生成箇所を絞り込むなどを行った。</p>
-
 <p>これだけでかなりスコアは伸びるようになったのだが、あとは地道にDBからRedisへの切り替えなどをしていった。</p>
-
 <p>運営側と多少の行き違いがあり、スコアが計算されない事態が発生して肝を冷やしたが、最終的には対応してもらいなんとか本戦にたどり着くことができた。</p>
-
-<h2 id="section-1">本戦</h2>
-
+<h2>本戦</h2>
 <p>問題としてはリアルタイム性のあるお絵かきアプリという非常にこったものであった。利用されている技術としては Docker / React / SSE (Server-sent events) といったところで、慣れていないこともあり初動が遅くなってしまった。</p>
-
 <p>画像の表示部分で詰まっているような状態だったので、このあたりをなんとかしようという話ができはじめたのが昼から夕方にかけてで、いろいろ手を出しては失敗しを繰り返しているうちにタイムアップになってしまった。</p>
-
-<h2 id="section-2">コンテストを終えて</h2>
-
+<h2>コンテストを終えて</h2>
 <p>今年も非常に楽しく行えた。やり応えのある問題、快適な会場の提供、その他もろもろ運営の方々には頭が下がるばかりである。</p>
-
 <p>本戦の結果についてはとにかく悔しい。この記事を書いている時点で一週間が経ったが、未だに後悔が残るばかりである。ただ、自分の未熟さを痛感させてくれるという意味でとても有意義であったと思う。今後も参加したいので、末永く続いてくれることを願う。</p>
-
-
-    
-    <aside>
-    <div class="share">
-  <div class="addthis_toolbox addthis_default_style ">
-    <a class="addthis_counter addthis_pill_style"></a>
-  </div>
-  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4f8eed8875190f92"></script>
-  <script type="text/javascript">
-    var addthis_config = {
-      data_track_clickback: false
-    }
-  </script>
-</div>
-
-    
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-  var disqus_shortname = 'apatheiainfo';
-(function() {
-  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-})();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-
-
-    </aside>
-    
-  </article>
-
-    <footer>
-    <div>
-      <ul>
-        <li>Link:</li>
-        <li><a href="https://twitter.com/f440">Twitter</a></li>
-        <li><a href="https://github.com/f440">Github</a></li>
-        <li><a href="https://pinboard.in/u:f440">Pinboard</a></li>
-      </ul>
-    </div>
-    </footer>
-  </body>
-</html>
-
-<script>
-window.addEventListener("load", function() {
-  var imgs = document.getElementsByTagName("img");
-  for (var i = 0, len = imgs.length; i < len; i++) {
-    var img = imgs[i];
-    var a = document.createElement("a");
-    a.setAttribute("href", img.src);
-    a.setAttribute("title", img.alt);
-    a.appendChild(img.cloneNode(true));
-    img.parentNode.replaceChild(a, img);
-  }
-}, false);
-</script>
+</div></article></main><footer><ul><li>Link:</li><li><a href="https://twitter.com/f440">Twitter</a></li><li><a href="https://github.com/f440">Github</a></li><li><a href="https://pinbaord.in/u:f440">Pinbaord</a></li></ul></footer></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"post":{"localPath":"/home/f440/go/src/github.com/f440/f440.github.com/content/2016-10-30-isucon6.markdown","path":"2016/10/30/isucon6","layout":"post","title":"ISUCON 6","createdAt":"2016-10-29T15:51:00.000Z","kind":"article","comments":true,"tags":["isucon","performance"],"content":"\u003cp\u003e今年も\u003ca href=\"http://isucon.net/\"\u003eISUCON\u003c/a\u003eに参加した。\u003c/p\u003e\n\u003c!-- more --\u003e\n\u003cp\u003e例年に比べて十分な予習・復習をすることができず、メンバー内の得手・不得手を十分に理解できない状態だったので、不安を残したままコンテストを迎えることとなった。\u003c/p\u003e\n\u003ch2\u003e予選\u003c/h2\u003e\n\u003cp\u003e最初にAzure Resource Managerテンプレートで環境を作るのだが、プロビジョニングに失敗したり、作業ミス（AppArmorを削除したら一緒にMySQLが消された）などで、結局3回くらい環境の構築をしなおしてだいぶ焦ったりした。\u003c/p\u003e\n\u003cp\u003e問題の内容としてはいわばはてなキーワードで、記事の投稿により別の記事内のリンクが増えるといったものだった。\u003c/p\u003e\n\u003cp\u003e参考実装ではオンデマンドにリンクを計算してページをレンダリングするのだが、これでは遅いので事前に計算結果をキャッシュする方針とした。ただ、ページが投稿されるごとに過去の記事も再生成する必要があり、これについては影響を受けるページだけを絞り込んでキャッシュを破棄することで対応しようとした。\u003c/p\u003e\n\u003cp\u003e方針が決まり、試しに雑なキャッシュをアプリに組み込んで見るとベンチマークを流すと毎回同じ箇所でベンチマークが失敗判定される。どうやらベンチマークは特定のページでリンクを確認しており、それ以外については問題があっても完走できる模様である。このことに気づいてからはベンチマークの挙動に合わせてキャッシュの再生成箇所を絞り込むなどを行った。\u003c/p\u003e\n\u003cp\u003eこれだけでかなりスコアは伸びるようになったのだが、あとは地道にDBからRedisへの切り替えなどをしていった。\u003c/p\u003e\n\u003cp\u003e運営側と多少の行き違いがあり、スコアが計算されない事態が発生して肝を冷やしたが、最終的には対応してもらいなんとか本戦にたどり着くことができた。\u003c/p\u003e\n\u003ch2\u003e本戦\u003c/h2\u003e\n\u003cp\u003e問題としてはリアルタイム性のあるお絵かきアプリという非常にこったものであった。利用されている技術としては Docker / React / SSE (Server-sent events) といったところで、慣れていないこともあり初動が遅くなってしまった。\u003c/p\u003e\n\u003cp\u003e画像の表示部分で詰まっているような状態だったので、このあたりをなんとかしようという話ができはじめたのが昼から夕方にかけてで、いろいろ手を出しては失敗しを繰り返しているうちにタイムアップになってしまった。\u003c/p\u003e\n\u003ch2\u003eコンテストを終えて\u003c/h2\u003e\n\u003cp\u003e今年も非常に楽しく行えた。やり応えのある問題、快適な会場の提供、その他もろもろ運営の方々には頭が下がるばかりである。\u003c/p\u003e\n\u003cp\u003e本戦の結果についてはとにかく悔しい。この記事を書いている時点で一週間が経ったが、未だに後悔が残るばかりである。ただ、自分の未熟さを痛感させてくれるという意味でとても有意義であったと思う。今後も参加したいので、末永く続いてくれることを願う。\u003c/p\u003e\n"}},"__N_SSG":true},"page":"/blog/[...slug]","query":{"slug":["2016","10","30","isucon6"]},"buildId":"PHKJ2Dzu0oDEBCrRGxDFE","isFallback":false,"gsp":true,"scriptLoader":[]}</script></body></html>

@@ -1,79 +1,14 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>サブコマンドを sub で処理する - apatheia.info</title>
-    <link href="/stylesheets/screen.css" rel="stylesheet" />
-    <script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-35021317-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-</script>
-
-    <script>
-var _prum = [['id', '534a4930abe53d551a2dfa1b'],
-             ['mark', 'firstbyte', (new Date()).getTime()]];
-(function() {
-  var s = document.getElementsByTagName('script')[0]
-    , p = document.createElement('script');
-  p.async = 'async';
-  p.src = '//rum-static.pingdom.net/prum.min.js';
-  s.parentNode.insertBefore(p, s);
-})();
-</script>
-
-    <link rel="alternate" type="application/rss+xml" title="apatheia.info" href="/atom.xml" />
-  </head>
-  <body class="2012-10-07-sub-for-subcommands">
-    <header>
-      <div id="site-title">
-        <h1><a href="/">apatheia.info</a></h1>
-      </div>
-      <nav>
-        <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="/archives/">Archive</a></li>
-          <li><a href="/atom.xml">RSS</a></li>
-        </ul>
-      </nav>
-    </header>
-    
-  <article>
-    <h1>サブコマンドを sub で処理する</h1>
-    <p id="article-info">
-      Published on 07 Oct 2012
-      
-  Tags: <a href="/blog/categories/cli/">cli</a> <a href="/blog/categories/shell/">shell</a> <a href="/blog/categories/unix/">unix</a> 
-
-
-    </p>
-    
-<p><a href="https://github.com/37signals/sub">sub</a> は <a href="http://37signals.com/">37signals</a> が公開しているスクリプト群。サブコマンド付きのコマンドを作りたいとき、補完やヘルプメッセージなどの便利な機能を提供してくれる。</p>
-
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width"/><meta charSet="utf-8"/><title>サブコマンドを sub で処理する - aptheia.info</title><link rel="alternate" type="application/rss+xml" title="apatheia.info" href="/atom.xml"/><meta name="next-head-count" content="4"/><link rel="preload" href="/_next/static/css/3c128f59c2ecef969dbc.css" as="style"/><link rel="stylesheet" href="/_next/static/css/3c128f59c2ecef969dbc.css" data-n-g=""/><noscript data-n-css=""></noscript><script defer="" nomodule="" src="/_next/static/chunks/polyfills-a40ef1678bae11e696dba45124eadd70.js"></script><script src="/_next/static/chunks/webpack-1a8a258926ecde76681b.js" defer=""></script><script src="/_next/static/chunks/framework-895f067827ebe11ffe45.js" defer=""></script><script src="/_next/static/chunks/main-a9acf05574b3448968f1.js" defer=""></script><script src="/_next/static/chunks/pages/_app-d96712b144c157b4cbfa.js" defer=""></script><script src="/_next/static/chunks/915-c287d7adb8a31cf4da35.js" defer=""></script><script src="/_next/static/chunks/pages/blog/%5B...slug%5D-c134caf83809c687960e.js" defer=""></script><script src="/_next/static/PHKJ2Dzu0oDEBCrRGxDFE/_buildManifest.js" defer=""></script><script src="/_next/static/PHKJ2Dzu0oDEBCrRGxDFE/_ssgManifest.js" defer=""></script></head><body><div id="__next"><header><div id="site-title"><h1><a href="/">apatheia.info</a></h1></div><nav><ul><li><a href="/">Home</a></li><li><a href="/atom.xml">RSS</a></li></ul></nav></header><main><article><h1>サブコマンドを sub で処理する</h1><p id="article-info">Published on <!-- -->2012.10.07<!-- --> <span><a href="/blog/categories/cli/">cli</a> </span><span><a href="/blog/categories/shell/">shell</a> </span><span><a href="/blog/categories/unix/">unix</a> </span></p><div><p><a href="https://github.com/37signals/sub">sub</a> は <a href="http://37signals.com/">37signals</a> が公開しているスクリプト群。サブコマンド付きのコマンドを作りたいとき、補完やヘルプメッセージなどの便利な機能を提供してくれる。</p>
 <!-- more -->
-
-<h2 id="section">使い方</h2>
-
+<h2>使い方</h2>
 <p>以下の簡単なコマンドを作って、動作を確認してみることにする。</p>
-
 <pre><code>ex. browse safari http://google.com/
 
 コマンド browse にサブコマンドでブラウザ(safari, chrome, opera, ...)を与え、
 最後の引数で渡された URL が開く。URL が渡されなければ、ブラウザの起動のみ行う。
 </code></pre>
-
 <p>なお、確認はすべて Mac OS X 10.8 上 の zsh で行っている。</p>
-
-<h3 id="section-1">初期化</h3>
-
+<h3>初期化</h3>
 <pre><code>$ git clone git://github.com/37signals/sub.git browse
 $ cd browse
 $ ./prepare.sh browse
@@ -93,9 +28,7 @@ Made a mistake? Want to make a different sub? Run:
     git checkout -f
 Thanks for making a sub!
 </code></pre>
-
 <p>言われたとおり、コマンドを実行</p>
-
 <pre><code>$ rm -rf .git
 $ git init
 $ git add .
@@ -108,23 +41,17 @@ $ ./bin/foo init
 
 eval "$(/XXXXXXXX/browse/bin/browse init -)"
 </code></pre>
-
 <p>最後に表示されるコマンドを実行することにより、補完が有効になる(XXXXXXXX は作業ディレクトリに応じて変わる)。<code>browse he[tab]</code> を実行してみよう。</p>
-
 <pre><code>$ browse help
-Usage: browse &lt;command&gt; [&lt;args&gt;]
+Usage: browse &#x3C;command> [&#x3C;args>]
 Some useful browse commands are:
    commands               List all browse commands
 
-See 'browse help &lt;command&gt;' for information on a specific command.
+See 'browse help &#x3C;command>' for information on a specific command.
 </code></pre>
-
 <p>無事ヘルプが表示されたら、セットアップはうまくいっている。</p>
-
-<h3 id="section-2">サブコマンド作成</h3>
-
+<h3>サブコマンド作成</h3>
 <p>まずはディレクトリ構造を見てみよう。</p>
-
 <pre><code>$ gfind ! -path './.git/*'
 .
 ./.git
@@ -145,9 +72,7 @@ See 'browse help &lt;command&gt;' for information on a specific command.
 ./share/browse
 ./share/browse/example
 </code></pre>
-
 <p>libexec/browse-SUBCOMMAND  形式でファイルを作れば、サブコマンドを追加できる。早速追加してみよう。</p>
-
 <pre><code>$ vim libexec/browse-safari
 
     #!/usr/bin/env bash
@@ -156,9 +81,7 @@ See 'browse help &lt;command&gt;' for information on a specific command.
     
 $ chomod a+x libexec/browse-safari
 </code></pre>
-
 <p>サブコマンドはシェル補完できるので、<code>browse saf[tab] http://google.com</code> といった入力が可能。問題が無ければブラウザが起動する。 ただ、これだけだと使い方がわかりづらいので、ヘルプを追加してみる。</p>
-
 <pre><code>$ vim libexec/browse-safari
 
     #!/usr/bin/env bash
@@ -172,99 +95,30 @@ $ chomod a+x libexec/browse-safari
     
     open -a safari $1
 </code></pre>
-
 <p>ヘルプに反映されていることを確認。</p>
-
 <pre><code>$ browse help safari
 Usage: browse safari [URL]
 
 safari を利用して、引数で渡された URL を開く
 何も URL を指定しなければ、ブラウザの起動のみ
 </code></pre>
-
 <p>引数なしの <code>help</code> もメッセージが変わっている。</p>
-
 <pre><code>$ browse help
-Usage: browse &lt;command&gt; [&lt;args&gt;]
+Usage: browse &#x3C;command> [&#x3C;args>]
 
 Some useful browse commands are:
    commands               List all browse commands
    safari                 safari で指定の URL を開く
 
-See 'browse help &lt;command&gt;' for information on a specific command.
+See 'browse help &#x3C;command>' for information on a specific command.
 </code></pre>
-
-<p>あとは、libexec-chrome, libexec-opera, … とサブコマンドを追加していくことができる。</p>
-
-<h2 id="section-3">雑感</h2>
-
+<p>あとは、libexec-chrome, libexec-opera, ... とサブコマンドを追加していくことができる。</p>
+<h2>雑感</h2>
 <p>プログラムを書いてもシェルの補完設定までは手が回らないことが多いので、簡単にサポートしてくれる仕組みが提供されているのはかなりよかった。</p>
-
 <p>シェルスクリプトの書き方はかなりばらつきがあり、自分の周りでも割とフリーダムな状況になっていたので、邪魔にならない程度のフレームワークがあればいいな、と思っていた。そういう用途にも合っていると思う。</p>
-
-<h2 id="section-4">参考</h2>
-
+<h2>参考</h2>
 <ul>
-  <li><a href="http://37signals.com/svn/posts/3264-automating-with-convention-introducing-sub">37signalsのブログでの紹介</a></li>
-  <li><a href="https://github.com/37signals/sub">GitHubのリポジトリ</a></li>
+<li><a href="http://37signals.com/svn/posts/3264-automating-with-convention-introducing-sub">37signalsのブログでの紹介</a></li>
+<li><a href="https://github.com/37signals/sub">GitHubのリポジトリ</a></li>
 </ul>
-
-
-    
-    <aside>
-    <div class="share">
-  <div class="addthis_toolbox addthis_default_style ">
-    <a class="addthis_counter addthis_pill_style"></a>
-  </div>
-  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4f8eed8875190f92"></script>
-  <script type="text/javascript">
-    var addthis_config = {
-      data_track_clickback: false
-    }
-  </script>
-</div>
-
-    
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-  var disqus_shortname = 'apatheiainfo';
-(function() {
-  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-})();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-
-
-    </aside>
-    
-  </article>
-
-    <footer>
-    <div>
-      <ul>
-        <li>Link:</li>
-        <li><a href="https://twitter.com/f440">Twitter</a></li>
-        <li><a href="https://github.com/f440">Github</a></li>
-        <li><a href="https://pinboard.in/u:f440">Pinboard</a></li>
-      </ul>
-    </div>
-    </footer>
-  </body>
-</html>
-
-<script>
-window.addEventListener("load", function() {
-  var imgs = document.getElementsByTagName("img");
-  for (var i = 0, len = imgs.length; i < len; i++) {
-    var img = imgs[i];
-    var a = document.createElement("a");
-    a.setAttribute("href", img.src);
-    a.setAttribute("title", img.alt);
-    a.appendChild(img.cloneNode(true));
-    img.parentNode.replaceChild(a, img);
-  }
-}, false);
-</script>
+</div></article></main><footer><ul><li>Link:</li><li><a href="https://twitter.com/f440">Twitter</a></li><li><a href="https://github.com/f440">Github</a></li><li><a href="https://pinbaord.in/u:f440">Pinbaord</a></li></ul></footer></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"post":{"localPath":"/home/f440/go/src/github.com/f440/f440.github.com/content/2012-10-07-sub-for-subcommands.markdown","path":"2012/10/07/sub-for-subcommands","layout":"post","title":"サブコマンドを sub で処理する","createdAt":"2012-10-07T13:13:00.000Z","kind":"article","comments":true,"tags":["cli","shell","unix"],"content":"\u003cp\u003e\u003ca href=\"https://github.com/37signals/sub\"\u003esub\u003c/a\u003e は \u003ca href=\"http://37signals.com/\"\u003e37signals\u003c/a\u003e が公開しているスクリプト群。サブコマンド付きのコマンドを作りたいとき、補完やヘルプメッセージなどの便利な機能を提供してくれる。\u003c/p\u003e\n\u003c!-- more --\u003e\n\u003ch2\u003e使い方\u003c/h2\u003e\n\u003cp\u003e以下の簡単なコマンドを作って、動作を確認してみることにする。\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eex. browse safari http://google.com/\n\nコマンド browse にサブコマンドでブラウザ(safari, chrome, opera, ...)を与え、\n最後の引数で渡された URL が開く。URL が渡されなければ、ブラウザの起動のみ行う。\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eなお、確認はすべて Mac OS X 10.8 上 の zsh で行っている。\u003c/p\u003e\n\u003ch3\u003e初期化\u003c/h3\u003e\n\u003cpre\u003e\u003ccode\u003e$ git clone git://github.com/37signals/sub.git browse\n$ cd browse\n$ ./prepare.sh browse\n# 以下のメッセージが表示される\n\nPreparing your 'browse' sub!\nDone! Enjoy your new sub! If you're happy with your sub, run:\n\n    rm -rf .git\n    git init\n    git add .\n    git commit -m 'Starting off browse'\n    ./bin/browse init\n\nMade a mistake? Want to make a different sub? Run:\n    git add .\n    git checkout -f\nThanks for making a sub!\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e言われたとおり、コマンドを実行\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e$ rm -rf .git\n$ git init\n$ git add .\n$ git commit -m 'Starting off foo'\n$ ./bin/foo init\n# 以下のメッセージが表示される。パスは作業ディレクトリに応じて変わる。\n\n# Load browse automatically by adding\n# the following to ~/.zshenv:\n\neval \"$(/XXXXXXXX/browse/bin/browse init -)\"\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e最後に表示されるコマンドを実行することにより、補完が有効になる(XXXXXXXX は作業ディレクトリに応じて変わる)。\u003ccode\u003ebrowse he[tab]\u003c/code\u003e を実行してみよう。\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e$ browse help\nUsage: browse \u0026#x3C;command\u003e [\u0026#x3C;args\u003e]\nSome useful browse commands are:\n   commands               List all browse commands\n\nSee 'browse help \u0026#x3C;command\u003e' for information on a specific command.\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e無事ヘルプが表示されたら、セットアップはうまくいっている。\u003c/p\u003e\n\u003ch3\u003eサブコマンド作成\u003c/h3\u003e\n\u003cp\u003eまずはディレクトリ構造を見てみよう。\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e$ gfind ! -path './.git/*'\n.\n./.git\n./bin\n./bin/browse\n./completions\n./completions/browse.bash\n./completions/browse.zsh\n./libexec\n./libexec/browse\n./libexec/browse-commands\n./libexec/browse-completions\n./libexec/browse-help\n./libexec/browse-init\n./libexec/browse-sh-shell\n./LICENSE\n./share\n./share/browse\n./share/browse/example\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003elibexec/browse-SUBCOMMAND  形式でファイルを作れば、サブコマンドを追加できる。早速追加してみよう。\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e$ vim libexec/browse-safari\n\n    #!/usr/bin/env bash\n    set -e\n    open -a safari $1\n    \n$ chomod a+x libexec/browse-safari\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eサブコマンドはシェル補完できるので、\u003ccode\u003ebrowse saf[tab] http://google.com\u003c/code\u003e といった入力が可能。問題が無ければブラウザが起動する。 ただ、これだけだと使い方がわかりづらいので、ヘルプを追加してみる。\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e$ vim libexec/browse-safari\n\n    #!/usr/bin/env bash\n    #\n    # Usage: browse safari [URL]\n    # Summary: safari で指定の URL を開く\n    # Help: safari を利用して、引数で渡された URL を開く\n    # 何も URL を指定しなければ、ブラウザの起動のみ\n    \n    set -e\n    \n    open -a safari $1\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eヘルプに反映されていることを確認。\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e$ browse help safari\nUsage: browse safari [URL]\n\nsafari を利用して、引数で渡された URL を開く\n何も URL を指定しなければ、ブラウザの起動のみ\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e引数なしの \u003ccode\u003ehelp\u003c/code\u003e もメッセージが変わっている。\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e$ browse help\nUsage: browse \u0026#x3C;command\u003e [\u0026#x3C;args\u003e]\n\nSome useful browse commands are:\n   commands               List all browse commands\n   safari                 safari で指定の URL を開く\n\nSee 'browse help \u0026#x3C;command\u003e' for information on a specific command.\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eあとは、libexec-chrome, libexec-opera, ... とサブコマンドを追加していくことができる。\u003c/p\u003e\n\u003ch2\u003e雑感\u003c/h2\u003e\n\u003cp\u003eプログラムを書いてもシェルの補完設定までは手が回らないことが多いので、簡単にサポートしてくれる仕組みが提供されているのはかなりよかった。\u003c/p\u003e\n\u003cp\u003eシェルスクリプトの書き方はかなりばらつきがあり、自分の周りでも割とフリーダムな状況になっていたので、邪魔にならない程度のフレームワークがあればいいな、と思っていた。そういう用途にも合っていると思う。\u003c/p\u003e\n\u003ch2\u003e参考\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"http://37signals.com/svn/posts/3264-automating-with-convention-introducing-sub\"\u003e37signalsのブログでの紹介\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"https://github.com/37signals/sub\"\u003eGitHubのリポジトリ\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n"}},"__N_SSG":true},"page":"/blog/[...slug]","query":{"slug":["2012","10","07","sub-for-subcommands"]},"buildId":"PHKJ2Dzu0oDEBCrRGxDFE","isFallback":false,"gsp":true,"scriptLoader":[]}</script></body></html>

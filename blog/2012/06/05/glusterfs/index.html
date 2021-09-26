@@ -1,94 +1,29 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>分散ファイルシステム GlusterFS を使う - apatheia.info</title>
-    <link href="/stylesheets/screen.css" rel="stylesheet" />
-    <script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-35021317-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-</script>
-
-    <script>
-var _prum = [['id', '534a4930abe53d551a2dfa1b'],
-             ['mark', 'firstbyte', (new Date()).getTime()]];
-(function() {
-  var s = document.getElementsByTagName('script')[0]
-    , p = document.createElement('script');
-  p.async = 'async';
-  p.src = '//rum-static.pingdom.net/prum.min.js';
-  s.parentNode.insertBefore(p, s);
-})();
-</script>
-
-    <link rel="alternate" type="application/rss+xml" title="apatheia.info" href="/atom.xml" />
-  </head>
-  <body class="2012-06-05-glusterfs">
-    <header>
-      <div id="site-title">
-        <h1><a href="/">apatheia.info</a></h1>
-      </div>
-      <nav>
-        <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="/archives/">Archive</a></li>
-          <li><a href="/atom.xml">RSS</a></li>
-        </ul>
-      </nav>
-    </header>
-    
-  <article>
-    <h1>分散ファイルシステム GlusterFS を使う</h1>
-    <p id="article-info">
-      Published on 05 Jun 2012
-      
-
-    </p>
-    <p>Webアプリケーションを構築する上で、運用中に発生したファイルをローカルのファイルシステム上に保管すると、スケールを阻害するため好ましくないことが多い。</p>
-
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width"/><meta charSet="utf-8"/><title>分散ファイルシステム GlusterFS を使う - aptheia.info</title><link rel="alternate" type="application/rss+xml" title="apatheia.info" href="/atom.xml"/><meta name="next-head-count" content="4"/><link rel="preload" href="/_next/static/css/3c128f59c2ecef969dbc.css" as="style"/><link rel="stylesheet" href="/_next/static/css/3c128f59c2ecef969dbc.css" data-n-g=""/><noscript data-n-css=""></noscript><script defer="" nomodule="" src="/_next/static/chunks/polyfills-a40ef1678bae11e696dba45124eadd70.js"></script><script src="/_next/static/chunks/webpack-1a8a258926ecde76681b.js" defer=""></script><script src="/_next/static/chunks/framework-895f067827ebe11ffe45.js" defer=""></script><script src="/_next/static/chunks/main-a9acf05574b3448968f1.js" defer=""></script><script src="/_next/static/chunks/pages/_app-d96712b144c157b4cbfa.js" defer=""></script><script src="/_next/static/chunks/915-c287d7adb8a31cf4da35.js" defer=""></script><script src="/_next/static/chunks/pages/blog/%5B...slug%5D-c134caf83809c687960e.js" defer=""></script><script src="/_next/static/PHKJ2Dzu0oDEBCrRGxDFE/_buildManifest.js" defer=""></script><script src="/_next/static/PHKJ2Dzu0oDEBCrRGxDFE/_ssgManifest.js" defer=""></script></head><body><div id="__next"><header><div id="site-title"><h1><a href="/">apatheia.info</a></h1></div><nav><ul><li><a href="/">Home</a></li><li><a href="/atom.xml">RSS</a></li></ul></nav></header><main><article><h1>分散ファイルシステム GlusterFS を使う</h1><p id="article-info">Published on <!-- -->2012.06.05<!-- --> </p><div><p>Webアプリケーションを構築する上で、運用中に発生したファイルをローカルのファイルシステム上に保管すると、スケールを阻害するため好ましくないことが多い。</p>
 <!-- more -->
-
 <p>そのため、アプリケーションの設計の段階からCDNの利用したり、ファイルの管理だけ別のサービスに切り出したりすることを考慮すべきだけど、いろいろなしがらみのた
 めにどうしてもファイルを複数台のサーバーで共有するようなシステム形態にせざるを得ないことが往々にしてある。</p>
-
-<p>サーバー間のファイル共有のための方法として、<a href="http://code.google.com/p/lsyncd/">lsyncd</a> や<a href="http://www.drbd.org/">DRBD</a>を使ったり、NASを介したりするなど様々な方法があるけど、<a href="http://www.gluster.or
-g/">GlusterFS</a> がとても便利。特別な機器を必要とせず、すでにある環境に対して導入でき、信頼性とスケーラビリティのあるクラスタリングファイルシステムを手早く構築するこ
+<p>サーバー間のファイル共有のための方法として、<a href="http://code.google.com/p/lsyncd/">lsyncd</a> や<a href="http://www.drbd.org/">DRBD</a>を使ったり、NASを介したりするなど様々な方法があるけど、[GlusterFS](http://www.gluster.or
+g/) がとても便利。特別な機器を必要とせず、すでにある環境に対して導入でき、信頼性とスケーラビリティのあるクラスタリングファイルシステムを手早く構築するこ
 とができる。</p>
-
 <p>GlusterFS を簡単に説明すると、以下のような特徴がある:</p>
-
 <ul>
-  <li>分散型ファイルシステム
-    <ul>
-      <li>SPOFになるような特殊ノードも必要ない</li>
-    </ul>
-  </li>
-  <li>NFSやCIFSでマウント可能
-    <ul>
-      <li>先日発表された 3.3.0 で、HDFSとの互換性できてHadoopから処理できるようになったり、OpenStack Object Storage API互換の REST APIが提供されたりでいろいろ熱い感じになっている</li>
-    </ul>
-  </li>
-  <li>ストライピングで性能を上げたり、レプリケーションで耐障害性をあげたりすることが可能</li>
+<li>分散型ファイルシステム
+<ul>
+<li>SPOFになるような特殊ノードも必要ない</li>
 </ul>
-
+</li>
+<li>NFSやCIFSでマウント可能
+<ul>
+<li>先日発表された 3.3.0 で、HDFSとの互換性できてHadoopから処理できるようになったり、OpenStack Object Storage API互換の REST APIが提供されたりでいろいろ熱い感じになっている</li>
+</ul>
+</li>
+<li>ストライピングで性能を上げたり、レプリケーションで耐障害性をあげたりすることが可能</li>
+</ul>
 <p>今回は仮想マシンで動作を検証するまでの流れをまとめる。</p>
-
-<h2 id="section">環境構築</h2>
-
+<h2>環境構築</h2>
 <p>作業環境として、Mac OS X Lion上のVirtualBoxを利用し、仮想マシンとしてはCentOS 6.2
 x86_64を使う。Windowsでやる場合は<code>vagrant ssh</code>が動かないので、そのあたりを読み替えればできると思う。</p>
-
 <p>はじめにCentOS 6.2のマシンイメージを作る。</p>
-
 <pre><code>$ gem install vagrant veewee
 $ mkdir work
 $ cd work
@@ -100,29 +35,21 @@ $ vagrant box add CentOS-6.2-x86_64-minimal CentOS-6.2-x86_64-minimal.box
 $ cd ..
 $ rm -rf ./work
 </code></pre>
-
 <p>次にクラスタ構成の設定。</p>
-
 <pre><code>$ mkdir -p ~/Documents/vagrant/glusterfs/ # 作業用ディレクトリ作成
 $ cd ~/Documents/vagrant/glusterfs/
 $ vim Vagrantfile # 編集
 </code></pre>
-
 <p><a href="https://gist.github.com/2868494">https://gist.github.com/2868494</a></p>
-
 <pre><code>$ vagrant up # 3台の仮想マシン起動
 </code></pre>
-
 <p>必要となる仮想マシンがそろったので、glusterfsのセットアップを始める。</p>
-
 <pre><code>$ cd ~/Documents/vagrant/glusterfs # この中は 共有ディレクトリを通して、仮想マシンの/vagrantからも参照可能
 $ curl -LO [http://download.gluster.org/pub/gluster/glusterfs/LATEST/CentOS/glusterfs-3.3.0-1.el6.x86_64.rpm](http://download.gluster.org/pub/gluster/glusterfs/LATEST/CentOS/glusterfs-3.3.0-1.el6.x86_64.rpm)
 $ curl -LO [http://download.gluster.org/pub/gluster/glusterfs/LATEST/CentOS/glusterfs-fuse-3.3.0-1.el6.x86_64.rpm](http://download.gluster.org/pub/gluster/glusterfs/LATEST/CentOS/glusterfs-fuse-3.3.0-1.el6.x86_64.rpm)
 $ curl -LO [http://download.gluster.org/pub/gluster/glusterfs/LATEST/CentOS/glusterfs-server-3.3.0-1.el6.x86_64.rpm](http://download.gluster.org/pub/gluster/glusterfs/LATEST/CentOS/glusterfs-server-3.3.0-1.el6.x86_64.rpm)
 </code></pre>
-
 <p>仮想マシンに必要となるパッケージをインストールしておく。</p>
-
 <pre><code>$ brew install parallel # 一台ずつ設定するの面倒なので、gnu parallel 使う
 $ parallel vagrant ssh {} -c sh -c "sudo yum -y install wget fuse fuse-libs" ::: host1 host2 host3
 $ parallel vagrant ssh {} -c sh -c "sudo yum install -y /vagrant/glusterfs-*" ::: host1 host2 host3 # パッケージインストール
@@ -130,70 +57,47 @@ $ parallel vagrant ssh {} -c sh -c "/usr/sbin/glusterfs -V" ::: host1 host2 host
 $ parallel vagrant ssh {} -c sh -c "sudo /sbin/service iptables stop" ::: host1 host2 host3 # iptables 停止
 $ parallel vagrant ssh {} -c sh -c "sudo /sbin/service glusterd start" ::: host1 host2 host3 # 起動
 </code></pre>
-
 <p>以降、<code>$</code> から始まるのはホストOS、<code>hostX$</code> から始まるのは仮想マシン上のターミナルの説明とする。</p>
-
-<h2 id="section-1">ストレージプール作成</h2>
-
+<h2>ストレージプール作成</h2>
 <p>ストレージプールと呼ばれる、サーバー間の信頼済みネットワークを作成する。</p>
-
 <pre><code>$ vagrant ssh host1
 
 host1$ sudo gluster peer probe 192.168.56.11 # host2 をプールに追加
 host1$ sudo gluster peer probe 192.168.56.12 # host3 をプールに追加
 # 自ホスト(host1)の追加は不要
 </code></pre>
-
-<h2 id="section-2">ボリューム作成</h2>
-
+<h2>ボリューム作成</h2>
 <p>ストレージプールを構成したら、ボリュームを作成する。</p>
-
 <p>ボリュームは「分散するかどうか」「レプリケーションするかどうか」「ストライピングするかどうか」を選ぶことになる。組み合わせることも可能。ひとまず2台構成で分
 散、ストライピング、レプリケーションのそれぞれについて試してみる。</p>
-
-<h3 id="section-3">分散</h3>
-
+<h3>分散</h3>
 <p>ファイルをストレージ内のどこかしらに保存しておく形態。追加すればするほど大きなストレージとなるけど、冗長性などは確保されない。</p>
-
 <p>host1, host2 で分散ボリュームを作ってみる。</p>
-
 <pre><code>$ parallel vagrant ssh {} -c sh -c "sudo mkdir -p /export/vol" ::: host1 host2
 $ vagrant ssh host1
 
 host1$ sudo gluster volume create vol 192.168.56.10:/export/vol 192.168.56.11:/export/vol
 </code></pre>
-
-<h3 id="section-4">ストラインピング</h3>
-
+<h3>ストラインピング</h3>
 <p>性能向上を目的として、ファイルを複数に分割して保存しておく形態。RAID0みたいな感じ。</p>
-
 <p>host2, host3 でストライピングボリュームを作ってみる。</p>
-
 <pre><code>$ parallel vagrant ssh {} -c sh -c "sudo mkdir -p /export/vol-striping" ::: host2 host3  
 $ vagrant ssh host1
 
 host1 $ sudo gluster volume create vol-striping stripe 2 192.168.56.11:/export/vol-striping 192.168.56.12:/export/vol-striping
 </code></pre>
-
-<h3 id="section-5">レプリケーション</h3>
-
+<h3>レプリケーション</h3>
 <p>データの複製を作って、複数の場所に保管しておく形態。RAID1みたいな感じ。信頼性が高くなり、ファイルの読み込みも早くなる。</p>
-
 <p>host1, host3 でレプリケーションボリュームを作ってみる。</p>
-
 <pre><code>$ parallel vagrant ssh {} -c sh -c "sudo mkdir -p /export/vol-replica" ::: host1 host3
 $ vagrant ssh host1
 
 host1$ sudo gluster volume create vol-replica replica 2 192.168.56.10:/export/vol-replica 192.168.56.12:/export/vol-replica
 host1$ sudo gluster volume start vol-replica
 </code></pre>
-
-<h2 id="section-6">利用</h2>
-
-<h3 id="section-7">マウント</h3>
-
+<h2>利用</h2>
+<h3>マウント</h3>
 <p>OSにマウントしてみる。マウント方法にはNFSやCIFSなども選べるけど、ここではネイティブのglusterfs形式を選んでみる。</p>
-
 <pre><code>$ vagrant ssh host1
 
 host1$ sudo mkdir -p /mnt/{vol,vol-striping,vol-replica}
@@ -201,11 +105,8 @@ host1$ sudo mount -t glusterfs 192.168.56.10:/vol /mnt/vol # 分散
 host1$ sudo mount -t glusterfs 192.168.56.11:/vol-striping /mnt/vol-striping # ストライピング
 host1$ sudo mount -t glusterfs 192.168.56.12:/vol-replica /mnt/vol-replica # レプリケーション    
 </code></pre>
-
-<h3 id="section-8">動作確認</h3>
-
+<h3>動作確認</h3>
 <p>はじめに、マウントした結果を見てみる。</p>
-
 <pre><code>$ df -h /mnt/*
 Filesystem            Size  Used Avail Use% Mounted on
 192.168.56.10:vol      17G  1.9G   14G  12% /mnt/vol
@@ -214,13 +115,9 @@ Filesystem            Size  Used Avail Use% Mounted on
 192.168.56.11:vol-striping
                        17G  1.9G   14G  12% /mnt/vol-striping
 </code></pre>
-
 <p>分散、ストライピングは2台分を足し合わせた結果になっている。レプリケーションは2台に同じデータが分散されるので、ディスク効率は50%に下がる。</p>
-
-<h4 id="section-9">分散</h4>
-
+<h4>分散</h4>
 <p>適当にファイルを作ってみる。</p>
-
 <pre><code>host1$ sudo touch /mnt/vol/{1..9}
 
 # 保管先をチェック
@@ -229,11 +126,8 @@ host1$ ls /export/vol/ # 1  5  7  8  9
 
 host2$ ls /export/vol/ # 2  3  4  6
 </code></pre>
-
 <p>ファイルがばらばらと格納されていることがわかる。</p>
-
-<h3 id="section-10">ストライピング</h3>
-
+<h3>ストライピング</h3>
 <pre><code>host1$ sudo vi /mnt/vol-striping/sample.txt # 10M強データをテキストデータを書き込み
 
 host1$ du -s /mnt/vol-striping/sample.txt # 10256と表示された
@@ -246,14 +140,10 @@ host2$ ls -l /export/vol-striping/sample.txt # サイズが 10354688 と表示�
 host3$ du -s /export/vol-striping/sample.txt # 5128 と表示された
 host3$ ls -l /export/vol-striping/sample.txt # サイズが 10484785 と表示された
 </code></pre>
-
 <p>duの結果（ディスクのセクタ）はちょうど半分ずつに分割されるけど、ファイルの実際のサイズは元ファイルと同じ場合と異なる場合の2パターンが検出できた。これは、
 ファイルがスパースファイルなっているため、見かけ上のサイズと実際にディスク上で利用しているサイズが異なっていることが原因。</p>
-
-<h3 id="section-11">レプリケーション</h3>
-
+<h3>レプリケーション</h3>
 <p>適当なファイルを作ってみる。</p>
-
 <pre><code>host1$ sudo dd if=/dev/urandom of=/mnt/vol-replica/dummy bs=1M count=10
 host1$ sha1sum /mnt/vol-replica/dummy # 54b5c383e96d511249f9393de060c3219549e030 だった
 
@@ -262,78 +152,14 @@ host1$ sha1sum /export/vol-replica/dummy # 54b5c383e96d511249f9393de060c3219549e
 
 host2$ sha1sum /export/vol-replica/dummy # 54b5c383e96d511249f9393de060c3219549e030 だった
 </code></pre>
-
 <p>同じ内容のファイルが複数箇所に保存されることがわかった。</p>
-
-<h2 id="section-12">メモ</h2>
-
-<p>なんとなくでも使い始められちゃうくらい簡単に使えるけど、<a href="http://gluster.org/community/documentatio
-n/index.php/Main_Page">ドキュメント</a>の<a href="http://www.gluster.org/wp-
+<h2>メモ</h2>
+<p>なんとなくでも使い始められちゃうくらい簡単に使えるけど、[ドキュメント](http://gluster.org/community/documentatio
+n/index.php/Main_Page)の[PDF](http://www.gluster.org/wp-
 content/uploads/2012/05/Gluster_File_System-3.3.0-Administration_Guide-en-
-US.pdf">PDF</a> がわかりやすくコンパクトにまとまっていて、全体像を理解するのはここからここから始めるといいと思う。</p>
-
-<h2 id="section-13">参考</h2>
-
+US.pdf) がわかりやすくコンパクトにまとまっていて、全体像を理解するのはここからここから始めるといいと思う。</p>
+<h2>参考</h2>
 <ul>
-  <li><a href="http://www.gluster.org/community/documentation/index.php/Main_Page">Gluster Community のドキュメント</a></li>
+<li><a href="http://www.gluster.org/community/documentation/index.php/Main_Page">Gluster Community のドキュメント</a></li>
 </ul>
-
-
-    
-    <aside>
-    <div class="share">
-  <div class="addthis_toolbox addthis_default_style ">
-    <a class="addthis_counter addthis_pill_style"></a>
-  </div>
-  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4f8eed8875190f92"></script>
-  <script type="text/javascript">
-    var addthis_config = {
-      data_track_clickback: false
-    }
-  </script>
-</div>
-
-    
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-  var disqus_shortname = 'apatheiainfo';
-(function() {
-  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-})();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-
-
-    </aside>
-    
-  </article>
-
-    <footer>
-    <div>
-      <ul>
-        <li>Link:</li>
-        <li><a href="https://twitter.com/f440">Twitter</a></li>
-        <li><a href="https://github.com/f440">Github</a></li>
-        <li><a href="https://pinboard.in/u:f440">Pinboard</a></li>
-      </ul>
-    </div>
-    </footer>
-  </body>
-</html>
-
-<script>
-window.addEventListener("load", function() {
-  var imgs = document.getElementsByTagName("img");
-  for (var i = 0, len = imgs.length; i < len; i++) {
-    var img = imgs[i];
-    var a = document.createElement("a");
-    a.setAttribute("href", img.src);
-    a.setAttribute("title", img.alt);
-    a.appendChild(img.cloneNode(true));
-    img.parentNode.replaceChild(a, img);
-  }
-}, false);
-</script>
+</div></article></main><footer><ul><li>Link:</li><li><a href="https://twitter.com/f440">Twitter</a></li><li><a href="https://github.com/f440">Github</a></li><li><a href="https://pinbaord.in/u:f440">Pinbaord</a></li></ul></footer></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"post":{"localPath":"/home/f440/go/src/github.com/f440/f440.github.com/content/2012-06-05-glusterfs.markdown","path":"2012/06/05/glusterfs","layout":"post","title":"分散ファイルシステム GlusterFS を使う","createdAt":"2012-06-04T15:00:00.000Z","kind":"article","comments":true,"tags":null,"content":"\u003cp\u003eWebアプリケーションを構築する上で、運用中に発生したファイルをローカルのファイルシステム上に保管すると、スケールを阻害するため好ましくないことが多い。\u003c/p\u003e\n\u003c!-- more --\u003e\n\u003cp\u003eそのため、アプリケーションの設計の段階からCDNの利用したり、ファイルの管理だけ別のサービスに切り出したりすることを考慮すべきだけど、いろいろなしがらみのた\nめにどうしてもファイルを複数台のサーバーで共有するようなシステム形態にせざるを得ないことが往々にしてある。\u003c/p\u003e\n\u003cp\u003eサーバー間のファイル共有のための方法として、\u003ca href=\"http://code.google.com/p/lsyncd/\"\u003elsyncd\u003c/a\u003e や\u003ca href=\"http://www.drbd.org/\"\u003eDRBD\u003c/a\u003eを使ったり、NASを介したりするなど様々な方法があるけど、[GlusterFS](http://www.gluster.or\ng/) がとても便利。特別な機器を必要とせず、すでにある環境に対して導入でき、信頼性とスケーラビリティのあるクラスタリングファイルシステムを手早く構築するこ\nとができる。\u003c/p\u003e\n\u003cp\u003eGlusterFS を簡単に説明すると、以下のような特徴がある:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e分散型ファイルシステム\n\u003cul\u003e\n\u003cli\u003eSPOFになるような特殊ノードも必要ない\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eNFSやCIFSでマウント可能\n\u003cul\u003e\n\u003cli\u003e先日発表された 3.3.0 で、HDFSとの互換性できてHadoopから処理できるようになったり、OpenStack Object Storage API互換の REST APIが提供されたりでいろいろ熱い感じになっている\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eストライピングで性能を上げたり、レプリケーションで耐障害性をあげたりすることが可能\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003e今回は仮想マシンで動作を検証するまでの流れをまとめる。\u003c/p\u003e\n\u003ch2\u003e環境構築\u003c/h2\u003e\n\u003cp\u003e作業環境として、Mac OS X Lion上のVirtualBoxを利用し、仮想マシンとしてはCentOS 6.2\nx86_64を使う。Windowsでやる場合は\u003ccode\u003evagrant ssh\u003c/code\u003eが動かないので、そのあたりを読み替えればできると思う。\u003c/p\u003e\n\u003cp\u003eはじめにCentOS 6.2のマシンイメージを作る。\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e$ gem install vagrant veewee\n$ mkdir work\n$ cd work\n$ vagrant basebox define CentOS-6.2-x86_64-minimal CentOS-6.2-x86_64-minimal\n$ vagrant basebox build CentOS-6.2-x86_64-minimal # マシンイメージのビルド\n$ vagrant basebox validate CentOS-6.2-x86_64-minimal # チェック\n$ vagrant basebox export CentOS-6.2-x86_64-minimal\n$ vagrant box add CentOS-6.2-x86_64-minimal CentOS-6.2-x86_64-minimal.box\n$ cd ..\n$ rm -rf ./work\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e次にクラスタ構成の設定。\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e$ mkdir -p ~/Documents/vagrant/glusterfs/ # 作業用ディレクトリ作成\n$ cd ~/Documents/vagrant/glusterfs/\n$ vim Vagrantfile # 編集\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003ca href=\"https://gist.github.com/2868494\"\u003ehttps://gist.github.com/2868494\u003c/a\u003e\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e$ vagrant up # 3台の仮想マシン起動\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e必要となる仮想マシンがそろったので、glusterfsのセットアップを始める。\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e$ cd ~/Documents/vagrant/glusterfs # この中は 共有ディレクトリを通して、仮想マシンの/vagrantからも参照可能\n$ curl -LO [http://download.gluster.org/pub/gluster/glusterfs/LATEST/CentOS/glusterfs-3.3.0-1.el6.x86_64.rpm](http://download.gluster.org/pub/gluster/glusterfs/LATEST/CentOS/glusterfs-3.3.0-1.el6.x86_64.rpm)\n$ curl -LO [http://download.gluster.org/pub/gluster/glusterfs/LATEST/CentOS/glusterfs-fuse-3.3.0-1.el6.x86_64.rpm](http://download.gluster.org/pub/gluster/glusterfs/LATEST/CentOS/glusterfs-fuse-3.3.0-1.el6.x86_64.rpm)\n$ curl -LO [http://download.gluster.org/pub/gluster/glusterfs/LATEST/CentOS/glusterfs-server-3.3.0-1.el6.x86_64.rpm](http://download.gluster.org/pub/gluster/glusterfs/LATEST/CentOS/glusterfs-server-3.3.0-1.el6.x86_64.rpm)\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e仮想マシンに必要となるパッケージをインストールしておく。\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e$ brew install parallel # 一台ずつ設定するの面倒なので、gnu parallel 使う\n$ parallel vagrant ssh {} -c sh -c \"sudo yum -y install wget fuse fuse-libs\" ::: host1 host2 host3\n$ parallel vagrant ssh {} -c sh -c \"sudo yum install -y /vagrant/glusterfs-*\" ::: host1 host2 host3 # パッケージインストール\n$ parallel vagrant ssh {} -c sh -c \"/usr/sbin/glusterfs -V\" ::: host1 host2 host3 # 動作確認\n$ parallel vagrant ssh {} -c sh -c \"sudo /sbin/service iptables stop\" ::: host1 host2 host3 # iptables 停止\n$ parallel vagrant ssh {} -c sh -c \"sudo /sbin/service glusterd start\" ::: host1 host2 host3 # 起動\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e以降、\u003ccode\u003e$\u003c/code\u003e から始まるのはホストOS、\u003ccode\u003ehostX$\u003c/code\u003e から始まるのは仮想マシン上のターミナルの説明とする。\u003c/p\u003e\n\u003ch2\u003eストレージプール作成\u003c/h2\u003e\n\u003cp\u003eストレージプールと呼ばれる、サーバー間の信頼済みネットワークを作成する。\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e$ vagrant ssh host1\n\nhost1$ sudo gluster peer probe 192.168.56.11 # host2 をプールに追加\nhost1$ sudo gluster peer probe 192.168.56.12 # host3 をプールに追加\n# 自ホスト(host1)の追加は不要\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eボリューム作成\u003c/h2\u003e\n\u003cp\u003eストレージプールを構成したら、ボリュームを作成する。\u003c/p\u003e\n\u003cp\u003eボリュームは「分散するかどうか」「レプリケーションするかどうか」「ストライピングするかどうか」を選ぶことになる。組み合わせることも可能。ひとまず2台構成で分\n散、ストライピング、レプリケーションのそれぞれについて試してみる。\u003c/p\u003e\n\u003ch3\u003e分散\u003c/h3\u003e\n\u003cp\u003eファイルをストレージ内のどこかしらに保存しておく形態。追加すればするほど大きなストレージとなるけど、冗長性などは確保されない。\u003c/p\u003e\n\u003cp\u003ehost1, host2 で分散ボリュームを作ってみる。\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e$ parallel vagrant ssh {} -c sh -c \"sudo mkdir -p /export/vol\" ::: host1 host2\n$ vagrant ssh host1\n\nhost1$ sudo gluster volume create vol 192.168.56.10:/export/vol 192.168.56.11:/export/vol\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch3\u003eストラインピング\u003c/h3\u003e\n\u003cp\u003e性能向上を目的として、ファイルを複数に分割して保存しておく形態。RAID0みたいな感じ。\u003c/p\u003e\n\u003cp\u003ehost2, host3 でストライピングボリュームを作ってみる。\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e$ parallel vagrant ssh {} -c sh -c \"sudo mkdir -p /export/vol-striping\" ::: host2 host3  \n$ vagrant ssh host1\n\nhost1 $ sudo gluster volume create vol-striping stripe 2 192.168.56.11:/export/vol-striping 192.168.56.12:/export/vol-striping\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch3\u003eレプリケーション\u003c/h3\u003e\n\u003cp\u003eデータの複製を作って、複数の場所に保管しておく形態。RAID1みたいな感じ。信頼性が高くなり、ファイルの読み込みも早くなる。\u003c/p\u003e\n\u003cp\u003ehost1, host3 でレプリケーションボリュームを作ってみる。\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e$ parallel vagrant ssh {} -c sh -c \"sudo mkdir -p /export/vol-replica\" ::: host1 host3\n$ vagrant ssh host1\n\nhost1$ sudo gluster volume create vol-replica replica 2 192.168.56.10:/export/vol-replica 192.168.56.12:/export/vol-replica\nhost1$ sudo gluster volume start vol-replica\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003e利用\u003c/h2\u003e\n\u003ch3\u003eマウント\u003c/h3\u003e\n\u003cp\u003eOSにマウントしてみる。マウント方法にはNFSやCIFSなども選べるけど、ここではネイティブのglusterfs形式を選んでみる。\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e$ vagrant ssh host1\n\nhost1$ sudo mkdir -p /mnt/{vol,vol-striping,vol-replica}\nhost1$ sudo mount -t glusterfs 192.168.56.10:/vol /mnt/vol # 分散\nhost1$ sudo mount -t glusterfs 192.168.56.11:/vol-striping /mnt/vol-striping # ストライピング\nhost1$ sudo mount -t glusterfs 192.168.56.12:/vol-replica /mnt/vol-replica # レプリケーション    \n\u003c/code\u003e\u003c/pre\u003e\n\u003ch3\u003e動作確認\u003c/h3\u003e\n\u003cp\u003eはじめに、マウントした結果を見てみる。\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e$ df -h /mnt/*\nFilesystem            Size  Used Avail Use% Mounted on\n192.168.56.10:vol      17G  1.9G   14G  12% /mnt/vol\n192.168.56.12:vol-replica\n                      8.4G  949M  7.0G  12% /mnt/vol-replica\n192.168.56.11:vol-striping\n                       17G  1.9G   14G  12% /mnt/vol-striping\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e分散、ストライピングは2台分を足し合わせた結果になっている。レプリケーションは2台に同じデータが分散されるので、ディスク効率は50%に下がる。\u003c/p\u003e\n\u003ch4\u003e分散\u003c/h4\u003e\n\u003cp\u003e適当にファイルを作ってみる。\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003ehost1$ sudo touch /mnt/vol/{1..9}\n\n# 保管先をチェック\n\nhost1$ ls /export/vol/ # 1  5  7  8  9\n\nhost2$ ls /export/vol/ # 2  3  4  6\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eファイルがばらばらと格納されていることがわかる。\u003c/p\u003e\n\u003ch3\u003eストライピング\u003c/h3\u003e\n\u003cpre\u003e\u003ccode\u003ehost1$ sudo vi /mnt/vol-striping/sample.txt # 10M強データをテキストデータを書き込み\n\nhost1$ du -s /mnt/vol-striping/sample.txt # 10256と表示された\nhost1$ ls -l /mnt/vol-striping/sample.txt # サイズが 10484785 と表示された\n\n# 保管先をチェック\nhost2$ du -s /export/vol-striping/sample.txt # 5128 と表示された\nhost2$ ls -l /export/vol-striping/sample.txt # サイズが 10354688 と表示された\n\nhost3$ du -s /export/vol-striping/sample.txt # 5128 と表示された\nhost3$ ls -l /export/vol-striping/sample.txt # サイズが 10484785 と表示された\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eduの結果（ディスクのセクタ）はちょうど半分ずつに分割されるけど、ファイルの実際のサイズは元ファイルと同じ場合と異なる場合の2パターンが検出できた。これは、\nファイルがスパースファイルなっているため、見かけ上のサイズと実際にディスク上で利用しているサイズが異なっていることが原因。\u003c/p\u003e\n\u003ch3\u003eレプリケーション\u003c/h3\u003e\n\u003cp\u003e適当なファイルを作ってみる。\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003ehost1$ sudo dd if=/dev/urandom of=/mnt/vol-replica/dummy bs=1M count=10\nhost1$ sha1sum /mnt/vol-replica/dummy # 54b5c383e96d511249f9393de060c3219549e030 だった\n\n# 保管先をチェック\nhost1$ sha1sum /export/vol-replica/dummy # 54b5c383e96d511249f9393de060c3219549e030 だった\n\nhost2$ sha1sum /export/vol-replica/dummy # 54b5c383e96d511249f9393de060c3219549e030 だった\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e同じ内容のファイルが複数箇所に保存されることがわかった。\u003c/p\u003e\n\u003ch2\u003eメモ\u003c/h2\u003e\n\u003cp\u003eなんとなくでも使い始められちゃうくらい簡単に使えるけど、[ドキュメント](http://gluster.org/community/documentatio\nn/index.php/Main_Page)の[PDF](http://www.gluster.org/wp-\ncontent/uploads/2012/05/Gluster_File_System-3.3.0-Administration_Guide-en-\nUS.pdf) がわかりやすくコンパクトにまとまっていて、全体像を理解するのはここからここから始めるといいと思う。\u003c/p\u003e\n\u003ch2\u003e参考\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"http://www.gluster.org/community/documentation/index.php/Main_Page\"\u003eGluster Community のドキュメント\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n"}},"__N_SSG":true},"page":"/blog/[...slug]","query":{"slug":["2012","06","05","glusterfs"]},"buildId":"PHKJ2Dzu0oDEBCrRGxDFE","isFallback":false,"gsp":true,"scriptLoader":[]}</script></body></html>

@@ -1,150 +1,20 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>プログレスバーを簡単に表示できるコマンド pv - apatheia.info</title>
-    <link href="/stylesheets/screen.css" rel="stylesheet" />
-    <script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-35021317-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-</script>
-
-    <script>
-var _prum = [['id', '534a4930abe53d551a2dfa1b'],
-             ['mark', 'firstbyte', (new Date()).getTime()]];
-(function() {
-  var s = document.getElementsByTagName('script')[0]
-    , p = document.createElement('script');
-  p.async = 'async';
-  p.src = '//rum-static.pingdom.net/prum.min.js';
-  s.parentNode.insertBefore(p, s);
-})();
-</script>
-
-    <link rel="alternate" type="application/rss+xml" title="apatheia.info" href="/atom.xml" />
-  </head>
-  <body class="2011-12-17-pv">
-    <header>
-      <div id="site-title">
-        <h1><a href="/">apatheia.info</a></h1>
-      </div>
-      <nav>
-        <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="/archives/">Archive</a></li>
-          <li><a href="/atom.xml">RSS</a></li>
-        </ul>
-      </nav>
-    </header>
-    
-  <article>
-    <h1>プログレスバーを簡単に表示できるコマンド pv</h1>
-    <p id="article-info">
-      Published on 17 Dec 2011
-      
-  Tags: <a href="/blog/categories/unix/">unix</a> <a href="/blog/categories/pv/">pv</a> 
-
-
-    </p>
-    <p>プログレスバーを簡単に表示できる <code>pv</code> について説明する。</p>
-
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width"/><meta charSet="utf-8"/><title>プログレスバーを簡単に表示できるコマンド pv - aptheia.info</title><link rel="alternate" type="application/rss+xml" title="apatheia.info" href="/atom.xml"/><meta name="next-head-count" content="4"/><link rel="preload" href="/_next/static/css/3c128f59c2ecef969dbc.css" as="style"/><link rel="stylesheet" href="/_next/static/css/3c128f59c2ecef969dbc.css" data-n-g=""/><noscript data-n-css=""></noscript><script defer="" nomodule="" src="/_next/static/chunks/polyfills-a40ef1678bae11e696dba45124eadd70.js"></script><script src="/_next/static/chunks/webpack-1a8a258926ecde76681b.js" defer=""></script><script src="/_next/static/chunks/framework-895f067827ebe11ffe45.js" defer=""></script><script src="/_next/static/chunks/main-a9acf05574b3448968f1.js" defer=""></script><script src="/_next/static/chunks/pages/_app-d96712b144c157b4cbfa.js" defer=""></script><script src="/_next/static/chunks/915-c287d7adb8a31cf4da35.js" defer=""></script><script src="/_next/static/chunks/pages/blog/%5B...slug%5D-c134caf83809c687960e.js" defer=""></script><script src="/_next/static/PHKJ2Dzu0oDEBCrRGxDFE/_buildManifest.js" defer=""></script><script src="/_next/static/PHKJ2Dzu0oDEBCrRGxDFE/_ssgManifest.js" defer=""></script></head><body><div id="__next"><header><div id="site-title"><h1><a href="/">apatheia.info</a></h1></div><nav><ul><li><a href="/">Home</a></li><li><a href="/atom.xml">RSS</a></li></ul></nav></header><main><article><h1>プログレスバーを簡単に表示できるコマンド pv</h1><p id="article-info">Published on <!-- -->2011.12.17<!-- --> <span><a href="/blog/categories/unix/">unix</a> </span><span><a href="/blog/categories/pv/">pv</a> </span></p><div><p>プログレスバーを簡単に表示できる <code>pv</code> について説明する。</p>
 <!-- more -->
-
-<h2 id="section">インストール方法</h2>
-
+<h2>インストール方法</h2>
 <p>自分の環境(debian 6.0.3)だと <code>apt</code>でインストール出来る。RHEL系なら<a href="http://pkgs.repoforge.org/pv/">ここ</a>かな。</p>
-
-<h2 id="section-1">使い方</h2>
-
+<h2>使い方</h2>
 <p>端的に言うと、「cat ＋ 標準エラー出力にプログレスバー」という動きを取る。</p>
-
-<pre><code>f440@abhoth[10]:~$ yes | pv &gt;/dev/null
- 529MB 0:00:08 [67.2MB/s] [       &lt;=&gt;                                         ]
+<pre><code>f440@abhoth[10]:~$ yes | pv >/dev/null
+ 529MB 0:00:08 [67.2MB/s] [       &#x3C;=>                                         ]
 </code></pre>
-
 <p>8秒で合計529MB、秒間67.2MBくらいで「y」の文字が <code>pv</code> を通り抜けてるのがわかる。 <code>-l</code>オプションをつけると行モードになり、転送量ではなく転送行数を調べられる。</p>
-
-<pre><code>f440@abhoth[10]:~$ yes | pv -l &gt;/dev/null
- 435k 0:00:10 [45.9k/s] [          &lt;=&gt;                                        ]
+<pre><code>f440@abhoth[10]:~$ yes | pv -l >/dev/null
+ 435k 0:00:10 [45.9k/s] [          &#x3C;=>                                        ]
 </code></pre>
-
 <p>10秒で435行、秒間45900行くらいが通り抜けてるのがわかる。</p>
-
 <p>他にもおもしろいオプションとして <code>-L</code> っていうのがあって、パイプから出てく流量を制限することが出来る。</p>
-
-<h2 id="section-2">用途</h2>
-
+<h2>用途</h2>
 <p><code>mysqldump</code> とか <code>mysql</code>にくっつけてダンプ、リストアの完了時刻を予想する、とかかな。</p>
-
 <p>Webで見てると、<code>nc</code> とか <code>tcpdump</code> とかと組み合わせてる例がある。</p>
-
 <p>自分で作ったコマンドとかに、簡単に進行状況表示がくっつけられるのは便利。</p>
-
-
-    
-    <aside>
-    <div class="share">
-  <div class="addthis_toolbox addthis_default_style ">
-    <a class="addthis_counter addthis_pill_style"></a>
-  </div>
-  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4f8eed8875190f92"></script>
-  <script type="text/javascript">
-    var addthis_config = {
-      data_track_clickback: false
-    }
-  </script>
-</div>
-
-    
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-  var disqus_shortname = 'apatheiainfo';
-(function() {
-  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-})();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-
-
-    </aside>
-    
-  </article>
-
-    <footer>
-    <div>
-      <ul>
-        <li>Link:</li>
-        <li><a href="https://twitter.com/f440">Twitter</a></li>
-        <li><a href="https://github.com/f440">Github</a></li>
-        <li><a href="https://pinboard.in/u:f440">Pinboard</a></li>
-      </ul>
-    </div>
-    </footer>
-  </body>
-</html>
-
-<script>
-window.addEventListener("load", function() {
-  var imgs = document.getElementsByTagName("img");
-  for (var i = 0, len = imgs.length; i < len; i++) {
-    var img = imgs[i];
-    var a = document.createElement("a");
-    a.setAttribute("href", img.src);
-    a.setAttribute("title", img.alt);
-    a.appendChild(img.cloneNode(true));
-    img.parentNode.replaceChild(a, img);
-  }
-}, false);
-</script>
+</div></article></main><footer><ul><li>Link:</li><li><a href="https://twitter.com/f440">Twitter</a></li><li><a href="https://github.com/f440">Github</a></li><li><a href="https://pinbaord.in/u:f440">Pinbaord</a></li></ul></footer></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"post":{"localPath":"/home/f440/go/src/github.com/f440/f440.github.com/content/2011-12-17-pv.markdown","path":"2011/12/17/pv","layout":"post","title":"プログレスバーを簡単に表示できるコマンド pv","createdAt":"2011-12-16T15:00:00.000Z","kind":"article","comments":true,"tags":["unix","pv"],"content":"\u003cp\u003eプログレスバーを簡単に表示できる \u003ccode\u003epv\u003c/code\u003e について説明する。\u003c/p\u003e\n\u003c!-- more --\u003e\n\u003ch2\u003eインストール方法\u003c/h2\u003e\n\u003cp\u003e自分の環境(debian 6.0.3)だと \u003ccode\u003eapt\u003c/code\u003eでインストール出来る。RHEL系なら\u003ca href=\"http://pkgs.repoforge.org/pv/\"\u003eここ\u003c/a\u003eかな。\u003c/p\u003e\n\u003ch2\u003e使い方\u003c/h2\u003e\n\u003cp\u003e端的に言うと、「cat ＋ 標準エラー出力にプログレスバー」という動きを取る。\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003ef440@abhoth[10]:~$ yes | pv \u003e/dev/null\n 529MB 0:00:08 [67.2MB/s] [       \u0026#x3C;=\u003e                                         ]\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e8秒で合計529MB、秒間67.2MBくらいで「y」の文字が \u003ccode\u003epv\u003c/code\u003e を通り抜けてるのがわかる。 \u003ccode\u003e-l\u003c/code\u003eオプションをつけると行モードになり、転送量ではなく転送行数を調べられる。\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003ef440@abhoth[10]:~$ yes | pv -l \u003e/dev/null\n 435k 0:00:10 [45.9k/s] [          \u0026#x3C;=\u003e                                        ]\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e10秒で435行、秒間45900行くらいが通り抜けてるのがわかる。\u003c/p\u003e\n\u003cp\u003e他にもおもしろいオプションとして \u003ccode\u003e-L\u003c/code\u003e っていうのがあって、パイプから出てく流量を制限することが出来る。\u003c/p\u003e\n\u003ch2\u003e用途\u003c/h2\u003e\n\u003cp\u003e\u003ccode\u003emysqldump\u003c/code\u003e とか \u003ccode\u003emysql\u003c/code\u003eにくっつけてダンプ、リストアの完了時刻を予想する、とかかな。\u003c/p\u003e\n\u003cp\u003eWebで見てると、\u003ccode\u003enc\u003c/code\u003e とか \u003ccode\u003etcpdump\u003c/code\u003e とかと組み合わせてる例がある。\u003c/p\u003e\n\u003cp\u003e自分で作ったコマンドとかに、簡単に進行状況表示がくっつけられるのは便利。\u003c/p\u003e\n"}},"__N_SSG":true},"page":"/blog/[...slug]","query":{"slug":["2011","12","17","pv"]},"buildId":"PHKJ2Dzu0oDEBCrRGxDFE","isFallback":false,"gsp":true,"scriptLoader":[]}</script></body></html>

@@ -1,173 +1,38 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>sphinxの更新をguard-livereloadで検知してブラウザを自動リロードする - apatheia.info</title>
-    <link href="/stylesheets/screen.css" rel="stylesheet" />
-    <script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-35021317-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-</script>
-
-    <script>
-var _prum = [['id', '534a4930abe53d551a2dfa1b'],
-             ['mark', 'firstbyte', (new Date()).getTime()]];
-(function() {
-  var s = document.getElementsByTagName('script')[0]
-    , p = document.createElement('script');
-  p.async = 'async';
-  p.src = '//rum-static.pingdom.net/prum.min.js';
-  s.parentNode.insertBefore(p, s);
-})();
-</script>
-
-    <link rel="alternate" type="application/rss+xml" title="apatheia.info" href="/atom.xml" />
-  </head>
-  <body class="2012-06-03-sphinx-guard-livereload">
-    <header>
-      <div id="site-title">
-        <h1><a href="/">apatheia.info</a></h1>
-      </div>
-      <nav>
-        <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="/archives/">Archive</a></li>
-          <li><a href="/atom.xml">RSS</a></li>
-        </ul>
-      </nav>
-    </header>
-    
-  <article>
-    <h1>sphinxの更新をguard-livereloadで検知してブラウザを自動リロードする</h1>
-    <p id="article-info">
-      Published on 03 Jun 2012
-      
-
-    </p>
-    <p>sphinxでドキュメントを書く際に生じる「文章の記述 =&gt; ビルド =&gt;
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width"/><meta charSet="utf-8"/><title>sphinxの更新をguard-livereloadで検知してブラウザを自動リロードする - aptheia.info</title><link rel="alternate" type="application/rss+xml" title="apatheia.info" href="/atom.xml"/><meta name="next-head-count" content="4"/><link rel="preload" href="/_next/static/css/3c128f59c2ecef969dbc.css" as="style"/><link rel="stylesheet" href="/_next/static/css/3c128f59c2ecef969dbc.css" data-n-g=""/><noscript data-n-css=""></noscript><script defer="" nomodule="" src="/_next/static/chunks/polyfills-a40ef1678bae11e696dba45124eadd70.js"></script><script src="/_next/static/chunks/webpack-1a8a258926ecde76681b.js" defer=""></script><script src="/_next/static/chunks/framework-895f067827ebe11ffe45.js" defer=""></script><script src="/_next/static/chunks/main-a9acf05574b3448968f1.js" defer=""></script><script src="/_next/static/chunks/pages/_app-d96712b144c157b4cbfa.js" defer=""></script><script src="/_next/static/chunks/915-c287d7adb8a31cf4da35.js" defer=""></script><script src="/_next/static/chunks/pages/blog/%5B...slug%5D-c134caf83809c687960e.js" defer=""></script><script src="/_next/static/PHKJ2Dzu0oDEBCrRGxDFE/_buildManifest.js" defer=""></script><script src="/_next/static/PHKJ2Dzu0oDEBCrRGxDFE/_ssgManifest.js" defer=""></script></head><body><div id="__next"><header><div id="site-title"><h1><a href="/">apatheia.info</a></h1></div><nav><ul><li><a href="/">Home</a></li><li><a href="/atom.xml">RSS</a></li></ul></nav></header><main><article><h1>sphinxの更新をguard-livereloadで検知してブラウザを自動リロードする</h1><p id="article-info">Published on <!-- -->2012.06.03<!-- --> </p><div><p>sphinxでドキュメントを書く際に生じる「文章の記述 => ビルド =>
 ブラウザでの確認」という一連のサイクルを人力でやるのは効率が悪い。いろいろな省力化対策が考えられるが、ここでは guard-livereloadを使って、文章のビルドとブラウザのリロードを自動化する方法を説明する。</p>
-
 <!-- more -->
-
-<h2 id="section">作業環境</h2>
-
+<h2>作業環境</h2>
 <p>検証に使った環境は以下の通り。環境に依存する部分は少ないので、他のOSでも動くと思う。</p>
-
 <ul>
-  <li>Mac OS X Lion</li>
-  <li>ruby 1.9.3-p194</li>
-  <li>sphinx 1.1.3</li>
+<li>Mac OS X Lion</li>
+<li>ruby 1.9.3-p194</li>
+<li>sphinx 1.1.3</li>
 </ul>
-
-<h2 id="section-1">事前準備</h2>
-
-<h3 id="section-2">サーバー側準備</h3>
-
+<h2>事前準備</h2>
+<h3>サーバー側準備</h3>
 <p>用意するのは3ファイル</p>
-
 <ul>
-  <li>Gemfile … 必要なライブラリをまとめてインストールするための設定ファイル</li>
-  <li>Gaurdfile … ファイルシステム監視の設定ファイル</li>
-  <li>Procfile … Webサーバーとファイル監視を起動するための設定ファイル</li>
+<li>Gemfile … 必要なライブラリをまとめてインストールするための設定ファイル</li>
+<li>Gaurdfile … ファイルシステム監視の設定ファイル</li>
+<li>Procfile … Webサーバーとファイル監視を起動するための設定ファイル</li>
 </ul>
-
 <p><a href="https://gist.github.com/2862843">https://gist.github.com/2862843</a></p>
-
 <p>これら3ファイルをsphinxの作業ディレクトリ内に配置する。製生後のhtmlファイルは<code>buld/html</code>ディレクトリに格納されていることを期待した設定になっているので、必要であれば適宜修正する。</p>
-
 <p>ファイルの設置が終わったら、ライブラリをインストールする。</p>
-
 <pre><code>bundle install
 </code></pre>
-
-<h3 id="section-3">ブラウザ側準備</h3>
-
+<h3>ブラウザ側準備</h3>
 <p>好きなブラウザにlivereloadのブラウザ拡張をインストールする。</p>
-
 <p><a href="http://help.livereload.com/kb/general-use/browser-extensions">http://help.livereload.com/kb/general-use/browser-
 extensions</a></p>
-
-<h2 id="section-4">利用方法</h2>
-
+<h2>利用方法</h2>
 <p>サーバー側でファイルの監視とlivereloadを開始する。</p>
-
 <pre><code>foreman start
 </code></pre>
-
 <p>ブラウザで http://localhost:3000/ (3000以外にしたい場合は Procfile 内で変更)にアクセスしてlivereloadのブラウザ拡張を有効化すれば、あとはファイルの更新に合わせて自動的にビルドとブラウザのリロードが行われる。</p>
-
-<h2 id="section-5">参考</h2>
-
+<h2>参考</h2>
 <ul>
-  <li><a href="http://aligach.net/diary/20110925.html">LiveReloadが超気持ちいい2011</a> Livereloadの詳しい説明</li>
-  <li><a href="https://addons.mozilla.org/en-US/firefox/addon/auto-reload/">Auto Reload</a> ローカルファイルの更新を検知してFirefoxをリロードしてくれるアドオン。試してみたけど、自分の環境ではリロードがうまく動かなかった。</li>
+<li><a href="http://aligach.net/diary/20110925.html">LiveReloadが超気持ちいい2011</a> Livereloadの詳しい説明</li>
+<li><a href="https://addons.mozilla.org/en-US/firefox/addon/auto-reload/">Auto Reload</a> ローカルファイルの更新を検知してFirefoxをリロードしてくれるアドオン。試してみたけど、自分の環境ではリロードがうまく動かなかった。</li>
 </ul>
-
-
-    
-    <aside>
-    <div class="share">
-  <div class="addthis_toolbox addthis_default_style ">
-    <a class="addthis_counter addthis_pill_style"></a>
-  </div>
-  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4f8eed8875190f92"></script>
-  <script type="text/javascript">
-    var addthis_config = {
-      data_track_clickback: false
-    }
-  </script>
-</div>
-
-    
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-  var disqus_shortname = 'apatheiainfo';
-(function() {
-  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-})();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-
-
-    </aside>
-    
-  </article>
-
-    <footer>
-    <div>
-      <ul>
-        <li>Link:</li>
-        <li><a href="https://twitter.com/f440">Twitter</a></li>
-        <li><a href="https://github.com/f440">Github</a></li>
-        <li><a href="https://pinboard.in/u:f440">Pinboard</a></li>
-      </ul>
-    </div>
-    </footer>
-  </body>
-</html>
-
-<script>
-window.addEventListener("load", function() {
-  var imgs = document.getElementsByTagName("img");
-  for (var i = 0, len = imgs.length; i < len; i++) {
-    var img = imgs[i];
-    var a = document.createElement("a");
-    a.setAttribute("href", img.src);
-    a.setAttribute("title", img.alt);
-    a.appendChild(img.cloneNode(true));
-    img.parentNode.replaceChild(a, img);
-  }
-}, false);
-</script>
+</div></article></main><footer><ul><li>Link:</li><li><a href="https://twitter.com/f440">Twitter</a></li><li><a href="https://github.com/f440">Github</a></li><li><a href="https://pinbaord.in/u:f440">Pinbaord</a></li></ul></footer></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"post":{"localPath":"/home/f440/go/src/github.com/f440/f440.github.com/content/2012-06-03-sphinx-guard-livereload.markdown","path":"2012/06/03/sphinx-guard-livereload","layout":"post","title":"sphinxの更新をguard-livereloadで検知してブラウザを自動リロードする","createdAt":"2012-06-02T15:00:00.000Z","kind":"article","comments":true,"tags":null,"content":"\u003cp\u003esphinxでドキュメントを書く際に生じる「文章の記述 =\u003e ビルド =\u003e\nブラウザでの確認」という一連のサイクルを人力でやるのは効率が悪い。いろいろな省力化対策が考えられるが、ここでは guard-livereloadを使って、文章のビルドとブラウザのリロードを自動化する方法を説明する。\u003c/p\u003e\n\u003c!-- more --\u003e\n\u003ch2\u003e作業環境\u003c/h2\u003e\n\u003cp\u003e検証に使った環境は以下の通り。環境に依存する部分は少ないので、他のOSでも動くと思う。\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eMac OS X Lion\u003c/li\u003e\n\u003cli\u003eruby 1.9.3-p194\u003c/li\u003e\n\u003cli\u003esphinx 1.1.3\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2\u003e事前準備\u003c/h2\u003e\n\u003ch3\u003eサーバー側準備\u003c/h3\u003e\n\u003cp\u003e用意するのは3ファイル\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eGemfile … 必要なライブラリをまとめてインストールするための設定ファイル\u003c/li\u003e\n\u003cli\u003eGaurdfile … ファイルシステム監視の設定ファイル\u003c/li\u003e\n\u003cli\u003eProcfile … Webサーバーとファイル監視を起動するための設定ファイル\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003e\u003ca href=\"https://gist.github.com/2862843\"\u003ehttps://gist.github.com/2862843\u003c/a\u003e\u003c/p\u003e\n\u003cp\u003eこれら3ファイルをsphinxの作業ディレクトリ内に配置する。製生後のhtmlファイルは\u003ccode\u003ebuld/html\u003c/code\u003eディレクトリに格納されていることを期待した設定になっているので、必要であれば適宜修正する。\u003c/p\u003e\n\u003cp\u003eファイルの設置が終わったら、ライブラリをインストールする。\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003ebundle install\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch3\u003eブラウザ側準備\u003c/h3\u003e\n\u003cp\u003e好きなブラウザにlivereloadのブラウザ拡張をインストールする。\u003c/p\u003e\n\u003cp\u003e\u003ca href=\"http://help.livereload.com/kb/general-use/browser-extensions\"\u003ehttp://help.livereload.com/kb/general-use/browser-\nextensions\u003c/a\u003e\u003c/p\u003e\n\u003ch2\u003e利用方法\u003c/h2\u003e\n\u003cp\u003eサーバー側でファイルの監視とlivereloadを開始する。\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eforeman start\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eブラウザで http://localhost:3000/ (3000以外にしたい場合は Procfile 内で変更)にアクセスしてlivereloadのブラウザ拡張を有効化すれば、あとはファイルの更新に合わせて自動的にビルドとブラウザのリロードが行われる。\u003c/p\u003e\n\u003ch2\u003e参考\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"http://aligach.net/diary/20110925.html\"\u003eLiveReloadが超気持ちいい2011\u003c/a\u003e Livereloadの詳しい説明\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"https://addons.mozilla.org/en-US/firefox/addon/auto-reload/\"\u003eAuto Reload\u003c/a\u003e ローカルファイルの更新を検知してFirefoxをリロードしてくれるアドオン。試してみたけど、自分の環境ではリロードがうまく動かなかった。\u003c/li\u003e\n\u003c/ul\u003e\n"}},"__N_SSG":true},"page":"/blog/[...slug]","query":{"slug":["2012","06","03","sphinx-guard-livereload"]},"buildId":"PHKJ2Dzu0oDEBCrRGxDFE","isFallback":false,"gsp":true,"scriptLoader":[]}</script></body></html>
