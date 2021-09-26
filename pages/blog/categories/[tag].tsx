@@ -18,7 +18,7 @@ const Tag: React.VFC<Props> = ({ tag, posts }) => {
         <h1>Articles tagged '{tag}'</h1>
         {posts.map((post) => {
           return (
-            <section key={post.path}>
+            <section key={post.path} style={{ marginBottom: "1em" }}>
               <h2>
                 <Link href={`/${post.path}`}>
                   <a>{post.title}</a>

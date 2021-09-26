@@ -17,7 +17,7 @@ const Index: React.VFC<Props> = ({ posts }) => {
       <article>
         {posts.map((post) => {
           return (
-            <section key={post.path}>
+            <section key={post.path} style={{ marginBottom: "1em" }}>
               <h2>
                 <Link href={`/${post.path}`}>
                   <a>{post.title}</a>
