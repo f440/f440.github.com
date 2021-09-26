@@ -3,7 +3,6 @@
     <id>https://apatheia.info/</id>
     <title>apatheia.info</title>
     <updated>2016-10-29T15:51:00.000Z</updated>
-    <link rel="alternate" href="https://apatheia.info/"/>
     <link rel="self" href="https://apatheia.info/atom.xml"/>
     <author>
       <name>f440</name>
@@ -11,11 +10,694 @@
     </author>
     
 <entry>
+  <id>tag:apatheia.info,2016-10-30:/blog/2016/10/30/isucon6/</id>
+  <title type="text">ISUCON 6</title>
+  <published>2016-10-29T15:51:00.000Z</published>
+  <updated>2016-10-29T15:51:00.000Z</updated>
+  <link href="https://apatheia.info/blog/2016/10/30/isucon6/"/>
+  <content type="html">
+  <![CDATA[<p>今年も<a href="http://isucon.net/">ISUCON</a>に参加した。</p>
+<!-- more -->
+<p>例年に比べて十分な予習・復習をすることができず、メンバー内の得手・不得手を十分に理解できない状態だったので、不安を残したままコンテストを迎えることとなった。</p>
+<h2>予選</h2>
+<p>最初にAzure Resource Managerテンプレートで環境を作るのだが、プロビジョニングに失敗したり、作業ミス（AppArmorを削除したら一緒にMySQLが消された）などで、結局3回くらい環境の構築をしなおしてだいぶ焦ったりした。</p>
+<p>問題の内容としてはいわばはてなキーワードで、記事の投稿により別の記事内のリンクが増えるといったものだった。</p>
+<p>参考実装ではオンデマンドにリンクを計算してページをレンダリングするのだが、これでは遅いので事前に計算結果をキャッシュする方針とした。ただ、ページが投稿されるごとに過去の記事も再生成する必要があり、これについては影響を受けるページだけを絞り込んでキャッシュを破棄することで対応しようとした。</p>
+<p>方針が決まり、試しに雑なキャッシュをアプリに組み込んで見るとベンチマークを流すと毎回同じ箇所でベンチマークが失敗判定される。どうやらベンチマークは特定のページでリンクを確認しており、それ以外については問題があっても完走できる模様である。このことに気づいてからはベンチマークの挙動に合わせてキャッシュの再生成箇所を絞り込むなどを行った。</p>
+<p>これだけでかなりスコアは伸びるようになったのだが、あとは地道にDBからRedisへの切り替えなどをしていった。</p>
+<p>運営側と多少の行き違いがあり、スコアが計算されない事態が発生して肝を冷やしたが、最終的には対応してもらいなんとか本戦にたどり着くことができた。</p>
+<h2>本戦</h2>
+<p>問題としてはリアルタイム性のあるお絵かきアプリという非常にこったものであった。利用されている技術としては Docker / React / SSE (Server-sent events) といったところで、慣れていないこともあり初動が遅くなってしまった。</p>
+<p>画像の表示部分で詰まっているような状態だったので、このあたりをなんとかしようという話ができはじめたのが昼から夕方にかけてで、いろいろ手を出しては失敗しを繰り返しているうちにタイムアップになってしまった。</p>
+<h2>コンテストを終えて</h2>
+<p>今年も非常に楽しく行えた。やり応えのある問題、快適な会場の提供、その他もろもろ運営の方々には頭が下がるばかりである。</p>
+<p>本戦の結果についてはとにかく悔しい。この記事を書いている時点で一週間が経ったが、未だに後悔が残るばかりである。ただ、自分の未熟さを痛感させてくれるという意味でとても有意義であったと思う。今後も参加したいので、末永く続いてくれることを願う。</p>
+]]>
+  </content>
+</entry>
+<entry>
+  <id>tag:apatheia.info,2016-02-22:/blog/2016/02/22/install-dlite/</id>
+  <title type="text">DLiteでOS X上にDockerの環境を構築する</title>
+  <published>2016-02-22T11:54:00.000Z</published>
+  <updated>2016-05-08T10:12:00.000Z</updated>
+  <link href="https://apatheia.info/blog/2016/02/22/install-dlite/"/>
+  <content type="html">
+  <![CDATA[<p><a href="https://github.com/nlf/dlite">DLite</a> をインストールしたので、そのときのメモ。</p>
+<!-- more -->
+<h2>DLiteとは</h2>
+<p>OS XでDockerを使えるようにやつ。内部では<a href="https://github.com/mist64/xhyve">xhyve</a>を使っていて非常にコンパクト。</p>
+<h2>作業環境</h2>
+<ul>
+<li>DLite 1.1.3</li>
+<li>OS X El capitan 10.11.3</li>
+</ul>
+<h2>インストール手順</h2>
+<pre><code>brew install dlite
+sudo dlite install # CPUやディスクサイズなどのオプションは`-h`で確認可能
+</code></pre>
+<p>おしまい。</p>
+<p>内部では以下が行われる:</p>
+<ul>
+<li><code>/etc/sudoers</code>に<code>dlite,nfs</code>コマンドをパスワードなしで<code>sudo</code>できるようにする設定を追加</li>
+<li><code>~/Library/LaunchAgents/local.dlite.plist</code>に起動設定を配置</li>
+<li><code>~/.dlite</code>に起動イメージをダウンロード</li>
+</ul>
+<h2>起動</h2>
+<p>Tmux内で起動しようとするとエラーになるので、必ずTmux外でやること。</p>
+<pre><code>dlite start
+</code></pre>
+<p>問題がなければ以下が加えられる:</p>
+<ul>
+<li><code>/var/run/docker.sock</code> にソケットファイルを作成</li>
+<li><code>/etc/hosts</code> にdliteへの参照を追加 (デフォルトは <code>local.docker</code>。インストール時のオプションで変更可能)</li>
+<li><code>/etc/exports</code> にDLite側のホストへのNFSマウントする設定を追加</li>
+<li><code>~/Library/LaunchAgents/local.dlite.plist</code> をロードし、自動起動するように設定</li>
+</ul>
+<p>うまくいっていれば、<code>docker -H unix://var/run/docker.sock</code>(<code>export DOCKER_HOST=unix:///var/run/docker.sock</code>で指定も可)でdockerが使えるようになる。</p>
+<p>もしうまくいかないようなら、<code>sudo dlite daemon</code>でコマンドラインから実行して原因を突き止める。とくに、NFS周りのコンフリクトが起きていないかを確認。</p>
+<h2>まとめ</h2>
+<p>ホストと仮想環境の間がシームレスにつながってcoLinuxっぽさがある。こういうすっきりしたツールは楽しい。</p>
+<h2>追記</h2>
+<p>2016-05-08: 現在はDocker for Macを利用している。osxfsでファイルシステムのイベントが連携できて便利。</p>
+<h2>参考</h2>
+<ul>
+<li><a href="https://github.com/nlf/dlite">GitHub - nlf/dlite: The simplest way to use Docker on OS X</a></li>
+<li><a href="https://blog.andyet.com/2016/01/25/easy-docker-on-osx/">Simplifying Docker on OS X</a></li>
+</ul>
+]]>
+  </content>
+</entry>
+<entry>
+  <id>tag:apatheia.info,2013-11-11:/blog/2013/11/11/isucon3/</id>
+  <title type="text">ISUCON 3 の参加記録</title>
+  <published>2013-11-11T00:20:00.000Z</published>
+  <updated>2013-11-11T00:20:00.000Z</updated>
+  <link href="https://apatheia.info/blog/2013/11/11/isucon3/"/>
+  <content type="html">
+  <![CDATA[<p>Web アプリケーションのパフォーマンスコンテスト <a href="http://isucon.net/">ISUCON 3</a> に参加し、2 位の成績となった。どのような状態で当日を迎え、どのような作業を行ったのかをまとめる。</p>
+<!-- more -->
+<p>私自身はこれで三度目の ISUCON 参加となるが、今回チームを組むメンバーはみんな初めての参加ということもあり、事前の打ち合わせでは以下のようなことを話していた:</p>
+<ul>
+<li>これまでの大会の説明と典型的なアプローチ
+<ul>
+<li>同時に、過去にとられた戦法は参考程度であること、あくまで現物のアプリケーションを元に戦略を立てるべきでアプリケーションやミドルウェアを事前に決めることは危険であるということは強調</li>
+</ul>
+</li>
+<li>よく使われるミドルウェアの概要、メリット/デメリット
+<ul>
+<li>主要機能のほか、キャッシュ部分の永続性の有無（単純に考えればメモリだけで処理してファイルに書き出さない方が早いが、ベンチマークをまたいでキャッシュを引き継げれば切り札になり得る）、キャッシュの時間単位(ベンチマークがフェイルしない限り極力キャッシュしたいという要望を考えると、ミリ秒単位で制御したくなることが多い) などのコンテストで重要となりそうな部分について解説</li>
+</ul>
+</li>
+<li>今後問題として取り上げられそうなWebアプリケーションの構成要素
+<ul>
+<li>毎回趣向を凝らした題材が提供されるので完全に予想しきることは不可能だが、Web プログラミングで頻出する要素（予選で言えば「セッション」「ページング」のような単位）を挙げ、他にもどのようなものが考えられるか、どうやって実装できてどのような高速化が行えるかを話し合い</li>
+</ul>
+</li>
+</ul>
+<p>予選までに数回休日に集まっては過去の問題を解いたり、自分たちで考えた予想アプリに対してチューニングをしてみたり、もくもく自分なりのトレーニングをしたりする会を開いていた。</p>
+<p>また、個人的には以下のようなことを行ってきた:</p>
+<ul>
+<li>よく目にしているWebアプリケーションの解析
+<ul>
+<li>普段 Web を閲覧しているときでも、どのようなデータ構造が想定されそれをどうやって KVS に乗せるか、画面の構成要素のうちリアルタイムで作る必要がある場所はどこでキャッシュ可能な場所はどこか、といったことを考えるようにする</li>
+</ul>
+</li>
+<li>速度に対する感覚を養うため、アプリケーションやミドルウェアのチューニングとその際の効果測定
+<ul>
+<li>自分の日頃扱っているWebアプリケーションではネットワークが飽和するようなアクセスはこないため、限界性能を引き出すような使い方はしていないことが多い。「コンテンツキャッシュでさばいてアプリに届かせないのが定石っス！Nginx とか Varnish っていうのがApacheよりいいらしいっス！」みたいなレベルではなく、アプリケーションと Nginx ではどれくらいの性能差が生まれるのか、Nginx を使うのであれば <a href="http://nginx.org/en/docs/http/ngx_http_proxy_module.html">proxy_cache</a> と比べて Unix Domain Socket でMemcached に接続した <a href="https://github.com/agentzh/srcache-nginx-module">SRCache</a> ではどれくらい単位時間あたりの処理数が変わるのか、別サーバーにある Memcached と TCP 通信した場合や Redis に変えたときではどのように変わるのか、というようなことを考えられるようにしておく<br>
+ベンチマーク上の最速を求めるということではなく、どういった選択肢が考えられ、それぞれにどのような性能と機能のトレードオフが発生するのかを体にしみつけておく</li>
+</ul>
+</li>
+</ul>
+<p>どんなアプリケーションがくるかわからない以上、不安がぬぐいさることはできない。この時点でできることは「当日できるだけ早くウィークポイントを見つけること」、「見つけたウィークポイントに対しての効果的な対応をとれるための引き出しを増やしておくこと」であり、そのための準備をひたすら積み重ねてきた。</p>
+<h2>予選</h2>
+<p>予選問題はチームメンバーの勤め先の会議室を借りて取り組んだ。何度も事前打ち合わせで利用していたので、ストレス無く作業に打ち込めた。ただ、興奮しすぎて当日 2 時間くらいしか眠れていない状態だったため、テンションが高いのに頭があんまり働かなくてだいぶつらかった。</p>
+<p>題材はコードスニペット投稿アプリケーション、いわゆる Nopaste や Pastebin と呼ばれるたぐいで <a href="https://gist.github.com/">Gist</a> を想像してもらうとわかりやすいと思う。ログインがありセッションが発生すること、公開/プライベートのフラグがあることがこれまでの題材との大きな違いであったが、ある程度予想の範囲内であったことと後述するとおりベンチマークの抜け道に気づけたので、すぐにスコアを伸ばすことができた。</p>
+<p>主な施策は以下の通り:</p>
+<ul>
+<li>インフラ面
+<ul>
+<li>Varnish の配置
+<ul>
+<li>ページキャッシュ。Cookie の値を参照し、ユーザー別にキャッシュを管理することでログイン中のユーザーもキャッシュ対象となるよう設定</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>アプリ面
+<ul>
+<li>markdown -> html の事前変換
+<ul>
+<li>全件 markdown -> html 化したテーブルの dump データを用意しておき、DBクリア後にリストアしようとした<br>
+リストア時間が時間が40秒くらいかかり初期化制限時間60秒をだいぶ圧迫すること(*)、途中から初期データはほぼページキャッシュでさばけるようになっていたので、ここに力をかけるのは無駄だと判定して採用しなかった
+<ul>
+<li>(*) init の間に /var/lib/mysql をまるごと差し替えるなり別のDBにアプリを接続するなりで回避できるので、これ自体はぬるい判断だったと思う</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>更新のないテーブルのインメモリ化や Cookie 内へユーザー情報を登録などで DB 参照回数の低減</li>
+<li>（チームメンバー担当）クエリの組み方やインデックスの追加などのRDB最適化
+<ul>
+<li>今回のアプリの肝となる部分であり、ひたすら調整を行ってもらっていた</li>
+</ul>
+</li>
+<li>（チームメンバー担当）Memcached の参照方法を TCP から Unix Domain Socket に変更
+<ul>
+<li>初期状態では MySQL Memcached Plugin を参照しているので成績が伸びなかったが、こによりトラップを回避してくれた</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>事後の講評などでも抜け穴があったという話があったが、後日公開された<a href="http://isucon.net/archives/32971265.html">予選のAMI</a>を利用しても以下のような方法で簡単に確認できる。</p>
+<ol>
+<li>アプリを  Perl から Ruby に変更 (※ これは単純に自分がRuby に慣れているからで、他の言語では確認していない)</li>
+<li>Memcached への接続先を MySQL Memcached plugin (ポート 11211) から本当の Memcached (ポート 11212)に変更しアプリケーション起動</li>
+<li>リバースプロキシの Apache を停止</li>
+<li>Varnish をインストール</li>
+<li>以下の設定をして Varnish を起動</li>
+</ol>
+<p>/etc/varnish/default.vcl</p>
+<pre><code>backend default { .host = "127.0.0.1"; .port = "5000"; }
+
+sub vcl_recv {
+  # POST リクエストやCookieがある(ログイン中)の場合は直接アプリを参照
+  if (req.request != "GET" || req.http.Cookie) {
+      return (pass);
+  }
+  return (lookup); # それ以外はキャッシュを探す
+}
+
+sub vcl_hash {
+    hash_data(req.url);
+    hash_data(req.http.host);
+    return (hash);
+}
+
+sub vcl_fetch {
+    set beresp.ttl = 1d; # キャッシュ期間は1日に設定。数字は適当で、とにかく長くしておけばいい
+    return (deliver);
+}
+</code></pre>
+<p>上記設定で初回 workload=1 で 9000 くらい、2 回目に workload=2 で24000くらいでベンチマークが Fail せずに完走することがわかる。Varnish じゃなくて他のコンテンツキャッシュを利用しても同様。</p>
+<p>予選開始直後、Sinatra のアクション単位でリクエスト回数、平均実行時間、ワーストケースの実行時間などの情報がそろえ、いざ Varnish のチューニングを行いはじめたところ、どんなにキャッシュの TTL を伸ばしてもベンチマークが通ってしまうことに気づき思わず吹き出してしまった。</p>
+<p>キャッシュで簡単にスコアが伸ばせることに気づいたのがたしかお昼前で、このあと夕方くらいまで 1 位だったと思う。その後トップは手放すこととなったが、最終的に<a href="http://isucon.net/archives/32951235.html" title="ISUCON 本戦出場者決定のお知らせ : ISUCON公式Blog">予選5位</a>で決勝進出を決めることができた。</p>
+<h3>予選後</h3>
+<p>どうにも簡単に勝てすぎたので本当の自分の実力がどの程度かの不安が残るかたちとなったが、穴を見つけられたのも実力のうちと考えて本戦へ向けての準備を進める。</p>
+<p>予選が割とシンプルで簡単にキャッシュで返せるような作りだったので、本戦はよりアプリケーションよりの対応が求められるはず、そのためにはいままで以上にアプリの状況を把握する能力を高めておく必要がある。*stat 系のパフォーマンス調査ソフトに慣れておいたり、ログ解析のやり方探してみたり（<a href="http://goaccess.prosoftcorp.com/">GoAccess</a> 使ったりだとか）、プロファイリング用のソフトウェアを把握しておいたり、調査用<a href="https://gist.github.com/f440/7395268">アクセスカウンタ</a> を準備したり、とにかくすぐに分析できるようにしておいた。</p>
+<p>また、予選の際は自分もアプリを改修し、アプリメインのメンバーもインフラ面を考慮してくれていたので、本戦で複数台構成になることにより作業がバッティングすることを懸念された。これについては事前にチーム内でそれぞれにメインとなる作業をお願いして競合しないよう取りはからった。</p>
+<h2>本戦</h2>
+<p>予選での経験を踏まえ、前日早めに就寝したお陰で当日は体調的には万全、先着で利用可能なミーティングスペースも確保でき順調な滑り出しだった。</p>
+<p>題材は画像投稿版の Twitter で、アップロードした画像ファイルがパブリック/フォロワーのみ/プライベートといった公開範囲に応じて閲覧可能となり、関係するメンバーの投稿が画面に自動反映される SPA (Single Page Application) だった。「ファイルアップロード」「フォロワーのアクティビティがタイムラインに表示」などで、チーム内の感想としては「やっぱりきましたね」、といった感じだったのだが、なによりアプリケーションの出来がよくてびっくりした。</p>
+<p>作業用サーバーとしては、アプリケーションが稼働している 1 台と自由に使える 4 台の計 5 台が与えられた。これまでの ISUCON では CentOS 5 系が使われており、データホテルの Web サイトでもホスティングしている VPS の OS CentOS 5.8 となっているので CentOS 5 系が来る可能性も考慮していたのだが、今回は CentOS 6.4 であった。</p>
+<p>サーバー受け取り後、バックアップをとりつつアプリケーションのプロファイリングを進めるが、どう見ても画像変換のコストだけが突出していることがわかる。データベースへのアクセスはきわめて短時間で終わっており、ボトルネックではない以上手をかけるのは無駄だと判断した。</p>
+<p>状況確認を踏まえ、以下のような作業を行っていった:</p>
+<ul>
+<li>事前に初期データのアイコンおよび投稿画像はリサイズをかけておく
+<ul>
+<li>バックアップとしてローカルに全ファイルを転送していたので、そのファイルを変換して本番環境に書き戻し
+<ul>
+<li>うっかりリサイズのサイズ間違えたり、そんなに早くない自分のマシン(Macbook Air)で実行していたので、かなりの時間がかかってしまった</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>画像のうち、誰でも閲覧可能なファイルは Web サーバーから直接配信できるよう、公開領域にシンボリックリンクを作成
+<ul>
+<li>全ユーザーと全ファイルのアクセス権限を組み合わせてリンクを作成し、アクセス権限をDBに問い合わせずにレスポンスを返すというのもアイデアとしてはあったのだが、時間がかかるのでこのようにした</li>
+</ul>
+</li>
+<li>（チームメンバー担当）画像変換時にファイルシステムへファイルを保存。また画像表示時に変換済みファイルがないかのチェックを追加</li>
+<li>（チームメンバー担当）ファイルシステムに保存したタイミングで、リサイズを非同期処理で実施
+<ul>
+<li>負荷が高くなってくるとこの部分が詰まってしまい、変換待ちが大量にたまるのであまり効率的ではなく、不採用</li>
+</ul>
+</li>
+</ul>
+<p>最終的に以下の構成で計測を迎えた。フロント 4 台に Nginx を配置のうえ <code>try_files</code> でローカルにファイルがあるかどうかをチェックし、なければバックエンドサーバーに処理を委譲するようになっている。</p>
+<pre><code>                +----------+        +----------------+
+  Benchmark ->  | Web x 4  |  ----  | Web + App + DB |
+                +----------+        +----------------+
+</code></pre>
+<p>時間がなくてこのようなかたちとなったが、今考えてもこれがよかったかどうかでいえばまったくもってよくなかった。完全にバックエンドのアプリサーバーが負荷でつぶれていたが、全サーバーでアプリを動かせばきれいに台数分スケールしていたはずだったのに、本当に悔やまれる。</p>
+<p>タイムアップ時点ではそれほどの成績ではなかったが、本戦のベンチマークを無事乗り越え、気づいたら 2 位という成績で ISUCON 3 の幕を閉じた。</p>
+<h2>ふりかえって</h2>
+<p>正攻法ではない方法もいろいろ考えてはいたんだけど、結局のところ他のチームと比べても過激な改修は行わずに済ませた。直しやすそうなところ、目のつきやすいところではなく、手早く確実にウィークポイントを直すというのが目標だったので、それは実現できたんだと思う。</p>
+<p>けどやっぱり優勝できなかったのは心残りで、試合終了後や帰宅後のチャット上でもチームメンバーと「非同期のワーカー作る時間の無駄だった」とか「どう考えてもアプリサーバーネックだったし、他の4台でもアプリ動かしてベンチマークのワーカー増やせばトップとれたんじゃないの」とか「Macbook Air でちまちま画像変換するの失敗だった」とか、いろいろ話をしていた。1位があまりに鮮烈で、それ以外の順位は空気みたいな存在だし、やはりこの世はトップ総取りなのだなぁ、と痛感した。</p>
+<p>毎回このような場を用意していただいている LINE 社、データホテル社の方々には感謝の限りです。お弁当おいしゅうございました。出題のカヤックの皆さんもすばらしい問題をありがとうございました。</p>
+]]>
+  </content>
+</entry>
+<entry>
+  <id>tag:apatheia.info,2013-08-10:/blog/2013/08/10/immutable-infrastructure/</id>
+  <title type="text">Immutable Infrastracture について</title>
+  <published>2013-08-10T12:00:00.000Z</published>
+  <updated>2013-08-10T12:00:00.000Z</updated>
+  <link href="https://apatheia.info/blog/2013/08/10/immutable-infrastructure/"/>
+  <content type="html">
+  <![CDATA[<p>ここ最近話題に上がることが多い Immutable Infrastracture と、その他仮想環境周りについての雑感。</p>
+<!-- more -->
+<p>Immutable Server や Immutable Infrastracture っていう単語がいろんなところで目に入るようになった。とくに Chad Fowler が<a href="http://chadfowler.com/blog/2013/06/23/immutable-deployments/">ブログで取り上げたり</a>、<a href="http://foodfightshow.org/2013/07/immutable-infrastructure.html">Food Fight に出たり</a> して、世間でも関心が高まった感じがある。</p>
+<p>プログラムを書く人にはご存じの通り、この Immutable っていうのは状態が変更出来ないことを指している。Immutable な Infrastracture っていうのは、ざっくり言うと「運用中のサーバーに変更を加えない」っていうアプローチでサーバーを管理しているスタイルのこと。</p>
+<p>(ファイルシステムを読み取り専用にする、とかそういう話じゃなくて、あくまでそういう方針でやろうっていう話)</p>
+<p>サーバーの設定を変更したくなったら、その変更を加えた新しいサーバーを用意する。アプリケーションをデプロイしたくなったら、新しくサーバーを立ち上げてそちらにデプロイを行う。稼働中のサーバーに SSH でログインして設定を変更するようなことはせず、なにかしらの変更のためにはつねにサーバーを追加していく。サービスを新サーバー群にで行うように DNS を切り替えたあと、参照されなくなったサーバーは破棄する(まるでガベージコレクションみたいだね)。</p>
+<h2>どうやって Immutable Infrastracture を実現するのか</h2>
+<p>Immutable Infrastracture には、いわゆる <a href="http://martinfowler.com/bliki/BlueGreenDeployment.html">Blue Green Deployment</a> で知られているテクニックを用いる。</p>
+<p>現在、プラットフォームとして上手に Immutable Infrastracture を実現できているのは <a href="http://aws.amazon.com/jp/elasticbeanstalk/">AWS Elastic Beanstalk</a> だと思っているので、これを例に説明する。Elastic Beanstalk を「あー、AWS がやってる heroku 的なアレだろ」くらいの認識しかなければ、一度ちゃんと調べてみたほうがいい。</p>
+<p>Elastic Beanstalk では、ロードバランサーとそこにぶら下がるサーバー群 (オートスケールするので、台数は伸び縮みする) が「環境(Envirnment)」というくくりで管理される。</p>
+<p>サーバーには Amazon が用意したマシンイメージを使うこともできるし、カスタマイズしたイメージを利用することも可能になっている。アプリケーションのデプロイは git push だったり、Java の war ファイルアップロードでできるので、サーバーにログインする必要はない。</p>
+<p>「環境」にはそれぞれ URL が割り振られるのだが、これは環境間ですげ替えることができる。つまり、検証環境でアプリをデプロイしたりミドルウェアの設定変更をして、確認がとれたら本番環境と入れ替えたり、問題が起きたらすぐに元に戻したりといったことがダウンタイムなく行える。</p>
+<p>Netflix のデプロイツール <a href="https://github.com/Netflix/asgard">asgard</a> も同じようなことをしているし、Heroku の <a href="https://devcenter.heroku.com/articles/labs-preboot/">preboot</a> も内部では同じようなことやってるんじゃないかな。(追記: Heroku の Preboot だけど、説明ページへのリンクがなくなっている。今は <a href="https://devcenter.heroku.com/articles/labs-pipelines">Pipelines</a> 使えってことかも)</p>
+<p>もちろん、オンプレミスに自前の環境でこういったことを行うことも可能だろうけど、アプリケーションの切り替えに DNS の設定変更なり浮動 IP アドレスの付け替えなりが必要となってくるので、かなり面倒くさい。すでにシステムとして提供されているものを利用できるのであれば、それを使うのが現実的だとは思う。</p>
+<h2>構成管理ツールの役割</h2>
+<p>設定を変更するためだけに新しいマシンを作るだなんて、なんでそんなことをするのだろうと Chef や Puppet などのツールを使って変更管理している人たちは不思議に思うかもしれない。発想を逆にしてみると、仮想マシンが状態を持っているから冪等性だとか自己修復性を考慮したセットアップツールが必要になる。仮想マシンが不変だという前提にたてば、こういった処理が省けるようになるのかもしれない。</p>
+<p>とはいえ、Immutable Infrastracture を実践したとしても構成管理ツールは以下のような局面で今後も使われていくことになるだろうと思う。</p>
+<ul>
+<li>ベースとなる仮想マシンのセットアップのため</li>
+<li>初回起動後の仮想マシンに対して、(仮想マシンに組み込めない or 組み込みたくない) マシンごとの変更を設定するため</li>
+</ul>
+<p>個人的には、今の Chef や Puppet みたいなサーバー/クライアント構成は必要なくて、もっとライトウェイトなもので十分な気がしている。</p>
+<h2>仮想マシンの役割</h2>
+<p>昨今の構成管理ツールブームで、サーバーセットアップの技術が成熟してきた。こういったツールをソフトウェアでいうところの autotools や ant といったビルドツールにたとえるなら、次の興味は apt や rpm といったパッケージにあたるもの、つまりセットアップ済み仮想マシンになるかと思う。</p>
+<ul>
+<li>Packer は仮想マシンの作成手順や作成先を抽象化しようとしている</li>
+<li>Docker は仮想マシンをまるで Github から clone するかのように共有する方法を提供している</li>
+<li>AWS MarketPlace は個人/企業に仮想マシンを売り買いできる仕組みを提供している</li>
+</ul>
+<p>最近のプロダクトやサービスを考えてみても、仮想マシン自体の取り扱いにだんだん関心がむかっているのは確かっぽい。Immutable Infrastracture もまた、仮想マシンを仮想マシンらしく扱った運用形態といえるんじゃないかな。</p>
+<h2>参考</h2>
+<ul>
+<li><a href="http://martinfowler.com/bliki/ImmutableServer.html">ImmutableServer</a></li>
+<li><a href="http://www.thoughtworks-studios.com/blog/rethinking-building-cloud-part-4-immutable-servers">Rethinking building on the cloud: Part 4: Immutable Servers</a></li>
+<li><a href="http://chadfowler.com/blog/2013/06/23/immutable-deployments/">Trash Your Servers and Burn Your Code: Immutable Infrastructure and Disposable Components - Chad Fowler</a></li>
+</ul>
+]]>
+  </content>
+</entry>
+<entry>
+  <id>tag:apatheia.info,2013-08-10:/blog/2013/08/10/octopress-to-middleman/</id>
+  <title type="text">ブログエンジンを Octopress から Middleman に変えた</title>
+  <published>2013-08-10T11:30:00.000Z</published>
+  <updated>2013-08-10T11:30:00.000Z</updated>
+  <link href="https://apatheia.info/blog/2013/08/10/octopress-to-middleman/"/>
+  <content type="html">
+  <![CDATA[<p>このサイトは今まで <a href="http://octopress.org/">Octopress</a> を使って生成していたんだけど、<a href="http://middlemanapp.com/">Middleman</a> に変えてみた。</p>
+<!-- more -->
+<p>元々 Octopress の設定ファイルの書き方とかがモヤモヤするものがあって(Rakefile に設定項目埋め込んであるところとか) Jekyll にしようかなと思ったんだけど、なんとなく Middleman にしてみた。その後の感想など。</p>
+<p>(もう2ヶ月くらい前の話なので、移行当時の記憶はおぼろげ)</p>
+<ul>
+<li>ビルド時間が短くなった
+<ul>
+<li>素の jekyll はビルド早いんだけど、Octopress は結構遅いんで気になっていた。middleman は Octopress よりかは早い</li>
+</ul>
+</li>
+<li>ブログの内容はほぼそのまま使い回せた
+<ul>
+<li>メタデータ部分を s/categories/tags/ で置換したくらいだったと思う</li>
+</ul>
+</li>
+<li>公開されているテンプレートが少ない
+<ul>
+<li>自分でちまちま書いてる</li>
+</ul>
+</li>
+<li>middleman-livereload が便利
+<ul>
+<li><a href="https://github.com/johnbintz/rack-livereload">rack-livereload</a> を使っている。ブラウザに拡張を入れなくても、Web Socket でリロードしてくれる。</li>
+</ul>
+</li>
+<li><a href="https://github.com/rtomayko/tilt">tilt</a> を使っているので、テンプレートエンジンは自由に選択できる
+<ul>
+<li>楽しくなって、<a href="http://slim-lang.com/">Slim</a> を使って <a href="https://github.com/shower/shower">shower</a> を <a href="https://github.com/f440/middleman-miwer">移植してみたりした</a>。</li>
+</ul>
+</li>
+</ul>
+<p>おおむね満足です。</p>
+<h2>参考</h2>
+<ul>
+<li><a href="http://octopress.org/">Octopress</a></li>
+<li><a href="http://middlemanapp.com/">Middleman</a></li>
+<li><a href="https://github.com/rtomayko/tilt">tilt</a></li>
+</ul>
+]]>
+  </content>
+</entry>
+<entry>
+  <id>tag:apatheia.info,2013-06-17:/blog/2013/06/17/docker/</id>
+  <title type="text">仮想環境構築に docker を使う</title>
+  <published>2013-06-17T00:13:00.000Z</published>
+  <updated>2013-06-17T00:13:00.000Z</updated>
+  <link href="https://apatheia.info/blog/2013/06/17/docker/"/>
+  <content type="html">
+  <![CDATA[<p>ちょっと前から <a href="http://www.docker.io/">Docker</a> を使っているので、その話。</p>
+<!-- more -->
+<h2>Dockr について</h2>
+<p><a href="http://www.docker.io/">Docker</a> は <a href="https://www.dotcloud.com/">dotcloud</a> がオープンソースで公開している、コンテナ技術による仮想化ソフトウェア。</p>
+<p>以下のテクノロジーベースにしている:</p>
+<ul>
+<li><a href="http://lxc.sourceforge.net/">LXC</a>
+<ul>
+<li><a href="/blog/2012/05/13/vps-lxc-xtradb-cluster/">前にも書いた</a>。Xen とか VirtualBOX みたいにホスト内に仮想マシンを立ち上げるんじゃなくて、ホスト内の隔離された環境で仮想マシンを動かす技術。物理マシンをシミュレーションしているんじゃないってことは、VPS とか EC2 とかの仮想マシン上でも問題なく動くし、マシンを起動するプロセスが不要となるので、一瞬で使い始められるというメリットにつながっている。</li>
+</ul>
+</li>
+<li><a href="http://aufs.sourceforge.net/">AUFS</a>
+<ul>
+<li>UnionFS(ディレクトリを重ね合わせることができる)の実装の一つ。元の仮想マシンイメージを書き換えないで、更新が発生した部分は別の場所に書き込んでいくようになっている。これにより、仮想マシンの立ち上げ時にイメージのコピーが発生しないので、すぐに使い始められる。</li>
+</ul>
+</li>
+</ul>
+<p>Docker を使う前は LXC のラッパーとして取っつきにくさを緩和してくれる、とかそういうレベルだと思ったんだけど、予想はよい方向に裏切られた。</p>
+<p><a href="http://docs.docker.io/en/latest/commandline/command/images/">仮想マシンのイメージを可視化したもの</a>を見ると、まるで Git のコミットログみたいに見えると思う。実際、情報は差分で管理され、履歴を残したり分岐させたりといった操作が非常に軽量にできていて、Git を操作するかのように仮想マシンを操作できるようになっている。</p>
+<h2>動かし方</h2>
+<p>Arch Linux や Debian で動かしている人がいるみたいだけど、公式サポートは今のところ Ubuntu のみ。Ubuntu 12.04 LTS を使っているのであれば、<code>curl get.docker.io | sh -x</code> で動くようになる。</p>
+<p>ちゃんとしたやり方は <a href="http://docs.docker.io/en/latest/installation/">ドキュメント</a>を見れば、特にはまることもないと思う。できるだけ新しい Ubuntu を使っておけばいい。</p>
+<p>すぐに試してみたいんなら、Vagrant 経由で簡単に使い始められる。</p>
+<pre><code>git clone https://github.com/dotcloud/docker.git
+cd docker
+vagrant up --provider virtualbox # or vagrant up --provider aws
+</code></pre>
+<h2>基礎的な操作方法</h2>
+<p>インストールがうまくいって Docker が起動しているものとして、早速使ってみる。</p>
+<pre><code>$ docker
+Usage: docker [OPTIONS] COMMAND [arg...]
+  -H="127.0.0.1:4243": Host:port to bind/connect to
+
+  A self-sufficient runtime for linux containers.
+
+  Commands:
+  attach    Attach to a running container
+  build     Build a container from a Dockerfile
+  commit    Create a new image from a container's changes
+(以下省略)
+</code></pre>
+<p>コマンドがずらっと表示されるかと思う。まずは単発のコマンドをコンテナ内で実行してみる。</p>
+<pre><code>$ docker run base /bin/echo hi
+Pulling repository base from https://index.docker.io/v1
+Pulling image b750fe79269d2ec9a3c593ef05b4332b1d1a02a62b4accb2c21d589ff2f5f2dc (latest) from base
+Pulling b750fe79269d2ec9a3c593ef05b4332b1d1a02a62b4accb2c21d589ff2f5f2dc metadata
+Pulling b750fe79269d2ec9a3c593ef05b4332b1d1a02a62b4accb2c21d589ff2f5f2dc fs layer
+Downloading 10240/? (n/a)
+Pulling 27cf784147099545 metadata
+Pulling 27cf784147099545 fs layer
+Downloading 94863360/? (n/a)
+Pulling image 27cf784147099545 () from base
+hi
+</code></pre>
+<p>「<code>docker</code> コマンドに run サブコマンドを指定して、<code>base</code> という仮想マシンで <code>/bin/echo hi</code> コマンドを実行する」という意味になる。仮想マシンがダウンロードされるが、これは初回実行時のみ。最後に表示された「hi」というのが今回の実行結果で、このコンテナの役割はこれで終わり。</p>
+<p>今度は作ったマシンの中に入ってみるために、<code>-i</code> と <code>-t</code> オプションで入出力できるようにして <code>/bin/bash</code> を起動してみる。</p>
+<pre><code>$ docker run -i -t base /bin/bash
+root@bc43a290f0ce:/#
+</code></pre>
+<p>端末から抜けるとホスト側に制御が戻る。</p>
+<pre><code>root@bc43a290f0ce:/# exit
+exit
+$
+</code></pre>
+<p>今度は <code>-d</code> オプションでコマンドを実行しっぱなしにする。</p>
+<pre><code>$ docker run -i -t -d base /bin/ping -i 5 www.aikatsu.net
+79365b2985c4
+$
+</code></pre>
+<p>ID が返されて、すぐに端末が利用可能になる。稼働中のプロセスを確認してみる。</p>
+<pre><code>$ docker ps
+ID                  IMAGE               COMMAND                CREATED             STATUS              PORTS
+79365b2985c4        base:latest         /bin/ping -i 5 www.a   22 seconds ago      Up 21 seconds
+</code></pre>
+<p>次に実行中の出力をのぞいてみよう。</p>
+<pre><code>$ docker logs 79365b2985c4
+PING www.aikatsu.net (60.32.7.37) 56(84) bytes of data.
+64 bytes from www3.sunrise-anime.jp (60.32.7.37): icmp_req=1 ttl=49 time=282 ms
+64 bytes from www3.sunrise-anime.jp (60.32.7.37): icmp_req=3 ttl=49 time=278 ms
+64 bytes from www3.sunrise-anime.jp (60.32.7.37): icmp_req=4 ttl=49 time=283 ms
+64 bytes from www3.sunrise-anime.jp (60.32.7.37): icmp_req=5 ttl=49 time=266 ms
+64 bytes from www3.sunrise-anime.jp (60.32.7.37): icmp_req=6 ttl=49 time=268 ms
+64 bytes from www3.sunrise-anime.jp (60.32.7.37): icmp_req=8 ttl=49 time=264 ms
+64 bytes from www3.sunrise-anime.jp (60.32.7.37): icmp_req=9 ttl=49 time=270 ms
+64 bytes from www3.sunrise-anime.jp (60.32.7.37): icmp_req=10 ttl=49 time=290 ms
+64 bytes from www3.sunrise-anime.jp (60.32.7.37): icmp_req=11 ttl=49 time=284 ms
+</code></pre>
+<p>順調に動き続けているようなので、このジョブにアタッチしてみる。</p>
+<pre><code>$ docker attach 79365b2985c4
+64 bytes from www3.sunrise-anime.jp (60.32.7.37): icmp_req=18 ttl=49 time=239 ms
+64 bytes from www3.sunrise-anime.jp (60.32.7.37): icmp_req=19 ttl=49 time=291 ms
+64 bytes from www3.sunrise-anime.jp (60.32.7.37): icmp_req=20 ttl=49 time=275 ms
+(出力が続く)
+</code></pre>
+<p>アタッチ中の端末は <code>Ctrl-p Ctrl-q</code> でデタッチできる。(このとき use of closed network connection っていうエラーが出る場合 Ctrl-c で抜けるしかないっぽい。バグレポートは上がっているので、じきに直ると思う。)</p>
+<p>最後に<code>kill</code>でこのプロセスを消してみる。</p>
+<pre><code>$ docker kill 79365b2985c4
+$ docker ps
+$
+</code></pre>
+<p><code>ps</code>からプロセスが消えた。基礎的なコンテナの操作の説明は以上。</p>
+<h2>詳細</h2>
+<h3>コンテナ</h3>
+<p>これまでコマンドを実行したり、<code>kill</code> されたコンテナはどうなっているのか。実は全部残っている。停止したコンテナを表示するために<code>-a</code>をつける。ついでに、情報を省略しないで表示するために<code>-notrunc</code> もつける。</p>
+<pre><code>$ docker ps -a -notrunc
+ID                                                                 IMAGE               COMMAND                          CREATED             STATUS              PORTS
+79365b2985c43a2a6977764f4dde2d375084020fbc04cc855508c417a36f88c2   base:latest         /bin/ping -i 5 www.aikatsu.net   14 minutes ago      Exit 0
+bc43a290f0ced4677ee7eb1a0d662cca496cc720d8db20e746dda45e4659f503   base:latest         /bin/bash                        16 minutes ago      Exit 0
+7a666192cca72cea81cade398b22700c982fbb9271a7eca23ff51c6c504d5971   base:latest         /bin/echo hi                     16 minutes ago      Exit 0
+8b0af4fc390d762c33dadc1b149516ba95bdb70d093e991ec2df563817f55ffb   base:latest         /bin/bash                        21 minutes ago      Exit 0
+4637bc6341706c25e066c5ccfe92e10c923bfe4955a9e8b3ce07237fda0fb34a   base:latest         /bin/echo hi                     21 minutes ago      Exit 0
+</code></pre>
+<p>正常終了しているので、すべて<code>Exit 0</code>になっている。また、ID は省略表記されていたこともわかる。コンテナの実体は <code>/var/lib/docker/containers/&#x3C;ID></code> 以下に格納されている。</p>
+<pre><code>$ sudo ls /var/lib/docker/containers/
+4637bc6341706c25e066c5ccfe92e10c923bfe4955a9e8b3ce07237fda0fb34a
+79365b2985c43a2a6977764f4dde2d375084020fbc04cc855508c417a36f88c2
+7a666192cca72cea81cade398b22700c982fbb9271a7eca23ff51c6c504d5971
+8b0af4fc390d762c33dadc1b149516ba95bdb70d093e991ec2df563817f55ffb
+bc43a290f0ced4677ee7eb1a0d662cca496cc720d8db20e746dda45e4659f503
+</code></pre>
+<p>どんどんたまっていくから心配かもしれないけど、各コンテナはベースイメージからの差分しかもたないので、問題にならない。もし、消したくなったら <code>docker rm &#x3C;コンテナのID></code> で消せる。</p>
+<p>作業領域であったコンテナを <code>commit</code> するとイメージとして使い回せるようになる。<code>ユーザー名/名称</code>にするのが作法っぽい。</p>
+<pre><code>$ docker commit -m "My first container" 4637bc634170 f440/first_container
+02036952e5dc
+$ docker images
+REPOSITORY             TAG                 ID                  CREATED
+base                   latest              b750fe79269d        12 weeks ago
+base                   ubuntu-quantl       b750fe79269d        12 weeks ago
+base                   ubuntu-quantal      b750fe79269d        12 weeks ago
+base                   ubuntu-12.10        b750fe79269d        12 weeks ago
+f440/first_container   latest              02036952e5dc        3 seconds ago
+</code></pre>
+<p>これで今後は <code>docker run f440/first_container</code> をベースにしたコンテナを作れるようになる。</p>
+<h3>イメージ</h3>
+<p>もう一回イメージの一覧を内容を確認してみよう。</p>
+<pre><code>$ docker images
+REPOSITORY             TAG                 ID                  CREATED
+f440/first-container   latest              141fef9a2f57        14 seconds ago
+base                   latest              b750fe79269d        12 weeks ago
+base                   ubuntu-12.10        b750fe79269d        12 weeks ago
+base                   ubuntu-quantl       b750fe79269d        12 weeks ago
+base                   ubuntu-quantal      b750fe79269d        12 weeks ago
+</code></pre>
+<p>base イメージは latest, ubuntu-quantl, ubuntu-quantal, ubuntu-12.10 といった複数のタグがついていることがわかる。イメージは複数の名称をタグ付けできるようになっており、<code>base:latest</code>, <code>base:ubuntu-12.10</code> といった形で異なるイメージを呼び出せるようになっている。省略時は <code>base:latest</code> と同じ。</p>
+<p>pull してくるイメージは <a href="https://index.docker.io/">https://index.docker.io/</a> から情報を持ってくる。コマンドラインで検索したい場合は <code>search</code> コマンドを利用する。</p>
+<pre><code>$ docker search centos
+Found 4 results matching your query ("centos")
+NAME                          DESCRIPTION
+centos
+backjlack/centos-6.4-x86_64
+creack/centos
+mbkan/lamp                    centos with ssh, LAMP, PHPMyAdmin(root pas...
+</code></pre>
+<p>ローカルにキャッシュされたイメージを消すには <code>docker rmi &#x3C;イメージのID></code>でいい。</p>
+<p>自前で作ったイメージを <a href="https://index.docker.io/">https://index.docker.io/</a>  に登録するには、あらかじめサイト上でアカウントを作っておき、 <code>docker login</code> した後に <code>docker push</code> する。イメージ名にアンダーバー使っていると <code>push</code> で失敗するのと、アップロードしたイメージを消す機能がまだなかったりするので注意。</p>
+<p>イメージの実体は <code>/var/lib/docker/graph/</code> にある。</p>
+<pre><code>$ docker images -a -notrunc
+REPOSITORY          TAG                 ID                                                                 CREATED
+base                latest              b750fe79269d2ec9a3c593ef05b4332b1d1a02a62b4accb2c21d589ff2f5f2dc   12 weeks ago
+base                ubuntu-12.10        b750fe79269d2ec9a3c593ef05b4332b1d1a02a62b4accb2c21d589ff2f5f2dc   12 weeks ago
+base                ubuntu-quantl       b750fe79269d2ec9a3c593ef05b4332b1d1a02a62b4accb2c21d589ff2f5f2dc   12 weeks ago
+base                ubuntu-quantal      b750fe79269d2ec9a3c593ef05b4332b1d1a02a62b4accb2c21d589ff2f5f2dc   12 weeks ago
+&#x3C;none>              &#x3C;none>              27cf784147099545                                                   12 weeks ago
+
+$ sudo ls -1 /var/lib/docker/graph
+141fef9a2f57e86dd6d9aa58fe9318b0d9d71d91053079842051d9738bad6e45
+27cf784147099545
+b750fe79269d2ec9a3c593ef05b4332b1d1a02a62b4accb2c21d589ff2f5f2dc
+checksums
+:tmp:
+</code></pre>
+<p>ここで images に ID: 27cf784147099545 というのが現れた。これは何か。<code>inspect</code> を使うとイメージの詳細を表示できる。</p>
+<pre><code>$ docker inspect base
+{
+    "id": "b750fe79269d2ec9a3c593ef05b4332b1d1a02a62b4accb2c21d589ff2f5f2dc",
+    "parent": "27cf784147099545",
+    "created": "2013-03-23T22:24:18.818426-07:00",
+    "container": "3d67245a8d72ecf13f33dffac9f79dcdf70f75acb84d308770391510e0c23ad0",
+    "container_config": {
+        "Hostname": "",
+        "User": "",
+        "Memory": 0,
+        "MemorySwap": 0,
+        "CpuShares": 0,
+        "AttachStdin": false,
+        "AttachStdout": false,
+        "AttachStderr": false,
+        "PortSpecs": null,
+        "Tty": true,
+        "OpenStdin": true,
+        "StdinOnce": false,
+        "Env": null,
+        "Cmd": [
+            "/bin/bash"
+        ],
+        "Dns": null,
+        "Image": "base",
+        "Volumes": null,
+        "VolumesFrom": ""
+    }
+}
+</code></pre>
+<p>ID: 27cf784147099545 は base イメージの親イメージの ID であることがわかる。イメージは差分になっているので、親のイメージが必要ということで初回実行のタイミングで base と一緒に 27cf784147099545 もダウンロードされていたのだった。</p>
+<h3>ネットワーク</h3>
+<p><code>docker run</code> 時に <code>-p</code> をつけることで、コンテナから外部にさらすポートを決められる。コンテナ側のポートはホスト側のポートに変換される際、ポート番号が変更される(49153以降になる)ので、<code>docker port &#x3C;ジョブのID> &#x3C;ポート番号></code> あるいは <code>docker ps </code> でポートの対応状況を確認する必要がある。</p>
+<p>ドキュメントの <a href="https://github.com/dotcloud/docker#expose-a-service-on-a-tcp-port">Expose a service on a TCP port</a> がわかりやすい。</p>
+<pre><code># 以下、コメントは書き換えてある
+# また、途中経過がわかりやすいように set -x しておく
+set -x
+
+# 4444 を晒すよう -p オプションをつけて docker run しつつ、
+# コンテナは netcat で4444を待ち受ける
+JOB=$(docker run -d -p 4444 base /bin/nc -l -p 4444)
+++ docker run -d -p 4444 base /bin/nc -l -p 4444
++ JOB=c86c892574f7
+
+# 4444 がローカルのどのポートに対応するのか確認
+# docker ps でも調べることはできる
+PORT=$(docker port $JOB 4444)
+++ docker port c86c892574f7 4444
++ PORT=49166
+
+# ルーティングによっては localhost とか 127.0.0.1 だと
+# うまくいかないことがあるので、eth0 のIPアドレスを使おう、
+# ってことらしい
+IP=$(ifconfig eth0 | perl -n -e 'if (m/inet addr:([\d\.]+)/g) { print $1 }')
+++ perl -n -e 'if (m/inet addr:([\d\.]+)/g) { print $1 }'
+++ ifconfig eth0
++ IP=10.156.137.111
+echo hello world | nc $IP $PORT
++ nc 10.156.137.111 49166
++ echo hello world
+
+# コンテナが受信したメッセージを logs で表示
+echo "Daemon received: $(docker logs $JOB)"
+++ docker logs c86c892574f7
++ echo 'Daemon received: hello world'
+Daemon received: hello world
+</code></pre>
+<h3>Dockerfile</h3>
+<p>DSLで書かれた設定(通常ファイル名は<code>Dockerfile</code>とする)をあらかじめ用意することで、手順に従ってイメージを作ることができる。</p>
+<pre><code>読み込ませ方 (1)
+docker build &#x3C;Dockerfileのあるディレクトリ>
+# ex. docker build .
+
+読み込ませ方 (2)
+docker build -
+# ex. docker build - &#x3C; /foo/bar/Dockerfile
+</code></pre>
+<p>Dockerfile の例</p>
+<pre><code>FROM base
+RUN /bin/echo hi
+</code></pre>
+<p>これで、<code>docker build</code> すれば <code>docker run base /bin/echo hi</code> と同じ効果が得られる。</p>
+<p>指定できるはコマンドは以下の通り。大文字小文字は区別しないけど、引数と見分けやすいように大文字が使われる。</p>
+<ul>
+<li><code>FROM &#x3C;image></code> ベースとなるイメージを指定</li>
+<li><code>MAINTAINER &#x3C;name></code> メンテナの名前を指定</li>
+<li><code>RUN &#x3C;command></code> ビルド中に実行したいコマンドを指定</li>
+<li><code>CMD &#x3C;command></code> 起動後のコンテナで実行したいコマンドを指定</li>
+<li><code>EXPOSE &#x3C;port> [&#x3C;port> ...]</code> 外部に晒すポートの指定</li>
+<li><code>ENV &#x3C;key> &#x3C;value></code> 環境変数の設定</li>
+<li><code>INSERT &#x3C;file url> &#x3C;path></code> deprecated なので ADD を利用すること</li>
+<li><code>ADD &#x3C;src> &#x3C;dest></code> ファイルを配置</li>
+</ul>
+<p><code>RUN</code> と <code>CMD</code> の違いがわかりにくいかもしれない。例を出す。</p>
+<pre><code># RUN, CMD で指定したコマンドが実行されたとき、
+# 標準出力と /tmp/*.log に記録を残す
+
+$ cat &#x3C;&#x3C;SCRIPT >Dockerfile
+> FROM base
+> RUN /bin/echo run | tee /tmp/run.log
+> CMD /bin/echo cmd | tee /tmp/cmd.log
+> SCRIPT
+
+# ビルドの実行
+
+$ docker build .
+Caching Context 10240/? (n/a)
+FROM base ()
+===> b750fe79269d2ec9a3c593ef05b4332b1d1a02a62b4accb2c21d589ff2f5f2dc
+RUN /bin/echo run | tee /tmp/run.log (b750fe79269d2ec9a3c593ef05b4332b1d1a02a62b4accb2c21d589ff2f5f2dc)
+===> d10b6bd1321d45b0228b5741c01d1f76fd0288052e56836609f9bdf217854f3d
+CMD /bin/echo cmd | tee /tmp/cmd.log (d10b6bd1321d45b0228b5741c01d1f76fd0288052e56836609f9bdf217854f3d)
+===> 60671e9969185841032fb02f623917672c4f871a6be68e5aa575e8fdf1f94229
+Build successful.
+===> 60671e9969185841032fb02f623917672c4f871a6be68e5aa575e8fdf1f94229
+
+# run, cmd の実行結果を確認
+# => run だけが実行されている
+
+$ docker run 60671e99691 /bin/ls /tmp/
+run.log
+
+# イメージを inspect する
+# => どうやらコンテナは記憶していることがわかる
+
+$ docker inspect 60671e99691
+{
+    "id": "60671e9969185841032fb02f623917672c4f871a6be68e5aa575e8fdf1f94229",
+    "parent": "d10b6bd1321d45b0228b5741c01d1f76fd0288052e56836609f9bdf217854f3d",
+    "created": "2013-06-16T16:29:14.602237Z",
+    "container": "4c54683cec90500f329dfaad2e0856cc408483be0ae3166018121d4d4b9b3282",
+    "container_config": {
+        "Hostname": "78c72f8ba6ad",
+        "User": "",
+        "Memory": 0,
+        "MemorySwap": 0,
+        "CpuShares": 0,
+        "AttachStdin": false,
+        "AttachStdout": false,
+        "AttachStderr": false,
+        "PortSpecs": null,
+        "Tty": false,
+        "OpenStdin": false,
+        "StdinOnce": false,
+        "Env": null,
+        "Cmd": [
+            "/bin/sh",
+            "-c",
+            "#(nop) CMD [/bin/sh -c /bin/echo cmd | tee /tmp/cmd.log]"
+        ],
+        "Dns": null,
+        "Image": "d10b6bd1321d45b0228b5741c01d1f76fd0288052e56836609f9bdf217854f3d",
+        "Volumes": null,
+
+# 引数でコマンドを指定せずに run を実行
+# => cmd で登録した内容が実行される
+
+$ docker run 60671e99691
+cmd
+</code></pre>
+<p>つまり、<code>RUN</code> は <code>Dockerfile</code> を元にビルドしているときに参照され、<code>CMD</code> はコンテナを実行する際に参照されるということがわかる。パッケージをインストールしたりといった用途では通常 <code>RUN</code> を使う。</p>
+<h2>まとめ</h2>
+<p>仮想環境の発達でプログラマブルなインフラストラクチャーは実現できてきているけど、マシンを上げたり下げたりするのにどうしても時間がかかるし、それは仕方が無いものと我慢していた。<code>Docker</code> を使ってみると、今までのそういった不満から解放されることができそう。一応開発中というステータスなのでプロダクション環境では使いづらいけど、開発やテスト、とくに構成管理ツールを設定するときなどは、この俊敏性、柔軟性は有効になると思う。</p>
+<h2>参考</h2>
+<ul>
+<li><a href="http://docs.docker.io/en/latest/">Documentation</a></li>
+</ul>
+]]>
+  </content>
+</entry>
+<entry>
   <id>tag:apatheia.info,2013-06-16:/blog/2013/06/16/yum-cache/</id>
-  <title type="html">yum のパッケージキャッシュについて</title>
+  <title type="text">yum のパッケージキャッシュについて</title>
   <published>2013-06-15T16:26:00.000Z</published>
-  
-  <link rel="alternate" href="https://apatheia.info/blog/2013/06/16/yum-cache/"/>
+  <updated>2013-06-15T16:26:00.000Z</updated>
+  <link href="https://apatheia.info/blog/2013/06/16/yum-cache/"/>
   <content type="html">
   <![CDATA[<p><code>/etc/yum.conf</code>で<code>keepcache=1</code>にしておくと、インストールしたパッケージがキャッシュされるようになる。これが無効化された状態だと、パッケージアップグレード時に問題が起きても元に戻せなくなるので有効化しておいた方がいい。</p>
 <!-- more -->
@@ -47,10 +729,10 @@ $ sudo yum history undo 4
 </entry>
 <entry>
   <id>tag:apatheia.info,2013-05-07:/blog/2013/05/07/create-ominibus-installer/</id>
-  <title type="html">omnibus を使って オムニバスインストーラーを作成する</title>
+  <title type="text">omnibus を使って オムニバスインストーラーを作成する</title>
   <published>2013-05-06T16:41:00.000Z</published>
-  
-  <link rel="alternate" href="https://apatheia.info/blog/2013/05/07/create-ominibus-installer/"/>
+  <updated>2013-05-06T16:41:00.000Z</updated>
+  <link href="https://apatheia.info/blog/2013/05/07/create-ominibus-installer/"/>
   <content type="html">
   <![CDATA[<p>Chef のインストールは結構面倒くさかったんだけど、<a href="http://www.opscode.com/chef/install/">オムニバスインストーラー</a>が出たことで状況はがらっと変わって、簡単に導入できるようになった。このオムニバスインストーラーの仕組みは汎用的に作られているので、他のツールでも適用できるという話。</p>
 <!-- more -->
@@ -153,10 +835,10 @@ end
 </entry>
 <entry>
   <id>tag:apatheia.info,2013-05-03:/blog/2013/05/03/create-mesos-rpm-using-fpm/</id>
-  <title type="html">fpm で Mesos の RPM を作るまで</title>
+  <title type="text">fpm で Mesos の RPM を作るまで</title>
   <published>2013-05-03T08:24:00.000Z</published>
-  
-  <link rel="alternate" href="https://apatheia.info/blog/2013/05/03/create-mesos-rpm-using-fpm/"/>
+  <updated>2013-05-03T08:24:00.000Z</updated>
+  <link href="https://apatheia.info/blog/2013/05/03/create-mesos-rpm-using-fpm/"/>
   <content type="html">
   <![CDATA[<p><a href="http://incubator.apache.org/mesos/">Mesos</a> をインストールするとき各マシンでビルドはしんどいので、<a href="https://github.com/jordansissel/fpm">fpm</a> で Mesos の RPM を作ってインストールしている。ビルドからパッケージ作成までの作業ログを残しておく。</p>
 <!-- more -->
@@ -219,10 +901,10 @@ rpm -qpl mesos-0.10.0-1.x86_64.rpm
 </entry>
 <entry>
   <id>tag:apatheia.info,2013-04-06:/blog/2013/04/06/about-ansible/</id>
-  <title type="html">構成管理ツール Ansible について</title>
+  <title type="text">構成管理ツール Ansible について</title>
   <published>2013-04-06T05:50:00.000Z</published>
-  
-  <link rel="alternate" href="https://apatheia.info/blog/2013/04/06/about-ansible/"/>
+  <updated>2013-04-06T05:50:00.000Z</updated>
+  <link href="https://apatheia.info/blog/2013/04/06/about-ansible/"/>
   <content type="html">
   <![CDATA[<p><a href="http://ansible.cc/">Ansible</a> というサーバーの設定を管理するツールの説明。いわゆる構成管理 (CM: Configuration Management) にカテゴライズされるもので、Puppet や Chef の親戚みたいなものと考えてもらえればだいたいあってる。</p>
 <!-- more -->
@@ -392,1917 +1074,6 @@ client1                        : ok=3    changed=1    unreachable=0    failed=0
 <p>ロゴのセンスは悪いけど、アプリケーション自体の仕組みはすごくセンスがいい。</p>
 <p>他の構成管理ツールと比べると、DSL を覚えるといった「ツールを使うまでののコスト」、ツールのためのサーバー構築・運用といった「ツールを使ってからのコスト」が軽微なので、よりやりたいことに目が向けられるのもうれしい。</p>
 <p>最近日本国内でも Chef の話題を聞くことが多いんだけど、Chef Server の運用とかオートスケールとのコンビネーションとかの情報はあまり聞かないので、たぶん割と小規模な環境でリモートサーバーの Chef-solo をキックみたいなケースが多いのかと思う。そういったところだと、Ansible のほうがふさわしいっていうことが多いんじゃないかな。</p>
-]]>
-  </content>
-</entry>
-<entry>
-  <id>tag:apatheia.info,2013-03-17:/blog/2013/03/17/logging-with-splunk-storm/</id>
-  <title type="html">イベント管理にSplunk Stormを使ってみる</title>
-  <published>2013-03-17T12:17:00.000Z</published>
-  
-  <link rel="alternate" href="https://apatheia.info/blog/2013/03/17/logging-with-splunk-storm/"/>
-  <content type="html">
-  <![CDATA[<p><a href="http://www.splunk.com/">Splunk</a> はおそらくイベント・ログ管理のツールとしてはおそらくもっとも有名で、日本でも販売展開しているので知っている人も多いかと思う。その splunk が <a href="https://www.splunkstorm.com/storm/">Splunk Storm</a> というサービスを始めている。試しに使ってみたのでその感想。</p>
-<!-- more -->
-<p>料金に応じて、格納可能なデータの容量が増える課金体系。無料でも1GBまで利用可能。</p>
-<p>データの取り込みは以下の方法が提供されている:</p>
-<ul>
-<li>Syslog, Rsyslog, Syslog-ng などから転送</li>
-<li>TCP/UDP を使って直接登録
-<ul>
-<li><code>cat some_file.log | nc endpoind_hostname port</code> で登録可能</li>
-</ul>
-</li>
-<li>HTTP API</li>
-<li>forwarder と呼ばれるクライアントプログラム
-<ul>
-<li>ログの読み取りなども可能</li>
-</ul>
-</li>
-<li>ファイルアップロード</li>
-</ul>
-<p>試しにアカウントをとってApacheのログ形式のデータをncでがんがん取り込んでみたところ、1GB を超えたところでもうこれ以上追加できないとのメールが届いた。結果、200万件以上のデータが登録できていた。</p>
-<p>複雑な検索式を使って特定の条件に合うレコードを弾き出したり、図示することができる。たとえば、ステータスコードでグルーピングしたグラフを表示するには、以下の検索式を指定する。</p>
-<pre><code>sourcetype="access_combined" status="*" | timechart count by status
-</code></pre>
-<p>リアルタイムで計算しているらしく、新しい時間帯から古い時間帯へとどんどんグラフが追加されていく。</p>
-<p><img src="/images/2013-03-17-logging-with-splunk-storm/httpstatus.png" alt="httpstatus"></p>
-<p>さすがというか、よくできている。</p>
-]]>
-  </content>
-</entry>
-<entry>
-  <id>tag:apatheia.info,2013-03-17:/blog/2013/03/17/fluentd-and-graphite/</id>
-  <title type="html">FluentdのデータをGraphiteに出力するときのTips</title>
-  <published>2013-03-17T06:50:00.000Z</published>
-  
-  <link rel="alternate" href="https://apatheia.info/blog/2013/03/17/fluentd-and-graphite/"/>
-  <content type="html">
-  <![CDATA[<p><a href="https://github.com/hotchpotch/fluent-plugin-graphite">fluent-plugin-graphite</a> 利用時のメモ。</p>
-<p>Ops界隈での可視化というと、ここ何年かは<a href="http://graphite.wikidot.com/">Graphite</a>でグラフを作ってそれを他のツールで表示する、みたいなのが多い。<a href="http://fluentd.org/">Fluentd</a>のデータを可視化したい場合は<a href="http://kazeburo.github.com/GrowthForecast/">GrowthForecast</a>が使われることが多いけど、<a href="http://graphite.wikidot.com/">Graphite</a>使ってみるといろんなツールと組み合わせられておもしろい。</p>
-<!-- more -->
-<p>Fluentd から Graphite へデータを送るのは <a href="https://github.com/hotchpotch/fluent-plugin-graphite">Fluent-plugin-graphite</a> を使えば簡単に実現できそうなんだけど、プラグイン側のインターフェース(<code>:key</code> や <code>:count</code> といったキーが必要)に合わせて入力のデータを整形する必要がある。</p>
-<p>こういった調整は、out_map を使うことで実現できる。</p>
-<pre><code>&#x3C;source>
-  type tail
-  format apache
-  path /var/log/httpd/access_log
-  tag apache.access
-&#x3C;/source>
-&#x3C;match apache.access>
-  type map
-  map [["graphite." + tag, time, {"key" => "graphite.apache.accesslog.code." + record["code"], "count" => 1}]]
-  multi true
-&#x3C;/match>
-&#x3C;match graphite.**>
-  type graphite
-&#x3C;/match>
-</code></pre>
-]]>
-  </content>
-</entry>
-<entry>
-  <id>tag:apatheia.info,2013-03-17:/blog/2013/03/17/fluentd-and-stathat/</id>
-  <title type="html">Fluentdの出力結果をStatHatで可視化する</title>
-  <published>2013-03-17T06:48:00.000Z</published>
-  
-  <link rel="alternate" href="https://apatheia.info/blog/2013/03/17/fluentd-and-stathat/"/>
-  <content type="html">
-  <![CDATA[<p><a href="http://fluentd.org/">Fluentd</a>で取得した情報を可視化したいとき、<a href="https://github.com/tagomoris/fluent-plugin-growthforecast">fluent-plugin-growthforecast</a>を使って<a href="http://kazeburo.github.com/GrowthForecast/">GrowthForecast</a>にグラフを作る方法がよく知られている。<a href="http://kazeburo.github.com/GrowthForecast/">GrowthForecast</a>はインストール後すぐに使い始められるお手軽ツールなんだけど、それすら面倒くさい、自前で環境を作るのが面倒、というときには<a href="http://www.stathat.com/">StatHat</a>を使うと簡単に可視化を実現できるという話。</p>
-<!-- more -->
-<p><a href="http://www.stathat.com/">StatHat</a>はシンプルなインターフェースで必要十分な機能があり、しかも無料で使えるというサービス。HTTPでデータを登録するだけできれいなグラフが簡単に生成できるので、幅広い用途で利用できる。</p>
-<p>以降、<a href="http://fluentd.org/">Fluentd</a>と<a href="http://www.stathat.com/">StatHat</a>を組み合わせて利用するための設定を説明する。</p>
-<h2>作業</h2>
-<h3>StatHat</h3>
-<p>Stathatの<a href="https://www.stathat.com/sign_up">Sign up</a>にアクセスしてメールアドレスを登録し、折り返し届くメール内のURLからパスワードを登録すればすぐ使い始められる。グラフを作るための下準備は不要。まずは、curl を使って直接 POST してみる。</p>
-<pre><code>curl -d "email=登録時のメールアドレス&#x26;stat=body temperature&#x26;value=36.8" http://api.stathat.com/ez
-</code></pre>
-<p>すると、メールアドレス宛にグラフの追加が通知され、画面から確認できるようになる。</p>
-<p>(メールアドレスに<code>+</code>みたいなURLエンコードが必要な文字を含んでる場合は、 --data-urlencode を使って一つずつパラメータを指定すればいい)</p>
-<p>APIを利用するために必要となるキーは、初期状態だと登録時のメールアドレスになっている。これは<a href="https://www.stathat.com/settings">設定画面</a>から変更可能。タイムゾーンも修正できるので住んでいる地域に変更しておいた方がいい。</p>
-<h3>Fluentd</h3>
-<p>Fluentd から StatHat を利用するために<a href="https://github.com/f440/fluent-plugin-stathat">プラギン</a>作ったので、これを利用する。</p>
-<pre><code>fluent-gem install fluent-plugin-stathat
-</code></pre>
-<p>たとえば、よくある「HTTP ステータスコードのカウント」の場合、以下のような設定をすればいい。</p>
-<pre><code>&#x3C;source>
-  type tail
-  format apache
-  path /var/log/httpd/access_log
-  tag apache.access
-&#x3C;/source>
-&#x3C;match apache.access>
-  type datacounter
-  unit minute
-  tag stathut.httpstatus
-  count_key code
-  pattern1 2xx ^2\d\d$
-  pattern2 3xx ^3\d\d$
-  pattern3 4xx ^4\d\d$
-  pattern4 5xx ^5\d\d$
-&#x3C;/match>
-&#x3C;match stathut.httpstatus>
-  type copy
-  &#x3C;store>
-    type  stathat
-    stat 2xx
-    ezkey your_email@example.com
-    count apache.access_200_count
-  &#x3C;/store>
-  &#x3C;store>
-    type  stathat
-    stat 3xx
-    ezkey your_email@example.com
-    count apache.access_3xx_count
-  &#x3C;/store>
-  &#x3C;store>
-    type  stathat
-    stat 4xx
-    ezkey your_email@example.com
-    count apache.access_4xx_count
-  &#x3C;/store>
-  &#x3C;store>
-    type  stathat
-    stat 5xx
-    ezkey your_email@example.com
-    count apache.access_5xx_count
-  &#x3C;/store>
-&#x3C;/match>
-</code></pre>
-<p>これで、こういったグラフが作れる。</p>
-<p><img src="/images/2013-03-17-fluentd-and-stathat/httpstatus.png" alt="httpstatus">
-<img src="/images/2013-03-17-fluentd-and-stathat/4xx.png" alt="4xx"></p>
-<h2>まとめ</h2>
-<p><a href="http://www.stathat.com/">StatHat</a> 便利。</p>
-]]>
-  </content>
-</entry>
-<entry>
-  <id>tag:apatheia.info,2013-02-08:/blog/2013/02/08/create-chocolatey-package/</id>
-  <title type="html">chocolatey で Haskell Platform 用のパッケージを作る</title>
-  <published>2013-02-08T13:49:00.000Z</published>
-  
-  <link rel="alternate" href="https://apatheia.info/blog/2013/02/08/create-chocolatey-package/"/>
-  <content type="html">
-  <![CDATA[<p><a href="http://chocolatey.org/">chocolatey</a> の仕組みに興味を持ったので、パッケージを作ってみる。</p>
-<!-- more -->
-<p>目標は「<a href="http://www.haskell.org/platform/windows.html">Haskell Platform for Windows</a> からインストーラをダウンロードしてきてサイレントインストール」ができるパッケージを作って、<a href="http://chocolatey.org/">chocolatey</a> のリポジトリにパッケージを登録してみる。</p>
-<h2>作業</h2>
-<h3>パッケージ作成</h3>
-<p><a href="https://github.com/chocolatey/chocolatey/wiki/CreatePackages">ドキュメント</a>では <a href="https://github.com/chucknorris/Warmup">warmup</a> (プロジェクトのひな形を作ったり、そこで生成されたファイル内の文字列を置換したりするプログラム) を使ったやり方が説明されているけど、うまく動かなかったのでガリガリ手作業でやっていく。</p>
-<p>前提として、chocolatey のインストール方法は済んでいるものとする。</p>
-<p>まずはテンプレートを手に入れる。github から直接ファイルをダウンロードでもいいけど、今回の手順では clone してみよう。</p>
-<pre><code># git 入れてなければ インストール
-cinst git
-# パスを通すため、コマンドプロンプトから抜けて新しく立ち上げ直す
-
-cd %ChocolateyInstall%
-git clone https://github.com/chocolatey/chocolateytemplates.git
-cd chocolateytemplates\_templates
-</code></pre>
-<p>どこでもいいので、作業用にフォルダを作ってそこにテンプレートをコピーする。</p>
-<pre><code>cd %USERPROFILE%
-mkdir my_templates
-cd my_templates
-xcopy %ChocolateyInstall%\chocolateytemplates\_templates\chocolatey HaskellPlatform /s /e /i
-</code></pre>
-<p>いよいよテンプレートの中身を作っていく。</p>
-<pre><code>cd HaskellPlatform
-ren __NAME__.nuspec HaskellPlatform.nuspec 
-# HaskellPlatform.nuspec と tools/chocolateyInstall.ps1 を開いてプレースホルダを変更
-notepad HaskellPlatform.nuspec
-notepad tools/chocolateyInstall.ps1
-# HaskellPlatform は NSIS 製なので、
-# http://nsis.sourceforge.net/Docs/Chapter3.html#3.2 より、
-# サイレントインストールのためのコマンドラインオプションが /S をつければいい
-</code></pre>
-<p>編集後のファイルは以下の通り</p>
-<ul>
-<li><a href="https://github.com/f440/chocolatey-HaskellPlatform/blob/master/HaskellPlatform.nuspec">HaskellPlatform.nuspec</a></li>
-<li><a href="https://github.com/f440/chocolatey-HaskellPlatform/blob/master/tools/chocolateyInstall.ps1">tools/chocolatey-HaskellPlatform.ps1</a></li>
-</ul>
-<p>パッケージングする。</p>
-<pre><code>cpack
-</code></pre>
-<p>HaskellPlatform.{バージョン番号}.nupkg ができるはず。インストールしてみよう。</p>
-<pre><code>cinst HaskellPlatform -source %cd%
-</code></pre>
-<p>うまくいけば、Haskell のサイレントインストールが始まる。</p>
-<h3>パッケージ登録</h3>
-<p><a href="http://chocolatey.org/">chocolatey</a> にパッケージを登録してみよう。パッケージの登録にはアカウントが必要。</p>
-<p>登録方法は 2 種類。</p>
-<ol>
-<li>アップロードフォームから *.nupkg をアップロード</li>
-<li>API キーを取得して、コマンドラインから push</li>
-</ol>
-<p>1 は簡単すぎるので、2 を試す。事前に <a href="http://chocolatey.org/">chocolatey</a> のアカウント画面から API キーを取得しておこう。</p>
-<pre><code>cinst nuget.commandline
-NuGet SetApiKey &#x3C;your key here> -source http://chocolatey.org/
-cpush HaskellPlatform.{バージョン番号}.nupkg
-</code></pre>
-<p>登録が終われば、他のマシンから <code>cinst HaskellPlatform</code> でインストールできるようになる。</p>
-<h2>まとめ</h2>
-<p>アンインストールの設定が用意されていない、といっただいぶ手抜きなものだけど簡単にできた。</p>
-<p><a href="http://chocolatey.org/">chocolatey</a> 公式の github アカウントでは <a href="https://github.com/chocolatey/chocolatey-cookbook">Chef 用の cookbook</a> を配布している。chef を使って Windows マシンをセットアップするとなると、パッケージマネージャがなければ <a href="https://github.com/opscode-cookbooks/windows">chef-cookbooks/windows</a> (Windows向けのResource/Provider) を使ってインストール方法をちまちま指定していくことになるわけだけど、<a href="http://chocolatey.org/">chocolatey</a> 使えば処理が抽象化できてよさげ。</p>
-<h2>参考</h2>
-<ul>
-<li><a href="http://chocolatey.org/">chocolatey</a></li>
-<li><a href="http://www.haskell.org/platform/windows.html">Haskell Platform for Windows</a></li>
-<li><a href="https://github.com/chocolatey/">chocolateyのgithubアカウント</a></li>
-</ul>
-]]>
-  </content>
-</entry>
-<entry>
-  <id>tag:apatheia.info,2013-02-03:/blog/2013/02/03/installing-node-dot-js-on-windows-7/</id>
-  <title type="html">Windows 上に node.js の開発環境を整える</title>
-  <published>2013-02-03T12:11:00.000Z</published>
-  
-  <link rel="alternate" href="https://apatheia.info/blog/2013/02/03/installing-node-dot-js-on-windows-7/"/>
-  <content type="html">
-  <![CDATA[<p>一身上の都合で Windows 7 上に Node.js の開発環境を整えたんだけど、コマンドラインからの操作だけで開発環境がそろう時代になっていたことに驚いた。</p>
-<p>そのときの作業メモ。</p>
-<!-- more -->
-<p>コマンドプロンプト起動:</p>
-<pre><code># Chocolatey のインストール
-@powershell -NoProfile -ExecutionPolicy unrestricted -Command "iex ((new-object net.webclient).DownloadString('http://chocolatey.org/install.ps1'))" &#x26;&#x26; SET PATH=%PATH%;%systemdrive%\chocolatey\bin
-# システムドライブ直下にインストールするの微妙……
-# 追記: [システムディスクの直下にインストールする理由](https://github.com/chocolatey/chocolatey/wiki/DefaultChocolateyInstallReasoning)
-
-
-# パッケージのダウンロード&#x26;インストール
-cinst nodejs.install
-# nodejs.install ではなく nodejs だけだとコマンドライン版プログラムだけ
-# インストールされる。別途 npm を用意する必要が出てくるので
-# パッケージを使った方が楽
-
-# Node.js にパスを通す
-set PATH=%PATH%;%ProgramFiles(x86)%\nodejs
-
-# ちゃんと動くかどうか、試しに grunt をインストールしてみる
-mkdir test
-cd test
-npm install grunt
-</code></pre>
-<p>あとは好みにあわせて開発ツールを <code>cinst</code> でインストールしていく</p>
-<ul>
-<li>バージョン管理 (git ...)</li>
-<li>エディタ (sublimetext2, vim ...)</li>
-<li>データストア (redis, mongodb ...)</li>
-<li>ユーティリティ (Gow, ...)</li>
-</ul>
-<h2>参考</h2>
-<ul>
-<li><a href="http://nodejs.org/">node.js</a></li>
-<li><a href="http://chocolatey.org/">chocolatey</a></li>
-</ul>
-]]>
-  </content>
-</entry>
-<entry>
-  <id>tag:apatheia.info,2013-01-03:/blog/2013/01/03/log-visualization-using-logstalgia/</id>
-  <title type="html">logstalgia を使ってログを可視化</title>
-  <published>2013-01-03T09:50:00.000Z</published>
-  
-  <link rel="alternate" href="https://apatheia.info/blog/2013/01/03/log-visualization-using-logstalgia/"/>
-  <content type="html">
-  <![CDATA[<p>Webサーバーのログでピンポンゲームの映像を生成する<a href="https://code.google.com/p/logstalgia/" title="logstalgia">logstalgia</a>。</p>
-<!-- more -->
-<p>homebrew がインストール済みなら以下で動かせる。</p>
-<pre><code>gem install apache-loggen
-brew install logstalgia
-apache-loggen --rate 10 | logstalgia -
-</code></pre>
-<p><a href="http://mt.orz.at/archives/2012/11/apacherubygems.html" title="apache-loggen">apache-loggen</a> はApacheのダミーログを生成してくれるスクリプト。便利。</p>
-<p><img src="/images/2013-01-03-log-visualization-using-logstalgia/logstalgia.png" alt="logstalgia"></p>
-<h2>参考</h2>
-<ul>
-<li><a href="https://code.google.com/p/logstalgia/" title="logstalgia">logstalgia</a></li>
-<li><a href="http://mt.orz.at/archives/2012/11/apacherubygems.html" title="apache-loggen">apache-loggen</a></li>
-</ul>
-]]>
-  </content>
-</entry>
-<entry>
-  <id>tag:apatheia.info,2013-01-01:/blog/2013/01/01/network-restriction-using-trickle/</id>
-  <title type="html">Trickleを使って帯域制限をする</title>
-  <published>2013-01-01T08:05:00.000Z</published>
-  
-  <link rel="alternate" href="https://apatheia.info/blog/2013/01/01/network-restriction-using-trickle/"/>
-  <content type="html">
-  <![CDATA[<p>ネットワーク経由で大量のデータをやりとりしたいが、メインのサービスには影響を与えたくないという場合がよくある。<code>rsync</code>や<code>scp</code> など、大きなファイルの転送を考慮されたコマンドではネットワーク帯域を制限するオプションが用意されていることも多いが、自作のツールなどに帯域制限を実装するとなるとかなり面倒くさいことになる。</p>
-<!-- more -->
-<p>Linux で帯域制限をしたい場合、tc や cgroup を使う方法がよく知られている。ただ、「あるコマンドにネットワークが占領されないように穏やかに実行したい」というニーズに対しては大げさで、またオプションが難解だったり管理権限が必要だったりといったことから二の足を踏む感じのものだった。もっと普段使いに適したツールがないものかと探していたところ、こういったシーンでは<a href="http://monkey.org/~marius/pages/?page=trickle" title="trickle公式">Tricle</a>がかなり有効だと言うことがわかった。</p>
-<h2>インストール</h2>
-<p>Debian, Ubuntu なら公式からパッケージが提供されている。RHEL 系 OS であれば、EPEL にパッケージがあるのでそちらを利用。</p>
-<h2>使い方</h2>
-<h3>trickle</h3>
-<p>コマンドの前に <code>trickle</code> をつけるだけで、簡単に帯域制限が実現できる。とりあえず、「<code>-d n</code>で n KByte/sec にダウンロードが制限」、「<code>-u n</code>で n KByte/sec に制限」だけ覚えておけばいい。</p>
-<pre><code># wget のダウンロード速度を 20 KBpsに制限する例
-#  (本当は wget も curl も --limit-rate オプションが元々あるので、こんなことしなくても大丈夫)
-trickle -d 20 wget --verbose http://ftp.jaist.ac.jp/pub/Linux/ArchLinux/iso/2012.12.01/archlinux-2012.12.01-dual.iso
-</code></pre>
-<p>実行時、<code>trickled</code> が見つからないというメッセージが出るが、これは<code>-s</code>(standaloneモード)をつけることで抑制できる。</p>
-<h3>trickled</h3>
-<p><code>trickled</code> というプログラムも利用できるようになって、<code>tricle</code>と同様にオプション<code>-d</code>, <code>-u</code>が設定可能。<code>trickled</code>を一度起動するとデーモンとなり、以降<code>trickle</code>を使って起動したコマンドの帯域は、<code>trickled</code>起動時のオプションで設定した値までに制限される。複数個のプログラムを <code>trickle</code> で起動した場合、使用している帯域の総和が <code>trickled</code>の設定値に従うことになる。</p>
-<h2>参考</h2>
-<ul>
-<li><a href="http://monkey.org/~marius/pages/?page=trickle" title="trickle公式">配布元</a></li>
-<li><a href="http://monkey.org/~marius/trickle/trickle.pdf">仕組み</a></li>
-</ul>
-]]>
-  </content>
-</entry>
-<entry>
-  <id>tag:apatheia.info,2012-10-07:/blog/2012/10/07/sub-for-subcommands/</id>
-  <title type="html">サブコマンドを sub で処理する</title>
-  <published>2012-10-07T13:13:00.000Z</published>
-  
-  <link rel="alternate" href="https://apatheia.info/blog/2012/10/07/sub-for-subcommands/"/>
-  <content type="html">
-  <![CDATA[<p><a href="https://github.com/37signals/sub">sub</a> は <a href="http://37signals.com/">37signals</a> が公開しているスクリプト群。サブコマンド付きのコマンドを作りたいとき、補完やヘルプメッセージなどの便利な機能を提供してくれる。</p>
-<!-- more -->
-<h2>使い方</h2>
-<p>以下の簡単なコマンドを作って、動作を確認してみることにする。</p>
-<pre><code>ex. browse safari http://google.com/
-
-コマンド browse にサブコマンドでブラウザ(safari, chrome, opera, ...)を与え、
-最後の引数で渡された URL が開く。URL が渡されなければ、ブラウザの起動のみ行う。
-</code></pre>
-<p>なお、確認はすべて Mac OS X 10.8 上 の zsh で行っている。</p>
-<h3>初期化</h3>
-<pre><code>$ git clone git://github.com/37signals/sub.git browse
-$ cd browse
-$ ./prepare.sh browse
-# 以下のメッセージが表示される
-
-Preparing your 'browse' sub!
-Done! Enjoy your new sub! If you're happy with your sub, run:
-
-    rm -rf .git
-    git init
-    git add .
-    git commit -m 'Starting off browse'
-    ./bin/browse init
-
-Made a mistake? Want to make a different sub? Run:
-    git add .
-    git checkout -f
-Thanks for making a sub!
-</code></pre>
-<p>言われたとおり、コマンドを実行</p>
-<pre><code>$ rm -rf .git
-$ git init
-$ git add .
-$ git commit -m 'Starting off foo'
-$ ./bin/foo init
-# 以下のメッセージが表示される。パスは作業ディレクトリに応じて変わる。
-
-# Load browse automatically by adding
-# the following to ~/.zshenv:
-
-eval "$(/XXXXXXXX/browse/bin/browse init -)"
-</code></pre>
-<p>最後に表示されるコマンドを実行することにより、補完が有効になる(XXXXXXXX は作業ディレクトリに応じて変わる)。<code>browse he[tab]</code> を実行してみよう。</p>
-<pre><code>$ browse help
-Usage: browse &#x3C;command> [&#x3C;args>]
-Some useful browse commands are:
-   commands               List all browse commands
-
-See 'browse help &#x3C;command>' for information on a specific command.
-</code></pre>
-<p>無事ヘルプが表示されたら、セットアップはうまくいっている。</p>
-<h3>サブコマンド作成</h3>
-<p>まずはディレクトリ構造を見てみよう。</p>
-<pre><code>$ gfind ! -path './.git/*'
-.
-./.git
-./bin
-./bin/browse
-./completions
-./completions/browse.bash
-./completions/browse.zsh
-./libexec
-./libexec/browse
-./libexec/browse-commands
-./libexec/browse-completions
-./libexec/browse-help
-./libexec/browse-init
-./libexec/browse-sh-shell
-./LICENSE
-./share
-./share/browse
-./share/browse/example
-</code></pre>
-<p>libexec/browse-SUBCOMMAND  形式でファイルを作れば、サブコマンドを追加できる。早速追加してみよう。</p>
-<pre><code>$ vim libexec/browse-safari
-
-    #!/usr/bin/env bash
-    set -e
-    open -a safari $1
-    
-$ chomod a+x libexec/browse-safari
-</code></pre>
-<p>サブコマンドはシェル補完できるので、<code>browse saf[tab] http://google.com</code> といった入力が可能。問題が無ければブラウザが起動する。 ただ、これだけだと使い方がわかりづらいので、ヘルプを追加してみる。</p>
-<pre><code>$ vim libexec/browse-safari
-
-    #!/usr/bin/env bash
-    #
-    # Usage: browse safari [URL]
-    # Summary: safari で指定の URL を開く
-    # Help: safari を利用して、引数で渡された URL を開く
-    # 何も URL を指定しなければ、ブラウザの起動のみ
-    
-    set -e
-    
-    open -a safari $1
-</code></pre>
-<p>ヘルプに反映されていることを確認。</p>
-<pre><code>$ browse help safari
-Usage: browse safari [URL]
-
-safari を利用して、引数で渡された URL を開く
-何も URL を指定しなければ、ブラウザの起動のみ
-</code></pre>
-<p>引数なしの <code>help</code> もメッセージが変わっている。</p>
-<pre><code>$ browse help
-Usage: browse &#x3C;command> [&#x3C;args>]
-
-Some useful browse commands are:
-   commands               List all browse commands
-   safari                 safari で指定の URL を開く
-
-See 'browse help &#x3C;command>' for information on a specific command.
-</code></pre>
-<p>あとは、libexec-chrome, libexec-opera, ... とサブコマンドを追加していくことができる。</p>
-<h2>雑感</h2>
-<p>プログラムを書いてもシェルの補完設定までは手が回らないことが多いので、簡単にサポートしてくれる仕組みが提供されているのはかなりよかった。</p>
-<p>シェルスクリプトの書き方はかなりばらつきがあり、自分の周りでも割とフリーダムな状況になっていたので、邪魔にならない程度のフレームワークがあればいいな、と思っていた。そういう用途にも合っていると思う。</p>
-<h2>参考</h2>
-<ul>
-<li><a href="http://37signals.com/svn/posts/3264-automating-with-convention-introducing-sub">37signalsのブログでの紹介</a></li>
-<li><a href="https://github.com/37signals/sub">GitHubのリポジトリ</a></li>
-</ul>
-]]>
-  </content>
-</entry>
-<entry>
-  <id>tag:apatheia.info,2012-09-22:/blog/2012/09/22/head-tail/</id>
-  <title type="html">head と tail の行数指定方法</title>
-  <published>2012-09-22T10:00:00.000Z</published>
-  
-  <link rel="alternate" href="https://apatheia.info/blog/2012/09/22/head-tail/"/>
-  <content type="html">
-  <![CDATA[<p>head と tail を使うとき、行数指定方法について。動作確認は GNU coreutils 8.19 で行っている。</p>
-<!-- more -->
-<p>head と tail のは<code>-n 数字</code>(あるいは<code>--line 数字</code>)で出力する行数を指定できる。</p>
-<pre><code># 先頭3行を表示
-$ seq 10 | head -n 3
-1
-2
-3
-
-# 末尾3行を表示
-$ seq 10 | tail -n 3
-8
-9
-10
-</code></pre>
-<p>オプションで与える数字には、プラスがつく場合、マイナスがつく場合、何もつかない場合が考えられるが、記号がついた場合に通常異なる挙動をとる場合が出てくる。</p>
-<p><code>head -n -数字</code>の場合は、「末尾から指定した行数を除いたもの」となる:</p>
-<pre><code>$ seq 10 | head -n -3
-1
-2
-3
-4
-5
-6
-7
-</code></pre>
-<p><code>tail -n +数字</code> の場合は、「先頭から数えて指定した行以降のもの」となる:</p>
-<pre><code>$ seq 10 | tail -n +3
-3
-4
-5
-6
-7
-8
-9
-10
-</code></pre>
-<p>まとめると以下の通り:</p>
-<table><thead><tr><th>コマンド</th> <th>-n -行数</th> <th>-n 行数</th> <th>-n
-+行数</th> </tr></thead><tr><td>head</td> <td>末尾から
-<p>指定行数を除いて表示</td> <td>先頭から</p>
-<p>指定行数表示</td> <td>先頭から</p>
-<p>指定行数表示</td> </tr><tr><td>tail</td> <td>先頭から</p>
-<p>指定行数以降を表示</td> <td>末尾から</p>
-<p>指定行数表示</td> <td>先頭から</p>
-<p>数えて指定した行以降表示</td> </tr></table></p>
-<p><code>-n 数字</code> の代わりに <code>-数字</code> で指定することもできるけど、-n のオプションで負数を指定しているときと混同するのでやめた方がいい。</p>
-<p><code>-</code> や <code>+</code> オプションは境界値がどうなっているか忘れがちだし、これが必要となるような局面では <code>awk</code> を使った方が直感的に表現できる。</p>
-<pre><code># 3行目から5行目を表示
-$ seq 10 | awk 3&#x3C;=NR &#x26;&#x26; NR&#x3C;=5
-3
-4
-5
-</code></pre>
-]]>
-  </content>
-</entry>
-<entry>
-  <id>tag:apatheia.info,2012-09-22:/blog/2012/09/22/riemann/</id>
-  <title type="html">イベント処理ツール riemannを使う</title>
-  <published>2012-09-22T09:00:00.000Z</published>
-  
-  <link rel="alternate" href="https://apatheia.info/blog/2012/09/22/riemann/"/>
-  <content type="html">
-  <![CDATA[<p>イベント処理ツール <a href="http://aphyr.github.com/riemann/">riemann</a>を使ってみたのでその感想。</p>
-<!-- more -->
-<ul>
-<li>サーバーは clojure で書かれている
-<ul>
-<li>設定ファイルは S 式</li>
-</ul>
-</li>
-<li>クライアントは各言語版がある <a href="http://aphyr.github.com/riemann/clients.html">http://aphyr.github.com/riemann/clients.html</a></li>
-<li>サーバーの状態は riemann-dash という sinatra でできた Web 画面から確認できる</li>
-<li>クライアントからのメッセージはイベントと呼んでる
-<ul>
-<li>host, service, state, time, description, tags, metric, ttl というパラメータを持っている</li>
-</ul>
-</li>
-<li>サーバー、クライアント間は Protocol Buffer で通信する</li>
-</ul>
-<p>公式サイトではサーバーの tar ball と deb パッケージを配布している。動かすためには、Java で実行するだけ。</p>
-<pre><code>$ wget [http://aphyr.com/riemann/riemann-0.1.2.tar.bz2](http://aphyr.com/riemann/riemann-0.1.2.tar.bz2)
-$ tar xf riemann-0.1.2.tar.bz2
-$ cd riemann-0.1.2
-$ bin/riemann etc/riemann.config
-</code></pre>
-<p>設定ファイルを S 式でがりがりかけるのはおもしろくって、riemann だとこんな感じに設定できる:</p>
-<pre><code># 公式サイトの設定例から引用 [http://aphyr.github.com/riemann/configuring.html](http://aphyr.github.com/riemann/configuring.html)
-
-; You can use any options for [https://github.com/drewr/postal.](https://github.com/drewr/postal.)
-;
-; (mailer {:from "riemann@trioptimum.com"
-;          :host "mx1.trioptimum.com"
-;          :user "foo"
-;          :pass "bar"})
-
-(streams
-  (where (and (service "web server")
-              (state "exception"))
-         (tagged "controller"
-                 (email "5551234567@txt.att.net"))
-         (tagged "view"
-                 (email "delacroix@trioptimum.com" "bronson@trioptimum.com"))
-         (tagged "model"
-                 (email "staff@vonbraun.mil"))))
-</code></pre>
-<p>「イベント x あるいは y が n 秒以内に m 回発生したらアラート」みたいなのも設定できるみたいなので、監視ツールと組み合わせてもおもしろそう。</p>
-<p>ソフトウェアの内容や使いかっては、 <a href="http://fluentd.org/">fluentd</a>
-ととても近いように感じた。それぞれ公式サイトに掲げられているメッセージを比較してみると、fluentd は「Fluentd is a lightweight and flexible log collector」で、riemann は「Riemann is an event stream processor」だった。fluentd はイベントを集計できる形式でログとして残すこと、riemannはイベントストリームから特定の状況をリアルタイムで見つけだすことが主眼ということかな。</p>
-<h2>参考</h2>
-<ul>
-<li><a href="http://aphyr.github.com/riemann/">公式サイト</a></li>
-<li><a href="http://vimeo.com/45807716">紹介ビデオ</a></li>
-<li><a href="http://blog.boundary.com/2012/03/12/boundary-tech-talks-march-6th-2012/">紹介ビデオ</a></li>
-<li><a href="https://twitter.com/aphyr">作者 Kyle Kingsbury</a></li>
-<li><a href="http://labs.amara.org/2012-07-16-metrics.html">利用事例</a></li>
-</ul>
-<h3>関連するサービス、同類のソフトウェア</h3>
-<ul>
-<li><a href="http://fluentd.org/">fluentd</a></li>
-<li><a href="http://boundary.com/">boundary</a></li>
-<li><a href="http://aws.amazon.com/en/cloudwatch/">amazon cloudwatch</a></li>
-<li><a href="http://www.loggly.com/">loggly</a></li>
-<li>その他多くの監視ツール</li>
-</ul>
-]]>
-  </content>
-</entry>
-<entry>
-  <id>tag:apatheia.info,2012-09-22:/blog/2012/09/22/tumbler-to-octopress/</id>
-  <title type="html">TumblerからOctopressへの移行</title>
-  <published>2012-09-22T08:28:00.000Z</published>
-  
-  <link rel="alternate" href="https://apatheia.info/blog/2012/09/22/tumbler-to-octopress/"/>
-  <content type="html">
-  <![CDATA[<p>Tumblerでブログ書いていたけど、ローカルで記事書く => フォームに貼り付け => プレビューのサイクルが結構面倒くさいな、と常々思っていたので、Octopressに移行した。</p>
-<p>ホスティングには <a href="http://pages.github.com/">Github Pages</a> を利用している。</p>
-<!-- more -->
-<h2>手順</h2>
-<h3>設定</h3>
-<pre><code>$ git clone git://github.com/imathis/octopress.git octopress
-
-# テーマ入れ替える    
-$ git clone git://github.com/tommy351/Octopress-Theme-Slash.git .themes/slash
-$ rake 'install[slash]' # zsh だとクォートなりエスケープするなりしないと、[, ] がメタ文字として解釈される
-# .themes/slash/{source,sass} がルートディレクトリにコピーされる
-</code></pre>
-<p>このままだと header の canonical が設定されないかったので、同梱テンプレート <code>.themes/classic/source/_includes/head.html</code> を参考に <code>./source/_includes/head.html</code> をちょっとといじった。</p>
-<h3>Tumbler の記事をインポート</h3>
-<p><a href="http://tsurayogoshi.tumblr.com/archive">ブログの過去記事</a>を全部インポートする
-( 参考: <a href="http://blog.assimov.net/blog/2012/03/24/tumblr-to-octopress-powered-by-jekyll-and-markdown/">Goodbye Tumblr. Hello, Octopress Powered by Jekyll and Markdown!</a> )</p>
-<pre><code>$ wget -O source/tumblr.rb https://raw.github.com/stephenmcd/jekyll/master/lib/jekyll/migrators/tumblr.rb
-$ vim source/tumblr.rb # format="md" => format="markdown" に書き換え
-$ ruby -rubygems -e 'require "./source/tumblr"; Jekyll::Tumblr.process("http://tsurayogoshi.tumblr.com", format="markdown", grab_images=true)'
-$ mv _posts/tumblr/* source/_posts/
-$ mv post source/
-</code></pre>
-<p>後は細かい調整</p>
-<ul>
-<li>画像のパスが tumblr を参照しているので、全部ダウンロードして <code>source/images</code>
-以下に保存</li>
-<li>記事のメタデータ部分
-<ul>
-<li><code>comments: true</code>を追加</li>
-<li><code>tags</code> を <code>categories</code> に書き換え。</li>
-</ul>
-</li>
-<li>各種外部サイト向けパーツの設定</li>
-</ul>
-<p><code>source/post</code> には、tumbler と同じURLでアクセスしたとき、移行後のコンテンツにアクセスするリダイレクト設定が入っている。tumbler の頃からカスタムドメインを使っていた場合は、後述のドメイン設定で前と同じドメインにすればいい。</p>
-<h3>ドメインの設定</h3>
-<p>独自ドメインを使う場合、source/ 以下に CNAME というファイルを作り、そこにドメインを書いておく。その後、指定の IP アドレスに名前を向ける。</p>
-<p>何度かIPアドレスが変更になっているみたいで、別のIPアドレスを利用した説明がネットに残っているけど、古いものだとカスタムドメインが使えるけどusername.github.comからのカスタムドメインへのリダイレクトが有効にならなかったりするので、ちゃんと
-<a href="https://help.github.com/articles/setting-up-a-custom-domain-with-pages">公式の説明</a>のもの
-を参照すること。</p>
-<h3>Github Pages へデプロイ</h3>
-<p><a href="http://octopress.org/docs/deploying/github/">ドキュメント</a>を読めばわかるので詳細は割愛。</p>
-<p><code>source</code> ディレクトリの中身が <code>public</code> 以下に展開されて、ここがプレビュー領域となる。<code>public</code> の中身が <code>_deploy</code> にコピーされて、ここが Github Pages に pushされる。</p>
-<p>git リポジトリのうち <code>master</code> ブランチがは公開用、<code>source</code> が編集用となる。ルーディレクトリに <code>source</code> ブランチ、公開用の <code>_deploy</code> ディレクトリに <code>maste</code> ブランチという二つのリポジトリが配置されることになる。</p>
-<h2>感想</h2>
-<p>vim で書く => すぐに確認 => github にデプロイ => 公開の流れは気持ちいい。tumblr の頃と同じく、markdown で書けるのもとても具合がいい。</p>
-]]>
-  </content>
-</entry>
-<entry>
-  <id>tag:apatheia.info,2012-07-30:/blog/2012/07/30/roundsman-capistrano-chef-solo/</id>
-  <title type="html">roundsmanを使ってcapistranoからchef-soloを実行する</title>
-  <published>2012-07-29T15:00:00.000Z</published>
-  
-  <link rel="alternate" href="https://apatheia.info/blog/2012/07/30/roundsman-capistrano-chef-solo/"/>
-  <content type="html">
-  <![CDATA[<p>管理対象のサーバー台数が少ない場合など、<a href="http://www.opscode.com/chef/">chef</a>のサーバーを運用するコストとベネフィットを天秤にかけてみて、ああこれどう考えても労力ペイできないな、でも設定ファイルを手動で管理するのはやだな、といったときに[roundsman](https://g
-ithub.com/iain/roundsman)を使うといいという話。</p>
-<!-- more -->
-<p><a href="https://github.com/iain/roundsman">roundsman</a>は、chefのレシピを転送して<a href="http://wiki.opscode.com/display/chef/Chef+Solo">chef-solo</a>を実行する<a href="https://github.com/capistrano/capistrano">capistrano</a>向けライブラリ。アプリケーションのリリースタイミングに併せてインフラ設定の変更が必要になることは往々にしてあるので、<a href="https://github.com/capistrano/capistrano">capistrano</a>を使ってデプロイとインフラ設定変更を一括適
-用できるのは便利だ。</p>
-<p>ここでは、Railsアプリを対象に<a href="https://github.com/iain/roundsman">roundsman</a>適用までの作業を簡単にまとめる。</p>
-<h2>手順</h2>
-<p>まずは適当なRailsプロジェクトを作るところから。</p>
-<pre><code>PROJECT="my_fantastic_project"
-rails new $PROJECT
-cd $PROJECT
-
-$EDITOR Gemfile
-  # 追加
-  gem roundsman, :require => false
-  gem capistrano, :require => false
-
-bundle install --path vendor/bundle
-
-# capistranoのCapfile、config/deploy.rbを生成
-bundle exec capify .
-</code></pre>
-<p>chefのcookbooksは<code>config/cookbooks</code>に配置する。場所は設定で変更可能。このディレクトリだけ別リポジトリにしておくと、ほかのプロジェクトでも転用できて便利なのでそうしてる。</p>
-<p>config/deploy.rbを調整する。サーバーの種別ごとにデプロイを切り替えたいので、マルチステージを有効化。</p>
-<pre><code>$EDITOR config/deploy.rb
-
-# 追加
-# require roundsman/capistrano
-# require capistrano/ext/multistage
-</code></pre>
-<p>サーバーグループの設定を<code>config/deploy/*.rb</code>に配置。これについては、[capistrano/ext/multistage](https:
-//github.com/capistrano/capistrano/wiki/2.x-Multistage-Extension)の説明を参照。</p>
-<p>あとは<code>config/deploy.rb</code>でrecipeを実行するタスクを追加し、<code>config/deploy/*.rb</code>の中でattributeを設定していく。</p>
-<pre><code>config/deploy.rb:
-
-    namespace :chef do
-      set :care_about_ruby_version, false
-
-      # 一括して適用
-      task :default do
-        roundsman.run_list fetch(:run_list)
-      end
-
-      # 個別にレシピ適用 (ex. nginx)
-        namespace :nginx do
-          task :install do
-            roundsman.run_list "recipe[nginx]"
-          end
-        end
-
-      end
-</code></pre>
-<p><a href="https://github.com/iain/roundsman#configuration">githubにある設定方法の説明</a>だと、config/ステージ名.rb に設定を書いている。</p>
-<pre><code>config/deploy/*.rb:
-
-    set :nginx, :user => "nginx", "worker_process" => 1, …
-    set :run_recipe, :user => "nginx", "worker_process" => 1, …
-</code></pre>
-<p>ただ、これだとattributesの管理がcapistranoの中にべったり書くことになってしまい、chef-soloを手で実行したいときとか面倒くさい。そのため、attributesの値はknifeやchef-
-soloで読めるようなjsonを作って、config/roles 以下で管理している。</p>
-<p>roles ディレクトリはアプリのアップデートと関係なく更新していくことになるので、別リポジトリで管理した方がいい。</p>
-<pre><code>ファイル構成(抜粋)
-
-  ├── Capify
-  ├── Gemfile
-  └── config
-        ├── cookbooks
-        ├── deploy
-        └── roles
-
-config/deploy.rb:
-
-  # jsonファイルを取り込む関数を追加
-  require active_support/core_ext/hash/deep_merge
-  def load_role(*roles)
-    json = {}
-    roles.each do |role|
-      json_path = "#{File.dirname(__FILE__)}/roles/#{role}.json"
-      json.deep_merge! JSON.load(File.new(json_path))
-    end
-    json.each {|k,v| set (k.to_sym), v }
- end
-
-config/deploy/*.rb:
-
-  # 読み込みたいjsonファイルを指定
-  load_role "web"
-
-config/roles/*.json:
-
- 例: config/roles/web.json
-  {
-     "nginx" : {
-      "user" : "nginx",
-      "worker_processes" : 1,
-    …
-     "run_list" : [ "recipe[nginx]", ... ]
-  }
-</code></pre>
-<p>以上で準備が整った。これで実行できるようになる。</p>
-<pre><code># 一括適用
-bundle exec cap ステージ名 chef
-
-# cookbook を指定して適用
-bundle exec cap ステージ名 chef:nginx
-</code></pre>
-]]>
-  </content>
-</entry>
-<entry>
-  <id>tag:apatheia.info,2012-06-05:/blog/2012/06/05/glusterfs/</id>
-  <title type="html">分散ファイルシステム GlusterFS を使う</title>
-  <published>2012-06-04T15:00:00.000Z</published>
-  
-  <link rel="alternate" href="https://apatheia.info/blog/2012/06/05/glusterfs/"/>
-  <content type="html">
-  <![CDATA[<p>Webアプリケーションを構築する上で、運用中に発生したファイルをローカルのファイルシステム上に保管すると、スケールを阻害するため好ましくないことが多い。</p>
-<!-- more -->
-<p>そのため、アプリケーションの設計の段階からCDNの利用したり、ファイルの管理だけ別のサービスに切り出したりすることを考慮すべきだけど、いろいろなしがらみのた
-めにどうしてもファイルを複数台のサーバーで共有するようなシステム形態にせざるを得ないことが往々にしてある。</p>
-<p>サーバー間のファイル共有のための方法として、<a href="http://code.google.com/p/lsyncd/">lsyncd</a> や<a href="http://www.drbd.org/">DRBD</a>を使ったり、NASを介したりするなど様々な方法があるけど、[GlusterFS](http://www.gluster.or
-g/) がとても便利。特別な機器を必要とせず、すでにある環境に対して導入でき、信頼性とスケーラビリティのあるクラスタリングファイルシステムを手早く構築するこ
-とができる。</p>
-<p>GlusterFS を簡単に説明すると、以下のような特徴がある:</p>
-<ul>
-<li>分散型ファイルシステム
-<ul>
-<li>SPOFになるような特殊ノードも必要ない</li>
-</ul>
-</li>
-<li>NFSやCIFSでマウント可能
-<ul>
-<li>先日発表された 3.3.0 で、HDFSとの互換性できてHadoopから処理できるようになったり、OpenStack Object Storage API互換の REST APIが提供されたりでいろいろ熱い感じになっている</li>
-</ul>
-</li>
-<li>ストライピングで性能を上げたり、レプリケーションで耐障害性をあげたりすることが可能</li>
-</ul>
-<p>今回は仮想マシンで動作を検証するまでの流れをまとめる。</p>
-<h2>環境構築</h2>
-<p>作業環境として、Mac OS X Lion上のVirtualBoxを利用し、仮想マシンとしてはCentOS 6.2
-x86_64を使う。Windowsでやる場合は<code>vagrant ssh</code>が動かないので、そのあたりを読み替えればできると思う。</p>
-<p>はじめにCentOS 6.2のマシンイメージを作る。</p>
-<pre><code>$ gem install vagrant veewee
-$ mkdir work
-$ cd work
-$ vagrant basebox define CentOS-6.2-x86_64-minimal CentOS-6.2-x86_64-minimal
-$ vagrant basebox build CentOS-6.2-x86_64-minimal # マシンイメージのビルド
-$ vagrant basebox validate CentOS-6.2-x86_64-minimal # チェック
-$ vagrant basebox export CentOS-6.2-x86_64-minimal
-$ vagrant box add CentOS-6.2-x86_64-minimal CentOS-6.2-x86_64-minimal.box
-$ cd ..
-$ rm -rf ./work
-</code></pre>
-<p>次にクラスタ構成の設定。</p>
-<pre><code>$ mkdir -p ~/Documents/vagrant/glusterfs/ # 作業用ディレクトリ作成
-$ cd ~/Documents/vagrant/glusterfs/
-$ vim Vagrantfile # 編集
-</code></pre>
-<p><a href="https://gist.github.com/2868494">https://gist.github.com/2868494</a></p>
-<pre><code>$ vagrant up # 3台の仮想マシン起動
-</code></pre>
-<p>必要となる仮想マシンがそろったので、glusterfsのセットアップを始める。</p>
-<pre><code>$ cd ~/Documents/vagrant/glusterfs # この中は 共有ディレクトリを通して、仮想マシンの/vagrantからも参照可能
-$ curl -LO [http://download.gluster.org/pub/gluster/glusterfs/LATEST/CentOS/glusterfs-3.3.0-1.el6.x86_64.rpm](http://download.gluster.org/pub/gluster/glusterfs/LATEST/CentOS/glusterfs-3.3.0-1.el6.x86_64.rpm)
-$ curl -LO [http://download.gluster.org/pub/gluster/glusterfs/LATEST/CentOS/glusterfs-fuse-3.3.0-1.el6.x86_64.rpm](http://download.gluster.org/pub/gluster/glusterfs/LATEST/CentOS/glusterfs-fuse-3.3.0-1.el6.x86_64.rpm)
-$ curl -LO [http://download.gluster.org/pub/gluster/glusterfs/LATEST/CentOS/glusterfs-server-3.3.0-1.el6.x86_64.rpm](http://download.gluster.org/pub/gluster/glusterfs/LATEST/CentOS/glusterfs-server-3.3.0-1.el6.x86_64.rpm)
-</code></pre>
-<p>仮想マシンに必要となるパッケージをインストールしておく。</p>
-<pre><code>$ brew install parallel # 一台ずつ設定するの面倒なので、gnu parallel 使う
-$ parallel vagrant ssh {} -c sh -c "sudo yum -y install wget fuse fuse-libs" ::: host1 host2 host3
-$ parallel vagrant ssh {} -c sh -c "sudo yum install -y /vagrant/glusterfs-*" ::: host1 host2 host3 # パッケージインストール
-$ parallel vagrant ssh {} -c sh -c "/usr/sbin/glusterfs -V" ::: host1 host2 host3 # 動作確認
-$ parallel vagrant ssh {} -c sh -c "sudo /sbin/service iptables stop" ::: host1 host2 host3 # iptables 停止
-$ parallel vagrant ssh {} -c sh -c "sudo /sbin/service glusterd start" ::: host1 host2 host3 # 起動
-</code></pre>
-<p>以降、<code>$</code> から始まるのはホストOS、<code>hostX$</code> から始まるのは仮想マシン上のターミナルの説明とする。</p>
-<h2>ストレージプール作成</h2>
-<p>ストレージプールと呼ばれる、サーバー間の信頼済みネットワークを作成する。</p>
-<pre><code>$ vagrant ssh host1
-
-host1$ sudo gluster peer probe 192.168.56.11 # host2 をプールに追加
-host1$ sudo gluster peer probe 192.168.56.12 # host3 をプールに追加
-# 自ホスト(host1)の追加は不要
-</code></pre>
-<h2>ボリューム作成</h2>
-<p>ストレージプールを構成したら、ボリュームを作成する。</p>
-<p>ボリュームは「分散するかどうか」「レプリケーションするかどうか」「ストライピングするかどうか」を選ぶことになる。組み合わせることも可能。ひとまず2台構成で分
-散、ストライピング、レプリケーションのそれぞれについて試してみる。</p>
-<h3>分散</h3>
-<p>ファイルをストレージ内のどこかしらに保存しておく形態。追加すればするほど大きなストレージとなるけど、冗長性などは確保されない。</p>
-<p>host1, host2 で分散ボリュームを作ってみる。</p>
-<pre><code>$ parallel vagrant ssh {} -c sh -c "sudo mkdir -p /export/vol" ::: host1 host2
-$ vagrant ssh host1
-
-host1$ sudo gluster volume create vol 192.168.56.10:/export/vol 192.168.56.11:/export/vol
-</code></pre>
-<h3>ストラインピング</h3>
-<p>性能向上を目的として、ファイルを複数に分割して保存しておく形態。RAID0みたいな感じ。</p>
-<p>host2, host3 でストライピングボリュームを作ってみる。</p>
-<pre><code>$ parallel vagrant ssh {} -c sh -c "sudo mkdir -p /export/vol-striping" ::: host2 host3  
-$ vagrant ssh host1
-
-host1 $ sudo gluster volume create vol-striping stripe 2 192.168.56.11:/export/vol-striping 192.168.56.12:/export/vol-striping
-</code></pre>
-<h3>レプリケーション</h3>
-<p>データの複製を作って、複数の場所に保管しておく形態。RAID1みたいな感じ。信頼性が高くなり、ファイルの読み込みも早くなる。</p>
-<p>host1, host3 でレプリケーションボリュームを作ってみる。</p>
-<pre><code>$ parallel vagrant ssh {} -c sh -c "sudo mkdir -p /export/vol-replica" ::: host1 host3
-$ vagrant ssh host1
-
-host1$ sudo gluster volume create vol-replica replica 2 192.168.56.10:/export/vol-replica 192.168.56.12:/export/vol-replica
-host1$ sudo gluster volume start vol-replica
-</code></pre>
-<h2>利用</h2>
-<h3>マウント</h3>
-<p>OSにマウントしてみる。マウント方法にはNFSやCIFSなども選べるけど、ここではネイティブのglusterfs形式を選んでみる。</p>
-<pre><code>$ vagrant ssh host1
-
-host1$ sudo mkdir -p /mnt/{vol,vol-striping,vol-replica}
-host1$ sudo mount -t glusterfs 192.168.56.10:/vol /mnt/vol # 分散
-host1$ sudo mount -t glusterfs 192.168.56.11:/vol-striping /mnt/vol-striping # ストライピング
-host1$ sudo mount -t glusterfs 192.168.56.12:/vol-replica /mnt/vol-replica # レプリケーション    
-</code></pre>
-<h3>動作確認</h3>
-<p>はじめに、マウントした結果を見てみる。</p>
-<pre><code>$ df -h /mnt/*
-Filesystem            Size  Used Avail Use% Mounted on
-192.168.56.10:vol      17G  1.9G   14G  12% /mnt/vol
-192.168.56.12:vol-replica
-                      8.4G  949M  7.0G  12% /mnt/vol-replica
-192.168.56.11:vol-striping
-                       17G  1.9G   14G  12% /mnt/vol-striping
-</code></pre>
-<p>分散、ストライピングは2台分を足し合わせた結果になっている。レプリケーションは2台に同じデータが分散されるので、ディスク効率は50%に下がる。</p>
-<h4>分散</h4>
-<p>適当にファイルを作ってみる。</p>
-<pre><code>host1$ sudo touch /mnt/vol/{1..9}
-
-# 保管先をチェック
-
-host1$ ls /export/vol/ # 1  5  7  8  9
-
-host2$ ls /export/vol/ # 2  3  4  6
-</code></pre>
-<p>ファイルがばらばらと格納されていることがわかる。</p>
-<h3>ストライピング</h3>
-<pre><code>host1$ sudo vi /mnt/vol-striping/sample.txt # 10M強データをテキストデータを書き込み
-
-host1$ du -s /mnt/vol-striping/sample.txt # 10256と表示された
-host1$ ls -l /mnt/vol-striping/sample.txt # サイズが 10484785 と表示された
-
-# 保管先をチェック
-host2$ du -s /export/vol-striping/sample.txt # 5128 と表示された
-host2$ ls -l /export/vol-striping/sample.txt # サイズが 10354688 と表示された
-
-host3$ du -s /export/vol-striping/sample.txt # 5128 と表示された
-host3$ ls -l /export/vol-striping/sample.txt # サイズが 10484785 と表示された
-</code></pre>
-<p>duの結果（ディスクのセクタ）はちょうど半分ずつに分割されるけど、ファイルの実際のサイズは元ファイルと同じ場合と異なる場合の2パターンが検出できた。これは、
-ファイルがスパースファイルなっているため、見かけ上のサイズと実際にディスク上で利用しているサイズが異なっていることが原因。</p>
-<h3>レプリケーション</h3>
-<p>適当なファイルを作ってみる。</p>
-<pre><code>host1$ sudo dd if=/dev/urandom of=/mnt/vol-replica/dummy bs=1M count=10
-host1$ sha1sum /mnt/vol-replica/dummy # 54b5c383e96d511249f9393de060c3219549e030 だった
-
-# 保管先をチェック
-host1$ sha1sum /export/vol-replica/dummy # 54b5c383e96d511249f9393de060c3219549e030 だった
-
-host2$ sha1sum /export/vol-replica/dummy # 54b5c383e96d511249f9393de060c3219549e030 だった
-</code></pre>
-<p>同じ内容のファイルが複数箇所に保存されることがわかった。</p>
-<h2>メモ</h2>
-<p>なんとなくでも使い始められちゃうくらい簡単に使えるけど、[ドキュメント](http://gluster.org/community/documentatio
-n/index.php/Main_Page)の[PDF](http://www.gluster.org/wp-
-content/uploads/2012/05/Gluster_File_System-3.3.0-Administration_Guide-en-
-US.pdf) がわかりやすくコンパクトにまとまっていて、全体像を理解するのはここからここから始めるといいと思う。</p>
-<h2>参考</h2>
-<ul>
-<li><a href="http://www.gluster.org/community/documentation/index.php/Main_Page">Gluster Community のドキュメント</a></li>
-</ul>
-]]>
-  </content>
-</entry>
-<entry>
-  <id>tag:apatheia.info,2012-06-03:/blog/2012/06/03/sphinx-guard-livereload/</id>
-  <title type="html">sphinxの更新をguard-livereloadで検知してブラウザを自動リロードする</title>
-  <published>2012-06-02T15:00:00.000Z</published>
-  
-  <link rel="alternate" href="https://apatheia.info/blog/2012/06/03/sphinx-guard-livereload/"/>
-  <content type="html">
-  <![CDATA[<p>sphinxでドキュメントを書く際に生じる「文章の記述 => ビルド =>
-ブラウザでの確認」という一連のサイクルを人力でやるのは効率が悪い。いろいろな省力化対策が考えられるが、ここでは guard-livereloadを使って、文章のビルドとブラウザのリロードを自動化する方法を説明する。</p>
-<!-- more -->
-<h2>作業環境</h2>
-<p>検証に使った環境は以下の通り。環境に依存する部分は少ないので、他のOSでも動くと思う。</p>
-<ul>
-<li>Mac OS X Lion</li>
-<li>ruby 1.9.3-p194</li>
-<li>sphinx 1.1.3</li>
-</ul>
-<h2>事前準備</h2>
-<h3>サーバー側準備</h3>
-<p>用意するのは3ファイル</p>
-<ul>
-<li>Gemfile … 必要なライブラリをまとめてインストールするための設定ファイル</li>
-<li>Gaurdfile … ファイルシステム監視の設定ファイル</li>
-<li>Procfile … Webサーバーとファイル監視を起動するための設定ファイル</li>
-</ul>
-<p><a href="https://gist.github.com/2862843">https://gist.github.com/2862843</a></p>
-<p>これら3ファイルをsphinxの作業ディレクトリ内に配置する。製生後のhtmlファイルは<code>buld/html</code>ディレクトリに格納されていることを期待した設定になっているので、必要であれば適宜修正する。</p>
-<p>ファイルの設置が終わったら、ライブラリをインストールする。</p>
-<pre><code>bundle install
-</code></pre>
-<h3>ブラウザ側準備</h3>
-<p>好きなブラウザにlivereloadのブラウザ拡張をインストールする。</p>
-<p><a href="http://help.livereload.com/kb/general-use/browser-extensions">http://help.livereload.com/kb/general-use/browser-
-extensions</a></p>
-<h2>利用方法</h2>
-<p>サーバー側でファイルの監視とlivereloadを開始する。</p>
-<pre><code>foreman start
-</code></pre>
-<p>ブラウザで http://localhost:3000/ (3000以外にしたい場合は Procfile 内で変更)にアクセスしてlivereloadのブラウザ拡張を有効化すれば、あとはファイルの更新に合わせて自動的にビルドとブラウザのリロードが行われる。</p>
-<h2>参考</h2>
-<ul>
-<li><a href="http://aligach.net/diary/20110925.html">LiveReloadが超気持ちいい2011</a> Livereloadの詳しい説明</li>
-<li><a href="https://addons.mozilla.org/en-US/firefox/addon/auto-reload/">Auto Reload</a> ローカルファイルの更新を検知してFirefoxをリロードしてくれるアドオン。試してみたけど、自分の環境ではリロードがうまく動かなかった。</li>
-</ul>
-]]>
-  </content>
-</entry>
-<entry>
-  <id>tag:apatheia.info,2012-05-13:/blog/2012/05/13/vps-lxc-xtradb-cluster/</id>
-  <title type="html">さくらのVPSにLXCで仮想環境構築してXtraDB Cluster動かす</title>
-  <published>2012-05-12T15:00:00.000Z</published>
-  
-  <link rel="alternate" href="https://apatheia.info/blog/2012/05/13/vps-lxc-xtradb-cluster/"/>
-  <content type="html">
-  <![CDATA[<p>ほんの数年前までVPSといえばLinode、Slicehostなどの海外のサーバーしか選択肢がなかった。ls を実行しても一呼吸おくほどのレイテンシーがあるような環境で、128MBくらいのメモリを何とかやりくりしてRailsを動かしていたが、現在では月1000円程度で用途によっては手に余るようなスペックが手に入るようになっている。そんなVPSの余ったリソースを使って、仮想環境をたてようというのが今回の目的だ。</p>
-<!-- more -->
-<p><a href="http://lxc.sourceforge.net/">LXC</a>は、他の仮想化方式と比べてオーバーヘッドが少なくきびきび動くし、必要であればCPUやメモリの制限をつけることもできる。RPMやDebのパッケージ作成をしたり、Chefのcookbook作成などで独立した環境を手軽に構築したい人には特に有用に思う。また、簡単にネットワークが作れるので、複数台構成のソフトウェアを1台のマシンのなかで動かすことが出来る。今回は動作確認として <a href="http://www.percona.com/software/percona-xtradb-cluster/">PerconaXtraDB Cluster</a>を動かしてみることにする。</p>
-<h2>前提について</h2>
-<p>作業環境は以下を想定している。</p>
-<ul>
-<li>さくらのVPS(v3) 1G
-<ul>
-<li>CentOS 6.2 x86_64</li>
-</ul>
-</li>
-<li>LXC 0.7.5</li>
-</ul>
-<p>CentOSを使っているのはデフォルトのOSイメージだからというのが理由。</p>
-<p>今回の内容をEC2上で実行する場合、Amazon Linux でもほとんど同様の設定で作業を行えることを確認しているけど、もっ と新しいOS、たとえば Ubuntu 12.04 LTS を使えば後述する cgroupの設定、bridgeの設定が不要となるためより簡単に行える。CentOS 6で実施したときだけ遭遇するような問題に何度もぶつかったので、出来るだけ新しいOSを使った方がいい。</p>
-<p>仮想環境としては、lxcに同梱されているテンプレートを利用してUbuntuを、またOSイメージの作成からCentOSを構築する。</p>
-<h2>構築方法</h2>
-<p>以降の作業はすべて root で行うものとする。</p>
-<h3>ネットワークの設定</h3>
-<p>仮想環境とのやりとりで使うブリッジを作る。</p>
-<pre><code># yum install bridge-utils
-# vim /etc/sysconfig/network-scripts/ifcfg-lxcbr0
-
-    DEVICE=lxcbr0
-    TYPE=Bridge
-    BOOTPROTO=none
-    IPADDR=10.0.3.1
-    NETMASK=255.255.255.0
-    ONBOOT=yes
-
-# ifup lxcbr0 # 起動
-</code></pre>
-<h3>cgroup</h3>
-<pre><code># mount | grep cgroup # cgroup がないこと確認
-# mkdir -p /cgroup
-# printf "none			/cgroup		cgroup	defaults		0 0
-" >> /etc/fstab
-# mount -a
-# mount | grep cgroup # cgroup があること確認
-</code></pre>
-<h3>lxc セットアップ</h3>
-<pre><code># yum install libcap-devel docbook-utils
-# yum groupinstall "Development Tools"
-
-# wget [http://lxc.sourceforge.net/download/lxc/lxc-0.7.5.tar.gz](http://lxc.sourceforge.net/download/lxc/lxc-0.7.5.tar.gz)
-# tar xf lxc-0.7.5.tar.gz
-# cd lxc-0.7.5
-# ./configure
-# make rpm # この途中で /usr/lib64/lxc/{template,rootfs} がインストールされるのかなり狂ってる
-# rpm -ivh ~/rpmbuild/RPMS/x86_64/lxc-0.7.5-1.x86_64.rpm
-   (~/rpmbuild になければ、/usr/src/rpm から探す)
-# mkdir -p /var/lib/lxc
-</code></pre>
-<h3>dnsmasq (DHCP, DNS サーバー) セットアップ</h3>
-<p>環境を増やすごとに毎回NICの設定を編集するのは手間なので、ホスト側で dncp, dns の設定をする。</p>
-<pre><code># yum install dnsmasq
-# vim /etc/dnsmasq.conf
-
-    コメントを外して有効化する、編集するなどで以下の設定を行う
-    domain は自分の使いたい名前にすればいい
-
-    domain-needed
-    bogus-priv
-    interface = lxcbr0
-    listen-address = 127.0.0.1
-    listen-address = 10.0.3.1
-    expand-hosts
-    domain = lxc
-    dhcp-range = 10.0.3.50,10.0.3.200,1h
-
-# service dnsmasq reload
-</code></pre>
-<h3>ネットワークセットアップ</h3>
-<p>仮想環境から外部へのやりとりが出来るようにネットワークの設定を変更する。</p>
-<pre><code># sysctl -w net.ipv4.ip_forward=1
-# sed -i -re s/net.ipv4.ip_forward = 0/net.ipv4.ip_forward = 1/ /etc/sysctl.conf
-# iptables -A POSTROUTING -s 10.0.3.0/24 -t nat -j MASQUERADE
-# service iptables save # 設定を /etc/sysconfig/iptables に保存
-</code></pre>
-<h3>仮想環境構築 (1) 同梱のスクリプトを使った Ubuntu のインストール</h3>
-<p>lxcに同梱のスクリプト /usr/lib64/lxc/templates/lxc-ubuntu を使ってUbuntuをインストールする。</p>
-<p>基本的な設定ファイルを作る。</p>
-<pre><code># cd
-# vim lxc.conf
-
-    lxc.network.type=veth
-    lxc.network.link=lxcbr0
-    lxc.network.flags=up
-</code></pre>
-<p>今回は Ubuntu を導入するので、そのために必要なプログラムをインストールする。</p>
-<pre><code># yum install --enablerepo=epel debootstrap dpkg
-</code></pre>
-<p>これで準備が出来たので、実際に仮想環境を動かしてみる。</p>
-<pre><code># lxc-create -t ubuntu -f lxc.conf -n vm0
-   -t がテンプレートの名前。 -t ubuntu なら /usr/lib64/lxc/templates/lxc-ubuntu が読み込まれる
-      オプションでバージョンが指定可能だが、lxc 0.7.5 に同梱されているテンプレートのデフォルトだと Ubuntu 10.04 が選ばれる。
-   -f がさっき作った設定ファイルの場所
-   -n が環境の名前。今回は vm0 とした。 /var/lib/lxc/vm0 にファイルがおかれる
-# lxc-start -n vm0 -l debug -o debug.out -d
-   -l はデバッグレベル、-o はデバッグの場所を指定。安定して起動するようになったらつけなくていい
-# lxc-console -n vm0
-  一回エンター押した後、ユーザー root パスワード root でログイン
-  抜けるときは Ctrl-a q
-
-  lxc-console をしても何も表示されない状態になったら、以下を施して再起動
-
-# vim /var/lib/lxc/vm0/rootfs/etc/init/lxc.conf
-
-  telinit を差し込む
-
-    --- /var/lib/lxc/vm0/rootfs/etc/init/lxcguest.conf.orig 2012-02-07 10:28:25.000000000 +0900
-    +++ /var/lib/lxc/vm0/rootfs/etc/init/lxcguest.conf      2012-05-06 22:43:21.606098530 +0900
-    @@ -12,5 +12,6 @@
-        touch /var/run/utmp
-        chown root:utmp /var/run/utmp
-        initctl emit --no-wait net-device-added INTERFACE=lo || true
-    +   telinit 3
-        exit 0
-     end script
-</code></pre>
-<p>lxc-console だとCtrl-aが使えなくて不便なので、今後はsshでログインしたい。テンプレートが自動的にOpenSSHをインストールしてくれるが、ちゃんと起動しない。仕方が無いので、update-rc.d で起動するように設定</p>
-<pre><code>  仮想環境内で実行
-# update-rc.d ssh enable
-</code></pre>
-<p>固定IPアドレスを振りたい場合は、設定を変更する。</p>
-<pre><code>  ホスト側からの変更
-# vim /var/lib/lxc/vm0/config
-
-  lxc.network.ipv4 = 10.0.3.2/24
-
-  仮想環境の中で変更
-# vim /etc/network/interfaces
-
-    変更前
-    auto lo
-    iface lo inet loopback
-
-    auto eth0
-    iface eth0 inet dhcp
-
-    変更後
-    auto lo
-    iface lo inet loopback
-
-    iface eth0 inet static
-        address 10.0.3.2
-        netmask 255.255.255.0
-        gateway 10.0.3.1
-</code></pre>
-<p>仮想環境の破棄は lxc-destroy で行う</p>
-<pre><code># lxc-destroy -n vm0
-</code></pre>
-<h3>仮想環境構築 (2) 独自に構築した CentOS 6 のインストール</h3>
-<p>lxc-console の標準テンプレートでは CentOS が用意されていないので、自力でセットアップする。</p>
-<h4>イメージ作成</h4>
-<p>基本的に <a href="http://wiki.1tux.org/wiki/Centos6/Installation/Minimal_installation_using_yum">Centos6/Installation/Minimal installation using yum</a> の通り。ただし 64 bit 版をインストールする</p>
-<pre><code># mkdir /t
-# cd /t
-# wget [http://mirrors.kernel.org/centos/6/os/x86_64/Packages/centos-release-6-2.el6.centos.7.x86_64.rpm](http://mirrors.kernel.org/centos/6/os/x86_64/Packages/centos-release-6-2.el6.centos.7.x86_64.rpm)
-# rpm2cpio centos-release-6-2.el6.centos.7.x86_64.rpm  | cpio -idm
-# sed -i s/$releasever/6/g ./etc/yum.repos.d/*
-# yum --installroot=/t groupinstall base
-# yum --installroot=/t install dhclient
-# rm centos-release*.rpm
-# chroot /t
-
-  // ここから後はchroot内
-
-# passwd # パスワード変更
-
-# rm -f /dev/null
-# mknod -m 666 /dev/null c 1 3
-# mknod -m 666 /dev/zero c 1 5
-# mknod -m 666 /dev/urandom c 1 9
-# ln -s /dev/urandom /dev/random
-# mknod -m 600 /dev/console c 5 1
-# mknod -m 660 /dev/tty1 c 4 1
-# chown root:tty /dev/tty1
-
-# mkdir -p /dev/shm
-# chmod 1777 /dev/shm
-# mkdir -p /dev/pts
-# chmod 755 /dev/pts
-
-# cp -a /etc/skel/. /root/.
-
-# cat > /etc/resolv.conf &#x3C;&#x3C; END
-# Google public DNS
-nameserver 8.8.8.8
-nameserver 8.8.4.4
-END
-
-# cat > /etc/hosts &#x3C;&#x3C; END
-127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
-::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
-END
-
-# cat > /etc/sysconfig/network &#x3C;&#x3C; END
-NETWORKING=yes
-HOSTNAME=localhost
-END
-
-# cat > /etc/sysconfig/network-scripts/ifcfg-eth0  &#x3C;&#x3C; END
-DEVICE=eth0
-ONBOOT=yes
-BOOTPROTO=dhcp
-END
-
-# cat > /etc/fstab &#x3C;&#x3C; END
-/dev/root               /                       rootfs   defaults        0 0
-none                    /dev/shm                tmpfs    nosuid,nodev    0 0
-END
-
-# cat > /etc/init/lxc-sysinit.conf &#x3C;&#x3C; END
-start on startup
-env container
-
-pre-start script
-        if [ "x$container" != "xlxc" -a "x$container" != "xlibvirt" ]; then
-                stop;
-        fi
-        telinit 3
-        initctl start tty TTY=console
-        exit 0;
-end script
-END
-
-# exit
-
-// ここから後はchroot外
-
-# cd /t
-# tar cvfz /centos6-lxc-root.tgz .
-</code></pre>
-<h4>設定</h4>
-<pre><code># mkdir /var/lib/lxc/vm0
-# cd /var/lib/lxc/vm0
-# mkdir rootfs
-# cd rootfs
-# tar xfz /centos6-lxc-root.tgz --numeric-owner
-# cd /var/lib/lxc/vm0
-
-# cat >/var/lib/lxc/vm0/config &#x3C;&#x3C; END
-lxc.network.type=veth
-lxc.network.link=lxcbr0
-lxc.network.flags=up
-lxc.network.veth.pair=veth-vm0
-lxc.utsname = vm0
-
-lxc.tty = 1
-lxc.pts = 1024
-lxc.rootfs = /var/lib/lxc/vm0/rootfs
-lxc.mount  = /var/lib/lxc/vm0/fstab
-lxc.arch = x86_64
-lxc.cap.drop = sys_module mac_admin
-
-lxc.cgroup.devices.deny = a
-# Allow any mknod (but not using the node)
-lxc.cgroup.devices.allow = c *:* m
-lxc.cgroup.devices.allow = b *:* m
-# /dev/null and zero
-lxc.cgroup.devices.allow = c 1:3 rwm
-lxc.cgroup.devices.allow = c 1:5 rwm
-# consoles
-lxc.cgroup.devices.allow = c 5:1 rwm
-lxc.cgroup.devices.allow = c 5:0 rwm
-# /dev/{,u}random
-lxc.cgroup.devices.allow = c 1:9 rwm
-lxc.cgroup.devices.allow = c 1:8 rwm
-lxc.cgroup.devices.allow = c 136:* rwm
-lxc.cgroup.devices.allow = c 5:2 rwm
-# rtc
-lxc.cgroup.devices.allow = c 254:0 rwm
-#fuse
-lxc.cgroup.devices.allow = c 10:229 rwm
-#tun
-lxc.cgroup.devices.allow = c 10:200 rwm
-#full
-lxc.cgroup.devices.allow = c 1:7 rwm
-#hpet
-lxc.cgroup.devices.allow = c 10:228 rwm
-#kvm
-lxc.cgroup.devices.allow = c 10:232 rwm
-END
-
-# cat > fstab  &#x3C;&#x3C; END
-proc            /var/lib/lxc/vm0/rootfs/proc         proc    nodev,noexec,nosuid 0 0
-sysfs           /var/lib/lxc/vm0/rootfs/sys          sysfs defaults  0 0
-END
-</code></pre>
-<h4>起動</h4>
-<pre><code># lxc-start -n vm0 -l debug -o debug.out -d
-# lxc-console -n vm0
-
-OpenSSH がなければ入れておく
-# yum install openssh-server
-# service sshd start
-</code></pre>
-<h2>動作確認 (Percona XtraDB Cluster の稼働確認)</h2>
-<p>動作確認として Percona XtraDB Cluster を動かしてみる。</p>
-<p>すでにこれまでの作業を通して vm0 としてCentOS 6がインストール済みとする。</p>
-<h3>ホスト側設定</h3>
-<ul>
-<li>構成
-<ul>
-<li>ホスト, IPアドレス 10.0.3.1</li>
-<li>仮想0 vm0, IPアドレス 10.0.3.2</li>
-<li>仮想1 vm1, IPアドレス 10.0.3.3</li>
-<li>仮想2 vm2, IPアドレス 10.0.3.4</li>
-</ul>
-</li>
-</ul>
-<p>各仮想環境に簡単にアクセスできるように hosts を設定しておく。ホスト側に設定しておけば、dnsmasq のおかげで仮想側でも名前が引けるようになる。</p>
-<pre><code># vim /etc/hosts
-    以下を追記
-    10.0.3.2 vm0
-    10.0.3.3 vm1
-    10.0.3.4 vm2
-</code></pre>
-<h3>コピー元(vm0) 設定</h3>
-<pre><code># ssh vm0
-  ここからはvm0の中
-
-  固定IPアドレスを設定
-# vim /var/lib/lxc/vm1/rootfs/etc/sysconfig/network-scripts/ifcfg-eth0
-    DEVICE=eth0
-    ONBOOT=yes
-    BOOTPROTO=static
-    IPADDR=10.0.3.3
-    NETMASK=255.255.255.0
-    GATEWAY=10.0.3.1
-
-  XtraDB Cluster インストール
-# rpm -Uhv [http://repo.percona.com/testing/centos/6/os/noarch/percona-testing-0.0-1.noarch.rpm](http://repo.percona.com/testing/centos/6/os/noarch/percona-testing-0.0-1.noarch.rpm)
-# rpm -Uhv [http://www.percona.com/downloads/percona-release/percona-release-0.0-1.x86_64.rpm](http://www.percona.com/downloads/percona-release/percona-release-0.0-1.x86_64.rpm)
-# yum install Percona-XtraDB-Cluster-server Percona-XtraDB-Cluster-client
-# cat > /etc/my.cnf &#x3C;&#x3C;END
-[mysqld]
-binlog_format=ROW
-wsrep_provider=/usr/lib64/libgalera_smm.so
-wsrep_cluster_address=gcomm://
-wsrep_slave_threads=2
-wsrep_cluster_name=lxccluster
-wsrep_sst_method=rsync
-wsrep_node_name=node0
-innodb_locks_unsafe_for_binlog=1
-innodb_autoinc_lock_mode=2
-END
-
-# poweroff
-</code></pre>
-<h3>コピー、起動</h3>
-<pre><code># lxc-clone -n vm1 -o vm0
-  -n はこれから作る仮想環境の名前
-  -o はコピー元の仮想環境の名前
-# lxc-clone -n vm1 -o vm0
-# vim /var/lib/lxc/vm1/config
-  vm0をvm1に置換 (vm2ではvm2に置換)
-  IPアドレスを10.0.3.2 -> 10.0.3.3 に変更 (vm2では 10.0.3.4に変更)
-# vim /var/lib/lxc/vm1/rootfs/etc/my.cnf
-    wsrep_cluster_address=gcomm:// をwsrep_cluster_address=gcomm://10.0.3.2 に変更
-    wsrep_node_name=node0 を wsrep_node_name=node1 に変更 (vm2ではnode2に変更)
-
-  同様にvm0からvm2のコピーを実施
-</code></pre>
-<p>3つの環境が完成したら起動</p>
-<pre><code># lxc-start -n vm0 -l debug -o debug.0.out -d
-# lxc-start -n vm1 -l debug -o debug.1.out -d
-# lxc-start -n vm2 -l debug -o debug.2.out -d
-</code></pre>
-<h3>動作確認</h3>
-<p>vm0 にログインして実行</p>
-<pre><code># mysql -u root
-  データベース、テーブル作成
-mysql> create database t;
-mysql> use t;
-mysql> create table sample (
-id int not null primary key auto_increment,
-value int
-);
-
-データ投入
-mysql> insert into sample set value = 1;
-mysql> insert into sample set value = 1;
-mysql> insert into sample set value = 1;
-mysql> select * from sample;
-+----+-------+
-| id | value |
-+----+-------+
-|  2 |     1 |
-|  5 |     1 |
-|  8 |     1 |
-+----+-------+
-</code></pre>
-<p>IDがスキップしながらインサートされることがわかる。引き続き、他の環境でもデータを入れてみる。</p>
-<p>vm1 にログインして実行</p>
-<pre><code>mysql> use t;
-mysql> select * from sample;
-+----+-------+
-| id | value |
-+----+-------+
-|  2 |     1 |
-|  5 |     1 |
-|  8 |     1 |
-+----+-------+
-mysql> insert into sample set value =  1;
-mysql> insert into sample set value =  1;
-mysql> insert into sample set value =  1;
-mysql> select * from sample;
-+----+-------+
-| id | value |
-+----+-------+
-|  2 |     1 |
-|  5 |     1 |
-|  8 |     1 |
-|  9 |     1 |
-| 12 |     1 |
-| 15 |     1 |
-+----+-------+
-</code></pre>
-<p>同様のことがvm2でも起きる。</p>
-<p>これにより、XtraDB Cluster の以下の動作が確認出来た。</p>
-<ul>
-<li>すべてのサーバーで書き込みと参照がおこなえること</li>
-<li>オートインクリメントがバッティングしないように、値が自動的にオフセットをつけて挿入されること</li>
-</ul>
-<h2>メモ</h2>
-<h3>外部から仮想環境へ直接アクセスしたい場合</h3>
-<p>たとえば、外部からポート10080でアクセスされたとき、仮想環境の 10.0.3.51 のポート 80 へ転送させたい場合は iptables
-で以下のような設定をする。</p>
-<pre><code># vim /etc/syscofig/iptables
-    -A POSTROUTING -s 10.0.3.0/24 -j MASQUERADE の下に以下を追加
-    -A PREROUTING -i eth0 -p tcp --dport 10080 -j DNAT --to-destination 10.0.3.51:80
-# service iptables condrestart
-# iptables -L -t nat # NATテーブルから設定追加を確認
-</code></pre>
-<h3>新しい Ubuntu を入れたい場合</h3>
-<p>元の手順だとlucid (10.04) がインストールされるが、たとえば oneiric (11.10) であれば以下でインストール可能。</p>
-<pre><code># cp -a /usr/share/debootstrap/scripts/lucid  /usr/share/debootstrap/scripts/oneiric
-    lucid は /usr/share/debootstrap/scripts/gutsy のシンボリックリンクで、他のリリースも同様。とにかくファ イル名が参照できるようにシンボリックリンクをコピーしておけばいい。
-# lxc-create -t ubuntu -f lxc.conf -n vm0 -- --trim -r oneiric
-    lxc-create ではなく -r はテンプレートへの引数
-</code></pre>
-<h3>他の OS もインストールしてみたい場合</h3>
-<p>/usr/lib64/lxc/templates/ には lxc-busybox,lxc-debian,lxc-fedora,lxc-lenny,lxc-
-opensuse,lxc-sshd,lxc-ubuntu の テンプレートがある。これ以外の環境が必要であれば、「lxc guset
-OS名」とかで検索してみる。</p>
-<h2>参考</h2>
-<ul>
-<li><a href="http://www.activestate.com/blog/2011/10/virtualization-ec2-cloud-using-lxc">http://www.activestate.com/blog/2011/10/virtualization-ec2-cloud-using-lxc</a></li>
-<li><a href="http://wiki.debian.org/LXC">http://wiki.debian.org/LXC</a></li>
-<li><a href="https://help.ubuntu.com/12.04/serverguide/lxc.html">https://help.ubuntu.com/12.04/serverguide/lxc.html</a></li>
-<li><a href="http://www.lacerta.be/d7/content/lxc-installation-ubuntu-server-1104">http://www.lacerta.be/d7/content/lxc-installation-ubuntu-server-1104</a></li>
-<li><a href="http://wiki.1tux.org/wiki/Lxc/Installation/Guest/Centos/6">http://wiki.1tux.org/wiki/Lxc/Installation/Guest/Centos/6</a></li>
-<li><a href="http://www.percona.com/doc/percona-xtradb-cluster/index.html">http://www.percona.com/doc/percona-xtradb-cluster/index.html</a></li>
-</ul>
-]]>
-  </content>
-</entry>
-<entry>
-  <id>tag:apatheia.info,2012-01-03:/blog/2012/01/03/rundeck-jenkins-java/</id>
-  <title type="html">rundeckをセットアップして、jenkins上のjava成果物をデプロイする</title>
-  <published>2012-01-02T15:00:00.000Z</published>
-  
-  <link rel="alternate" href="https://apatheia.info/blog/2012/01/03/rundeck-jenkins-java/"/>
-  <content type="html">
-  <![CDATA[<p>rundeck でjenkins上の成果物をデプロイしよう、という話。</p>
-<!-- more -->
-<h2>rundeck について</h2>
-<p><a href="http://rundeck.org/">公式サイト</a></p>
-<p>ITオペレーションのコンサルやってる<a href="http://www.dtosolutions.com/">DTO Solution</a>（Depops関連の資料とかでよく会社名は見かけますね）が作っているデプロイ用のツール。元々は<a href="http://doc36.controltier.org/wiki/Main_Page">ControlTier</a>っていう管理ツールがあって、そこから分家した。ControlTierはサーバー/クライアントモデルだけど、サーバー側しか用意しなくていいRundeckのほうがお手軽度高い。</p>
-<p>複数のサーバーを対象に状態を変更するのが目的で、<a href="https://github.com/capistrano/capistrano">capistrano</a>とか<a href="http://docs.fabfile.org">fabric</a>とかと同じジャンル。GUIで操作するのが特徴なので、<a href="https://github.com/peritor/webistrano">webistrano</a>
-とかに近い。</p>
-<p>GUI（笑）みたいに思うかもしれないけど、画面上から履歴が確認できたり、ブラウザがあればどこからでもデプロイ出来るのって、運用の敷居下げるのに貢献してくれると思う。</p>
-<h2>rundeck 設定</h2>
-<h3>インストール</h3>
-<p>とりあえずインストールしてみる。以降の説明は、rundeck インストールサーバー、デプロイ対象サーバーともに CentOS 5 の場合。</p>
-<p><a href="http://rundeck.org/docs/RunDeck-Guide.html#installing-rundeck">http://rundeck.org/docs/RunDeck-Guide.html#installing-rundeck</a> , <a href="http://kb.dtosolutions.com/wiki/Rundeck_on_CentOS">http://kb.dtosolutions.com/wiki/Rundeck_on_CentOS</a> 参照。CentOSならyumで簡単にインストールできる。</p>
-<pre><code>$ sudo rpm -Uvh [http://repo.rundeck.org/latest.rpm](http://repo.rundeck.org/latest.rpm)
-$ sudo yum install rundeck
-</code></pre>
-<p>まずはインストールされたファイルを確認してみよう。</p>
-<pre><code>$ rpm -ql rundeck
-$ rpm -ql rundeck-config
-</code></pre>
-<p>以下のようなことがわかる。</p>
-<ul>
-<li>設定系のファイル /etc/rundeck は本体と別の RPM (rundeck-config) に入っている</li>
-<li>/var/lib/rundeck 以下にシステム関係のデータがおかれて、/var/rundeck 以下にユーザーが作成したデータをおくっぽい
-<ul>
-<li>僕は試してないけど、保存先はDBも使えるみたい。http://rundeck.org/docs/RunDeck-Guide.html#relational-database</li>
-</ul>
-</li>
-</ul>
-<h3>起動</h3>
-<p>さっそく起動してみる。</p>
-<pre><code>$ sudo /sbin/service rundeckd start
-</code></pre>
-<p>既定のポートは 4440 なので http://RUNDECK_HOST:4440/ にアクセスしてみる。</p>
-<p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx82ozkABF1qz5yk8.png" alt="ログイン画面"></p>
-<p>アクセスできなければ、ちゃんと起動出来てるかどうかとか、iptables が邪魔していないかとか確認。この時点ではまだログイン出来ない。</p>
-<p>ログインできるようにするために、ユーザーを作る。[公式サイトの説明](http://rundeck.org/docs/RunDeck-Guide.html
-#managing-logins)</p>
-<p>パスワードのハッシュ化はmd5sumコマンドとかでもいいけど、手順に沿って付属のライブラリ使ってみる。RPMでインストールすると、説明文中の$RUNDECK_BASE相当がないので、読み替えて以下のように実行</p>
-<pre><code>$ cd /var/lib/rundeck/
-$ java -cp exp/webapp/WEB-INF/lib/jetty-6.1.21.jar:exp/webapp/WEB-INF/lib/jetty-util-6.1.21.jar org.mortbay.jetty.security.Password f440 secret_password
-OBF:1vny1vn61unn1z7e1vu91ytc1r3x1xfj1r411yta1vv11z7o1uob1vnw1vn4
-MD5:be6cb1069f01cd207e6484538367bd1d
-CRYPT:f4Ou7EnVsEzMg
-</code></pre>
-<p>ユーザー一覧に追加</p>
-<pre><code>$ sudo vim /etc/rundeck/realm.properties
-// 末尾に以下を追加
-f440: MD5:be6cb1069f01cd207e6484538367bd1d,admin,user
-</code></pre>
-<p>これで利用可能になった。ユーザー情報を読み込むために、サービス再起動 （今後もユーザー設定の変更ごとに再起動させる）</p>
-<pre><code>$ sudo /sbin/service rundeckd restart
-</code></pre>
-<p>アクセス出来るようになったはず。ログインしてみる。</p>
-<p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx838slUR51qz5yk8.png" alt="ログイン直後"></p>
-<p>やりましたね。</p>
-<p>プロジェクトの名前はお好きに。SSHのキーについては、RPMインストール時に作られるrundeckユーザーのキーが<code>/home/rundeck/.ssh/rundeck.id_rsa</code>なので、ここにしておくと手間が少なくて済む。他の値については、今回はデフォルトで。</p>
-<p>この後説明するホストやジョブはプロジェクト単位で管理していくことになる。</p>
-<p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx840qzSI71qz5yk8.png" alt="Run"></p>
-<p>左上のメニューに注目</p>
-<ul>
-<li>Run … 一回こっきりのコマンド。非定型な処理（緊急でアプリケーションサーバー順々に再起動かけたいとか）はここから実行できる。capistrano の <code>cap shell</code> みたいなイメージ</li>
-<li>Job … 複数のコマンドや条件を保存はここに登録。</li>
-<li>Histoly … 実行履歴が確認出来る。</li>
-</ul>
-<p>最初は localhost だけがホストに登録されているから、Run を選択後、真ん中の入力フォームからコマンドを実行してみる。</p>
-<p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx84c0tw7g1qz5yk8.png" alt="exec_uname"></p>
-<p>実行できた。</p>
-<h3>ホスト追加</h3>
-<p>ローカルホストにばかりいじっていても不毛なので、ホストを追加していく。ユーザー同様ホストについても設定ファイルを編集する必要がある。</p>
-<p>rundeck をインストールしたサーバーで公開鍵をメモ</p>
-<pre><code>rundeck$ sudo su - rundeck
-rundeck$ cat .ssh/rundeck.id_rsa.pub # 出力結果をメモ
-</code></pre>
-<p>各ホストに作業用ユーザー「deploy」を追加する - パスワード不要でsudo可能。 - パスワードは設定しない - SSH
-の鍵認証でパスフレーズ無しにログイン可能</p>
-<pre><code>以下、デプロイ対象サーバー(仮に192.168.10.10とする)
-192.168.10.10$ sudo /sbin/useradd deploy
-192.168.10.10$ sudo /usr/sbin/visudo
-
-  // tty が使えないとSSH経由のコマンドに問題が起きるので、無効化する
-  Defaults:deploy    !requiretty
-  deploy  ALL=(ALL)       NOPASSWD: ALL
-
-192.168.10.10$ mkdir -m 700 /home/deploy/.ssh
-192.168.10.10$ sudo vim /home/deploy/.ssh/authorized_keys # rundeck の公開鍵を登録
-192.168.10.10$ sudo chown -R deploy.deploy /home/deploy/.ssh
-</code></pre>
-<p>いったん rundeck 側からログインしてみる。</p>
-<pre><code> ここからはまた rundeck をインストールしたサーバーの話
-$ sudo su - rundeck
-$ touch .ssh/config
-$ chmod 600 .ssh/config
-$ vim .ssh/config
-    このあともがしがしサーバー追加していくので、LAN内のマシンについては指紋チェック無効化しておく
-    Host 192.168.*.*
-        StrictHostKeyChecking no
-$ ssh -i ~/.ssh/rundeck.id_rsa deploy@192.168.10.10
-</code></pre>
-<p>次に設定ファイル編集</p>
-<pre><code>$ sudo vim /var/rundeck/projects/example/etc/resources.xml
-
-以下のような行を追加。name, hostname, username 辺りは重要だけど、それ以外は適当に指定。絞り込みの時に使えるので、tags あたりはしっかり入力しておいたほうがいい。
-&#x3C;node name="target1" description="適当" tags="適当" hostname="192.168.10.10" osArch="適当" osFamily="適当" osName="適当" osVersion="適当" username="deploy" />
-</code></pre>
-<p>これで再起動させればrundeck側からホストが操作できるようになっているはず。target1(192.168.115.60), target2(192.168.115.61)を追加して画面から確認してみる。</p>
-<p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx96zd197m1qz5yk8.png" alt="フィルタ変更"></p>
-<p>フィルタの変更でとりあえず全部外して、全台表示にする。</p>
-<p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx96zqf2uJ1qz5yk8.png" alt="フィルタ変更後"></p>
-<p>確認できた。ここでコマンドを打てば全台に適用される。</p>
-<h3>ジョブ追加</h3>
-<p>サーバーがセットアップ出来たので、ジョブを追加していく。メニューから<code>Jobs</code>を選択して、<code>New job</code>をクリックすればいい。全部画面に書いてあるけど、一応説明すると:</p>
-<ul>
-<li>Saved this job? ジョブを保存するかどうか
-<ul>
-<li>Job Name … 名前</li>
-<li>Group … グループ。スラッシュ区切りで入力しておくと、階層構造で表示してくれる</li>
-<li>Description … 説明</li>
-<li>UUID … UUID （これとは別に、ジョブを作ると勝手にID割り振られる）</li>
-</ul>
-</li>
-<li>Project どのプロジェクトを対象とするか</li>
-<li>Workflow
-<ul>
-<li>Keepgoing エラーで止まるかそのまま進むか</li>
-<li>Strategy ノードが3台、ステップが2個あったとして、node1-step1, node1-step2, node1-step3, node2-step1 … とすすむのがNode-oriented、Node-oriented、node1-step1, node2-step1, node3-step1 と進んでいくのが Step-oriented</li>
-</ul>
-</li>
-<li>Step 実行するステップを指定。各行の右端にマウスをあわせると（入れ替えたり編集、削除したりできる）
-<ul>
-<li>Command … コマンドの実行（Runでやったのと同じ）</li>
-<li>Script … 複数行のスクリプトの実行</li>
-<li>Script file … サーバー上にあるスクリプトファイルの実行</li>
-<li>Job Reference … 他のジョブを実行</li>
-</ul>
-</li>
-<li>Dispatch to Nodes … これを選択しないと、ローカルホストだけで実行される。選択すると実行対象の絞り込み画面が表示されるので、タグやホスト名、その他条件を設定する。</li>
-<li>Log level … ログの出力多寡を決定</li>
-</ul>
-<p>サクサク作れるので、必要に応じてがしがし増やしていく。</p>
-<p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx99jg4sze1qz5yk8.png" alt=""></p>
-<h2>jenkins との連動</h2>
-<p>rundeck は<a href="http://jenkins-ci.org/">jenkins</a>および[rundeckプラグイン](https://wiki
-.jenkins-ci.org/display/JENKINS/RunDeck+Plugin)と連動して利用することが出来る。</p>
-<p>プラグインはjenkinsのプラグイン管理画面に表示されるので、それを選択するだけでいい。</p>
-<h3>jenkins から rundeck をキックする</h3>
-<p>jenkinsでビルド完了→rundeckでデプロイ→jenkinsで統合テスト実施、といった0-clickのデプロイパイプが作れるようになる。<a href="http://www.otsune.com/diary/2008/09/11/1.html#200809111">0-clickは革命</a> 。</p>
-<p>jenkinsの設定方法は<a href="https://wiki.jenkins-ci.org/display/JENKINS/RunDeck+Plugin#RunDeckPlugin-DeploymentPipeline">プラグインの説明ページ</a>参照。</p>
-<h3>rundeck からjenkins上の成果物を選択できるようにする。</h3>
-<p>rundeckで手動デプロイするとき、成果物名やビルドの名前を選択できるようにする。</p>
-<p>jenkins rundeck プラグインは以下を利用出来るようにしてくれる:</p>
-<ul>
-<li>特定の成果物を起点に、ビルド履歴とその際の成果物を提供するAPI</li>
-<li>特定のビルドを起点に、その最新成果物一覧を提供するAPI</li>
-</ul>
-<p>rundeck でジョブを実行するとき、ユーザー入力を受け付けることが出来るんだけど、この選択項目には外部から取得したJSONなども設定できる。この機能と先ほどのAPIを組み合わせることで実現出来る。</p>
-<p>やってみよう。ジョブの保存画面でオプションを選択。</p>
-<p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9bfrJrHn1qz5yk8.png" alt="オプション設定画面"></p>
-<p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9c296d8I1qz5yk8.png" alt="オプション設定画面2"></p>
-<ul>
-<li>Option Name … 変数名として使われる値。artifact を指定</li>
-<li>Description … 適当</li>
-<li>Default Value … 未設定でいい</li>
-<li>Allowed Value … Remote URL からAPIのURLを指定（URLの形式は<a href="https://wiki.jenkins-ci.org/display/JENKINS/RunDeck+Plugin#RunDeckPlugin-OptionProvider">ドキュメント参照</a>）</li>
-<li>Restrictions … 値の形式チェック。Remote URLの値しか指定させたくないので、「Enforced from Allowed Values」を指定</li>
-<li>Requirement … 必須かどうか。必須なので、当然「yes」</li>
-<li>Multi-valued … 複数の値をとれるようにするか。複数の成果物を同時にデプロイしたい、とかであれば使えるかもしれないけど、今回は「No」</li>
-<li>Usage … ここで指定した値をステップの部分でどのように使えばいいのか説明してくれている。</li>
-</ul>
-<p>併せて、受け取った値を表示するだけのステップを作ってみる。</p>
-<p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9cj2ACEP1qz5yk8.png" alt="ステップ"></p>
-<p>実行してみよう。最初にビルド番号を聞かれる。</p>
-<p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9cobBFg31qz5yk8.png" alt="成果物一覧"></p>
-<p>適当に選んで「Run Job Now」すると、さっき作った変数を表示するだけのスクリプトが動いて、指定した成果物のURLが表示され、連携がうまくいっていたことが確認出来る。</p>
-<p><img src="/images/2012-01-03-rundeckjenkinsjava/tumblr_lx9dlhjwmr1qz5yk8.png" alt="実行結果"></p>
-<p>詳細なデプロイ手順については、各環境ごとにあるだろうからアレンジしてもらえればと思う。</p>
-<h2>まとめ</h2>
-<p>ホストやユーザーの設定をいちいちファイル編集しなくちゃいけなかったりするのが、ちょっとかっこわるいかな。ただ、UIはわかりやすいし、セットアップも簡単なので
-、気軽に試してみるといいと思う。</p>
-]]>
-  </content>
-</entry>
-<entry>
-  <id>tag:apatheia.info,2011-12-31:/blog/2011/12/31/mysql-sandbox-blackhole/</id>
-  <title type="html">MySQL::Sandboxで環境を作ってBLACKHOLEエンジンを試す</title>
-  <published>2011-12-30T15:00:00.000Z</published>
-  
-  <link rel="alternate" href="https://apatheia.info/blog/2011/12/31/mysql-sandbox-blackhole/"/>
-  <content type="html">
-  <![CDATA[<p>ちょっとMySQLのBLACKHOLEエンジン使って調べたいことがあったんだけど、
-<a href="http://mysqlsandbox.net/">MySQL::Sandbox</a> 使うとレプリケーション環境が簡単に構築できて便利。</p>
-<!-- more -->
-<p>以下は、MySQL::SandboxのセットアップからBLACKHOLEエンジン使うところまでの記録。</p>
-<h3>前提</h3>
-<ul>
-<li>確認した環境は Debian 6.0.3, perl v5.12.3</li>
-<li>cpanm &#x26; perlbrew インストール済み（<code>cpan</code>コマンドでも問題無いはず）</li>
-<li>MySQL 5.5 はサーバーを起動するためにlibaio1が必要なので、あらかじめパッケージをインストールしておく</li>
-</ul>
-<h3>手順</h3>
-<h4>インストール</h4>
-<p><code>cpanm</code> でMySQL::Sandbox をインストール。</p>
-<pre><code>$ cpanm MySQL::Sandbox
-</code></pre>
-<p>これで make_sandbox などのコマンド群がインストールされる。</p>
-<p>データファイルは以下のようなファイル構成を取る</p>
-<ul>
-<li>$HOME/opt/mysql 以下のサブディレクトリにサーバーを設置 (環境変数 SANDBOX_BINARY で変更可能)</li>
-<li>$HOME/sandboxes 以下のサブディレクトリにMySQLのデータや起動スクリプトを設置 (環境変数 SANDBOX_HOME で変更可能)</li>
-</ul>
-<h4>サーバーセットアップ</h4>
-<p>サーバーを起動してみる。</p>
-<pre><code># 使用するディレクトリ設定
-$ export SANDBOX_BINARY=$HOME/opt/mysql
-$ export SANDBOX_HOME=$HOME/opt/sandboxes
-# ソース取得
-$ cd SANDBOX_HOME
-$ curl -L -o mysql-5.5.19-linux2.6-x86_64.tar.gz http://www-jp.mysql.com/get/Downloads/MySQL-5.5/mysql-5.5.19-linux2.6-x86_64.tar.gz/from/http://ftp.jaist.ac.jp/pub/mysql/
-# Sandbox 作成
-$ make_sandbox $SANDBOX_BINARY/mysql-5.5.19-linux2.6-x86_64.tar.gz
-</code></pre>
-<p>これで$SANDBOX_BINARY/5.5.19 にサーバーが、また $SANDBOX_HOME/msb_5_5_19 以下にインスタンスが作成される。</p>
-<p>この時点で起動出来ているはずなので、接続してみる。以下で mysql クライアントが起動するはず。</p>
-<pre><code>$ $SANDBOX_HOME/msb_5_5_19/use
-</code></pre>
-<p><code>use</code>以外には、<code>start</code>, <code>stop</code>, <code>status</code> などの名前から動作が推測できそうなコマンド群がある。$SANDBOX_HOMEには複数のサンドボックスを操作するコマンド <code>use_all</code>, <code>start_all</code>, <code>stop_all</code> などがある。</p>
-<pre><code>$ make_replication_sandbox 5.5.19 
-# 第二引数はtar.gzまでのパスでもいいが、一度展開されたらバージョン番号指定でもいい。make_sandboxも同様
-</code></pre>
-<p>以上で、 master, node1, node2 というサーバーが起動する。node1, node2 は masterを参照したレプリケーション構成となる。デフォルトでノードは2台だが、<code>--how_many_nodes</code> オプションで台数は変更可能。</p>
-<p>同様に[Circular recplication](http://dev.mysql.com/doc/refman/5.1/ja/replication-
-topology-circular.html)(日本語訳だとなんになるんだろう)も簡単に作れる。マスター/マスターレプリケーションはCircular replication が2台のみの構成だった場合に同じ。</p>
-<pre><code>$ make_replication_sandbox --circular=4 5.5.19
-</code></pre>
-<p>これで node1 -> node2, node2 -> nod3, node3 -> node4, node4 -> node1 という循環関係のレプリケーションが作れる。</p>
-<p>使い終わったら止めておこう。</p>
-<pre><code>$ $SANDBOX_HOME/stop_all
-</code></pre>
-<h3>BLACKHOLEエンジンを試す</h3>
-<p>準備ができたので、<a href="http://dev.mysql.com/doc/refman/5.1/ja/blackhole-storage-engine.html">BLACKHOLEエンジン</a>を使ってみる。BLACKHOLEエンジンはバイナリログは記録するが、データは残さないストレージエンジンのこと。</p>
-<p>まずは、サンドボックス作成</p>
-<p>$ make_replication_sandbox --circular=3 5.5.19</p>
-<p>デフォルトストレージエンジンをnode1, node3はInnoDB、node2 はBLACKHOLEに変更</p>
-<pre><code>$ echo default_storage_engine=InnoDB >> $SANDBOX_HOME/rcsandbox_5_5_19/node1/my.sandbox.cnf
-$ echo default_storage_engine=BLACKHOLE >> $SANDBOX_HOME/rcsandbox_5_5_19/node2/my.sandbox.cnf
-$ echo default_storage_engine=InnoDB >> $SANDBOX_HOME/rcsandbox_5_5_19/node3/my.sandbox.cnf
-$ $SANDBOX_HOME/rcsandbox_5_5_19/restart_all
-</code></pre>
-<p>node2, node3 のレプリケーションだけ再開して、node1 -> node2 -> node3 の2階層スレーブにする。</p>
-<pre><code>$ $SANDBOX_HOME/rcsandbox_5_5_19/node2/use -e start slave
-$ $SANDBOX_HOME/rcsandbox_5_5_19/node3/use -e start slave
-</code></pre>
-<p>実験のための構成が完成した。ここで、node1 にデータを流し込んだとき、node2 にはデータが残らなくて、node3 にデータが出来たら成功。</p>
-<p>サンプルデータには、[Sample database with test suite](https://launchpad.net/test-
-db/)を利用する。</p>
-<pre><code>$ curl -LO [http://launchpad.net/test-db/employees-db-1/1.0.6/+download/employees_db-full-1.0.6.tar.bz2](http://launchpad.net/test-db/employees-db-1/1.0.6/+download/employees_db-full-1.0.6.tar.bz2)
-$ tar xf employees_db-full-1.0.6.tar.bz2
-$ cd employees_db
-# InnoDB が決めうちで設定されているので、コメントアウト
-$ sed -i -re s/^\s+(set storage_engine = InnoDB;)/-- \1/ *.sql
-# 取り込み
-$ $SANDBOX_HOME/rcsandbox_5_5_19/node1/use  -t &#x3C; ./employees.sql
-</code></pre>
-<p>結果</p>
-<pre><code>$ cd $SANDBOX_HOME
-$ du -sh rcsandbox_5_5_19/node?/data/ibdata1
-219M    rcsandbox_5_5_19/node1/data/ibdata1
-18M     rcsandbox_5_5_19/node2/data/ibdata1
-219M    rcsandbox_5_5_19/node3/data/ibdata1
-</code></pre>
-<p>node2 だけデータファイルがふくらまない。</p>
-<pre><code>$ ls -l rcsandbox_5_5_19/node2/data/
-合計 357652
-drwx------ 2 f440 f440      4096 2011-12-31 17:15 employees/
--rw-rw---- 1 f440 f440   5242880 2011-12-31 17:14 ib_logfile0
--rw-rw---- 1 f440 f440   5242880 2011-12-31 17:11 ib_logfile1
--rw-rw---- 1 f440 f440  18874368 2011-12-31 17:14 ibdata1
--rw-rw---- 1 f440 f440        88 2011-12-31 17:16 master.info
--rw-rw---- 1 f440 f440      5925 2011-12-31 17:14 msandbox.err
-drwx------ 2 f440 f440      4096 2011-12-31 17:11 mysql/
--rw-rw---- 1 f440 f440      6273 2011-12-31 17:14 mysql-bin.000001
--rw-rw---- 1 f440 f440 168403385 2011-12-31 17:16 mysql-bin.000002
--rw-rw---- 1 f440 f440        38 2011-12-31 17:14 mysql-bin.index
--rw-rw---- 1 f440 f440       315 2011-12-31 17:14 mysql_sandbox15902-relay-bin.000005
--rw-rw---- 1 f440 f440 168399499 2011-12-31 17:16 mysql_sandbox15902-relay-bin.000006
--rw-rw---- 1 f440 f440        76 2011-12-31 17:14 mysql_sandbox15902-relay-bin.index
--rw-rw---- 1 f440 f440         5 2011-12-31 17:14 mysql_sandbox15902.pid
-drwx------ 2 f440 f440      4096 2011-12-31 17:11 performance_schema/
--rw-rw---- 1 f440 f440        75 2011-12-31 17:16 relay-log.info
-drwx------ 2 f440 f440      4096 2011-12-31 17:11 test/
-</code></pre>
-<p>node2 のバイナリログ、リレーログはちゃんと出来ているので、BLACKHOLEエンジンの適用を確認できた。</p>
-<h3>メモ</h3>
-<ul>
-<li><code>$SANDBOX_HOME/clear_all</code> でデータ消せるの便利。</li>
-<li>MySQL::Sandbox 3.0.19 からは、<a href="http://mysqlsandbox.net/news.html">Percona や Maria DB などの派生DBも扱える</a>みたい。いろいろなバージョンで試すことが多いのでうれしい。</li>
-</ul>
-]]>
-  </content>
-</entry>
-<entry>
-  <id>tag:apatheia.info,2011-12-24:/blog/2011/12/24/superviser/</id>
-  <title type="html">プロセス管理にsuperviserを使う</title>
-  <published>2011-12-23T15:00:00.000Z</published>
-  
-  <link rel="alternate" href="https://apatheia.info/blog/2011/12/24/superviser/"/>
-  <content type="html">
-  <![CDATA[<p>ちょっと前にsupervisorを使ったのでやり方をまとめておく。</p>
-<!-- more -->
-<p>公式サイト: <a href="http://supervisord.org/">supervisor</a></p>
-<p>supervisorはプログラムの起動、停止を管理するツール。daemontools
-がわかるなら、あんな感じのソフトだと思ってもらえれば早い。daemontoolsよりも標準的なディレクトリ構成で使えるぶん、導入障壁は低いと思う。</p>
-<p>最近のLinuxなら、パッケージですぐインストール出来る。以降の説明は debian (6.0.3)、superviser 3 系によるもの。</p>
-<h2>インストール</h2>
-<pre><code>$ sudo apt-get install superviser
-</code></pre>
-<h3>確認</h3>
-<pre><code>$ sudo service supervisor status # 起動確認（名前表示されない……）
- is running
-$ sudo service supervisor stop # 停止
-Stopping supervisor: supervisord.
-$ sudo service supervisor start # 起動
-Starting supervisor: supervisord.
-</code></pre>
-<h2>例</h2>
-<p>例のために、自分のホームにインストールしてあったmemcachedを起動してみる。</p>
-<p>まずは、コマンドラインから問題無く起動出来ることを確認</p>
-<pre><code>$ /home/f440/opt/bin/memcached # 起動
-</code></pre>
-<p>プログラムはフォアグラウンドで起動する。memcached の例で言うと、-d オプション (run as a daemon) はつけない。</p>
-<p>設定ファイルを配置する。もともと /etc/supervisor/supervisord.conf 内で /etc/supervisor/conf.d/*.conf を Include するよう設定されていた読み込むように設定されていたので、以下のようなファイルを作った。</p>
-<pre><code>$ cat /etc/supervisor/conf.d/memcached.conf
-[program:memcached]
-command=/home/f440/opt/bin/memcached
-user=f440
-</code></pre>
-<p>デフォルトだと設定したプログラムは自動起動する(autostart=true)なので、supervisor を再起動させれば memcachedも起動する。memcached がいつまでも起動しなければ /var/log/supervisor 以下のログを確認する。</p>
-<p>何らかの原因で停止したとき、自動起動して欲しければ autorestart=true を指定しておく。</p>
-<h2>コマンドで操作</h2>
-<p>起動中は supervisorctl 経由で操作ができるようになる。</p>
-<pre><code>$ sudo supervisor 
-memcached                        RUNNING    pid 24928, uptime 0:08:21
-supervisor> # help でヘルプを表示
-supervisor> exit
-$ sudo supervisor status # 直接引数を渡すこともできる
-memcached                        RUNNING    pid 24928, uptime 0:08:21
-</code></pre>
-<h2>Webで操作</h2>
-<p>設定を追加するとWebから操作できるようになる。外部から好き放題できるので、安全な場所以外では適切な権限設定必須。</p>
-<p>ポート9001で、どこからでもアクセスできるよう設定</p>
-<pre><code>diff --git a/supervisor/supervisord.conf b/supervisor/supervisord.conf
-index 61b3020..86e04f2 100644
---- a/supervisor/supervisord.conf
-+++ b/supervisor/supervisord.conf
-@@ -4,6 +4,9 @@
- file=/var/run//supervisor.sock   ; (the path to the socket file)
- chmod=0700                       ; sockef file mode (default 0700)
-
-+[inet_http_server]
-+port=*:9001
-+
- [supervisord]
- logfile=/var/log/supervisor/supervisord.log ; (main log file;default $CWD/supervisord.log)
- pidfile=/var/run/supervisord.pid ; (supervisord pidfile;default supervisord.pid)
-</code></pre>
-<p>設定ファイル再読込</p>
-<pre><code> $ sudo supervisor reload
-</code></pre>
-<p>アクセス出来るようになる</p>
-<p><img src="/images/2011-12-24-superviser/tumblr_lx9eq9SHXa1qz5yk8.jpg" alt="Web管理画面"></p>
-<p>終わり。</p>
-]]>
-  </content>
-</entry>
-<entry>
-  <id>tag:apatheia.info,2011-12-17:/blog/2011/12/17/github-yum/</id>
-  <title type="html">githubを使ってyumリポジトリを公開する</title>
-  <published>2011-12-16T15:00:00.000Z</published>
-  
-  <link rel="alternate" href="https://apatheia.info/blog/2011/12/17/github-yum/"/>
-  <content type="html">
-  <![CDATA[<p>ubuntuには<a href="https://launchpad.net/ubuntu/+ppas">PPA</a>という仕組みがあり、プロジェクトホスティングサービス<a href="https://launchpad.net/">launchpad</a> と連携してパッケージを簡単に配布する仕組みが用意されている。今回は、githubを使ってリポジトリにpushしたら自動的にRPMパッケージを公開する方法をまとめる。</p>
-<!-- more -->
-<p>※
-PPAだとサーバサイドで各種プラットフォームにビルドしてくれるが、そこまではサポートしない。あくまで配布だけ。RPMをどうやって作るのかについても触れない。</p>
-<p>以下は<a href="http://haproxy.1wt.eu/">haproxy</a>
-を公開するときの例。haproxyのソースにはRPMのspecファイルが含まれているので、簡単にrpmが作成出来る。</p>
-<h2>手順</h2>
-<h3>git リポジトリを作成</h3>
-<p><a href="https://github.com/repositories/new">Create a New Repository - github</a>
-からリポジトリを作成。</p>
-<h3>ディレクトリ構造を作成</h3>
-<p>以下はCentOS 5 64bit 版とソースRPMを配布する場合</p>
-<pre><code>$ mkdir -p haproxy-rpm/centos/5/os/{SRPMS,x86_64}
-$ cd haproxy-rpm
-</code></pre>
-<h3>ファイル設置</h3>
-<pre><code>$ cp /some/path/haproxy-1.4.18-1.src.rpm centos/5/os/SRPMS/
-$ cp /some/path/haproxy-1.4.18-1.x86_64.rpm centos/5/os/x86_64/
-</code></pre>
-<h3>メタデータ作成</h3>
-<pre><code>$ sudo yum install -y createrepo
-$ createrepo centos/5/os/SRPMS/
-$ createrepo centos/5/os/x86_64/
-</code></pre>
-<h3>commit &#x26; push</h3>
-<pre><code>$ git add .
-$ git ci -m initial commit  
-$ git remote add origin git@github.com:f440/haproxy-rpm.git
-$ git push -u origin master
-</code></pre>
-<h2>利用方法</h2>
-<p>/etc/yum.repos.d 以下にわかりやすい名前でファイルを作る。</p>
-<pre><code>サンプル /etc/yum.repos.d/haproxy-rpm-f440.repo (1行目やnameは適宜変更する)
-
-[haproxy-rpm-f440]
-name=haproxy-CentOS-$releasever
-baseurl=https://raw.github.com/f440/haproxy-rpm/master/centos/5/os/x86_64/
-enabled=1
-gpgcheck=0
-</code></pre>
-<p>あとは通常通り <code>sudo yum install haproxy</code> でインストール可能。</p>
-<h2>備考</h2>
-<ul>
-<li>createrepo はdebian, ubuntuなどにもコマンドが用意されているので、ビルド以外の作業はRHEL系以外のOSでもよい</li>
-<li>mercurialを使いたければ、<a href="https://bitbucket.org">bitbucket</a>でも似たような手順で公開可能。その際は baseurl の部分に <code>baseurl=https://bitbucket.org/f440/haproxy-rpm/raw/tip/centos/$releasever/os/$basearch/</code> のような形式で記述する</li>
-</ul>
-]]>
-  </content>
-</entry>
-<entry>
-  <id>tag:apatheia.info,2011-12-17:/blog/2011/12/17/pv/</id>
-  <title type="html">プログレスバーを簡単に表示できるコマンド pv</title>
-  <published>2011-12-16T15:00:00.000Z</published>
-  
-  <link rel="alternate" href="https://apatheia.info/blog/2011/12/17/pv/"/>
-  <content type="html">
-  <![CDATA[<p>プログレスバーを簡単に表示できる <code>pv</code> について説明する。</p>
-<!-- more -->
-<h2>インストール方法</h2>
-<p>自分の環境(debian 6.0.3)だと <code>apt</code>でインストール出来る。RHEL系なら<a href="http://pkgs.repoforge.org/pv/">ここ</a>かな。</p>
-<h2>使い方</h2>
-<p>端的に言うと、「cat ＋ 標準エラー出力にプログレスバー」という動きを取る。</p>
-<pre><code>f440@abhoth[10]:~$ yes | pv >/dev/null
- 529MB 0:00:08 [67.2MB/s] [       &#x3C;=>                                         ]
-</code></pre>
-<p>8秒で合計529MB、秒間67.2MBくらいで「y」の文字が <code>pv</code> を通り抜けてるのがわかる。 <code>-l</code>オプションをつけると行モードになり、転送量ではなく転送行数を調べられる。</p>
-<pre><code>f440@abhoth[10]:~$ yes | pv -l >/dev/null
- 435k 0:00:10 [45.9k/s] [          &#x3C;=>                                        ]
-</code></pre>
-<p>10秒で435行、秒間45900行くらいが通り抜けてるのがわかる。</p>
-<p>他にもおもしろいオプションとして <code>-L</code> っていうのがあって、パイプから出てく流量を制限することが出来る。</p>
-<h2>用途</h2>
-<p><code>mysqldump</code> とか <code>mysql</code>にくっつけてダンプ、リストアの完了時刻を予想する、とかかな。</p>
-<p>Webで見てると、<code>nc</code> とか <code>tcpdump</code> とかと組み合わせてる例がある。</p>
-<p>自分で作ったコマンドとかに、簡単に進行状況表示がくっつけられるのは便利。</p>
 ]]>
   </content>
 </entry>
