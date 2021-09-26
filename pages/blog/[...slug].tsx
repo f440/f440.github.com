@@ -1,7 +1,12 @@
 import { format } from "date-fns";
 import { readFileSync } from "fs";
 import matter from "gray-matter";
-import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
+import {
+  GetStaticPaths,
+  GetStaticProps,
+  GetStaticPropsContext,
+  InferGetStaticPropsType,
+} from "next";
 import { join } from "path";
 import Layout from "../../components/layout";
 import {
@@ -12,7 +17,13 @@ import {
 } from "../../lib/utils";
 import { Tags } from "../../components/tags";
 
-const Blog = ({ post }: InferGetStaticPropsType<typeof getStaticProps>) => {
+type Props = InferGetStaticPropsType<typeof getStaticProps>;
+
+const Blog: React.VFC<Props> = ({ post }) => {
+  if (post === undefined || post.content === undefined) {
+    return <></>;
+  }
+
   return (
     <Layout title={post.title}>
       <article>
@@ -43,7 +54,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getStaticProps = async (context: GetStaticPropsContext) => {
   return {
     props: {
       post: Array.isArray(context.params?.slug)

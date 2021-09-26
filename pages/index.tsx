@@ -2,10 +2,9 @@ import React from "react";
 import Layout from "../components/layout";
 import { PostType, getPosts } from "../lib/utils";
 import { Posts } from "../components/posts";
+import { InferGetStaticPropsType } from "next";
 
-type Props = {
-  posts: PostType[];
-};
+type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
 const Index: React.VFC<Props> = ({ posts }) => {
   return (
@@ -19,7 +18,7 @@ const Index: React.VFC<Props> = ({ posts }) => {
 
 export default Index;
 
-export const getStaticProps = async (): Promise<{ props: Props }> => {
+export const getStaticProps = async () => {
   const posts: PostType[] = getPosts();
 
   return {

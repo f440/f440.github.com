@@ -1,13 +1,10 @@
 import React from "react";
 import Layout from "../../../components/layout";
 import { PostType, getPosts } from "../../../lib/utils";
-import { GetStaticPaths } from "next";
+import { GetStaticPropsContext, InferGetStaticPropsType } from "next";
 import { Posts } from "../../../components/posts";
 
-type Props = {
-  tag: string;
-  posts: PostType[];
-};
+type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
 const Tag: React.VFC<Props> = ({ tag, posts }) => {
   return (
@@ -22,22 +19,26 @@ const Tag: React.VFC<Props> = ({ tag, posts }) => {
 
 export default Tag;
 
-export const getStaticProps = async (context: {
-  params: { tag: string };
-}): Promise<{ props: Props }> => {
+export const getStaticProps = async (context: GetStaticPropsContext) => {
   const posts: PostType[] = getPosts();
+  const tag: string =
+    context.params != undefined
+      ? Array.isArray(context.params.tag)
+        ? context.params.tag[0]
+        : context.params.tag || ""
+      : "";
 
   return {
     props: {
-      tag: context.params.tag,
+      tag: tag,
       posts: posts.filter((post) => {
-        return post.tags?.includes(context.params.tag);
+        return post.tags?.includes(tag);
       }),
     },
   };
 };
 
-export const getStaticPaths: GetStaticPaths = async () => {
+export const getStaticPaths = async () => {
   const posts: PostType[] = getPosts();
   let tags = new Set<string>();
 
