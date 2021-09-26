@@ -9,10 +9,10 @@ const feedEntry = async (post: PostType): Promise<string> => {
   <id>tag:apatheia.info,${format(new Date(post.createdAt), "yyyy-MM-dd")}:/${
     post.path
   }/</id>
-  <title type="html">${post.title}</title>
+  <title type="text">${post.title}</title>
   <published>${post.createdAt}</published>
-  ${post.updatedAt ? `<updated>${post.updatedAt}</updated>` : ""}
-  <link rel="alternate" href="https://apatheia.info/${post.path}/"/>
+  <updated>${post.updatedAt || post.createdAt}</updated>
+  <link href="https://apatheia.info/${post.path}/"/>
   <content type="html">
   <![CDATA[${await markdownToHtml(post.content || "")}]]>
   </content>
@@ -25,7 +25,7 @@ export const generateFeed = async (posts: PostType[]): Promise<void> => {
     return (a.updatedAt || a.createdAt) > (b.updatedAt || b.createdAt) ? a : b;
   });
 
-  const entries = await posts.slice(6).reduce(
+  const entries = await posts.slice(0, 10).reduce(
     async (prev: Promise<string>, post: PostType): Promise<string> =>
       (await prev) + "\n" + (await feedEntry(post)),
 
@@ -38,7 +38,6 @@ export const generateFeed = async (posts: PostType[]): Promise<void> => {
     <id>https://apatheia.info/</id>
     <title>apatheia.info</title>
     <updated>${latestPost.updatedAt || latestPost.createdAt}</updated>
-    <link rel="alternate" href="https://apatheia.info/"/>
     <link rel="self" href="https://apatheia.info/atom.xml"/>
     <author>
       <name>f440</name>
