@@ -31,7 +31,7 @@ diff:
 commit:
 	cd output && \
 		git add -A && \
-		git commit -m "Site updated at $(shell LC_ALL=C date -u --rfc-3339=seconds)"
+		git commit -m "Site updated at $(shell LC_ALL=C node -e 'console.log(new Date().toISOString())')"
 
 .PHONY: publish
 publish:
