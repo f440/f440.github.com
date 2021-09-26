@@ -20,7 +20,7 @@ build: output
 .PHONY: copy
 copy: output
 	cd output && git ls-files | xargs rm -f
-	find output -type d -mindepth 1 -delete
+	find output -mindepth 1 -type d -delete
 	rsync -a out/ output/
 
 .PHONY: diff
