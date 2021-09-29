@@ -74,6 +74,7 @@ pre, code {
   color: $base-color;
   font-family: Consolas, 'Liberation Mono', Courier, monospace;
   padding: .2em;
+  overflow: scroll;
 }
 
 code {
