@@ -1,11 +1,14 @@
 import { format } from "date-fns";
 import { NextPage } from "next";
 import Link from "next/link";
-import React from "react";
 import { PostType } from "../lib/utils";
 import { Tags } from "./tags";
 
-export const Posts: NextPage<{ posts: PostType[] }> = ({ posts }) => {
+type Props = {
+  posts: PostType[];
+};
+
+export const Posts: NextPage<Props> = ({ posts }) => {
   return (
     <>
       {posts.map((post) => {

@@ -1,5 +1,4 @@
 import { NextPage } from "next";
-import React from "react";
 import { generateSitemap } from "../lib/sitemap";
 import { PostType, getPosts } from "../lib/utils";
 

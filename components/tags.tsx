@@ -1,7 +1,11 @@
 import { NextPage } from "next";
 import Link from "next/link";
 
-export const Tags: NextPage<{ tags: string[] | undefined }> = ({ tags }) => {
+type Props = {
+  tags: string[] | undefined;
+};
+
+export const Tags: NextPage<Props> = ({ tags }) => {
   if (!tags) {
     return <></>;
   } else {

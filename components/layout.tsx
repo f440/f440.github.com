@@ -1,3 +1,4 @@
+import { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 
@@ -6,7 +7,7 @@ type Props = {
   children: JSX.Element;
 };
 
-export default function Layout({ title, children }: Props) {
+export const Layout: NextPage<Props> = ({ title, children }) => {
   return (
     <>
       <Head>
@@ -57,4 +58,4 @@ export default function Layout({ title, children }: Props) {
       </footer>
     </>
   );
-}
+};

@@ -1,5 +1,4 @@
-import React from "react";
-import Layout from "../../../components/layout";
+import { Layout } from "../../../components/layout";
 import { PostType, getPosts } from "../../../lib/utils";
 import { GetStaticPropsContext, InferGetStaticPropsType, NextPage } from "next";
 import { Posts } from "../../../components/posts";

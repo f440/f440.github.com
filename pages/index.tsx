@@ -1,5 +1,4 @@
-import React from "react";
-import Layout from "../components/layout";
+import { Layout } from "../components/layout";
 import { PostType, getPosts } from "../lib/utils";
 import { Posts } from "../components/posts";
 import { InferGetStaticPropsType, NextPage } from "next";

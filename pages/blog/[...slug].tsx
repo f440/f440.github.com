@@ -8,7 +8,7 @@ import {
   NextPage,
 } from "next";
 import { join } from "path";
-import Layout from "../../components/layout";
+import { Layout } from "../../components/layout";
 import {
   PostType,
   getPosts,
