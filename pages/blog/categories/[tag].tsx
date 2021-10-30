@@ -2,17 +2,22 @@ import { Layout } from "../../../components/layout";
 import { PostType, getPosts } from "../../../lib/utils";
 import { GetStaticPropsContext, InferGetStaticPropsType, NextPage } from "next";
 import { Posts } from "../../../components/posts";
+import Head from "next/head";
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
 const Tag: NextPage<Props> = ({ tag, posts }) => {
   return (
-    <Layout title={`tagged ${tag}`}>
+    <>
+      <Head>
+        <title>{`tagged ${tag} - aptheia.info`}</title>
+      </Head>
+
       <article>
         <h1>Articles tagged &apos;{tag}&apos; </h1>
         <Posts posts={posts} />
       </article>
-    </Layout>
+    </>
   );
 };
 

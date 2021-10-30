@@ -8,7 +8,6 @@ import {
   NextPage,
 } from "next";
 import { join } from "path";
-import { Layout } from "../../components/layout";
 import {
   PostType,
   getPosts,
@@ -16,6 +15,8 @@ import {
   markdownToHtml,
 } from "../../lib/utils";
 import { Tags } from "../../components/tags";
+import React from "react";
+import Head from "next/head";
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
@@ -25,7 +26,11 @@ const Blog: NextPage<Props> = ({ post }) => {
   }
 
   return (
-    <Layout title={post.title}>
+    <>
+      <Head>
+        <title>{`${post.title} - aptheia.info`}</title>
+      </Head>
+
       <article>
         <h1>{post.title}</h1>
         <p id="article-info">
@@ -35,7 +40,7 @@ const Blog: NextPage<Props> = ({ post }) => {
 
         <div dangerouslySetInnerHTML={{ __html: post.content }} />
       </article>
-    </Layout>
+    </>
   );
 };
 

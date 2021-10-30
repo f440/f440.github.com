@@ -3,21 +3,20 @@ import Head from "next/head";
 import Link from "next/link";
 
 type Props = {
-  title?: string;
   children: JSX.Element;
 };
 
-export const Layout: NextPage<Props> = ({ title, children }) => {
+export const Layout: NextPage<Props> = ({ children }) => {
   return (
     <>
       <Head>
-        <title>{(title ? `${title} - ` : "") + "aptheia.info"}</title>
         <link
           rel="alternate"
           type="application/rss+xml"
           title="apatheia.info"
           href="/atom.xml"
         />
+        <title>aptheia.info</title>
       </Head>
 
       <header>
