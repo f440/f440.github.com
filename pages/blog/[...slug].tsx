@@ -29,7 +29,7 @@ const Blog: React.VFC<Props> = ({ post }) => {
       <article>
         <h1>{post.title}</h1>
         <p id="article-info">
-          Published on {format(new Date(post.createdAt), "yyyy.MM.dd")}{" "}
+          {format(new Date(post.createdAt), "yyyy.MM.dd")}{" "}
           <Tags tags={post.tags} />
         </p>
 
