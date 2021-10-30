@@ -9,7 +9,7 @@ const Tag: NextPage<Props> = ({ tag, posts }) => {
   return (
     <Layout title={`tagged ${tag}`}>
       <article>
-        <h1>Articles tagged '{tag}'</h1>
+        <h1>Articles tagged &apos;{tag}&apos; </h1>
         <Posts posts={posts} />
       </article>
     </Layout>
