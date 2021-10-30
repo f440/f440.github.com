@@ -3,9 +3,9 @@ import { readFileSync } from "fs";
 import matter from "gray-matter";
 import {
   GetStaticPaths,
-  GetStaticProps,
   GetStaticPropsContext,
   InferGetStaticPropsType,
+  NextPage,
 } from "next";
 import { join } from "path";
 import Layout from "../../components/layout";
@@ -19,7 +19,7 @@ import { Tags } from "../../components/tags";
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
-const Blog: React.VFC<Props> = ({ post }) => {
+const Blog: NextPage<Props> = ({ post }) => {
   if (post === undefined || post.content === undefined) {
     return <></>;
   }

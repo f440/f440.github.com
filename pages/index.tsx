@@ -2,11 +2,11 @@ import React from "react";
 import Layout from "../components/layout";
 import { PostType, getPosts } from "../lib/utils";
 import { Posts } from "../components/posts";
-import { InferGetStaticPropsType } from "next";
+import { InferGetStaticPropsType, NextPage } from "next";
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
-const Index: React.VFC<Props> = ({ posts }) => {
+const Index: NextPage<Props> = ({ posts }) => {
   return (
     <Layout>
       <article>

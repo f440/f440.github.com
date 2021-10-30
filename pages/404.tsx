@@ -1,7 +1,8 @@
+import { NextPage } from "next";
 import React from "react";
 import Layout from "../components/layout";
 
-const Custom404: React.VFC = () => {
+const Custom404: NextPage = () => {
   return (
     <Layout>
       <article>

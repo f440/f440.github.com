@@ -1,12 +1,12 @@
 import React from "react";
 import Layout from "../../../components/layout";
 import { PostType, getPosts } from "../../../lib/utils";
-import { GetStaticPropsContext, InferGetStaticPropsType } from "next";
+import { GetStaticPropsContext, InferGetStaticPropsType, NextPage } from "next";
 import { Posts } from "../../../components/posts";
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
-const Tag: React.VFC<Props> = ({ tag, posts }) => {
+const Tag: NextPage<Props> = ({ tag, posts }) => {
   return (
     <Layout title={`tagged ${tag}`}>
       <article>

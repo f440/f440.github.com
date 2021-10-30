@@ -1,10 +1,11 @@
 import { format } from "date-fns";
+import { NextPage } from "next";
 import Link from "next/link";
 import React from "react";
 import { PostType } from "../lib/utils";
 import { Tags } from "./tags";
 
-export const Posts: React.VFC<{ posts: PostType[] }> = ({ posts }) => {
+export const Posts: NextPage<{ posts: PostType[] }> = ({ posts }) => {
   return (
     <>
       {posts.map((post) => {

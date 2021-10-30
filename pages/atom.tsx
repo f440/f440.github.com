@@ -1,8 +1,9 @@
+import { NextPage } from "next";
 import React from "react";
 import { generateFeed } from "../lib/feed";
 import { PostType, getPosts } from "../lib/utils";
 
-const Atom: React.VFC = () => <></>;
+const Atom: NextPage = () => <></>;
 
 export default Atom;
 

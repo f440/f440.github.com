@@ -1,6 +1,7 @@
+import { NextPage } from "next";
 import Link from "next/link";
 
-export const Tags: React.VFC<{ tags: string[] | undefined }> = ({ tags }) => {
+export const Tags: NextPage<{ tags: string[] | undefined }> = ({ tags }) => {
   if (!tags) {
     return <></>;
   } else {
