@@ -2,7 +2,7 @@ import { lstatSync, readdirSync, readFileSync } from "fs";
 import matter from "gray-matter";
 import { join } from "path";
 import html from "remark-html";
-import remark from "remark";
+import { remark}  from "remark";
 
 export type PostType = {
   localPath: string;
