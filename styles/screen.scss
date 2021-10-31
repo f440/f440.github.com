@@ -40,12 +40,10 @@ header, article, footer {
 }
 
 #site-title {
-  h1 {
-    font-size: 2.5em;
+  font-size: 2.5em;
 
-    a {
-      text-decoration: none;
-    }
+  a {
+    text-decoration: none;
   }
 }
 
@@ -78,7 +76,7 @@ img {
   }
 }
 
-nav ul, footer ul {
+footer ul {
   list-style: none;
   padding: 0;
   margin: 0;
@@ -88,11 +86,6 @@ nav ul, footer ul {
     margin: 0;
     padding-right: 1em;
   }
-}
-
-header {
-  display: flex;
-  flex-direction: column;
 }
 
 #article-info {

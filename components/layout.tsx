@@ -20,23 +20,9 @@ export const Layout: NextPage<Props> = ({ children }) => {
       </Head>
 
       <header>
-        <div id="site-title">
-          <h1>
-            <Link href="/">apatheia.info</Link>
-          </h1>
-        </div>
-        <nav>
-          <ul>
-            <li>
-              <Link href="/">
-                <a>Home</a>
-              </Link>
-            </li>
-            <li>
-              <a href="/atom.xml">RSS</a>
-            </li>
-          </ul>
-        </nav>
+        <h1 id="site-title">
+          <Link href="/">apatheia.info</Link>
+        </h1>
       </header>
 
       <main>{children}</main>
