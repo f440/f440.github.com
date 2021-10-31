@@ -8,7 +8,7 @@ export type PostType = {
   localPath: string;
   path: string;
   title: string;
-  layout: string;
+  layout?: string;
   createdAt: string;
   updatedAt?: string;
   kind?: string;

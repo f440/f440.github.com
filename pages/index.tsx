@@ -15,7 +15,14 @@ const Index: NextPage<Props> = ({ posts }) => {
 export default Index;
 
 export const getStaticProps = async () => {
-  const posts: PostType[] = getPosts();
+  const posts: PostType[] = getPosts().map((post) => {
+    return (({ localPath, path, title, createdAt }) => ({
+      localPath,
+      path,
+      title,
+      createdAt,
+    }))(post);
+  });
 
   return {
     props: { posts: posts },
