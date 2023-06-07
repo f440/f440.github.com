@@ -15,7 +15,7 @@ export const Tags: NextPage<Props> = ({ tags }) => {
           return (
             <span key={tag}>
               <Link href={`/blog/categories/${encodeURIComponent(tag)}`}>
-                <a>{tag}</a>
+                {tag}
               </Link>{" "}
             </span>
           );
