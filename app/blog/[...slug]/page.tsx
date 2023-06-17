@@ -1,29 +1,26 @@
 import { format } from "date-fns";
 import { readFileSync } from "fs";
 import matter from "gray-matter";
-import {
-  GetStaticPaths,
-  GetStaticPropsContext,
-  InferGetStaticPropsType,
-  NextPage,
-} from "next";
+
 import { join } from "path";
 import {
   PostType,
   getPosts,
   PostsDirectory,
   markdownToHtml,
-} from "../../lib/utils";
-import { Tags } from "../../components/tags";
+} from "../../../lib/utils";
+import { Tags } from "../../../components/tags";
 import React from "react";
 import Head from "next/head";
 
-type Props = InferGetStaticPropsType<typeof getStaticProps>;
-
-const Blog: NextPage<Props> = ({ post }) => {
-  if (post === undefined || post.content === undefined) {
-    return <></>;
-  }
+export default async function Page({
+  params,
+}: {
+  params: { slug: string[] | undefined };
+}) {
+  if (!params.slug) return <></>;
+  const post = await getPostBySlug(params.slug);
+  if (!post) return <></>;
 
   return (
     <>
@@ -38,36 +35,19 @@ const Blog: NextPage<Props> = ({ post }) => {
           <Tags tags={post.tags} />
         </p>
 
-        <div dangerouslySetInnerHTML={{ __html: post.content }} />
+        <div dangerouslySetInnerHTML={{ __html: post.content || "" }} />
       </article>
     </>
   );
-};
+}
 
-export default Blog;
-
-export const getStaticPaths: GetStaticPaths = async () => {
+export async function generateStaticParams() {
   const posts: PostType[] = getPosts();
 
-  return {
-    paths: posts.map((post) => {
-      return {
-        params: { slug: post.path.replace("blog/", "").split("/") },
-      };
-    }),
-    fallback: false,
-  };
-};
-
-export const getStaticProps = async (context: GetStaticPropsContext) => {
-  return {
-    props: {
-      post: Array.isArray(context.params?.slug)
-        ? await getPostBySlug(context.params?.slug)
-        : undefined,
-    },
-  };
-};
+  return posts.map((post) => ({
+    slug: post.path.replace("blog/", "").split("/"),
+  }));
+}
 
 const getPostBySlug = async (
   slug: string[] | undefined
