@@ -3,7 +3,7 @@ import Head from "next/head";
 import Link from "next/link";
 
 type Props = {
-  children: JSX.Element;
+  children: React.ReactNode;
 };
 
 export const Layout: NextPage<Props> = ({ children }) => {
