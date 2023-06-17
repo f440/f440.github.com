@@ -1,6 +1,16 @@
 import { PostType, getPosts } from "../../../../lib/utils";
 import { Posts } from "../../../../components/posts";
-import Head from "next/head";
+import { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { tag: string };
+}): Promise<Metadata> {
+  return {
+    title: `tagged ${params.tag} - aptheia.info`,
+  };
+}
 
 export default function Page({ params }: { params: { tag: string } }) {
   const tag: string =
@@ -15,9 +25,6 @@ export default function Page({ params }: { params: { tag: string } }) {
 
   return (
     <>
-      <Head>
-        <title>{`tagged ${tag} - aptheia.info`}</title>
-      </Head>
       <article>
         <h1>Articles tagged &apos;{tag}&apos; </h1>
         <Posts posts={posts} />

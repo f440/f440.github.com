@@ -1,5 +1,4 @@
 import { NextPage } from "next";
-import Head from "next/head";
 import Link from "next/link";
 
 type Props = {
@@ -9,16 +8,6 @@ type Props = {
 export const Layout: NextPage<Props> = ({ children }) => {
   return (
     <>
-      <Head>
-        <link
-          rel="alternate"
-          type="application/rss+xml"
-          title="apatheia.info"
-          href="/atom.xml"
-        />
-        <title>aptheia.info</title>
-      </Head>
-
       <header>
         <h1 id="site-title">
           <Link href="/">apatheia.info</Link>

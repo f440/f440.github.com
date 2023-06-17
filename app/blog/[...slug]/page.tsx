@@ -11,7 +11,20 @@ import {
 } from "../../../lib/utils";
 import { Tags } from "../../../components/tags";
 import React from "react";
-import Head from "next/head";
+import { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string[] | undefined };
+}): Promise<Metadata> {
+  if (!params.slug) return {};
+  const post = await getPostBySlug(params.slug);
+  if (!post) return {};
+  return {
+    title: `${post.title} - aptheia.info`,
+  };
+}
 
 export default async function Page({
   params,
@@ -24,10 +37,6 @@ export default async function Page({
 
   return (
     <>
-      <Head>
-        <title>{`${post.title} - aptheia.info`}</title>
-      </Head>
-
       <article>
         <h1>{post.title}</h1>
         <p id="article-info">
